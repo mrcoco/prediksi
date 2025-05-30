@@ -35,13 +35,13 @@ $(document).ready(function() {
     
     // Event handler untuk toggle sidebar
     // Update tombol toggle sidebar
-    // $("body").prepend('<header><div id="header-content"></div><button id="sidebar-toggle" class="btn btn-sm btn-secondary"><i class="k-icon k-i-menu"></i></button></header>');
+    $("body").prepend('<header><div id="header-content"><h5 class="text-white">Prestasi Siswa</h5></div><button id="sidebar-toggle" class="btn btn-sm btn-secondary"><i class="k-icon k-i-menu"></i></button></header>');
     
     // CSS telah dipindahkan ke file custom.css
     
     // Update tombol toggle sidebar
     $("#sidebar-toggle").on("click", function() {
-        $(".sidebar").toggleClass("collapsed hidden");
+        $(".sidebar").toggleClass("collapsed");
         $(".main-content").toggleClass("expanded full-width");
         $(this).find("i").toggleClass("k-i-menu k-i-close");
         
@@ -53,7 +53,7 @@ $(document).ready(function() {
     $(document).ready(function() {
         const sidebarState = localStorage.getItem('sidebarState');
         if (sidebarState === 'collapsed') {
-            $(".sidebar").addClass("collapsed hidden");
+            $(".sidebar").addClass("collapsed");
             $(".main-content").addClass("expanded full-width");
             $("#sidebar-toggle i").removeClass("k-i-menu").addClass("k-i-close");
         }

@@ -32,6 +32,26 @@ header {
     margin-top: 50px;
 }
 
+.main-content.full-width {
+    margin-left: 0;
+    width: 100%;
+}
+
+.content-wrapper {
+    padding: 20px;
+}
+
+.page-title {
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+#visualization-container img {
+    max-width: 100%;
+    height: auto;
+}
+
 .main-content {
     margin-top: 50px;
 }
@@ -82,6 +102,11 @@ header {
     height: 50px;
     background: #3c8dbc;
     z-index: 1030;
+}
+
+.content-wrapper {
+    margin-top: 50px;
+    padding: 15px;
 }
 
 .navbar {

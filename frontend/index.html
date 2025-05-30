@@ -79,26 +79,8 @@
         .sidebar.hidden {
             display: none;
         }
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 60px;
-            background: #343a40;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            z-index: 1000;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-        }
-        #sidebar-toggle {
-            position: relative;
-            right: auto;
-            top: auto;
-            margin-left: auto;
-        }
+        
+        
         .sidebar.collapsed ~ header #sidebar-toggle {
             margin-left: 0;
         }
@@ -180,10 +162,10 @@
     </style>
 </head>
 <body>
-    <header>
+    <!-- <header>
         <div id="header-content">OKEKE</div>
         <button id="sidebar-toggle" class="btn btn-sm btn-secondary"><i class="k-icon k-i-menu"></i></button>
-    </header>
+    </header> -->
     <script>
         // Add logout functionality
         function logout() {
@@ -196,9 +178,9 @@
             <!-- Sidebar -->
             <div class="col-md-2 px-0 sidebar">
         
-                <div class="py-4 px-3 mb-4 bg-dark">
+                <!-- <div class="py-4 px-3 mb-4 bg-dark">
                     <h5 class="text-white">Prestasi Siswa</h5>
-                </div>
+                </div> -->
                 <a href="#" class="sidebar-link active" data-page="dashboard">
                     <i class="fas fa-tachometer-alt sidebar-icon"></i> Dashboard
                 </a>
@@ -217,9 +199,9 @@
                 <a href="#" class="sidebar-link" data-page="prediksi">
                     <i class="fas fa-chart-line sidebar-icon"></i> Prediksi Prestasi
                 </a>
-                <a href="#" class="sidebar-link" data-page="generate-dummy">
+                <!-- <a href="#" class="sidebar-link" data-page="generate-dummy">
                     <i class="fas fa-database sidebar-icon"></i> Generate Data Dummy
-                </a>
+                </a> -->
                 <a href="#" class="sidebar-link" onclick="logout()">
                     <i class="fas fa-sign-out-alt sidebar-icon"></i> Logout
                 </a>
@@ -227,7 +209,7 @@
             </div>
             
             <!-- Main Content -->
-            <div class="col-md-10 content-wrapper">
+            <div class="col-md-10 main-content content-wrapper">
                 <!-- Container untuk hasil prediksi -->
                 <!-- <div id="hasil-prediksi" class="mb-4"></div> -->
                 

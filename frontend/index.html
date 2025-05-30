@@ -30,8 +30,9 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     
     <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles/custom.css">
     <style>
-        .k-grid-toolbar {
+        /* .k-grid-toolbar {
             padding: 8px;
         }
         
@@ -75,6 +76,43 @@
             width: 20px;
             text-align: center;
         }
+        .sidebar.hidden {
+            display: none;
+        }
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: #343a40;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        #sidebar-toggle {
+            position: relative;
+            right: auto;
+            top: auto;
+            margin-left: auto;
+        }
+        .sidebar.collapsed ~ header #sidebar-toggle {
+            margin-left: 0;
+        }
+        
+        .header-logo {
+            transition: opacity 0.3s;
+        }
+        .header-logo:hover {
+            opacity: 0.8;
+        }
+        .main-content.full-width {
+            margin-left: 0;
+            width: 100%;
+        }
         
         .content-wrapper {
             padding: 20px;
@@ -90,9 +128,62 @@
             max-width: 100%;
             height: auto;
         }
+        .main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50px;
+            background: #3c8dbc;
+            z-index: 1030;
+        }
+        .navbar {
+            margin-bottom: 0;
+            margin-left: 230px;
+            border: none;
+            min-height: 50px;
+            border-radius: 0;
+            transition: margin-left 0.3s;
+        }
+        .sidebar.collapsed ~ .main-header .navbar {
+            margin-left: 60px;
+        }
+        .navbar-brand {
+            padding: 15px;
+            color: white;
+            font-size: 18px;
+        }
+        .brand-image {
+            height: 30px;
+            width: 30px;
+            margin-right: 10px;
+        }
+        #sidebar-toggle {
+            color: white;
+            font-size: 18px;
+            padding: 15px;
+        }
+
+        .main-header .navbar {
+            box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+        }
+        .brand-text {
+            margin-left: 10px;
+            font-weight: bold;
+        }
+        #sidebar-toggle:hover {
+            background-color: rgba(0,0,0,0.1);
+        } */
+
+        
+
     </style>
 </head>
 <body>
+    <header>
+        <div id="header-content">OKEKE</div>
+        <button id="sidebar-toggle" class="btn btn-sm btn-secondary"><i class="k-icon k-i-menu"></i></button>
+    </header>
     <script>
         // Add logout functionality
         function logout() {
@@ -400,6 +491,41 @@
             </div>
         </div>
     </script>
+    <script id="nilai-template" type="text/x-kendo-template">
+        <div class="k-edit-form-container">
+            <div class="k-edit-label">
+                <label for="nama_siswa">Nama Siswa:</label>
+            </div>
+            <div class="k-edit-field">
+                <input type="text" class="k-textbox" name="nama_siswa" required validationMessage="Nama siswa harus diisi" />
+            </div>
+            <div class="k-edit-label">
+                <label for="semester">Semester:</label>
+            </div>
+            <div class="k-edit-field">
+                <input type="text" class="k-textbox" name="semester" required validationMessage="Semester harus diisi" />
+            </div>
+            <div class="k-edit-label">
+                <label for="tahun_ajaran">Tahun Ajaran:</label>
+            </div>
+            <div class="k-edit-field">
+                <input type="text" class="k-textbox" name="tahun_ajaran" required validationMessage="Tahun ajaran harus diisi" />
+            </div>
+            <div class="k-edit-label">
+                <label for="mata_pelajaran">Mata Pelajaran:</label>
+            </div>
+            <div class="k-edit-field">
+                <input type="text" class="k-textbox" name="mata_pelajaran" required validationMessage="Mata pelajaran harus diisi" />
+            </div>
+            <div class="k-edit-label">
+                <label for="nilai">Nilai:</label>
+            </div>
+            <div class="k-edit-field">
+                <input type="number" class="k-textbox" name="nilai" required validationMessage="Nilai harus diisi" />
+            </div>
+        </div>
+    </script>
+    
     
     <!-- jQuery, Bootstrap, and Kendo UI JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

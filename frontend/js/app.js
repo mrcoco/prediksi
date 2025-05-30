@@ -31,6 +31,35 @@ $(document).ready(function() {
     $("[data-page='dashboard']").addClass("active");
     
     // Navigasi sidebar
+    // $("body").prepend('<button id="sidebar-toggle" class="btn btn-sm btn-secondary"><i class="k-icon k-i-menu"></i></button>');
+    
+    // Event handler untuk toggle sidebar
+    // Update tombol toggle sidebar
+    // $("body").prepend('<header><div id="header-content"></div><button id="sidebar-toggle" class="btn btn-sm btn-secondary"><i class="k-icon k-i-menu"></i></button></header>');
+    
+    // CSS telah dipindahkan ke file custom.css
+    
+    // Update tombol toggle sidebar
+    $("#sidebar-toggle").on("click", function() {
+        $(".sidebar").toggleClass("collapsed hidden");
+        $(".main-content").toggleClass("expanded full-width");
+        $(this).find("i").toggleClass("k-i-menu k-i-close");
+        
+        // Simpan state sidebar di localStorage
+        localStorage.setItem('sidebarState', $(".sidebar").hasClass("collapsed") ? 'collapsed' : 'expanded');
+    });
+    
+    // Load state sidebar saat halaman dimuat
+    $(document).ready(function() {
+        const sidebarState = localStorage.getItem('sidebarState');
+        if (sidebarState === 'collapsed') {
+            $(".sidebar").addClass("collapsed hidden");
+            $(".main-content").addClass("expanded full-width");
+            $("#sidebar-toggle i").removeClass("k-i-menu").addClass("k-i-close");
+        }
+    });
+    
+    // Navigasi sidebar
     $(".sidebar-link").on("click", function(e) {
         console.log("Clicked sidebar link");
         e.preventDefault();
@@ -322,7 +351,10 @@ $(document).ready(function() {
             sortable: true,
             filterable: true,
             toolbar: ["create"],
-            editable: "popup",
+            editable: {
+                mode: "popup",
+                template: kendo.template($("#nilai-template").html())
+            },
             columns: [
                 { field: "siswa_id", title: "ID Siswa", editor: siswaDropDownEditor },
                 { field: "semester", title: "Semester" },
@@ -798,3 +830,11 @@ $(document).ready(function() {
         }
     }
 });
+
+// Update header dengan gaya AdminLTE termasuk logo dan tombol toggle
+// $("body").prepend('<header class="main-header">\n    <nav class="navbar navbar-static-top">\n        <div class="navbar-header">\n            <a href="#" class="navbar-brand">\n                <img src="logo.png" alt="Logo" class="brand-image">\n                <span class="brand-text">Prestasi Siswa</span>\n            </a>\n            <button id="sidebar-toggle" class="btn btn-link btn-sm pull-left">\n                <i class="k-icon k-i-menu"></i>\n            </button>\n        </div>\n    </nav>\n</header>');
+
+// Update CSS untuk header AdminLTE
+// $("<style>").appendTo("head").text(`
+    
+// `);

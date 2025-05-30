@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+        function logout() {
+            localStorage.removeItem('access_token');
+            window.location.href = 'login.html';
+        }
+        
+        // Check if user is authenticated
+        if (!localStorage.getItem('access_token')) {
+            window.location.href = 'login.html';
+        }
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Prediksi Prestasi Siswa</title>
+    
+    <!-- Kendo UI CSS -->
+    <link rel="stylesheet" href="styles/kendo.common-bootstrap.min.css">
+    <link rel="stylesheet" href="styles/kendo.bootstrap-v4.min.css">
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    
+    <!-- Custom CSS -->
+    <style>
+        .k-grid-toolbar {
+            padding: 8px;
+        }
+        
+        .dashboard-card {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            margin-bottom: 20px;
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .sidebar {
+            min-height: 100vh;
+            background-color: #343a40;
+        }
+        
+        .sidebar-link {
+            color: #f8f9fa;
+            padding: 10px 15px;
+            display: block;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        
+        .sidebar-link:hover, .sidebar-link.active {
+            background-color: #495057;
+            color: #fff;
+            text-decoration: none;
+        }
+        
+        .sidebar-icon {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .content-wrapper {
+            padding: 20px;
+        }
+        
+        .page-title {
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        #visualization-container img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // Add logout functionality
+        function logout() {
+            localStorage.removeItem('access_token');
+            window.location.href = 'login.html';
+        }
+    </script>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 px-0 sidebar">
+        
+                <div class="py-4 px-3 mb-4 bg-dark">
+                    <h5 class="text-white">Prestasi Siswa</h5>
+                </div>
+                <a href="#" class="sidebar-link active" data-page="dashboard">
+                    <i class="fas fa-tachometer-alt sidebar-icon"></i> Dashboard
+                </a>
+                <a href="#" class="sidebar-link" data-page="siswa">
+                    <i class="fas fa-user-graduate sidebar-icon"></i> Data Siswa
+                </a>
+                <a href="#" class="sidebar-link" data-page="nilai">
+                    <i class="fas fa-book sidebar-icon"></i> Nilai Raport
+                </a>
+                <a href="#" class="sidebar-link" data-page="presensi">
+                    <i class="fas fa-calendar-check sidebar-icon"></i> Presensi
+                </a>
+                <a href="#" class="sidebar-link" data-page="penghasilan">
+                    <i class="fas fa-money-bill-wave sidebar-icon"></i> Penghasilan Ortu
+                </a>
+                <a href="#" class="sidebar-link" data-page="prediksi">
+                    <i class="fas fa-chart-line sidebar-icon"></i> Prediksi Prestasi
+                </a>
+                <a href="#" class="sidebar-link" data-page="generate-dummy">
+                    <i class="fas fa-database sidebar-icon"></i> Generate Data Dummy
+                </a>
+                <a href="#" class="sidebar-link" onclick="logout()">
+                    <i class="fas fa-sign-out-alt sidebar-icon"></i> Logout
+                </a>
+                
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-md-10 content-wrapper">
+                <!-- Container untuk hasil prediksi -->
+                <!-- <div id="hasil-prediksi" class="mb-4"></div> -->
+                
+                <!-- Dashboard Page -->
+                <div class="page" id="dashboard-page">
+                    <h2 class="page-title">Dashboard</h2>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="card dashboard-card bg-primary text-white">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-user-graduate card-icon"></i>
+                                    <h5 class="card-title">Total Siswa</h5>
+                                    <h3 class="card-text" id="total-siswa">0</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card dashboard-card bg-success text-white">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-chart-line card-icon"></i>
+                                    <h5 class="card-title">Prestasi Tinggi</h5>
+                                    <h3 class="card-text" id="prestasi-tinggi">0</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card dashboard-card bg-warning text-white">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-chart-bar card-icon"></i>
+                                    <h5 class="card-title">Prestasi Sedang</h5>
+                                    <h3 class="card-text" id="prestasi-sedang">0</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card dashboard-card bg-danger text-white">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-chart-area card-icon"></i>
+                                    <h5 class="card-title">Prestasi Rendah</h5>
+                                    <h3 class="card-text" id="prestasi-rendah">0</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="card dashboard-card">
+                                <div class="card-header bg-light">
+                                    <h5 class="mb-0">Distribusi Prestasi</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="chart-prestasi" style="height: 300px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card dashboard-card">
+                                <div class="card-header bg-light">
+                                    <h5 class="mb-0">Pohon Keputusan C4.5</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="visualization-container" class="text-center">
+                                        <p>Visualisasi pohon keputusan akan ditampilkan di sini setelah model dilatih.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Siswa Page -->
+                <div class="page" id="siswa-page" style="display: none;">
+                    <h2 class="page-title">Data Siswa</h2>
+                    <div id="siswa-grid"></div>
+                </div>
+                
+                <!-- Nilai Page -->
+                <div class="page" id="nilai-page" style="display: none;">
+                    <h2 class="page-title">Data Nilai Raport</h2>
+                    <div id="nilai-grid"></div>
+                </div>
+                
+                <!-- Presensi Page -->
+                <div class="page" id="presensi-page" style="display: none;">
+                    <h2 class="page-title">Data Presensi</h2>
+                    <div id="presensi-grid"></div>
+                </div>
+                
+                <!-- Penghasilan Page -->
+                <div class="page" id="penghasilan-page" style="display: none;">
+                    <h2 class="page-title">Data Penghasilan Orang Tua</h2>
+                    <div id="penghasilan-grid"></div>
+                </div>
+                
+                <!-- Generate Dummy Data Page -->
+                <div class="page" id="generate-dummy-page" style="display: none;">
+                    <h2 class="page-title">Generate Data Dummy</h2>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <form id="generate-dummy-form">
+                                <div class="form-group">
+                                    <label>Metode Generate:</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="generateMethod" id="byName" value="byName" checked>
+                                        <label class="form-check-label" for="byName">Berdasarkan Nama Siswa</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="generateMethod" id="byCount" value="byCount">
+                                        <label class="form-check-label" for="byCount">Berdasarkan Jumlah Data</label>
+                                    </div>
+                                </div>
+                                
+                                <div id="nameBasedSection">
+                                    <div class="form-group">
+                                        <label for="nama-siswa-dummy">Nama Siswa:</label>
+                                        <input id="nama-siswa-dummy" class="form-control" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="tahun-ajaran-dummy">Tahun Ajaran:</label>
+                                        <input id="tahun-ajaran-dummy" class="form-control" placeholder="Contoh: 2023/2024" />
+                                    </div>
+                                </div>
+                                
+                                <div id="countBasedSection" style="display: none;">
+                                    <div class="form-group">
+                                        <label for="jumlah-data">Jumlah Data:</label>
+                                        <input type="number" id="jumlah-data" class="form-control" min="1" />
+                                    </div>
+                                </div>
+                                
+                                <button type="button" id="btn-generate-dummy" class="btn btn-info btn-block">
+                                    <i class="fas fa-database mr-2"></i> Buat Data Dummy
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Prediksi Page -->
+                <div class="page" id="prediksi-page" style="display: none;">
+                    <h2 class="page-title">Prediksi Prestasi Siswa</h2>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="card dashboard-card">
+                                <div class="card-header bg-light">
+                                    <h5 class="mb-0">Form Prediksi</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="prediksi-form">
+                                        <div class="form-group">
+                                            <label for="siswa-dropdown">Pilih Siswa:</label>
+                                            <input id="siswa-dropdown" style="width: 100%;" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="semester-input">Semester:</label>
+                                            <input id="semester-input" class="form-control" placeholder="Contoh: Ganjil" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="tahun-ajaran-input">Tahun Ajaran:</label>
+                                            <input id="tahun-ajaran-input" class="form-control" placeholder="Contoh: 2023/2024" />
+                                        </div>
+                                        <button type="button" id="btn-prediksi" class="btn btn-primary btn-block">
+                                            <i class="fas fa-chart-line mr-2"></i> Prediksi
+                                        </button>
+                                        <button type="button" id="btn-train" class="btn btn-success btn-block mt-2">
+                                            <i class="fas fa-cogs mr-2"></i> Latih Model
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            
+                            <!-- <div class="card dashboard-card mt-3">
+                                <div class="card-header bg-light">
+                                    <h5 class="mb-0">Buat Data Dummy</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="dummy-form">
+                                        <div class="form-group">
+                                            <label for="nama-siswa-dummy">Nama Siswa:</label>
+                                            <input id="nama-siswa-dummy" style="width: 100%;" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="tahun-ajaran-dummy">Tahun Ajaran:</label>
+                                            <input id="tahun-ajaran-dummy" class="form-control" placeholder="Contoh: 2023/2024" />
+                                        </div>
+                                        <button type="button" id="btn-generate-dummy" class="btn btn-info btn-block">
+                                            <i class="fas fa-database mr-2"></i> Buat Data Dummy
+                                        </button>
+                                    </form>
+                                </div>
+                            </div> -->
+                        </div>
+                        <div class="col-md-7">
+                            <div class="card dashboard-card">
+                                <div class="card-header bg-light">
+                                    <h5 class="mb-0">Hasil Prediksi</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="hasil-prediksi">
+                                        <p class="text-center text-muted">Hasil prediksi akan ditampilkan di sini.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card dashboard-card mt-3">
+                                <div class="card-header bg-light">
+                                    <h5 class="mb-0">Riwayat Prediksi</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="riwayat-grid"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Templates -->
+    <script id="siswa-template" type="text/x-kendo-template">
+        <div class="k-edit-form-container">
+            <div class="k-edit-label">
+                <label for="nama">Nama:</label>
+            </div>
+            <div class="k-edit-field">
+                <input type="text" class="k-textbox" name="nama" required validationMessage="Nama harus diisi" />
+            </div>
+            <div class="k-edit-label">
+                <label for="nis">NIS:</label>
+            </div>
+            <div class="k-edit-field">
+                <input type="text" class="k-textbox" name="nis" required validationMessage="NIS harus diisi" />
+            </div>
+            <div class="k-edit-label">
+                <label for="jenis_kelamin">Jenis Kelamin:</label>
+            </div>
+            <div class="k-edit-field">
+                <select name="jenis_kelamin" required validationMessage="Jenis kelamin harus dipilih">
+                    <option value="Laki-laki">Laki-laki</option>
+                    <option value="Perempuan">Perempuan</option>
+                </select>
+            </div>
+            <div class="k-edit-label">
+                <label for="kelas">Kelas:</label>
+            </div>
+            <div class="k-edit-field">
+                <input type="text" class="k-textbox" name="kelas" required validationMessage="Kelas harus diisi" />
+            </div>
+            <div class="k-edit-label">
+                <label for="tanggal_lahir">Tanggal Lahir:</label>
+            </div>
+            <div class="k-edit-field">
+                <input name="tanggal_lahir" required validationMessage="Tanggal lahir harus diisi" />
+            </div>
+            <div class="k-edit-label">
+                <label for="alamat">Alamat:</label>
+            </div>
+            <div class="k-edit-field">
+                <textarea name="alamat" class="k-textbox" style="width: 100%; height: 80px;"></textarea>
+            </div>
+        </div>
+    </script>
+    
+    <!-- jQuery, Bootstrap, and Kendo UI JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/kendo.all.min.js"></script>
+    
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="js/app.js?v=" + Date.now() + '"></script>
+</body>
+</html>

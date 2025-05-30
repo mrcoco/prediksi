@@ -8,11 +8,17 @@ from datetime import datetime
 import os
 import random
 import pandas as pd
+from routes.auth_router import get_current_user
+from models.user import User
 
 router = APIRouter()
 
 @router.post("/train", status_code=status.HTTP_200_OK)
-def train_model(db: Session = Depends(get_db), force_train: bool = False):
+def train_model(
+    db: Session = Depends(get_db),
+    force_train: bool = False,
+    current_user: User = Depends(get_current_user)
+):
     """Melatih model C4.5 dengan data yang ada di database"""
     try:
         result = c45_model.train(db)
@@ -39,7 +45,12 @@ def train_model(db: Session = Depends(get_db), force_train: bool = False):
         )
 
 @router.post("/", response_model=PrediksiResponse)
-def predict_prestasi(request: PrediksiRequest, db: Session = Depends(get_db), force_train: bool = False):
+def predict_prestasi(
+    request: PrediksiRequest,
+    db: Session = Depends(get_db),
+    force_train: bool = False,
+    current_user: User = Depends(get_current_user)
+):
     """Memprediksi prestasi siswa berdasarkan data yang ada"""
     # Cek apakah siswa ada
     siswa = db.query(Siswa).filter(Siswa.id == request.siswa_id).first()
@@ -163,7 +174,10 @@ def predict_prestasi(request: PrediksiRequest, db: Session = Depends(get_db), fo
         )
 
 @router.get("/rules")
-def get_rules(db: Session = Depends(get_db)):
+def get_rules(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     """Mendapatkan aturan-aturan dari model C4.5"""
     if not c45_model.trained:
         try:
@@ -187,7 +201,10 @@ def get_rules(db: Session = Depends(get_db)):
         )
 
 @router.post("/generate-labeled-data")
-def generate_labeled_data(db: Session = Depends(get_db)):
+def generate_labeled_data(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     """Membuat data berlabel untuk melatih model C4.5"""
     try:
         # Siapkan data dari database

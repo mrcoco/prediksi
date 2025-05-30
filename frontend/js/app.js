@@ -2,6 +2,26 @@ $(document).ready(function() {
     // initGenerateDummyForm();
     // Konfigurasi global
     const API_URL = 'http://localhost:8000/api';
+    const TOKEN_KEY = 'access_token';
+    
+    // Fungsi untuk mendapatkan token dari localStorage
+    function getToken() {
+        return localStorage.getItem(TOKEN_KEY);
+    }
+    
+    // Fungsi untuk menambahkan header Authorization ke AJAX requests
+    function addAuthHeader(xhr) {
+        const token = getToken();
+        if (token) {
+            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+        }
+    }
+    
+    // Applied to all AJAX requests
+    $.ajaxSetup({
+        beforeSend: addAuthHeader
+    });
+    
     kendo.culture("id-ID");
     
     // Tampilkan halaman dashboard secara default
@@ -129,13 +149,25 @@ $(document).ready(function() {
                 transport: {
                     read: {
                         url: `${API_URL}/siswa`,
-                        dataType: "json"
+                        dataType: "json",
+                        beforeSend: function(xhr) {
+                            const token = getToken();
+                            if (token) {
+                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                            }
+                        }
                     },
                     create: {
                         url: `${API_URL}/siswa`,
                         dataType: "json",
                         type: "POST",
-                        contentType: "application/json"
+                        contentType: "application/json",
+                        beforeSend: function(xhr) {
+                            const token = getToken();
+                            if (token) {
+                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                            }
+                        }
                     },
                     update: {
                         url: function(data) {
@@ -143,14 +175,26 @@ $(document).ready(function() {
                         },
                         dataType: "json",
                         type: "PUT",
-                        contentType: "application/json"
+                        contentType: "application/json",
+                        beforeSend: function(xhr) {
+                            const token = getToken();
+                            if (token) {
+                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                            }
+                        }
                     },
                     destroy: {
                         url: function(data) {
                             return `${API_URL}/siswa/${data.id}`;
                         },
                         dataType: "json",
-                        type: "DELETE"
+                        type: "DELETE",
+                        beforeSend: function(xhr) {
+                            const token = getToken();
+                            if (token) {
+                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                            }
+                        }
                     },
                     parameterMap: function(data, type) {
                         if (type === "create" || type === "update") {

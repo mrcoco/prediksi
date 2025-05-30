@@ -4,11 +4,17 @@ from typing import List, Optional, Dict
 from database import get_db, Siswa
 from schemas import SiswaCreate, SiswaUpdate, SiswaResponse
 from datetime import datetime
+from routes.auth_router import get_current_user
+from models.user import User
 
 router = APIRouter()
 
 @router.post("/", response_model=SiswaResponse, status_code=status.HTTP_201_CREATED)
-def create_siswa(siswa: SiswaCreate, db: Session = Depends(get_db)):
+def create_siswa(
+    siswa: SiswaCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     # Cek apakah NIS sudah ada
     db_siswa = db.query(Siswa).filter(Siswa.nis == siswa.nis).first()
     if db_siswa:
@@ -35,7 +41,13 @@ def create_siswa(siswa: SiswaCreate, db: Session = Depends(get_db)):
     return new_siswa
 
 @router.get("/", response_model=List[SiswaResponse])
-def get_all_siswa(skip: int = 0, limit: int = 100, search: Optional[str] = None, db: Session = Depends(get_db)):
+def get_all_siswa(
+    skip: int = 0,
+    limit: int = 100,
+    search: Optional[str] = None,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     query = db.query(Siswa)
     
     # Filter berdasarkan pencarian
@@ -51,7 +63,11 @@ def get_all_siswa(skip: int = 0, limit: int = 100, search: Optional[str] = None,
     return siswa
 
 @router.get("/{siswa_id}", response_model=SiswaResponse)
-def get_siswa(siswa_id: int, db: Session = Depends(get_db)):
+def get_siswa(
+    siswa_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     siswa = db.query(Siswa).filter(Siswa.id == siswa_id).first()
     if not siswa:
         raise HTTPException(
@@ -61,7 +77,12 @@ def get_siswa(siswa_id: int, db: Session = Depends(get_db)):
     return siswa
 
 @router.put("/{siswa_id}", response_model=SiswaResponse)
-def update_siswa(siswa_id: int, siswa_update: SiswaUpdate, db: Session = Depends(get_db)):
+def update_siswa(
+    siswa_id: int,
+    siswa_update: SiswaUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     # Cari siswa yang akan diupdate
     db_siswa = db.query(Siswa).filter(Siswa.id == siswa_id).first()
     if not db_siswa:
@@ -94,7 +115,11 @@ def update_siswa(siswa_id: int, siswa_update: SiswaUpdate, db: Session = Depends
     return db_siswa
 
 @router.delete("/{siswa_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_siswa(siswa_id: int, db: Session = Depends(get_db)):
+def delete_siswa(
+    siswa_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     # Cari siswa yang akan dihapus
     db_siswa = db.query(Siswa).filter(Siswa.id == siswa_id).first()
     if not db_siswa:
@@ -110,7 +135,10 @@ def delete_siswa(siswa_id: int, db: Session = Depends(get_db)):
     return None
 
 @router.get("/dropdown", response_model=List[Dict])
-def get_siswa_dropdown(db: Session = Depends(get_db)):
+def get_siswa_dropdown(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     """Mendapatkan daftar siswa untuk dropdown"""
     siswa_list = db.query(Siswa.id, Siswa.nama, Siswa.kelas).order_by(Siswa.nama).all()
     

@@ -488,3 +488,25 @@
 2025/05/30 04:19:58 [error] 29#29: *17 connect() failed (111: Connection refused) while connecting to upstream, client: 172.19.0.1, server: localhost, request: "POST /api/auth/token HTTP/1.1", upstream: "http://172.19.0.3:8000/api/auth/token", host: "localhost", referrer: "http://localhost/login.html"
 2025/05/30 04:25:44 [error] 29#29: *20 connect() failed (111: Connection refused) while connecting to upstream, client: 172.19.0.1, server: localhost, request: "POST /api/auth/token HTTP/1.1", upstream: "http://172.19.0.3:8000/api/auth/token", host: "localhost", referrer: "http://localhost/login.html"
 2025/05/30 04:36:19 [error] 29#29: *22 connect() failed (111: Connection refused) while connecting to upstream, client: 172.19.0.1, server: localhost, request: "POST /api/auth/create-dummy-users HTTP/1.1", upstream: "http://172.19.0.3:8000/api/auth/create-dummy-users", host: "localhost"
+2025/05/30 09:06:54 [error] 30#30: *53 upstream timed out (110: Operation timed out) while reading response header from upstream, client: 172.19.0.1, server: localhost, request: "POST /api/auth/token HTTP/1.1", upstream: "http://172.19.0.3:8000/api/auth/token", host: "localhost", referrer: "http://localhost/login.html"
+2025/05/30 12:26:54 [notice] 1#1: signal 3 (SIGQUIT) received, shutting down
+2025/05/30 12:26:54 [notice] 30#30: gracefully shutting down
+2025/05/30 12:26:54 [notice] 31#31: gracefully shutting down
+2025/05/30 12:26:54 [notice] 29#29: gracefully shutting down
+2025/05/30 12:26:54 [notice] 32#32: gracefully shutting down
+2025/05/30 12:26:54 [notice] 31#31: exiting
+2025/05/30 12:26:54 [notice] 30#30: exiting
+2025/05/30 12:26:54 [notice] 29#29: exiting
+2025/05/30 12:26:54 [notice] 31#31: exit
+2025/05/30 12:26:54 [notice] 30#30: exit
+2025/05/30 12:26:54 [notice] 29#29: exit
+2025/05/30 12:26:54 [notice] 32#32: exiting
+2025/05/30 12:26:54 [notice] 32#32: exit
+2025/05/30 12:26:54 [notice] 1#1: signal 17 (SIGCHLD) received from 31
+2025/05/30 12:26:54 [notice] 1#1: worker process 30 exited with code 0
+2025/05/30 12:26:54 [notice] 1#1: worker process 31 exited with code 0
+2025/05/30 12:26:54 [notice] 1#1: worker process 32 exited with code 0
+2025/05/30 12:26:54 [notice] 1#1: signal 29 (SIGIO) received
+2025/05/30 12:26:55 [notice] 1#1: signal 17 (SIGCHLD) received from 30
+2025/05/30 12:26:55 [notice] 1#1: worker process 29 exited with code 0
+2025/05/30 12:26:55 [notice] 1#1: exit

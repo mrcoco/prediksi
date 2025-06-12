@@ -103,6 +103,8 @@ $(document).ready(function() {
             },
             error: function(xhr) {
                 console.error("Error loading siswa data:", xhr.responseText);
+                const errorMsg = xhr.responseJSON ? xhr.responseJSON.detail : 'Terjadi kesalahan saat mengambil data';
+                kendo.alert(errorMsg);
             }
         });
         
@@ -142,6 +144,8 @@ $(document).ready(function() {
             },
             error: function(xhr) {
                 console.error("Error loading visualization:", xhr.responseText);
+                const errorMsg = xhr.responseJSON ? xhr.responseJSON.detail : 'Terjadi kesalahan saat mengambil data';
+                kendo.alert(errorMsg);
             }
         });
     }

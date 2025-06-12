@@ -12,7 +12,10 @@ services:
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/prestasi_siswa
       - PYTHONPATH=/app
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+    networks:
+      - prestasi-network
     command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 
   frontend:
@@ -26,6 +29,8 @@ services:
       - "80:80"
     depends_on:
       - backend
+    networks:
+      - prestasi-network
 
   db:
     image: postgres:13
@@ -38,6 +43,17 @@ services:
       - POSTGRES_DB=prestasi_siswa
     ports:
       - "54321:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - prestasi-network
+
+networks:
+  prestasi-network:
+    driver: bridge
 
 volumes:
   pgdata:

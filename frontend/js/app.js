@@ -184,6 +184,10 @@ $(document).ready(function() {
                             if (token) {
                                 xhr.setRequestHeader('Authorization', `Bearer ${token}`);
                             }
+                        },
+                        error: function(xhr) {
+                            const errorMsg = xhr.responseJSON ? xhr.responseJSON.detail : 'Terjadi kesalahan saat mengambil data';
+                            kendo.alert(errorMsg);
                         }
                     },
                     create: {
@@ -196,6 +200,10 @@ $(document).ready(function() {
                             if (token) {
                                 xhr.setRequestHeader('Authorization', `Bearer ${token}`);
                             }
+                        },
+                        error: function(xhr) {
+                            const errorMsg = xhr.responseJSON ? xhr.responseJSON.detail : 'Terjadi kesalahan saat menambah data';
+                            kendo.alert(errorMsg);
                         }
                     },
                     update: {
@@ -210,6 +218,10 @@ $(document).ready(function() {
                             if (token) {
                                 xhr.setRequestHeader('Authorization', `Bearer ${token}`);
                             }
+                        },
+                        error: function(xhr) {
+                            const errorMsg = xhr.responseJSON ? xhr.responseJSON.detail : 'Terjadi kesalahan saat mengupdate data';
+                            kendo.alert(errorMsg);
                         }
                     },
                     destroy: {
@@ -223,6 +235,10 @@ $(document).ready(function() {
                             if (token) {
                                 xhr.setRequestHeader('Authorization', `Bearer ${token}`);
                             }
+                        },
+                        error: function(xhr) {
+                            const errorMsg = xhr.responseJSON ? xhr.responseJSON.detail : 'Terjadi kesalahan saat menghapus data';
+                            kendo.alert(errorMsg);
                         }
                     },
                     parameterMap: function(data, type) {
@@ -254,7 +270,11 @@ $(document).ready(function() {
             pageable: true,
             sortable: true,
             filterable: true,
-            toolbar: ["create"],
+            toolbar: ["create", {
+                name: "export",
+                text: "Export Excel",
+                template: `<button class="k-button k-button-md k-rounded-md k-button-solid k-button-solid-primary" onclick="exportSiswaExcel()"><span class="k-icon k-i-excel"></span> Export Excel</button>`
+            }],
             editable: {
                 mode: "popup",
                 template: kendo.template($("#siswa-template").html())
@@ -282,7 +302,40 @@ $(document).ready(function() {
         });
     }
     
-    // ========== FUNGSI DATA NILAI RAPORT ==========
+    window.exportSiswaExcel = function() {
+        const token = getToken();
+        if (!token) {
+            alert("Anda harus login terlebih dahulu");
+            return;
+        }
+
+        // Buat link untuk download
+        const link = document.createElement('a');
+        link.href = `${API_URL}/siswa/export/excel`;
+        link.download = 'Data_Siswa.xlsx';
+        
+        // Tambahkan header Authorization
+        fetch(link.href, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => response.blob())
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            link.href = url;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Gagal mengunduh file Excel');
+        });
+    };
+
+// ========== FUNGSI DATA NILAI RAPORT ==========
     function initNilaiGrid() {
         $("#nilai-grid").kendoGrid({
             dataSource: {
@@ -350,7 +403,12 @@ $(document).ready(function() {
             pageable: true,
             sortable: true,
             filterable: true,
-            toolbar: ["create"],
+            toolbar: ["create", "excel"],
+            excel: {
+                fileName: "Data Siswa.xlsx",
+                filterable: true,
+                allPages: true
+            },
             editable: {
                 mode: "popup",
                 template: kendo.template($("#nilai-template").html())
@@ -438,7 +496,12 @@ $(document).ready(function() {
             pageable: true,
             sortable: true,
             filterable: true,
-            toolbar: ["create"],
+            toolbar: ["create", "excel"],
+            excel: {
+                fileName: "Data Siswa.xlsx",
+                filterable: true,
+                allPages: true
+            },
             editable: "popup",
             columns: [
                 { field: "siswa_id", title: "ID Siswa", editor: siswaDropDownEditor },

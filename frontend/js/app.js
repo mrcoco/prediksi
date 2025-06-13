@@ -104,7 +104,15 @@ $(document).ready(function() {
             error: function(xhr) {
                 console.error("Error loading siswa data:", xhr.responseText);
                 const errorMsg = xhr.responseJSON ? xhr.responseJSON.detail : 'Terjadi kesalahan saat mengambil data';
-                kendo.alert(errorMsg);
+                $("#toast-container").kendoNotification({
+                    position: {
+                        pinned: false,
+                        top: 30,
+                        right: 30
+                    },
+                    autoHideAfter: 3000,
+                    stacking: "up"
+                }).data("kendoNotification").error(errorMsg);
             }
         });
         
@@ -145,7 +153,15 @@ $(document).ready(function() {
             error: function(xhr) {
                 console.error("Error loading visualization:", xhr.responseText);
                 const errorMsg = xhr.responseJSON ? xhr.responseJSON.detail : 'Terjadi kesalahan saat mengambil data';
-                kendo.alert(errorMsg);
+                $("#toast-container").kendoNotification({
+                    position: {
+                        pinned: false,
+                        top: 30,
+                        right: 30
+                    },
+                    autoHideAfter: 3000,
+                    stacking: "up"
+                }).data("kendoNotification").error(errorMsg);
             }
         });
     }
@@ -191,7 +207,15 @@ $(document).ready(function() {
                         },
                         error: function(xhr) {
                             const errorMsg = xhr.responseJSON ? xhr.responseJSON.detail : 'Terjadi kesalahan saat mengambil data';
-                            kendo.alert(errorMsg);
+                            $("#toast-container").kendoNotification({
+                                position: {
+                                    pinned: false,
+                                    top: 30,
+                                    right: 30
+                                },
+                                autoHideAfter: 3000,
+                                stacking: "up"
+                            }).data("kendoNotification").error(errorMsg);
                         }
                     },
                     create: {
@@ -207,7 +231,15 @@ $(document).ready(function() {
                         },
                         error: function(xhr) {
                             const errorMsg = xhr.responseJSON ? xhr.responseJSON.detail : 'Terjadi kesalahan saat menambah data';
-                            kendo.alert(errorMsg);
+                            $("#toast-container").kendoNotification({
+                                position: {
+                                    pinned: false,
+                                    top: 30,
+                                    right: 30
+                                },
+                                autoHideAfter: 3000,
+                                stacking: "up"
+                            }).data("kendoNotification").error(errorMsg);
                         }
                     },
                     update: {
@@ -225,7 +257,15 @@ $(document).ready(function() {
                         },
                         error: function(xhr) {
                             const errorMsg = xhr.responseJSON ? xhr.responseJSON.detail : 'Terjadi kesalahan saat mengupdate data';
-                            kendo.alert(errorMsg);
+                            $("#toast-container").kendoNotification({
+                                position: {
+                                    pinned: false,
+                                    top: 30,
+                                    right: 30
+                                },
+                                autoHideAfter: 3000,
+                                stacking: "up"
+                            }).data("kendoNotification").error(errorMsg);
                         }
                     },
                     destroy: {
@@ -242,7 +282,15 @@ $(document).ready(function() {
                         },
                         error: function(xhr) {
                             const errorMsg = xhr.responseJSON ? xhr.responseJSON.detail : 'Terjadi kesalahan saat menghapus data';
-                            kendo.alert(errorMsg);
+                            $("#toast-container").kendoNotification({
+                                position: {
+                                    pinned: false,
+                                    top: 30,
+                                    right: 30
+                                },
+                                autoHideAfter: 3000,
+                                stacking: "up"
+                            }).data("kendoNotification").error(errorMsg);
                         }
                     },
                     parameterMap: function(data, type) {
@@ -309,7 +357,15 @@ $(document).ready(function() {
     window.exportSiswaExcel = function() {
         const token = getToken();
         if (!token) {
-            alert("Anda harus login terlebih dahulu");
+            $("#toast-container").kendoNotification({
+                position: {
+                    pinned: false,
+                    top: 30,
+                    right: 30
+                },
+                autoHideAfter: 3000,
+                stacking: "up"
+            }).data("kendoNotification").error("Anda harus login terlebih dahulu");
             return;
         }
 
@@ -335,7 +391,15 @@ $(document).ready(function() {
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Gagal mengunduh file Excel');
+            $("#toast-container").kendoNotification({
+                position: {
+                    pinned: false,
+                    top: 30,
+                    right: 30
+                },
+                autoHideAfter: 3000,
+                stacking: "up"
+            }).data("kendoNotification").error('Gagal mengunduh file Excel');
         });
     };
 

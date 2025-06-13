@@ -31,7 +31,14 @@
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="styles/custom.css">
+    
     <style>
+        #toast-container {
+            position: fixed;
+            z-index: 10000;
+            top: 20px;
+            right: 20px;
+        }
         /* .k-grid-toolbar {
             padding: 8px;
         }
@@ -173,6 +180,8 @@
             window.location.href = 'login.html';
         }
     </script>
+    <div id="toast-container"></div>
+    
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->

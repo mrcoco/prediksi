@@ -326,6 +326,17 @@ $(document).ready(function() {
                 name: "export",
                 text: "Export Excel",
                 template: `<button class="k-button k-button-md k-rounded-md k-button-solid k-button-solid-primary" onclick="exportSiswaExcel()"><span class="k-icon k-i-excel"></span> Export Excel</button>`
+            }, {
+                name: "upload",
+                text: "Upload Excel",
+                template: `
+                    <div style="display: inline-block; margin-left: 5px;">
+                        <input type="file" id="fileUpload" style="display: none;" accept=".xlsx,.xls" />
+                        <button class="k-button k-button-md k-rounded-md k-button-solid k-button-solid-primary" onclick="document.getElementById('fileUpload').click()">
+                            <span class="k-icon k-i-upload"></span> Upload Excel
+                        </button>
+                    </div>
+                `
             }],
             editable: {
                 mode: "popup",
@@ -354,6 +365,72 @@ $(document).ready(function() {
         });
     }
     
+    // Fungsi untuk menangani upload file Excel
+    function handleFileUpload(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const token = getToken();
+        if (!token) {
+            $("#toast-container").kendoNotification({
+                position: {
+                    pinned: false,
+                    top: 30,
+                    right: 30
+                },
+                autoHideAfter: 3000,
+                stacking: "up"
+            }).data("kendoNotification").error("Anda harus login terlebih dahulu");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        $.ajax({
+            url: `${API_URL}/siswa/upload/excel`,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            },
+            success: function(response) {
+                $("#toast-container").kendoNotification({
+                    position: {
+                        pinned: false,
+                        top: 30,
+                        right: 30
+                    },
+                    autoHideAfter: 3000,
+                    stacking: "up"
+                }).data("kendoNotification").success("Data berhasil diupload");
+                
+                // Refresh grid setelah upload berhasil
+                $("#siswa-grid").data("kendoGrid").dataSource.read();
+            },
+            error: function(xhr) {
+                const errorMsg = xhr.responseJSON ? xhr.responseJSON.detail : 'Terjadi kesalahan saat mengupload file';
+                $("#toast-container").kendoNotification({
+                    position: {
+                        pinned: false,
+                        top: 30,
+                        right: 30
+                    },
+                    autoHideAfter: 3000,
+                    stacking: "up"
+                }).data("kendoNotification").error(errorMsg);
+            }
+        });
+
+        // Reset input file
+        event.target.value = '';
+    }
+
+    // Tambahkan event listener untuk file upload
+    $(document).on('change', '#fileUpload', handleFileUpload);
+
     window.exportSiswaExcel = function() {
         const token = getToken();
         if (!token) {

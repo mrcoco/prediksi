@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File
+from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 from typing import List, Optional, Dict
 from database import get_db, Siswa
@@ -6,8 +7,119 @@ from schemas import SiswaCreate, SiswaUpdate, SiswaResponse
 from datetime import datetime
 from routes.auth_router import get_current_user
 from models.user import User
+import pandas as pd
+from io import BytesIO
+from sqlalchemy.exc import IntegrityError
 
 router = APIRouter()
+
+@router.post("/upload/excel")
+async def upload_siswa_excel(
+    file: UploadFile = File(...),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    if not file.filename.endswith(('.xlsx', '.xls')):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="File harus berformat Excel (.xlsx atau .xls)"
+        )
+    
+    try:
+        # Baca file Excel
+        contents = await file.read()
+        df = pd.read_excel(BytesIO(contents))
+        
+        # Validasi kolom yang diperlukan
+        required_columns = ['Nama', 'NIS', 'Jenis Kelamin', 'Kelas', 'Tanggal Lahir', 'Alamat']
+        missing_columns = [col for col in required_columns if col not in df.columns]
+        if missing_columns:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Kolom yang diperlukan tidak ditemukan: {', '.join(missing_columns)}"
+            )
+        
+        # Proses setiap baris data
+        success_count = 0
+        error_count = 0
+        for index, row in df.iterrows():
+            try:
+                # Cek apakah NIS sudah ada
+                existing_siswa = db.query(Siswa).filter(Siswa.nis == str(row['NIS'])).first()
+                if existing_siswa:
+                    error_count += 1
+                    continue
+                
+                # Buat objek siswa baru
+                new_siswa = Siswa(
+                    nama=row['Nama'],
+                    nis=str(row['NIS']),
+                    jenis_kelamin=row['Jenis Kelamin'],
+                    kelas=str(row['Kelas']),
+                    tanggal_lahir=pd.to_datetime(row['Tanggal Lahir']).date(),
+                    alamat=row['Alamat'] if pd.notna(row['Alamat']) else None
+                )
+                
+                db.add(new_siswa)
+                success_count += 1
+                
+            except Exception as e:
+                error_count += 1
+                continue
+        
+        # Commit perubahan ke database
+        db.commit()
+        
+        return {
+            "status": "success",
+            "message": f"Berhasil mengupload {success_count} data siswa. {error_count} data gagal diproses."
+        }
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=str(e)
+        )
+
+@router.get("/export/excel")
+def export_siswa_excel(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    # Ambil semua data siswa
+    siswa = db.query(Siswa).all()
+    
+    # Konversi data siswa ke DataFrame
+    data = [{
+        'ID': s.id,
+        'Nama': s.nama,
+        'NIS': s.nis,
+        'Jenis Kelamin': s.jenis_kelamin,
+        'Kelas': s.kelas,
+        'Tanggal Lahir': s.tanggal_lahir.strftime('%Y-%m-%d'),
+        'Alamat': s.alamat,
+        'Dibuat': s.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+        'Diperbarui': s.updated_at.strftime('%Y-%m-%d %H:%M:%S') if s.updated_at else ''
+    } for s in siswa]
+    
+    df = pd.DataFrame(data)
+    
+    # Buat file Excel di memory
+    output = BytesIO()
+    with pd.ExcelWriter(output, engine='openpyxl') as writer:
+        df.to_excel(writer, index=False, sheet_name='Data Siswa')
+    
+    output.seek(0)
+    
+    # Return file Excel sebagai response
+    headers = {
+        'Content-Disposition': 'attachment; filename=Data_Siswa.xlsx'
+    }
+    return StreamingResponse(
+        output,
+        media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        headers=headers
+    )
 
 @router.post("/", response_model=SiswaResponse, status_code=status.HTTP_201_CREATED)
 def create_siswa(

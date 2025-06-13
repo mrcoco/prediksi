@@ -14,7 +14,7 @@ from models.user import User
 # Configuration
 SECRET_KEY = "wfdrmGsTH4oRbZKe8gGNNnIjziDJZgsH"
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 120
 
 # Password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

@@ -524,6 +524,43 @@
             </div>
         </div>
     </script>
+
+    <script type="text/x-kendo-template" id="user-edit-template">
+        <div class="k-edit-form-container">
+            <div class="k-edit-label">
+                <label for="username">Username:</label>
+            </div>
+            <div class="k-edit-field">
+                <input type="text" class="k-textbox" name="username" data-bind="value:username" required 
+                    pattern="^[a-zA-Z0-9]+$" 
+                    minlength="3"
+                    maxlength="20"
+                    data-pattern-msg="Username harus berupa huruf dan angka"
+                    data-minlength-msg="Username minimal 3 karakter"
+                    data-maxlength-msg="Username maksimal 20 karakter"
+                    data-required-msg="Username harus diisi" />
+            </div>
+            <div class="k-edit-label">
+                <label for="password">Password:</label>
+            </div>
+            <div class="k-edit-field">
+                <input type="password" class="k-textbox" name="password" data-bind="value:password" required 
+                    minlength="6"
+                    maxlength="50"
+                    data-minlength-msg="Password minimal 6 karakter"
+                    data-maxlength-msg="Password maksimal 50 karakter"
+                    data-required-msg="Password harus diisi" />
+            </div>
+            <div class="k-edit-buttons k-state-default">
+                <a class="k-button k-button-icontext k-primary k-grid-update" href="\#">
+                    <span class="k-icon k-i-check"></span>Simpan
+                </a>
+                <a class="k-button k-button-icontext k-grid-cancel" href="\#">
+                    <span class="k-icon k-i-cancel"></span>Batal
+                </a>
+            </div>
+        </div>
+    </script>
     
     
     <!-- jQuery, Bootstrap, and Kendo UI JS -->

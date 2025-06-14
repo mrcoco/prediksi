@@ -196,6 +196,10 @@ $(document).ready(function() {
     // ========== FUNGSI DATA SISWA ==========
     function initSiswaGrid() {
         $("#siswa-grid").kendoGrid({
+            editable: {
+                mode: "popup",
+                template: kendo.template($("#user-edit-template").html())
+            },
             dataSource: {
                 transport: {
                     read: {
@@ -1168,9 +1172,11 @@ $(document).ready(function() {
                                     validation: { 
                                         required: true,
                                         minLength: 3,
+                                        maxLength: 20,
                                         pattern: "^[a-zA-Z0-9]+$",
                                         patternMessage: "Username harus berupa huruf dan angka",
-                                        minLengthMessage: "Username minimal 3 karakter"
+                                        minLengthMessage: "Username minimal 3 karakter",
+                                        maxLengthMessage: "Username maksimal 20 karakter"
                                     } 
                                 },
                                 password: { 
@@ -1178,7 +1184,9 @@ $(document).ready(function() {
                                     validation: { 
                                         required: true,
                                         minLength: 6,
-                                        minLengthMessage: "Password minimal 6 karakter"
+                                        maxLength: 50,
+                                        minLengthMessage: "Password minimal 6 karakter",
+                                        maxLengthMessage: "Password maksimal 50 karakter"
                                     } 
                                 }
                             }
@@ -1190,6 +1198,15 @@ $(document).ready(function() {
             pageable: true,
             sortable: true,
             filterable: true,
+            editable: {
+                mode: "popup",
+                window: {
+                    title: function(e) {
+                        return e.model.isNew() ? "Tambah User Baru" : "Edit User";
+                    }
+                },
+                confirmation: "Apakah Anda yakin ingin menghapus user ini?"
+            },
             columns: [
                 { field: "username", title: "Username" },
                 { field: "password", title: "Password", template: "******" },

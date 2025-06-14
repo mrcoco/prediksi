@@ -18,6 +18,16 @@
     white-space: pre-line;
 }
 
+.validation-error-container {
+    margin-top: 5px;
+}
+
+.validation-error-container p {
+    margin: 0 0 5px 0;
+    color: #666;
+    font-weight: 500;
+}
+
 .error-notification .validation-errors {
     margin: 5px 0 0 0;
     padding-left: 20px;
@@ -28,4 +38,10 @@
 .error-notification .validation-errors li {
     margin: 3px 0;
     line-height: 1.4;
+}
+
+.error-notification .validation-errors li strong {
+    color: #dc3545;
+    text-transform: capitalize;
+    margin-right: 3px;
 }

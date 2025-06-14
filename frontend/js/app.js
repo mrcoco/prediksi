@@ -35,7 +35,7 @@ $(document).ready(function() {
     
     // Event handler untuk toggle sidebar
     // Update tombol toggle sidebar
-    $("body").prepend('<header><div id="header-content"><h5 class="text-white">Prestasi Siswa</h5></div><button id="sidebar-toggle" class="btn btn-sm btn-secondary"><i class="k-icon k-i-menu"></i></button></header>');
+    // $(".wrapper").prepend('<header><div id="header-content"><h5 class="text-white">Prestasi Siswa</h5></div><button id="sidebar-toggle" class="btn btn-sm btn-secondary"><i class="k-icon k-i-menu"></i></button></header>');
     
     // CSS telah dipindahkan ke file custom.css
     

@@ -4,6 +4,7 @@
     <script>
         function logout() {
             localStorage.removeItem('access_token');
+            localStorage.removeItem('user_data');
             window.location.href = 'login.html';
         }
         
@@ -39,133 +40,65 @@
             top: 20px;
             right: 20px;
         }
-        /* .k-grid-toolbar {
-            padding: 8px;
+        
+        /* Enhanced main-content fixes */
+        .main-content {
+            position: relative !important;
+            top: 0 !important;
+            padding-top: 20px;
+            box-sizing: border-box !important;
         }
         
-        .dashboard-card {
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
-            margin-bottom: 20px;
+        /* Ensure wrapper behaves correctly */
+        .wrapper {
+            width: 100% !important;
+            max-width: 100% !important;
+            overflow-x: hidden !important;
+            box-sizing: border-box;
         }
         
-        .dashboard-card:hover {
-            transform: translateY(-5px);
+        /* Force proper sizing for all content elements */
+        .main-content .card,
+        .main-content .row,
+        .main-content .col-md-3,
+        .main-content .col-md-4,
+        .main-content .col-md-5,
+        .main-content .col-md-6,
+        .main-content .col-md-7,
+        .main-content .col-md-8,
+        .main-content .col-md-9,
+        .main-content .col-md-12 {
+            max-width: 100% !important;
+            box-sizing: border-box !important;
         }
         
-        .card-icon {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
+        /* Prevent horizontal overflow */
+        .main-content * {
+            box-sizing: border-box;
         }
         
-        .sidebar {
-            min-height: 100vh;
-            background-color: #343a40;
+        /* Enhanced responsive behavior */
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
         }
         
-        .sidebar-link {
-            color: #f8f9fa;
-            padding: 10px 15px;
-            display: block;
-            text-decoration: none;
-            transition: background-color 0.3s;
-        }
-        
-        .sidebar-link:hover, .sidebar-link.active {
-            background-color: #495057;
-            color: #fff;
-            text-decoration: none;
-        }
-        
-        .sidebar-icon {
-            margin-right: 10px;
-            width: 20px;
-            text-align: center;
-        }
-        .sidebar.hidden {
-            display: none;
-        }
-        
-        
-        .sidebar.collapsed ~ header #sidebar-toggle {
-            margin-left: 0;
-        }
-        
-        .header-logo {
-            transition: opacity 0.3s;
-        }
-        .header-logo:hover {
-            opacity: 0.8;
-        }
-        .main-content.full-width {
-            margin-left: 0;
-            width: 100%;
-        }
-        
-        .content-wrapper {
-            padding: 20px;
-        }
-        
-        .page-title {
-            margin-bottom: 25px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #dee2e6;
-        }
-        
-        #visualization-container img {
-            max-width: 100%;
-            height: auto;
-        }
-        .main-header {
+        /* Debug helper - remove in production */
+        .debug-info {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 50px;
-            background: #3c8dbc;
-            z-index: 1030;
-        }
-        .navbar {
-            margin-bottom: 0;
-            margin-left: 230px;
-            border: none;
-            min-height: 50px;
-            border-radius: 0;
-            transition: margin-left 0.3s;
-        }
-        .sidebar.collapsed ~ .main-header .navbar {
-            margin-left: 60px;
-        }
-        .navbar-brand {
-            padding: 15px;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
             color: white;
-            font-size: 18px;
+            padding: 5px 10px;
+            font-size: 12px;
+            border-radius: 4px;
+            z-index: 9999;
+            display: none; /* Hidden by default */
         }
-        .brand-image {
-            height: 30px;
-            width: 30px;
-            margin-right: 10px;
-        }
-        #sidebar-toggle {
-            color: white;
-            font-size: 18px;
-            padding: 15px;
-        }
-
-        .main-header .navbar {
-            box-shadow: 0 1px 1px rgba(0,0,0,0.1);
-        }
-        .brand-text {
-            margin-left: 10px;
-            font-weight: bold;
-        }
-        #sidebar-toggle:hover {
-            background-color: rgba(0,0,0,0.1);
-        } */
-
-        
-
     </style>
 </head>
 <body>
@@ -177,51 +110,83 @@
         // Add logout functionality
         function logout() {
             localStorage.removeItem('access_token');
+            localStorage.removeItem('user_data');
             window.location.href = 'login.html';
         }
     </script>
     <div id="toast-container"></div>
     
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <div class="col-md-2 px-0 sidebar">
-        
-                <!-- <div class="py-4 px-3 mb-4 bg-dark">
-                    <h5 class="text-white">Prestasi Siswa</h5>
-                </div> -->
-                <a href="#" class="sidebar-link active" data-page="dashboard">
-                    <i class="fas fa-tachometer-alt sidebar-icon"></i> Dashboard
-                </a>
-                <a href="#" class="sidebar-link" data-page="siswa">
-                    <i class="fas fa-user-graduate sidebar-icon"></i> Data Siswa
-                </a>
-                <a href="#" class="sidebar-link" data-page="nilai">
-                    <i class="fas fa-book sidebar-icon"></i> Nilai Raport
-                </a>
-                <a href="#" class="sidebar-link" data-page="users">
-                    <i class="fas fa-users sidebar-icon"></i> Manajemen User
-                </a>
-                <a href="#" class="sidebar-link" data-page="presensi">
-                    <i class="fas fa-calendar-check sidebar-icon"></i> Presensi
-                </a>
-                <a href="#" class="sidebar-link" data-page="penghasilan">
-                    <i class="fas fa-money-bill-wave sidebar-icon"></i> Penghasilan Ortu
-                </a>
-                <a href="#" class="sidebar-link" data-page="prediksi">
-                    <i class="fas fa-chart-line sidebar-icon"></i> Prediksi Prestasi
-                </a>
-                <!-- <a href="#" class="sidebar-link" data-page="generate-dummy">
-                    <i class="fas fa-database sidebar-icon"></i> Generate Data Dummy
-                </a> -->
-                <a href="#" class="sidebar-link" onclick="logout()">
-                    <i class="fas fa-sign-out-alt sidebar-icon"></i> Logout
-                </a>
-                
+    <!-- Debug info (remove in production) -->
+    <div class="debug-info" id="debugInfo">
+        Sidebar: <span id="sidebarWidth">250px</span> | 
+        Main: <span id="mainWidth">calc(100% - 250px)</span> | 
+        Window: <span id="windowWidth">0px</span>
+    </div>
+    
+    <!-- Header -->
+    <header class="main-header">
+        <nav class="navbar">
+            <div id="sidebar-toggle" class="d-flex align-items-center">
+                <button class="sidebar-toggle-btn me-3" id="toggleSidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h5 class="mb-0 text-white">Sistem Prediksi Prestasi Siswa</h5>
             </div>
-            
-            <!-- Main Content -->
-            <div class="col-md-10 main-content content-wrapper">
+            <div class="ms-auto">
+                <button class="btn btn-outline-light btn-sm" onclick="logout()">
+                    <i class="fas fa-sign-out-alt me-1"></i>Logout
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <h5>Menu Navigasi</h5>
+            </div>
+            <div class="sidebar-menu">
+                <a href="#" class="sidebar-link active" data-page="dashboard" data-tooltip="Dashboard">
+                    <i class="sidebar-icon fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="sidebar-link" data-page="siswa" data-tooltip="Data Siswa">
+                    <i class="sidebar-icon fas fa-user-graduate"></i>
+                    <span>Data Siswa</span>
+                </a>
+                <a href="#" class="sidebar-link" data-page="nilai" data-tooltip="Nilai Raport">
+                    <i class="sidebar-icon fas fa-book"></i>
+                    <span>Nilai Raport</span>
+                </a>
+                <a href="#" class="sidebar-link" data-page="users" data-tooltip="Manajemen User">
+                    <i class="sidebar-icon fas fa-users"></i>
+                    <span>Manajemen User</span>
+                </a>
+                <a href="#" class="sidebar-link" data-page="presensi" data-tooltip="Presensi">
+                    <i class="sidebar-icon fas fa-calendar-check"></i>
+                    <span>Presensi</span>
+                </a>
+                <a href="#" class="sidebar-link" data-page="penghasilan" data-tooltip="Penghasilan Ortu">
+                    <i class="sidebar-icon fas fa-money-bill-wave"></i>
+                    <span>Penghasilan Ortu</span>
+                </a>
+                <a href="#" class="sidebar-link" data-page="prediksi" data-tooltip="Prediksi Prestasi">
+                    <i class="sidebar-icon fas fa-chart-line"></i>
+                    <span>Prediksi Prestasi</span>
+                </a>
+                <a href="#" class="sidebar-link" onclick="logout()" data-tooltip="Logout">
+                    <i class="sidebar-icon fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </nav>
+        
+        <!-- Main Content -->
+        <div class="main-content" id="mainContent">
                 <!-- Container untuk hasil prediksi -->
                 <!-- <div id="hasil-prediksi" class="mb-4"></div> -->
                 
@@ -304,16 +269,15 @@
                     <h2 class="page-title">Data Nilai Raport</h2>
                     <div id="nilai-grid"></div>
                 </div>
-
-                <div class="page" id="users-page" style="display: none;">
-                    <h2 class="page-title">Manajemen User</h2>
-                    <div id="users-grid"></div>
-                </div>
                 
                 <!-- Presensi Page -->
                 <div class="page" id="presensi-page" style="display: none;">
                     <h2 class="page-title">Data Presensi</h2>
                     <div id="presensi-grid"></div>
+                </div>
+                <div class="page" id="users-page" style="display: none;">
+                    <h2 class="page-title">Manajemen User</h2>
+                    <div id="users-grid"></div>
                 </div>
                 
                 <!-- Penghasilan Page -->
@@ -524,43 +488,6 @@
             </div>
         </div>
     </script>
-
-    <script type="text/x-kendo-template" id="user-edit-template">
-        <div class="k-edit-form-container">
-            <div class="k-edit-label">
-                <label for="username">Username:</label>
-            </div>
-            <div class="k-edit-field">
-                <input type="text" class="k-textbox" name="username" data-bind="value:username" required 
-                    pattern="^[a-zA-Z0-9]+$" 
-                    minlength="3"
-                    maxlength="20"
-                    data-pattern-msg="Username harus berupa huruf dan angka"
-                    data-minlength-msg="Username minimal 3 karakter"
-                    data-maxlength-msg="Username maksimal 20 karakter"
-                    data-required-msg="Username harus diisi" />
-            </div>
-            <div class="k-edit-label">
-                <label for="password">Password:</label>
-            </div>
-            <div class="k-edit-field">
-                <input type="password" class="k-textbox" name="password" data-bind="value:password" required 
-                    minlength="6"
-                    maxlength="50"
-                    data-minlength-msg="Password minimal 6 karakter"
-                    data-maxlength-msg="Password maksimal 50 karakter"
-                    data-required-msg="Password harus diisi" />
-            </div>
-            <div class="k-edit-buttons k-state-default">
-                <a class="k-button k-button-icontext k-primary k-grid-update" href="\#">
-                    <span class="k-icon k-i-check"></span>Simpan
-                </a>
-                <a class="k-button k-button-icontext k-grid-cancel" href="\#">
-                    <span class="k-icon k-i-cancel"></span>Batal
-                </a>
-            </div>
-        </div>
-    </script>
     
     
     <!-- jQuery, Bootstrap, and Kendo UI JS -->
@@ -572,10 +499,35 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     
     <!-- Custom JS -->
-    <!-- <script src="js/app.js?v=" + Date.now() + '"></script> -->
+    <!-- <script src="js/app.js?v=" + Date.now() + '"></script>'); -->
     <script>
         var timestamp = Math.floor(Date.now() / 1000);
         document.write('<script src="js/app.js?v=' + timestamp + '"><\/script>');
+    </script>
+    
+    <!-- Debug script (remove in production) -->
+    <script>
+        // Debug function to show sizing info
+        function updateDebugInfo() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const debugInfo = document.getElementById('debugInfo');
+            
+            if (debugInfo && window.location.search.includes('debug=1')) {
+                debugInfo.style.display = 'block';
+                document.getElementById('sidebarWidth').textContent = 
+                    sidebar.classList.contains('collapsed') ? '60px' : '250px';
+                document.getElementById('mainWidth').textContent = 
+                    mainContent.style.width || 'auto';
+                document.getElementById('windowWidth').textContent = 
+                    window.innerWidth + 'px';
+            }
+        }
+        
+        // Update debug info periodically if debug mode is on
+        if (window.location.search.includes('debug=1')) {
+            setInterval(updateDebugInfo, 1000);
+        }
     </script>
 </body>
 </html>

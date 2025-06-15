@@ -167,16 +167,27 @@ $(document).ready(function() {
         }
     });
     
-    // Event handler umum untuk semua link dengan data-page attribute
-    $(document).on("click", "[data-page]", function(e) {
+    // Event handler umum untuk semua link dengan data-page attribute (kecuali pagination)
+    $(document).on("click", "[data-page]:not(.k-link):not(.k-pager-nav)", function(e) {
         // Skip jika sudah ditangani oleh event handler lain
         if ($(this).hasClass("sidebar-link")) {
             return; // Biarkan sidebar handler yang menangani
         }
         
+        // Skip jika ini adalah elemen pagination Kendo UI
+        if ($(this).closest('.k-pager-wrap, .k-pager, .k-grid-pager').length > 0) {
+            return; // Biarkan Kendo UI pagination yang menangani
+        }
+        
         console.log("Clicked data-page link:", $(this).data("page"));
         e.preventDefault();
         const page = $(this).data("page");
+        
+        // Validasi bahwa ini adalah halaman yang valid (bukan nomor halaman pagination)
+        const validPages = ['dashboard', 'siswa', 'nilai', 'presensi', 'penghasilan', 'prediksi', 'users', 'profile', 'generate-dummy'];
+        if (!validPages.includes(page)) {
+            return; // Bukan halaman navigasi yang valid, kemungkinan pagination
+        }
         
         // Check if user has permission to access this page
         if (!hasPageAccess(page)) {
@@ -222,6 +233,13 @@ $(document).ready(function() {
             console.log("Initializing generate dummy form");
             initGenerateDummyForm();
         }
+    });
+    
+    // Event handler khusus untuk mencegah konflik dengan pagination Kendo UI
+    $(document).on("click", ".k-pager-wrap .k-link[data-page], .k-pager .k-link[data-page], .k-grid-pager .k-link[data-page]", function(e) {
+        // Jangan preventDefault() di sini, biarkan Kendo UI menangani pagination
+        console.log("Pagination link clicked, letting Kendo UI handle it");
+        e.stopPropagation(); // Hentikan event bubbling untuk mencegah konflik
     });
     
     // Inisialisasi dashboard saat halaman dimuat
@@ -330,15 +348,31 @@ $(document).ready(function() {
         // Ambil data prediksi untuk statistik
         $.ajax({
             url: `${API_URL}/prediksi/history`,
-            method: "GET",
-            success: function(data) {
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                skip: 0,
+                limit: 1000 // Ambil lebih banyak data untuk statistik akurat
+            }),
+            beforeSend: function(xhr) {
+                const token = getToken();
+                if (token) {
+                    xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                }
+            },
+            success: function(response) {
                 let tinggi = 0, sedang = 0, rendah = 0;
                 
-                data.forEach(item => {
-                    if (item.prediksi_prestasi === "Tinggi") tinggi++;
-                    else if (item.prediksi_prestasi === "Sedang") sedang++;
-                    else if (item.prediksi_prestasi === "Rendah") rendah++;
-                });
+                // Handle new response format with pagination
+                const data = response.data || response; // Support both old and new format
+                
+                if (Array.isArray(data)) {
+                    data.forEach(item => {
+                        if (item.prediksi_prestasi === "Tinggi") tinggi++;
+                        else if (item.prediksi_prestasi === "Sedang") sedang++;
+                        else if (item.prediksi_prestasi === "Rendah") rendah++;
+                    });
+                }
                 
                 $("#prestasi-tinggi").text(tinggi);
                 $("#prestasi-sedang").text(sedang);
@@ -349,6 +383,16 @@ $(document).ready(function() {
             },
             error: function(xhr) {
                 console.error("Error loading prediction data:", xhr.responseText);
+                const errorMsg = xhr.responseJSON ? xhr.responseJSON.detail : 'Terjadi kesalahan saat mengambil data';
+                $("#toast-container").kendoNotification({
+                    position: {
+                        pinned: false,
+                        top: 30,
+                        right: 30
+                    },
+                    autoHideAfter: 3000,
+                    stacking: "up"
+                }).data("kendoNotification").error(errorMsg);
             }
         });
         
@@ -1247,42 +1291,97 @@ $(document).ready(function() {
                 transport: {
                     read: {
                         url: `${API_URL}/prediksi/history`,
+                        type: "POST",
                         dataType: "json",
+                        contentType: "application/json",
                         beforeSend: function(xhr) {
                             const token = getToken();
                             if (token) {
                                 xhr.setRequestHeader('Authorization', `Bearer ${token}`);
                             }
                         }
+                    },
+                    destroy: {
+                        url: function(data) {
+                            return `${API_URL}/prediksi/history/${data.id}`;
+                        },
+                        type: "DELETE",
+                        beforeSend: function(xhr) {
+                            const token = getToken();
+                            if (token) {
+                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                            }
+                        },
+                        complete: function(e) {
+                            if (e.status === 204) {
+                                showSuccessNotification("Riwayat prediksi berhasil dihapus", "Sukses");
+                            } else {
+                                const errorMsg = e.responseJSON?.detail || "Gagal menghapus riwayat prediksi";
+                                showErrorNotification(errorMsg);
+                            }
+                        }
+                    },
+                    parameterMap: function(data, operation) {
+                        if (operation === "read") {
+                            return JSON.stringify({
+                                skip: data.skip || 0,
+                                limit: data.take || 10
+                            });
+                        }
+                        return data;
                     }
                 },
                 schema: {
+                    data: "data",
+                    total: "total",
                     model: {
-                        id: "id",
-                        fields: {
-                            id: { type: "number" },
-                            siswa_id: { type: "number" },
-                            nama_siswa: { type: "string" },
-                            semester: { type: "string" },
-                            tahun_ajaran: { type: "string" },
-                            prediksi_prestasi: { type: "string" },
-                            confidence: { type: "number" },
-                            created_at: { type: "date" }
-                        }
+                        id: "id"
                     }
                 },
-                pageSize: 5
+                pageSize: 10,
+                serverPaging: true
             },
-            height: 300,
-            pageable: true,
-            sortable: true,
+            height: 400,
+            pageable: {
+                refresh: true,
+                pageSizes: [5, 10, 20, 50],
+                buttonCount: 5,
+                info: true,
+                input: true,
+                numeric: true,
+                previousNext: true
+            },
             columns: [
                 { field: "nama_siswa", title: "Nama Siswa", width: 150 },
                 { field: "semester", title: "Semester", width: 100 },
                 { field: "tahun_ajaran", title: "Tahun Ajaran", width: 120 },
-                { field: "prediksi_prestasi", title: "Prediksi", width: 100 },
+                { 
+                    field: "prediksi_prestasi", 
+                    title: "Prediksi", 
+                    width: 100,
+                    template: function(dataItem) {
+                        const badgeClass = dataItem.prediksi_prestasi === "Tinggi" ? "success" : 
+                                         dataItem.prediksi_prestasi === "Sedang" ? "warning" : "danger";
+                        return `<span class="badge badge-${badgeClass}">${dataItem.prediksi_prestasi}</span>`;
+                    }
+                },
                 { field: "confidence", title: "Confidence", format: "{0:p2}", width: 100 },
-                { field: "created_at", title: "Tanggal", format: "{0:dd/MM/yyyy HH:mm}", width: 150 }
+                { field: "created_at", title: "Tanggal", format: "{0:dd/MM/yyyy HH:mm}", width: 150 },
+                {
+                    command: [{
+                        name: "destroy",
+                        text: "Hapus",
+                        iconClass: "k-icon k-i-delete",
+                        click: function(e) {
+                            e.preventDefault();
+                            const dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+                            showDeleteConfirmationRiwayat(dataItem);
+                            return false;
+                        }
+                    }],
+                    title: "Aksi",
+                    width: 100
+                }
             ]
         });
         
@@ -1750,6 +1849,62 @@ $(document).ready(function() {
             window.close();
             // Proceed with delete
             const grid = $("#users-grid").data("kendoGrid");
+            grid.dataSource.remove(data);
+            grid.dataSource.sync();
+        });
+
+        window.center().open();
+    }
+
+    // Fungsi untuk menampilkan konfirmasi penghapusan riwayat prediksi
+    function showDeleteConfirmationRiwayat(data) {
+        // Hapus window yang mungkin masih ada
+        $(".k-window").remove();
+        
+        // Buat window baru
+        const windowElement = $("<div></div>").appendTo("body");
+        const window = windowElement.kendoWindow({
+            title: "Konfirmasi Hapus Riwayat",
+            width: "450px",
+            modal: true,
+            visible: false,
+            actions: ["close"],
+            content: {
+                template: `
+                    <div class="delete-confirmation">
+                        <div class="icon-container">
+                            <i class="fas fa-exclamation-triangle text-warning"></i>
+                        </div>
+                        <div class="message">
+                            <h4>Konfirmasi Hapus Riwayat Prediksi</h4>
+                            <p><strong>Siswa:</strong> ${data.nama_siswa}</p>
+                            <p><strong>Semester:</strong> ${data.semester} - ${data.tahun_ajaran}</p>
+                            <p><strong>Prediksi:</strong> <span class="badge badge-${data.prediksi_prestasi === "Tinggi" ? "success" : data.prediksi_prestasi === "Sedang" ? "warning" : "danger"}">${data.prediksi_prestasi}</span></p>
+                            <hr>
+                            <p class="text-danger">Apakah Anda yakin ingin menghapus riwayat prediksi ini? Tindakan ini tidak dapat dibatalkan.</p>
+                        </div>
+                        <div class="button-container">
+                            <button class="k-button k-button-solid-base" id="cancelDeleteRiwayat">
+                                <i class="fas fa-times"></i> Batal
+                            </button>
+                            <button class="k-button k-button-solid-error" id="confirmDeleteRiwayat">
+                                <i class="fas fa-trash"></i> Hapus Riwayat
+                            </button>
+                        </div>
+                    </div>
+                `
+            }
+        }).data("kendoWindow");
+
+        // Event handlers
+        windowElement.on("click", "#cancelDeleteRiwayat", function() {
+            window.close();
+        });
+
+        windowElement.on("click", "#confirmDeleteRiwayat", function() {
+            window.close();
+            // Proceed with delete
+            const grid = $("#riwayat-grid").data("kendoGrid");
             grid.dataSource.remove(data);
             grid.dataSource.sync();
         });

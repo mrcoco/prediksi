@@ -4,11 +4,17 @@ from typing import List, Optional
 from database import get_db, NilaiRaport, Siswa
 from schemas import NilaiRaportCreate, NilaiRaportUpdate, NilaiRaportResponse
 from datetime import datetime
+from routes.auth_router import get_current_user
+from models.user import User
 
 router = APIRouter()
 
 @router.post("/", response_model=NilaiRaportResponse, status_code=status.HTTP_201_CREATED)
-def create_nilai(nilai: NilaiRaportCreate, db: Session = Depends(get_db)):
+def create_nilai(
+    nilai: NilaiRaportCreate, 
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     # Cek apakah siswa ada
     siswa = db.query(Siswa).filter(Siswa.id == nilai.siswa_id).first()
     if not siswa:
@@ -59,7 +65,13 @@ def create_nilai(nilai: NilaiRaportCreate, db: Session = Depends(get_db)):
     return new_nilai
 
 @router.get("/", response_model=List[NilaiRaportResponse])
-def get_all_nilai(skip: int = 0, limit: int = 100, siswa_id: Optional[int] = None, db: Session = Depends(get_db)):
+def get_all_nilai(
+    skip: int = 0, 
+    limit: int = 100, 
+    siswa_id: Optional[int] = None, 
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     query = db.query(NilaiRaport)
     
     # Filter berdasarkan siswa_id jika ada
@@ -71,7 +83,11 @@ def get_all_nilai(skip: int = 0, limit: int = 100, siswa_id: Optional[int] = Non
     return nilai_list
 
 @router.get("/{nilai_id}", response_model=NilaiRaportResponse)
-def get_nilai(nilai_id: int, db: Session = Depends(get_db)):
+def get_nilai(
+    nilai_id: int, 
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     nilai = db.query(NilaiRaport).filter(NilaiRaport.id == nilai_id).first()
     if not nilai:
         raise HTTPException(
@@ -81,7 +97,12 @@ def get_nilai(nilai_id: int, db: Session = Depends(get_db)):
     return nilai
 
 @router.put("/{nilai_id}", response_model=NilaiRaportResponse)
-def update_nilai(nilai_id: int, nilai_update: NilaiRaportUpdate, db: Session = Depends(get_db)):
+def update_nilai(
+    nilai_id: int, 
+    nilai_update: NilaiRaportUpdate, 
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     # Cari nilai yang akan diupdate
     db_nilai = db.query(NilaiRaport).filter(NilaiRaport.id == nilai_id).first()
     if not db_nilai:
@@ -134,7 +155,11 @@ def update_nilai(nilai_id: int, nilai_update: NilaiRaportUpdate, db: Session = D
     return db_nilai
 
 @router.delete("/{nilai_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_nilai(nilai_id: int, db: Session = Depends(get_db)):
+def delete_nilai(
+    nilai_id: int, 
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     # Cari nilai yang akan dihapus
     db_nilai = db.query(NilaiRaport).filter(NilaiRaport.id == nilai_id).first()
     if not db_nilai:

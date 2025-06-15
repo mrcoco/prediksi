@@ -1178,6 +1178,12 @@ $(document).ready(function() {
                     url: `${API_URL}/prediksi/generate-dummy`,
                     method: "POST",
                     contentType: "application/json",
+                    beforeSend: function(xhr) {
+                        const token = getToken();
+                        if (token) {
+                            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                        }
+                    },
                     data: JSON.stringify({
                         jumlah_data: jumlahData
                     }),
@@ -1241,7 +1247,13 @@ $(document).ready(function() {
                 transport: {
                     read: {
                         url: `${API_URL}/prediksi/history`,
-                        dataType: "json"
+                        dataType: "json",
+                        beforeSend: function(xhr) {
+                            const token = getToken();
+                            if (token) {
+                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                            }
+                        }
                     }
                 },
                 schema: {
@@ -1250,6 +1262,7 @@ $(document).ready(function() {
                         fields: {
                             id: { type: "number" },
                             siswa_id: { type: "number" },
+                            nama_siswa: { type: "string" },
                             semester: { type: "string" },
                             tahun_ajaran: { type: "string" },
                             prediksi_prestasi: { type: "string" },
@@ -1264,12 +1277,12 @@ $(document).ready(function() {
             pageable: true,
             sortable: true,
             columns: [
-                { field: "siswa_id", title: "ID Siswa" },
-                { field: "semester", title: "Semester" },
-                { field: "tahun_ajaran", title: "Tahun Ajaran" },
-                { field: "prediksi_prestasi", title: "Prediksi" },
-                { field: "confidence", title: "Confidence", format: "{0:p2}" },
-                { field: "created_at", title: "Tanggal", format: "{0:dd/MM/yyyy HH:mm}" }
+                { field: "nama_siswa", title: "Nama Siswa", width: 150 },
+                { field: "semester", title: "Semester", width: 100 },
+                { field: "tahun_ajaran", title: "Tahun Ajaran", width: 120 },
+                { field: "prediksi_prestasi", title: "Prediksi", width: 100 },
+                { field: "confidence", title: "Confidence", format: "{0:p2}", width: 100 },
+                { field: "created_at", title: "Tanggal", format: "{0:dd/MM/yyyy HH:mm}", width: 150 }
             ]
         });
         
@@ -1289,6 +1302,12 @@ $(document).ready(function() {
                 url: `${API_URL}/prediksi`,
                 method: "POST",
                 contentType: "application/json",
+                beforeSend: function(xhr) {
+                    const token = getToken();
+                    if (token) {
+                        xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                    }
+                },
                 data: JSON.stringify({
                     siswa_id: parseInt(siswaId),
                     semester: semester,
@@ -1336,6 +1355,12 @@ $(document).ready(function() {
             $.ajax({
                 url: `${API_URL}/prediksi/train`,
                 method: "POST",
+                beforeSend: function(xhr) {
+                    const token = getToken();
+                    if (token) {
+                        xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                    }
+                },
                 success: function(data) {
                     alert(`Model berhasil dilatih dengan akurasi ${(data.data.accuracy * 100).toFixed(2)}% menggunakan ${data.data.samples} sampel data.`);
                     
@@ -1343,8 +1368,12 @@ $(document).ready(function() {
                     $.ajax({
                         url: `${API_URL}/prediksi/visualization`,
                         method: "GET",
-                        beforeSend: function() {
+                        beforeSend: function(xhr) {
                             $("#visualization-container").addClass("loading").html("");
+                            const token = getToken();
+                            if (token) {
+                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                            }
                         },
                         success: function(data) {
                             $("#visualization-container").removeClass("loading");
@@ -1420,6 +1449,12 @@ $(document).ready(function() {
                 url: `${API_URL}/prediksi/generate-dummy-by-name`,
                 method: "POST",
                 contentType: "application/json",
+                beforeSend: function(xhr) {
+                    const token = getToken();
+                    if (token) {
+                        xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                    }
+                },
                 data: JSON.stringify({
                     siswa_id: parseInt(siswaId),
                     tahun_ajaran: tahunAjaran

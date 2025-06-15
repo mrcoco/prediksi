@@ -326,16 +326,47 @@ def get_visualization(db: Session = Depends(get_db)):
             detail=f"Terjadi kesalahan saat membuat visualisasi: {str(e)}"
         )
 
-@router.get("/history", response_model=List[PrestasiResponse])
-def get_prediction_history(siswa_id: Optional[int] = None, db: Session = Depends(get_db)):
-    """Mendapatkan riwayat prediksi prestasi"""
-    query = db.query(Prestasi)
+@router.get("/history")
+def get_prediction_history(
+    siswa_id: Optional[int] = None, 
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Mendapatkan riwayat prediksi prestasi dengan nama siswa"""
+    # Query dengan JOIN ke tabel siswa
+    query = db.query(
+        Prestasi.id,
+        Prestasi.siswa_id,
+        Siswa.nama.label('nama_siswa'),
+        Prestasi.semester,
+        Prestasi.tahun_ajaran,
+        Prestasi.prediksi_prestasi,
+        Prestasi.confidence,
+        Prestasi.created_at,
+        Prestasi.updated_at
+    ).join(Siswa, Prestasi.siswa_id == Siswa.id)
     
     if siswa_id:
         query = query.filter(Prestasi.siswa_id == siswa_id)
     
     prestasi_list = query.order_by(Prestasi.updated_at.desc()).all()
-    return prestasi_list
+    
+    # Convert ke format yang diinginkan
+    result = []
+    for prestasi in prestasi_list:
+        result.append({
+            "id": prestasi.id,
+            "siswa_id": prestasi.siswa_id,
+            "nama_siswa": prestasi.nama_siswa,
+            "semester": prestasi.semester,
+            "tahun_ajaran": prestasi.tahun_ajaran,
+            "prediksi_prestasi": prestasi.prediksi_prestasi,
+            "confidence": prestasi.confidence,
+            "created_at": prestasi.created_at,
+            "updated_at": prestasi.updated_at
+        })
+    
+    return result
 
 @router.post("/generate-dummy-data", status_code=status.HTTP_201_CREATED)
 def generate_dummy_data(count: int = 10, db: Session = Depends(get_db)):

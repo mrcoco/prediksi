@@ -134,6 +134,16 @@ header {
     transition: width 0.3s ease;
 }
 
+/* Header adjustment when sidebar is collapsed */
+.sidebar.collapsed ~ .wrapper .main-header #sidebar-toggle {
+    width: 60px;
+}
+
+.sidebar.collapsed ~ .wrapper .main-header #sidebar-toggle h5 {
+    opacity: 0;
+    visibility: hidden;
+}
+
 /* Sidebar Toggle Button */
 .sidebar-toggle-btn {
     background: none;
@@ -339,11 +349,13 @@ header {
 }
 
 /* Header adjustment when sidebar is collapsed */
-#sidebar-toggle.collapsed {
+#sidebar-toggle.collapsed,
+.sidebar.collapsed ~ * #sidebar-toggle {
     width: 60px;
 }
 
-#sidebar-toggle.collapsed h5 {
+#sidebar-toggle.collapsed h5,
+.sidebar.collapsed ~ * #sidebar-toggle h5 {
     opacity: 0;
     visibility: hidden;
 }
@@ -439,6 +451,41 @@ header {
     opacity: 0.9;
 }
 
+/* Dashboard card specific styling */
+.dashboard-page .dashboard-card .card-icon {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.dashboard-page .dashboard-card .card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.dashboard-page .dashboard-card .card-text {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 0;
+    line-height: 1;
+}
+
+/* Dashboard card hover effects */
+.dashboard-page .dashboard-card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.dashboard-page .dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
 .page-title {
     margin-bottom: 25px;
     padding-bottom: 10px;
@@ -499,10 +546,38 @@ header {
 }
 
 /* Force proper sizing for Bootstrap columns - ENHANCED ✅ */
-.main-content .col-md-3,
-.main-content .col-md-4,
-.main-content .col-md-5,
-.main-content .col-md-6,
+.main-content .col-md-3 {
+    flex: 0 0 25%;
+    max-width: 25%;
+    box-sizing: border-box !important;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.main-content .col-md-4 {
+    flex: 0 0 33.333333%;
+    max-width: 33.333333%;
+    box-sizing: border-box !important;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.main-content .col-md-5 {
+    flex: 0 0 41.666667%;
+    max-width: 41.666667%;
+    box-sizing: border-box !important;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.main-content .col-md-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+    box-sizing: border-box !important;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
 .main-content .col-md-7,
 .main-content .col-md-8,
 .main-content .col-md-9,
@@ -511,6 +586,302 @@ header {
     box-sizing: border-box !important;
     padding-left: 15px;
     padding-right: 15px;
+    flex: 0 0 auto;
+}
+
+/* Dashboard Layout Specific Fixes */
+.main-content .row {
+    margin-left: -15px;
+    margin-right: -15px;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Ensure dashboard cards stay side by side */
+.main-content .row .col-md-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+    min-width: 0;
+}
+
+/* Force dashboard charts to stay side by side even when sidebar changes */
+.main-content .row.mt-4 .col-md-6 {
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+    width: 50% !important;
+}
+
+/* Responsive behavior for dashboard */
+@media (max-width: 992px) {
+    .main-content .row .col-md-6 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+    
+    .main-content .row.mt-4 .col-md-6 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+}
+
+/* Ensure charts containers maintain proper sizing */
+#chart-prestasi {
+    width: 100% !important;
+    height: 300px !important;
+    overflow: hidden;
+}
+
+/* Visualization container for decision tree - allow full image display */
+#visualization-container {
+    width: 100% !important;
+    min-height: 400px !important;
+    max-height: 600px !important;
+    overflow: auto;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+}
+
+/* Style for decision tree images */
+#visualization-container img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    background-color: white;
+    padding: 10px;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Hover effect for decision tree images */
+#visualization-container img:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Loading state for visualization container */
+#visualization-container.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+}
+
+#visualization-container.loading::before {
+    content: "Memuat visualisasi...";
+    color: #6c757d;
+    font-style: italic;
+}
+
+/* Empty state styling */
+#visualization-container p {
+    color: #6c757d;
+    font-style: italic;
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Confusion Matrix Styling */
+#confusion-matrix-container {
+    width: 100% !important;
+    min-height: 300px !important;
+    max-height: 500px !important;
+    overflow: auto;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+}
+
+#confusion-matrix-container table {
+    width: 100%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+#confusion-matrix-container th,
+#confusion-matrix-container td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #dee2e6;
+    font-weight: 500;
+}
+
+#confusion-matrix-container th {
+    background-color: #495057;
+    color: white;
+    font-weight: 600;
+}
+
+#confusion-matrix-container .matrix-cell {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+#confusion-matrix-container .matrix-cell.correct {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+#confusion-matrix-container .matrix-cell.incorrect {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+#confusion-matrix-container .matrix-label {
+    background-color: #e9ecef;
+    font-weight: 600;
+    color: #495057;
+}
+
+/* Model Metrics Styling */
+.metric-item {
+    text-align: center;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #dee2e6;
+    transition: transform 0.2s ease-in-out;
+}
+
+.metric-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.metric-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #6c757d;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.metric-value {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 0;
+    line-height: 1;
+}
+
+/* Loading state for confusion matrix */
+#confusion-matrix-container.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+}
+
+#confusion-matrix-container.loading::before {
+    content: "Memuat confusion matrix...";
+    color: #6c757d;
+    font-style: italic;
+}
+
+/* Empty state for confusion matrix */
+#confusion-matrix-container p {
+    color: #6c757d;
+    font-style: italic;
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Ensure the card containing visualization has proper height */
+.dashboard-page .row.mt-4 .col-md-7 .dashboard-card {
+    min-height: 500px;
+}
+
+.dashboard-page .row.mt-4 .col-md-7 .dashboard-card .card-body {
+    padding: 1rem;
+    height: auto;
+    min-height: 450px;
+}
+
+/* Dashboard card body sizing */
+.dashboard-card .card-body {
+    padding: 1.5rem;
+    height: auto;
+    min-height: 120px;
+}
+
+/* Dashboard Cards Row - 4 Column Layout */
+.dashboard-page .row:first-of-type {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -15px;
+    margin-right: -15px;
+}
+
+.dashboard-page .row:first-of-type .col-md-3 {
+    flex: 0 0 25% !important;
+    max-width: 25% !important;
+    width: 25% !important;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-bottom: 20px;
+}
+
+/* Ensure dashboard cards maintain equal height */
+.dashboard-page .row:first-of-type .dashboard-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard-page .row:first-of-type .dashboard-card .card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 140px;
+}
+
+/* Responsive behavior for dashboard cards */
+@media (max-width: 1200px) {
+    .dashboard-page .row:first-of-type .col-md-3 {
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
+        width: 50% !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-page .row:first-of-type .col-md-3 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+    
+    /* Mobile responsive for visualization container */
+    #visualization-container {
+        min-height: 300px !important;
+        max-height: 500px !important;
+        padding: 10px;
+    }
+    
+    .dashboard-page .row.mt-4 .col-md-7 .dashboard-card {
+        min-height: 400px;
+    }
+    
+    .dashboard-page .row.mt-4 .col-md-7 .dashboard-card .card-body {
+        min-height: 350px;
+        padding: 0.75rem;
+    }
 }
 
 /* Ensure proper container behavior - ENHANCED ✅ */
@@ -550,6 +921,57 @@ header {
 .main-content.sidebar-collapsed,
 .sidebar.collapsed ~ .main-content {
     transform: translateZ(0); /* Force GPU acceleration */
+}
+
+/* Ensure dashboard layout stability during sidebar transitions */
+.main-content.sidebar-collapsed .row,
+.sidebar.collapsed ~ .main-content .row {
+    width: 100% !important;
+    margin-left: -15px !important;
+    margin-right: -15px !important;
+}
+
+.main-content.sidebar-collapsed .row .col-md-6,
+.sidebar.collapsed ~ .main-content .row .col-md-6 {
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+    width: 50% !important;
+}
+
+/* Prevent layout shift during transitions */
+.main-content .row,
+.main-content .row .col-md-6,
+.main-content .row .col-md-3 {
+    transition: none !important;
+}
+
+/* Ensure 4-column layout stability during sidebar transitions */
+.main-content.sidebar-collapsed .dashboard-page .row:first-of-type .col-md-3,
+.sidebar.collapsed ~ .main-content .dashboard-page .row:first-of-type .col-md-3 {
+    flex: 0 0 25% !important;
+    max-width: 25% !important;
+    width: 25% !important;
+}
+
+/* Force dashboard cards to maintain 4-column layout */
+.dashboard-page .row:first-of-type {
+    width: 100% !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+}
+
+.dashboard-page .row:first-of-type .col-md-3 {
+    flex-shrink: 0 !important;
+    flex-grow: 0 !important;
+}
+
+/* Only apply transition to main-content container, not its children */
+.main-content {
+    transition: margin-left 0.3s ease, width 0.3s ease !important;
+}
+
+.main-content > * {
+    transition: none !important;
 }
 
 /* Perfect mobile behavior */

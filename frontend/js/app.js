@@ -40,13 +40,34 @@ $(document).ready(function() {
     // CSS telah dipindahkan ke file custom.css
     
     // Update tombol toggle sidebar
-    $("#sidebar-toggle").on("click", function() {
+    $(document).on("click", "#toggleSidebar, .sidebar-toggle-btn", function() {
         $(".sidebar").toggleClass("collapsed");
-        $(".main-content").toggleClass("expanded full-width");
-        $(this).find("i").toggleClass("k-i-menu k-i-close");
+        $(".main-content").toggleClass("sidebar-collapsed");
+        
+        // Update icon
+        const icon = $(this).find("i");
+        if ($(".sidebar").hasClass("collapsed")) {
+            icon.removeClass("fas fa-bars").addClass("fas fa-times");
+        } else {
+            icon.removeClass("fas fa-times").addClass("fas fa-bars");
+        }
         
         // Simpan state sidebar di localStorage
         localStorage.setItem('sidebarState', $(".sidebar").hasClass("collapsed") ? 'collapsed' : 'expanded');
+        
+        // Update header toggle width
+        if ($(".sidebar").hasClass("collapsed")) {
+            $("#sidebar-toggle").addClass("collapsed");
+        } else {
+            $("#sidebar-toggle").removeClass("collapsed");
+        }
+        
+        // Force layout recalculation for dashboard
+        setTimeout(function() {
+            if ($("#chart-prestasi").data("kendoChart")) {
+                $("#chart-prestasi").data("kendoChart").resize();
+            }
+        }, 350);
     });
     
     // Load state sidebar saat halaman dimuat
@@ -54,8 +75,9 @@ $(document).ready(function() {
         const sidebarState = localStorage.getItem('sidebarState');
         if (sidebarState === 'collapsed') {
             $(".sidebar").addClass("collapsed");
-            $(".main-content").addClass("expanded full-width");
-            $("#sidebar-toggle i").removeClass("k-i-menu").addClass("k-i-close");
+            $(".main-content").addClass("sidebar-collapsed");
+            $("#sidebar-toggle").addClass("collapsed");
+            $("#toggleSidebar i, .sidebar-toggle-btn i").removeClass("fas fa-bars").addClass("fas fa-times");
         }
     });
     
@@ -334,14 +356,23 @@ $(document).ready(function() {
         $.ajax({
             url: `${API_URL}/prediksi/visualization`,
             method: "GET",
+            beforeSend: function() {
+                $("#visualization-container").addClass("loading").html("");
+            },
             success: function(data) {
+                $("#visualization-container").removeClass("loading");
                 if (data.status === "success") {
-                    $("#visualization-container").html(`<img src="${data.image}" alt="Pohon Keputusan C4.5" />`);
+                    const imgHtml = `<img src="${data.image}" alt="Pohon Keputusan C4.5" onclick="openImageModal(this.src)" title="Klik untuk memperbesar" />`;
+                    $("#visualization-container").html(imgHtml);
+                } else {
+                    $("#visualization-container").html('<p>Visualisasi tidak tersedia. Silakan latih model terlebih dahulu.</p>');
                 }
             },
             error: function(xhr) {
+                $("#visualization-container").removeClass("loading");
                 console.error("Error loading visualization:", xhr.responseText);
                 const errorMsg = xhr.responseJSON ? xhr.responseJSON.detail : 'Terjadi kesalahan saat mengambil data';
+                $("#visualization-container").html('<p>Gagal memuat visualisasi. Silakan coba lagi.</p>');
                 $("#toast-container").kendoNotification({
                     position: {
                         pinned: false,
@@ -353,6 +384,113 @@ $(document).ready(function() {
                 }).data("kendoNotification").error(errorMsg);
             }
         });
+        
+        // Ambil confusion matrix dan metrik evaluasi
+        loadModelEvaluation();
+    }
+    
+    // ========== FUNGSI LOAD MODEL EVALUATION ==========
+    function loadModelEvaluation() {
+        // Load confusion matrix
+        $.ajax({
+            url: `${API_URL}/prediksi/confusion-matrix`,
+            method: "GET",
+            beforeSend: function(xhr) {
+                $("#confusion-matrix-container").addClass("loading").html("");
+                const token = getToken();
+                if (token) {
+                    xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                }
+            },
+            success: function(data) {
+                $("#confusion-matrix-container").removeClass("loading");
+                if (data.status === "success" && data.confusion_matrix) {
+                    displayConfusionMatrix(data.confusion_matrix, data.labels);
+                } else {
+                    $("#confusion-matrix-container").html('<p>Confusion matrix tidak tersedia. Silakan latih model terlebih dahulu.</p>');
+                }
+            },
+            error: function(xhr) {
+                $("#confusion-matrix-container").removeClass("loading");
+                console.error("Error loading confusion matrix:", xhr.responseText);
+                const errorMsg = xhr.responseJSON ? xhr.responseJSON.detail : 'Gagal memuat confusion matrix';
+                $("#confusion-matrix-container").html(`<p>${errorMsg}. Silakan coba lagi.</p>`);
+            }
+        });
+        
+        // Load model metrics
+        $.ajax({
+            url: `${API_URL}/prediksi/model-metrics`,
+            method: "GET",
+            beforeSend: function(xhr) {
+                const token = getToken();
+                if (token) {
+                    xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                }
+            },
+            success: function(data) {
+                if (data.status === "success" && data.metrics) {
+                    displayModelMetrics(data.metrics, data.last_trained);
+                } else {
+                    resetModelMetrics();
+                }
+            },
+            error: function(xhr) {
+                console.error("Error loading model metrics:", xhr.responseText);
+                const errorMsg = xhr.responseJSON ? xhr.responseJSON.detail : 'Gagal memuat model metrics';
+                console.warn(`Model metrics error: ${errorMsg}`);
+                resetModelMetrics();
+            }
+        });
+    }
+    
+    // ========== FUNGSI DISPLAY CONFUSION MATRIX ==========
+    function displayConfusionMatrix(matrix, labels) {
+        let tableHtml = '<table>';
+        
+        // Header row
+        tableHtml += '<tr><th></th>';
+        labels.forEach(label => {
+            tableHtml += `<th>Prediksi ${label}</th>`;
+        });
+        tableHtml += '</tr>';
+        
+        // Data rows
+        for (let i = 0; i < matrix.length; i++) {
+            tableHtml += `<tr><td class="matrix-label">Aktual ${labels[i]}</td>`;
+            for (let j = 0; j < matrix[i].length; j++) {
+                const cellClass = i === j ? 'matrix-cell correct' : 'matrix-cell incorrect';
+                tableHtml += `<td class="${cellClass}">${matrix[i][j]}</td>`;
+            }
+            tableHtml += '</tr>';
+        }
+        
+        tableHtml += '</table>';
+        $("#confusion-matrix-container").html(tableHtml);
+    }
+    
+    // ========== FUNGSI DISPLAY MODEL METRICS ==========
+    function displayModelMetrics(metrics, lastTrained) {
+        $("#accuracy-value").text((metrics.accuracy * 100).toFixed(2) + '%');
+        $("#precision-value").text((metrics.precision * 100).toFixed(2) + '%');
+        $("#recall-value").text((metrics.recall * 100).toFixed(2) + '%');
+        $("#f1-score-value").text((metrics.f1_score * 100).toFixed(2) + '%');
+        
+        if (lastTrained) {
+            const date = new Date(lastTrained);
+            $("#last-trained").text(date.toLocaleString('id-ID'));
+        } else {
+            $("#last-trained").text('Belum pernah');
+        }
+    }
+    
+    // ========== FUNGSI RESET MODEL METRICS ==========
+    function resetModelMetrics() {
+        $("#accuracy-value").text('-');
+        $("#precision-value").text('-');
+        $("#recall-value").text('-');
+        $("#f1-score-value").text('-');
+        $("#last-trained").text('Belum pernah');
     }
     
     function createPrestasiChart(tinggi, sedang, rendah) {
@@ -383,10 +521,6 @@ $(document).ready(function() {
     // ========== FUNGSI DATA SISWA ==========
     function initSiswaGrid() {
         $("#siswa-grid").kendoGrid({
-            editable: {
-                mode: "popup",
-                template: kendo.template($("#user-edit-template").html())
-            },
             dataSource: {
                 transport: {
                     read: {
@@ -536,7 +670,14 @@ $(document).ready(function() {
             }],
             editable: {
                 mode: "popup",
-                template: kendo.template($("#siswa-template").html())
+                template: function() {
+                    const templateHtml = $("#siswa-template").html();
+                    if (!templateHtml) {
+                        console.error("Template #siswa-template tidak ditemukan");
+                        return "<div>Error: Template tidak ditemukan</div>";
+                    }
+                    return kendo.template(templateHtml);
+                }()
             },
             columns: [
                 { field: "nama", title: "Nama" },
@@ -683,13 +824,25 @@ $(document).ready(function() {
                 transport: {
                     read: {
                         url: `${API_URL}/nilai`,
-                        dataType: "json"
+                        dataType: "json",
+                        beforeSend: function(xhr) {
+                            const token = getToken();
+                            if (token) {
+                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                            }
+                        }
                     },
                     create: {
                         url: `${API_URL}/nilai`,
                         dataType: "json",
                         type: "POST",
-                        contentType: "application/json"
+                        contentType: "application/json",
+                        beforeSend: function(xhr) {
+                            const token = getToken();
+                            if (token) {
+                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                            }
+                        }
                     },
                     update: {
                         url: function(data) {
@@ -697,14 +850,26 @@ $(document).ready(function() {
                         },
                         dataType: "json",
                         type: "PUT",
-                        contentType: "application/json"
+                        contentType: "application/json",
+                        beforeSend: function(xhr) {
+                            const token = getToken();
+                            if (token) {
+                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                            }
+                        }
                     },
                     destroy: {
                         url: function(data) {
                             return `${API_URL}/nilai/${data.id}`;
                         },
                         dataType: "json",
-                        type: "DELETE"
+                        type: "DELETE",
+                        beforeSend: function(xhr) {
+                            const token = getToken();
+                            if (token) {
+                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                            }
+                        }
                     },
                     parameterMap: function(data, type) {
                         if (type === "create" || type === "update") {
@@ -782,13 +947,25 @@ $(document).ready(function() {
                 transport: {
                     read: {
                         url: `${API_URL}/presensi`,
-                        dataType: "json"
+                        dataType: "json",
+                        beforeSend: function(xhr) {
+                            const token = getToken();
+                            if (token) {
+                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                            }
+                        }
                     },
                     create: {
                         url: `${API_URL}/presensi`,
                         dataType: "json",
                         type: "POST",
-                        contentType: "application/json"
+                        contentType: "application/json",
+                        beforeSend: function(xhr) {
+                            const token = getToken();
+                            if (token) {
+                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                            }
+                        }
                     },
                     update: {
                         url: function(data) {
@@ -796,14 +973,26 @@ $(document).ready(function() {
                         },
                         dataType: "json",
                         type: "PUT",
-                        contentType: "application/json"
+                        contentType: "application/json",
+                        beforeSend: function(xhr) {
+                            const token = getToken();
+                            if (token) {
+                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                            }
+                        }
                     },
                     destroy: {
                         url: function(data) {
                             return `${API_URL}/presensi/${data.id}`;
                         },
                         dataType: "json",
-                        type: "DELETE"
+                        type: "DELETE",
+                        beforeSend: function(xhr) {
+                            const token = getToken();
+                            if (token) {
+                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                            }
+                        }
                     },
                     parameterMap: function(data, type) {
                         if (type === "create" || type === "update") {
@@ -866,13 +1055,25 @@ $(document).ready(function() {
                 transport: {
                     read: {
                         url: `${API_URL}/penghasilan`,
-                        dataType: "json"
+                        dataType: "json",
+                        beforeSend: function(xhr) {
+                            const token = getToken();
+                            if (token) {
+                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                            }
+                        }
                     },
                     create: {
                         url: `${API_URL}/penghasilan`,
                         dataType: "json",
                         type: "POST",
-                        contentType: "application/json"
+                        contentType: "application/json",
+                        beforeSend: function(xhr) {
+                            const token = getToken();
+                            if (token) {
+                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                            }
+                        }
                     },
                     update: {
                         url: function(data) {
@@ -880,14 +1081,26 @@ $(document).ready(function() {
                         },
                         dataType: "json",
                         type: "PUT",
-                        contentType: "application/json"
+                        contentType: "application/json",
+                        beforeSend: function(xhr) {
+                            const token = getToken();
+                            if (token) {
+                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                            }
+                        }
                     },
                     destroy: {
                         url: function(data) {
                             return `${API_URL}/penghasilan/${data.id}`;
                         },
                         dataType: "json",
-                        type: "DELETE"
+                        type: "DELETE",
+                        beforeSend: function(xhr) {
+                            const token = getToken();
+                            if (token) {
+                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                            }
+                        }
                     },
                     parameterMap: function(data, type) {
                         if (type === "create" || type === "update") {
@@ -1009,7 +1222,13 @@ $(document).ready(function() {
                 transport: {
                     read: {
                         url: `${API_URL}/siswa`,
-                        dataType: "json"
+                        dataType: "json",
+                        beforeSend: function(xhr) {
+                            const token = getToken();
+                            if (token) {
+                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                            }
+                        }
                     }
                 }
             },
@@ -1124,12 +1343,29 @@ $(document).ready(function() {
                     $.ajax({
                         url: `${API_URL}/prediksi/visualization`,
                         method: "GET",
+                        beforeSend: function() {
+                            $("#visualization-container").addClass("loading").html("");
+                        },
                         success: function(data) {
+                            $("#visualization-container").removeClass("loading");
                             if (data.status === "success") {
-                                $("#visualization-container").html(`<img src="data:image/png;base64,${data.visualization_base64}" alt="Pohon Keputusan C4.5" />`);
+                                const imgSrc = data.visualization_base64 ? 
+                                    `data:image/png;base64,${data.visualization_base64}` : 
+                                    data.image;
+                                const imgHtml = `<img src="${imgSrc}" alt="Pohon Keputusan C4.5" onclick="openImageModal(this.src)" title="Klik untuk memperbesar" />`;
+                                $("#visualization-container").html(imgHtml);
+                            } else {
+                                $("#visualization-container").html('<p>Visualisasi tidak tersedia.</p>');
                             }
+                        },
+                        error: function() {
+                            $("#visualization-container").removeClass("loading");
+                            $("#visualization-container").html('<p>Gagal memuat visualisasi.</p>');
                         }
                     });
+                    
+                    // Refresh confusion matrix dan metrik evaluasi
+                    loadModelEvaluation();
                 },
                 error: function(xhr) {
                     let errorMsg = "Terjadi kesalahan saat melatih model.";
@@ -1155,7 +1391,13 @@ $(document).ready(function() {
                 transport: {
                     read: {
                         url: `${API_URL}/siswa`,
-                        dataType: "json"
+                        dataType: "json",
+                        beforeSend: function(xhr) {
+                            const token = getToken();
+                            if (token) {
+                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                            }
+                        }
                     }
                 }
             },
@@ -1218,7 +1460,13 @@ $(document).ready(function() {
                     transport: {
                         read: {
                             url: `${API_URL}/siswa`,
-                            dataType: "json"
+                            dataType: "json",
+                            beforeSend: function(xhr) {
+                                const token = getToken();
+                                if (token) {
+                                    xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                                }
+                            }
                         }
                     }
                 }
@@ -1904,8 +2152,99 @@ $(document).ready(function() {
         }, 1000);
     };
     
-    // Make functions globally accessible
+        // Make functions globally accessible
     window.showUserProfile = showUserProfile;
     window.showProfilePage = showProfilePage;
-    
+
 });
+
+// Global function for opening image modal
+function openImageModal(imageSrc) {
+    // Remove any existing modal
+    $(".image-modal").remove();
+    
+    // Create modal HTML
+    const modalHtml = `
+        <div class="image-modal" style="
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        ">
+            <div style="
+                position: relative;
+                max-width: 95%;
+                max-height: 95%;
+                background: white;
+                border-radius: 8px;
+                padding: 20px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            ">
+                <button onclick="closeImageModal()" style="
+                    position: absolute;
+                    top: 10px;
+                    right: 10px;
+                    background: #dc3545;
+                    color: white;
+                    border: none;
+                    border-radius: 50%;
+                    width: 30px;
+                    height: 30px;
+                    cursor: pointer;
+                    font-size: 16px;
+                    line-height: 1;
+                    z-index: 10001;
+                ">&times;</button>
+                <img src="${imageSrc}" alt="Pohon Keputusan C4.5" style="
+                    max-width: 100%;
+                    max-height: 100%;
+                    height: auto;
+                    display: block;
+                    margin: 0 auto;
+                ">
+                <div style="
+                    text-align: center;
+                    margin-top: 15px;
+                    color: #6c757d;
+                    font-size: 14px;
+                ">
+                    <p>Pohon Keputusan C4.5 - Klik di luar gambar atau tombol X untuk menutup</p>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Add modal to body
+    $("body").append(modalHtml);
+    
+    // Close modal when clicking outside the image
+    $(".image-modal").on("click", function(e) {
+        if (e.target === this) {
+            closeImageModal();
+        }
+    });
+    
+    // Close modal with Escape key
+    $(document).on("keydown.imageModal", function(e) {
+        if (e.key === "Escape") {
+            closeImageModal();
+        }
+    });
+}
+
+// Global function for closing image modal
+function closeImageModal() {
+    $(".image-modal").remove();
+    $(document).off("keydown.imageModal");
+}
+
+// Make functions globally accessible
+window.openImageModal = openImageModal;
+window.closeImageModal = closeImageModal;

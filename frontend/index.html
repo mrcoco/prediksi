@@ -99,6 +99,49 @@
             z-index: 9999;
             display: none; /* Hidden by default */
         }
+        
+        /* Token Countdown Styling */
+        .token-countdown {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 12px;
+            border-radius: 20px;
+            margin-right: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .token-countdown:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .token-countdown i {
+            margin-right: 8px;
+            font-size: 14px;
+        }
+        
+        .countdown-text {
+            color: white;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        
+        .countdown-timer-warning {
+            color: #ffc107 !important;
+            animation: pulse 1s infinite;
+        }
+        
+        .countdown-timer-danger {
+            color: #dc3545 !important;
+            animation: pulse 0.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
     </style>
 </head>
 <body>
@@ -133,6 +176,11 @@
                 <h5 class="mb-0 text-white">EduPro</h5>
             </div>
             <div class="ms-auto d-flex align-items-center">
+                
+                <div class="token-countdown" id="tokenCountdown">
+                    <i class="fas fa-clock text-warning"></i>
+                    <span class="countdown-text">Token: <span id="countdown-timer">--:--</span></span>
+                </div>
                 <span class="text-white me-3" id="user-info">
                     <i class="fas fa-user me-1"></i>
                     <span id="current-username">Loading...</span>

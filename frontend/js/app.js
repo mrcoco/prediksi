@@ -22,6 +22,106 @@ $(document).ready(function() {
         beforeSend: addAuthHeader
     });
     
+    // ========== TOKEN COUNTDOWN MANAGEMENT ==========
+    let countdownInterval = null;
+    let tokenExpiryTime = null;
+    
+    // Fungsi untuk mendapatkan waktu expired token dari JWT
+    function getTokenExpiryTime() {
+        const token = getToken();
+        if (!token) return null;
+        
+        try {
+            // Decode JWT token (base64)
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            // exp adalah timestamp dalam detik, convert ke milliseconds
+            return payload.exp * 1000;
+        } catch (e) {
+            console.error('Error decoding token:', e);
+            return null;
+        }
+    }
+    
+    // Fungsi untuk memformat waktu countdown
+    function formatCountdownTime(milliseconds) {
+        if (milliseconds <= 0) return "00:00";
+        
+        const totalSeconds = Math.floor(milliseconds / 1000);
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        
+        return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+    
+    // Fungsi untuk memulai countdown
+    function startTokenCountdown() {
+        // Clear existing interval
+        if (countdownInterval) {
+            clearInterval(countdownInterval);
+        }
+        
+        tokenExpiryTime = getTokenExpiryTime();
+        if (!tokenExpiryTime) {
+            $("#countdown-timer").text("--:--");
+            return;
+        }
+        
+        countdownInterval = setInterval(function() {
+            const now = Date.now();
+            const timeLeft = tokenExpiryTime - now;
+            
+            if (timeLeft <= 0) {
+                // Token expired
+                $("#countdown-timer").text("00:00").addClass("countdown-timer-danger");
+                clearInterval(countdownInterval);
+                
+                // Show expiry notification
+                showErrorNotification("Token telah expired. Silakan login kembali.", "Session Expired");
+                
+                // Auto logout after 3 seconds
+                setTimeout(() => {
+                    logout();
+                }, 3000);
+                
+                return;
+            }
+            
+            // Update countdown display
+            const formattedTime = formatCountdownTime(timeLeft);
+            const $timer = $("#countdown-timer");
+            $timer.text(formattedTime);
+            
+            // Add warning classes based on time left
+            $timer.removeClass("countdown-timer-warning countdown-timer-danger");
+            
+            if (timeLeft <= 5 * 60 * 1000) { // 5 minutes or less
+                $timer.addClass("countdown-timer-danger");
+                
+                // Show warning notification every minute in last 5 minutes
+                const minutesLeft = Math.floor(timeLeft / (60 * 1000));
+                if (timeLeft % (60 * 1000) < 1000 && minutesLeft > 0) {
+                    showInfoNotification(`Token akan expired dalam ${minutesLeft} menit`, "Peringatan Token");
+                }
+            } else if (timeLeft <= 10 * 60 * 1000) { // 10 minutes or less
+                $timer.addClass("countdown-timer-warning");
+            }
+        }, 1000);
+    }
+    
+    // Fungsi untuk stop countdown
+    function stopTokenCountdown() {
+        if (countdownInterval) {
+            clearInterval(countdownInterval);
+            countdownInterval = null;
+        }
+        $("#countdown-timer").text("--:--").removeClass("countdown-timer-warning countdown-timer-danger");
+    }
+    
+    // Fungsi untuk refresh token countdown (dipanggil setelah login atau refresh token)
+    function refreshTokenCountdown() {
+        startTokenCountdown();
+    }
+    
     kendo.culture("id-ID");
     
     // Tampilkan halaman dashboard secara default
@@ -250,6 +350,9 @@ $(document).ready(function() {
     
     // Update header user info
     updateHeaderUserInfo();
+    
+    // Start token countdown
+    startTokenCountdown();
     
     // Initialize tooltips
     $('[data-toggle="tooltip"]').tooltip();
@@ -1301,26 +1404,6 @@ $(document).ready(function() {
                             }
                         }
                     },
-                    destroy: {
-                        url: function(data) {
-                            return `${API_URL}/prediksi/history/${data.id}`;
-                        },
-                        type: "DELETE",
-                        beforeSend: function(xhr) {
-                            const token = getToken();
-                            if (token) {
-                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-                            }
-                        },
-                        complete: function(e) {
-                            if (e.status === 204) {
-                                showSuccessNotification("Riwayat prediksi berhasil dihapus", "Sukses");
-                            } else {
-                                const errorMsg = e.responseJSON?.detail || "Gagal menghapus riwayat prediksi";
-                                showErrorNotification(errorMsg);
-                            }
-                        }
-                    },
                     parameterMap: function(data, operation) {
                         if (operation === "read") {
                             return JSON.stringify({
@@ -1368,21 +1451,38 @@ $(document).ready(function() {
                 { field: "confidence", title: "Confidence", format: "{0:p2}", width: 100 },
                 { field: "created_at", title: "Tanggal", format: "{0:dd/MM/yyyy HH:mm}", width: 150 },
                 {
-                    command: [{
-                        name: "destroy",
-                        text: "Hapus",
-                        iconClass: "k-icon k-i-delete",
-                        click: function(e) {
-                            e.preventDefault();
-                            const dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-                            showDeleteConfirmationRiwayat(dataItem);
-                            return false;
-                        }
-                    }],
+                    field: "id",
                     title: "Aksi",
-                    width: 100
+                    width: 100,
+                    template: function(dataItem) {
+                        return `<button class="k-button k-button-solid k-button-solid-error k-button-sm btn-delete-riwayat" 
+                                       data-id="${dataItem.id}" 
+                                       data-nama="${dataItem.nama_siswa}" 
+                                       data-semester="${dataItem.semester}" 
+                                       data-tahun="${dataItem.tahun_ajaran}" 
+                                       data-prediksi="${dataItem.prediksi_prestasi}">
+                                    <i class="k-icon k-i-delete"></i> Hapus
+                                </button>`;
+                    }
                 }
             ]
+        });
+        
+        // Event handler untuk tombol hapus riwayat prediksi
+        $(document).on("click", ".btn-delete-riwayat", function(e) {
+            e.preventDefault();
+            
+            const button = $(this);
+            const dataItem = {
+                id: button.data("id"),
+                nama_siswa: button.data("nama"),
+                semester: button.data("semester"),
+                tahun_ajaran: button.data("tahun"),
+                prediksi_prestasi: button.data("prediksi")
+            };
+            
+            console.log("Delete button clicked:", dataItem);
+            showDeleteConfirmationRiwayat(dataItem);
         });
         
         // Handler untuk tombol prediksi
@@ -1903,10 +2003,30 @@ $(document).ready(function() {
 
         windowElement.on("click", "#confirmDeleteRiwayat", function() {
             window.close();
-            // Proceed with delete
-            const grid = $("#riwayat-grid").data("kendoGrid");
-            grid.dataSource.remove(data);
-            grid.dataSource.sync();
+            
+            // Lakukan AJAX call langsung ke backend untuk menghapus
+            $.ajax({
+                url: `${API_URL}/prediksi/history/${data.id}`,
+                type: "DELETE",
+                beforeSend: function(xhr) {
+                    const token = getToken();
+                    if (token) {
+                        xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                    }
+                },
+                success: function() {
+                    showSuccessNotification("Riwayat prediksi berhasil dihapus", "Sukses");
+                    // Refresh grid setelah berhasil menghapus
+                    const grid = $("#riwayat-grid").data("kendoGrid");
+                    if (grid) {
+                        grid.dataSource.read();
+                    }
+                },
+                error: function(xhr) {
+                    const errorMsg = xhr.responseJSON?.detail || "Gagal menghapus riwayat prediksi";
+                    showErrorNotification(errorMsg, "Error");
+                }
+            });
         });
 
         window.center().open();
@@ -2329,6 +2449,9 @@ $(document).ready(function() {
     
     // Global logout function
     window.logout = function() {
+        // Stop token countdown
+        stopTokenCountdown();
+        
         // Clear all localStorage data
         localStorage.removeItem('access_token');
         localStorage.removeItem('user_data');

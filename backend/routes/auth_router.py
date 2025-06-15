@@ -16,7 +16,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 # JWT Configuration
 SECRET_KEY = "wfdrmGsTH4oRbZKe8gGNNnIjziDJZgsH"
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 120
 
 # Pydantic Models
 class Token(BaseModel):

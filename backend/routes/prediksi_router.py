@@ -739,3 +739,71 @@ def get_data_count(db: Session = Depends(get_db)):
             "is_sufficient": len(df_labeled) >= 10
         }
     }
+
+@router.get("/confusion-matrix")
+def get_confusion_matrix(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Mendapatkan confusion matrix dari model C4.5 yang sudah dilatih"""
+    try:
+        # Cek apakah model sudah dilatih
+        if not c45_model.trained:
+            return {
+                "status": "error",
+                "message": "Model belum dilatih. Silakan latih model terlebih dahulu."
+            }
+        
+        # Ambil confusion matrix
+        result = c45_model.get_confusion_matrix()
+        
+        return {
+            "status": "success",
+            "confusion_matrix": result['confusion_matrix'],
+            "labels": result['labels']
+        }
+    
+    except ValueError as e:
+        return {
+            "status": "error",
+            "message": str(e)
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Terjadi kesalahan saat mengambil confusion matrix: {str(e)}"
+        )
+
+@router.get("/model-metrics")
+def get_model_metrics(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Mendapatkan metrik evaluasi model C4.5"""
+    try:
+        # Cek apakah model sudah dilatih
+        if not c45_model.trained:
+            return {
+                "status": "error",
+                "message": "Model belum dilatih. Silakan latih model terlebih dahulu."
+            }
+        
+        # Ambil model metrics
+        result = c45_model.get_model_metrics()
+        
+        return {
+            "status": "success",
+            "metrics": result['metrics'],
+            "last_trained": result['last_trained']
+        }
+    
+    except ValueError as e:
+        return {
+            "status": "error",
+            "message": str(e)
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Terjadi kesalahan saat mengambil model metrics: {str(e)}"
+        )

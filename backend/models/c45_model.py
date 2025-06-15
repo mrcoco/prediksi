@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from sklearn.tree import DecisionTreeClassifier, export_graphviz
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, classification_report
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, precision_score, recall_score, f1_score
 from sqlalchemy.orm import Session
 import pydotplus
 import graphviz
@@ -20,6 +20,10 @@ class C45Model:
         self.target = 'prediksi_prestasi'
         self.trained = False
         self.tree_visualization = None
+        self.confusion_matrix = None
+        self.model_metrics = None
+        self.class_labels = ['Rendah', 'Sedang', 'Tinggi']
+        self.last_trained = None
     
     def prepare_data(self, db: Session):
         """Menyiapkan data dari database untuk pelatihan model"""
@@ -83,6 +87,22 @@ class C45Model:
         y_pred = self.model.predict(X_test)
         accuracy = accuracy_score(y_test, y_pred)
         report = classification_report(y_test, y_pred, output_dict=True)
+        
+        # Hitung confusion matrix dan metrics
+        cm = confusion_matrix(y_test, y_pred, labels=self.class_labels)
+        precision = precision_score(y_test, y_pred, average='weighted', zero_division=0)
+        recall = recall_score(y_test, y_pred, average='weighted', zero_division=0)
+        f1 = f1_score(y_test, y_pred, average='weighted', zero_division=0)
+        
+        # Simpan confusion matrix dan metrics
+        self.confusion_matrix = cm.tolist()
+        self.model_metrics = {
+            'accuracy': accuracy,
+            'precision': precision,
+            'recall': recall,
+            'f1_score': f1
+        }
+        self.last_trained = pd.Timestamp.now().isoformat()
         
         # Buat visualisasi pohon keputusan
         dot_data = StringIO()
@@ -198,6 +218,32 @@ class C45Model:
             raise ValueError("Model belum dilatih")
         
         return self.tree_visualization
+    
+    def get_confusion_matrix(self):
+        """Mendapatkan confusion matrix dari model yang sudah dilatih"""
+        if not self.trained:
+            raise ValueError("Model belum dilatih")
+        
+        if self.confusion_matrix is None:
+            raise ValueError("Confusion matrix tidak tersedia")
+        
+        return {
+            'confusion_matrix': self.confusion_matrix,
+            'labels': self.class_labels
+        }
+    
+    def get_model_metrics(self):
+        """Mendapatkan metrik evaluasi model"""
+        if not self.trained:
+            raise ValueError("Model belum dilatih")
+        
+        if self.model_metrics is None:
+            raise ValueError("Model metrics tidak tersedia")
+        
+        return {
+            'metrics': self.model_metrics,
+            'last_trained': self.last_trained
+        }
         
     def visualize(self):
         """Generate visualization of decision tree and return as base64"""

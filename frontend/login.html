@@ -72,12 +72,12 @@
                         grant_type: 'password'
                     },
                     success: function(response) {
-                        // Store token in localStorage
+                        // Store token and user data in localStorage
                         localStorage.setItem('access_token', response.access_token);
+                        localStorage.setItem('user_data', JSON.stringify(response.user));
                         
                         // Redirect to dashboard
                         window.location.href = 'index.html';
-                        addAut
                     },
                     error: function(xhr) {
                         kendo.alert(xhr.responseJSON?.detail || 'Login gagal');

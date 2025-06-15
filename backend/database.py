@@ -23,8 +23,8 @@ class Siswa(Base):
     kelas = Column(String)
     tanggal_lahir = Column(DateTime)
     alamat = Column(Text)
-    created_at = Column(DateTime, default=datetime.now)
-    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+    created_at = Column(DateTime, default=datetime.now, nullable=False)
+    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now, nullable=False)
     
     # Relasi ke tabel lain
     nilai_raport = relationship("NilaiRaport", back_populates="siswa")
@@ -54,8 +54,8 @@ class NilaiRaport(Base):
     
     
     rata_rata = Column(Float)
-    created_at = Column(DateTime, default=datetime.now)
-    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+    created_at = Column(DateTime, default=datetime.now, nullable=False)
+    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now, nullable=False)
     
     # Relasi ke tabel Siswa
     siswa = relationship("Siswa", back_populates="nilai_raport")
@@ -74,8 +74,8 @@ class PenghasilanOrtu(Base):
     pendidikan_ibu = Column(String)
     total_penghasilan = Column(Float)
     kategori_penghasilan = Column(String)  # Rendah, Menengah, Tinggi
-    created_at = Column(DateTime, default=datetime.now)
-    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+    created_at = Column(DateTime, default=datetime.now, nullable=False)
+    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now, nullable=False)
     
     # Relasi ke tabel Siswa
     siswa = relationship("Siswa", back_populates="penghasilan_ortu")
@@ -94,8 +94,8 @@ class Presensi(Base):
     jumlah_alpa = Column(Integer)
     persentase_kehadiran = Column(Float)
     kategori_kehadiran = Column(String)  # Rendah, Sedang, Tinggi
-    created_at = Column(DateTime, default=datetime.now)
-    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+    created_at = Column(DateTime, default=datetime.now, nullable=False)
+    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now, nullable=False)
     
     # Relasi ke tabel Siswa
     siswa = relationship("Siswa", back_populates="presensi")
@@ -110,8 +110,8 @@ class Prestasi(Base):
     tahun_ajaran = Column(String)
     prediksi_prestasi = Column(String)  # Rendah, Sedang, Tinggi
     confidence = Column(Float)
-    created_at = Column(DateTime, default=datetime.now)
-    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+    created_at = Column(DateTime, default=datetime.now, nullable=False)
+    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now, nullable=False)
     
     # Relasi ke tabel Siswa
     siswa = relationship("Siswa", back_populates="prestasi")

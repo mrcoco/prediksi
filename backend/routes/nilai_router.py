@@ -94,7 +94,7 @@ def update_nilai(nilai_id: int, nilai_update: NilaiRaportUpdate, db: Session = D
     update_data = nilai_update.dict(exclude_unset=True)
     
     # Hitung rata-rata jika ada perubahan nilai
-    nilai_fields = ['matematika', 'bahasa_indonesia', 'bahasa_inggris', 'ipa', 'ips']
+    nilai_fields = ['matematika', 'bahasa_indonesia', 'bahasa_inggris', 'bahasa_jawa', 'ipa', 'agama', 'pjok', 'pkn', 'sejarah', 'seni', 'dasar_kejuruan']
     nilai_updated = False
     
     for field in nilai_fields:
@@ -103,15 +103,21 @@ def update_nilai(nilai_id: int, nilai_update: NilaiRaportUpdate, db: Session = D
             break
     
     if nilai_updated:
-        # Ambil nilai terbaru untuk perhitungan rata-rata
-        matematika = update_data.get('matematika', db_nilai.matematika)
-        bahasa_indonesia = update_data.get('bahasa_indonesia', db_nilai.bahasa_indonesia)
-        bahasa_inggris = update_data.get('bahasa_inggris', db_nilai.bahasa_inggris)
-        ipa = update_data.get('ipa', db_nilai.ipa)
-        ips = update_data.get('ips', db_nilai.ips)
+        # Ambil nilai terbaru untuk perhitungan rata-rata (11 mata pelajaran)
+        matematika = update_data.get('matematika', db_nilai.matematika or 0)
+        bahasa_indonesia = update_data.get('bahasa_indonesia', db_nilai.bahasa_indonesia or 0)
+        bahasa_inggris = update_data.get('bahasa_inggris', db_nilai.bahasa_inggris or 0)
+        bahasa_jawa = update_data.get('bahasa_jawa', db_nilai.bahasa_jawa or 0)
+        ipa = update_data.get('ipa', db_nilai.ipa or 0)
+        agama = update_data.get('agama', db_nilai.agama or 0)
+        pjok = update_data.get('pjok', db_nilai.pjok or 0)
+        pkn = update_data.get('pkn', db_nilai.pkn or 0)
+        sejarah = update_data.get('sejarah', db_nilai.sejarah or 0)
+        seni = update_data.get('seni', db_nilai.seni or 0)
+        dasar_kejuruan = update_data.get('dasar_kejuruan', db_nilai.dasar_kejuruan or 0)
         
-        # Hitung rata-rata
-        rata_rata = (matematika + bahasa_indonesia + bahasa_inggris + ipa + ips) / 5
+        # Hitung rata-rata (11 mata pelajaran)
+        rata_rata = (matematika + bahasa_indonesia + bahasa_inggris + bahasa_jawa + ipa + agama + pjok + pkn + sejarah + seni + dasar_kejuruan) / 11
         update_data['rata_rata'] = rata_rata
     
     # Update data

@@ -4,11 +4,17 @@ from typing import List, Optional
 from database import get_db, Presensi, Siswa
 from schemas import PresensiCreate, PresensiUpdate, PresensiResponse
 from datetime import datetime
+from routes.auth_router import get_current_user
+from models.user import User
 
 router = APIRouter()
 
 @router.post("/", response_model=PresensiResponse, status_code=status.HTTP_201_CREATED)
-def create_presensi(presensi: PresensiCreate, db: Session = Depends(get_db)):
+def create_presensi(
+    presensi: PresensiCreate, 
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     # Cek apakah siswa ada
     siswa = db.query(Siswa).filter(Siswa.id == presensi.siswa_id).first()
     if not siswa:
@@ -30,8 +36,28 @@ def create_presensi(presensi: PresensiCreate, db: Session = Depends(get_db)):
             detail=f"Presensi untuk siswa ID {presensi.siswa_id} pada semester {presensi.semester} tahun ajaran {presensi.tahun_ajaran} sudah ada"
         )
     
-    # Buat objek presensi baru
-    new_presensi = Presensi(**presensi.dict())
+    # Hitung persentase kehadiran
+    total_hari = presensi.jumlah_hadir + presensi.jumlah_sakit + presensi.jumlah_izin + presensi.jumlah_alpa
+    
+    if total_hari > 0:
+        persentase_kehadiran = (presensi.jumlah_hadir / total_hari) * 100
+    else:
+        persentase_kehadiran = 0
+    
+    # Tentukan kategori kehadiran
+    if persentase_kehadiran >= 80:
+        kategori_kehadiran = "Tinggi"
+    elif persentase_kehadiran >= 75:
+        kategori_kehadiran = "Sedang"
+    else:
+        kategori_kehadiran = "Rendah"
+    
+    # Buat objek presensi baru dengan perhitungan persentase dan kategori
+    presensi_data = presensi.dict()
+    presensi_data['persentase_kehadiran'] = persentase_kehadiran
+    presensi_data['kategori_kehadiran'] = kategori_kehadiran
+    
+    new_presensi = Presensi(**presensi_data)
     
     # Simpan ke database
     db.add(new_presensi)
@@ -41,7 +67,13 @@ def create_presensi(presensi: PresensiCreate, db: Session = Depends(get_db)):
     return new_presensi
 
 @router.get("/", response_model=List[PresensiResponse])
-def get_all_presensi(skip: int = 0, limit: int = 100, siswa_id: Optional[int] = None, db: Session = Depends(get_db)):
+def get_all_presensi(
+    skip: int = 0, 
+    limit: int = 100, 
+    siswa_id: Optional[int] = None, 
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     query = db.query(Presensi)
     
     # Filter berdasarkan siswa_id jika ada
@@ -53,7 +85,11 @@ def get_all_presensi(skip: int = 0, limit: int = 100, siswa_id: Optional[int] = 
     return presensi_list
 
 @router.get("/{presensi_id}", response_model=PresensiResponse)
-def get_presensi(presensi_id: int, db: Session = Depends(get_db)):
+def get_presensi(
+    presensi_id: int, 
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     presensi = db.query(Presensi).filter(Presensi.id == presensi_id).first()
     if not presensi:
         raise HTTPException(
@@ -63,7 +99,12 @@ def get_presensi(presensi_id: int, db: Session = Depends(get_db)):
     return presensi
 
 @router.put("/{presensi_id}", response_model=PresensiResponse)
-def update_presensi(presensi_id: int, presensi_update: PresensiUpdate, db: Session = Depends(get_db)):
+def update_presensi(
+    presensi_id: int, 
+    presensi_update: PresensiUpdate, 
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     # Cari presensi yang akan diupdate
     db_presensi = db.query(Presensi).filter(Presensi.id == presensi_id).first()
     if not db_presensi:
@@ -126,7 +167,11 @@ def update_presensi(presensi_id: int, presensi_update: PresensiUpdate, db: Sessi
     return db_presensi
 
 @router.delete("/{presensi_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_presensi(presensi_id: int, db: Session = Depends(get_db)):
+def delete_presensi(
+    presensi_id: int, 
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     # Cari presensi yang akan dihapus
     db_presensi = db.query(Presensi).filter(Presensi.id == presensi_id).first()
     if not db_presensi:

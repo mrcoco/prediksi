@@ -4,11 +4,17 @@ from typing import List, Optional
 from database import get_db, PenghasilanOrtu, Siswa
 from schemas import PenghasilanOrtuCreate, PenghasilanOrtuUpdate, PenghasilanOrtuResponse
 from datetime import datetime
+from routes.auth_router import get_current_user
+from models.user import User
 
 router = APIRouter()
 
 @router.post("/", response_model=PenghasilanOrtuResponse, status_code=status.HTTP_201_CREATED)
-def create_penghasilan(penghasilan: PenghasilanOrtuCreate, db: Session = Depends(get_db)):
+def create_penghasilan(
+    penghasilan: PenghasilanOrtuCreate, 
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     # Cek apakah siswa ada
     siswa = db.query(Siswa).filter(Siswa.id == penghasilan.siswa_id).first()
     if not siswa:
@@ -28,8 +34,23 @@ def create_penghasilan(penghasilan: PenghasilanOrtuCreate, db: Session = Depends
             detail=f"Data penghasilan untuk siswa ID {penghasilan.siswa_id} sudah ada"
         )
     
-    # Buat objek penghasilan baru
-    new_penghasilan = PenghasilanOrtu(**penghasilan.dict())
+    # Hitung total penghasilan
+    total_penghasilan = penghasilan.penghasilan_ayah + penghasilan.penghasilan_ibu
+    
+    # Tentukan kategori penghasilan
+    if total_penghasilan >= 5000000:  # 5 juta ke atas 2x UMK jogja
+        kategori = "Tinggi"
+    elif total_penghasilan >= 2300000:  # 2,3 juta - 5jt ke atas UMK jogja
+        kategori = "Menengah"
+    else:  # Di bawah 2,3 juta
+        kategori = "Rendah"
+    
+    # Buat objek penghasilan baru dengan perhitungan total dan kategori
+    penghasilan_data = penghasilan.dict()
+    penghasilan_data['total_penghasilan'] = total_penghasilan
+    penghasilan_data['kategori_penghasilan'] = kategori
+    
+    new_penghasilan = PenghasilanOrtu(**penghasilan_data)
     
     # Simpan ke database
     db.add(new_penghasilan)
@@ -39,7 +60,13 @@ def create_penghasilan(penghasilan: PenghasilanOrtuCreate, db: Session = Depends
     return new_penghasilan
 
 @router.get("/", response_model=List[PenghasilanOrtuResponse])
-def get_all_penghasilan(skip: int = 0, limit: int = 100, siswa_id: Optional[int] = None, db: Session = Depends(get_db)):
+def get_all_penghasilan(
+    skip: int = 0, 
+    limit: int = 100, 
+    siswa_id: Optional[int] = None, 
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     query = db.query(PenghasilanOrtu)
     
     # Filter berdasarkan siswa_id jika ada
@@ -51,7 +78,11 @@ def get_all_penghasilan(skip: int = 0, limit: int = 100, siswa_id: Optional[int]
     return penghasilan_list
 
 @router.get("/{penghasilan_id}", response_model=PenghasilanOrtuResponse)
-def get_penghasilan(penghasilan_id: int, db: Session = Depends(get_db)):
+def get_penghasilan(
+    penghasilan_id: int, 
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     penghasilan = db.query(PenghasilanOrtu).filter(PenghasilanOrtu.id == penghasilan_id).first()
     if not penghasilan:
         raise HTTPException(
@@ -61,7 +92,12 @@ def get_penghasilan(penghasilan_id: int, db: Session = Depends(get_db)):
     return penghasilan
 
 @router.put("/{penghasilan_id}", response_model=PenghasilanOrtuResponse)
-def update_penghasilan(penghasilan_id: int, penghasilan_update: PenghasilanOrtuUpdate, db: Session = Depends(get_db)):
+def update_penghasilan(
+    penghasilan_id: int, 
+    penghasilan_update: PenghasilanOrtuUpdate, 
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     # Cari penghasilan yang akan diupdate
     db_penghasilan = db.query(PenghasilanOrtu).filter(PenghasilanOrtu.id == penghasilan_id).first()
     if not db_penghasilan:
@@ -107,7 +143,11 @@ def update_penghasilan(penghasilan_id: int, penghasilan_update: PenghasilanOrtuU
     return db_penghasilan
 
 @router.delete("/{penghasilan_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_penghasilan(penghasilan_id: int, db: Session = Depends(get_db)):
+def delete_penghasilan(
+    penghasilan_id: int, 
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     # Cari penghasilan yang akan dihapus
     db_penghasilan = db.query(PenghasilanOrtu).filter(PenghasilanOrtu.id == penghasilan_id).first()
     if not db_penghasilan:

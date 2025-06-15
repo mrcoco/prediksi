@@ -24,8 +24,8 @@ class SiswaUpdate(BaseModel):
 
 class SiswaResponse(SiswaBase):
     id: int
-    created_at: datetime
-    updated_at: datetime
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
     
     class Config:
         orm_mode = True
@@ -69,8 +69,8 @@ class NilaiRaportUpdate(BaseModel):
 
 class NilaiRaportResponse(NilaiRaportBase):
     id: int
-    created_at: datetime
-    updated_at: datetime
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
     
     class Config:
         orm_mode = True
@@ -87,8 +87,14 @@ class PenghasilanOrtuBase(BaseModel):
     total_penghasilan: float
     kategori_penghasilan: str
 
-class PenghasilanOrtuCreate(PenghasilanOrtuBase):
-    pass
+class PenghasilanOrtuCreate(BaseModel):
+    siswa_id: int
+    penghasilan_ayah: float
+    penghasilan_ibu: float
+    pekerjaan_ayah: str
+    pekerjaan_ibu: str
+    pendidikan_ayah: str
+    pendidikan_ibu: str
 
 class PenghasilanOrtuUpdate(BaseModel):
     penghasilan_ayah: Optional[float] = None
@@ -102,8 +108,8 @@ class PenghasilanOrtuUpdate(BaseModel):
 
 class PenghasilanOrtuResponse(PenghasilanOrtuBase):
     id: int
-    created_at: datetime
-    updated_at: datetime
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
     
     class Config:
         orm_mode = True
@@ -120,8 +126,14 @@ class PresensiBase(BaseModel):
     persentase_kehadiran: float
     kategori_kehadiran: str
 
-class PresensiCreate(PresensiBase):
-    pass
+class PresensiCreate(BaseModel):
+    siswa_id: int
+    semester: str
+    tahun_ajaran: str
+    jumlah_hadir: int
+    jumlah_sakit: int
+    jumlah_izin: int
+    jumlah_alpa: int
 
 class PresensiUpdate(BaseModel):
     semester: Optional[str] = None
@@ -135,8 +147,8 @@ class PresensiUpdate(BaseModel):
 
 class PresensiResponse(PresensiBase):
     id: int
-    created_at: datetime
-    updated_at: datetime
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
     
     class Config:
         orm_mode = True
@@ -160,8 +172,8 @@ class PrestasiUpdate(BaseModel):
 
 class PrestasiResponse(PrestasiBase):
     id: int
-    created_at: datetime
-    updated_at: datetime
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
     
     class Config:
         orm_mode = True

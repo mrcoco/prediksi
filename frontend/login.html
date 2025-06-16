@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Sistem Prediksi Prestasi Siswa</title>
+    <title>EduPro - Educational Prediction System ( Sistem Prediksi Prestasi Siswa)</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="styles/kendo.bootstrap-v4.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -15,15 +15,24 @@
             align-items: center;
         }
         .login-container {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 30px;
             background: white;
+            padding: 40px;
             border-radius: 10px;
             box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 450px;
+            margin: 0 auto;
         }
         .logo {
             text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        /* Enhanced width and spacing for registration mode */
+        .login-container.registration-mode {
+            max-width: 900px; /* Significantly wider for 2-column layout */
+            padding: 50px 60px; /* More generous padding */
+            margin-top: 30px;
             margin-bottom: 30px;
         }
         
@@ -57,31 +66,21 @@
         /* Registration Form Styles */
         #registerForm {
             animation: fadeIn 0.3s ease-in;
-            padding-top: 20px;
-            margin-top: 15px;
-        }
-        
-        /* Additional spacing for registration form */
-        .login-container:has(#registerForm:visible) {
-            padding-top: 30px;
-        }
-        
-        /* Fallback for browsers that don't support :has() */
-        .login-container.registration-mode {
-            padding-top: 30px;
+            padding-top: 30px; /* Increased padding */
+            margin-top: 20px;
         }
         
         /* Better spacing for form title when in registration mode */
         #formTitle {
             color: #495057;
-            margin-bottom: 25px;
+            margin-bottom: 30px; /* Increased margin */
             font-weight: 500;
-            padding-top: 10px;
+            padding-top: 15px;
         }
         
         /* Better spacing for registration form fields */
         #registerForm .mb-3 {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.8rem; /* Increased spacing */
         }
         
         #registerForm .form-label {
@@ -91,7 +90,7 @@
         
         /* Ensure first field has proper spacing from title */
         #registerForm .mb-3:first-child {
-            margin-top: 10px;
+            margin-top: 15px;
         }
         
         @keyframes fadeIn {
@@ -105,13 +104,13 @@
         }
         
         .login-container .row {
-            margin-left: -5px;
-            margin-right: -5px;
+            margin-left: -10px; /* Increased spacing between columns */
+            margin-right: -10px;
         }
         
         .login-container .row .col-md-6 {
-            padding-left: 5px;
-            padding-right: 5px;
+            padding-left: 10px;
+            padding-right: 10px;
         }
         
         /* Responsive adjustments */
@@ -119,38 +118,269 @@
             .login-container {
                 padding: 20px;
                 margin: 10px;
+                max-width: 95%; /* Better mobile width */
+            }
+            
+            .login-container.registration-mode {
+                max-width: 95%;
+                padding: 30px 20px;
+                margin-top: 20px;
+                margin-bottom: 20px;
             }
             
             .login-container .row .col-md-6 {
-                margin-bottom: 10px;
-            }
-            
-            /* Additional spacing for registration form on mobile */
-            .login-container.registration-mode {
-                padding-top: 40px;
-                margin-top: 20px;
+                margin-bottom: 15px; /* Increased mobile spacing */
             }
             
             #registerForm {
-                padding-top: 25px;
+                padding-top: 20px;
             }
         }
         
-        /* Ensure container has enough space from top */
+        /* Medium screens (tablets) */
+        @media (min-width: 577px) and (max-width: 991px) {
+            .login-container.registration-mode {
+                max-width: 750px; /* Tablet width */
+                padding: 40px 45px;
+            }
+        }
+        
+        /* Large screens */
+        @media (min-width: 992px) {
+            .login-container.registration-mode {
+                max-width: 900px; /* Full desktop width */
+                padding: 50px 60px;
+            }
+        }
+        
+        /* Ensure container has enough space and better centering */
         .container {
-            padding-top: 20px;
+            padding-top: 30px; /* Increased top padding */
+            padding-bottom: 30px; /* Added bottom padding */
             min-height: 100vh;
             display: flex;
-            align-items: center;
+            align-items: flex-start; /* Changed from center to flex-start */
             justify-content: center;
         }
         
-        /* Better spacing for registration mode on larger screens */
-        @media (min-width: 577px) {
-            .login-container.registration-mode {
-                padding-top: 40px;
-                margin-top: 20px;
+        /* Better container behavior for registration mode */
+        .container:has(.login-container.registration-mode) {
+            align-items: flex-start;
+            padding-top: 20px;
+        }
+        
+        /* Fallback for browsers that don't support :has() */
+        .container.registration-active {
+            align-items: flex-start;
+            padding-top: 20px;
+        }
+        
+        /* Registration Form Section Styling */
+        .registration-header {
+            text-align: center;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 20px; /* Increased padding */
+            margin-bottom: 30px; /* Increased margin */
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border-radius: 10px;
+            padding: 25px 20px 20px 20px;
+        }
+        
+        .registration-header h5 {
+            font-weight: 600;
+            color: #007bff;
+            margin-bottom: 8px;
+            font-size: 1.4rem; /* Larger header */
+        }
+        
+        .registration-header p {
+            color: #6c757d;
+            font-size: 1rem; /* Slightly larger description */
+            margin-bottom: 0;
+        }
+        
+        .registration-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            padding: 25px 30px; /* Increased padding for wider form */
+            margin-bottom: 25px; /* Increased margin */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            animation: slideInUp 0.6s ease-out;
+        }
+        
+        .registration-section:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        
+        .section-header {
+            margin-bottom: 25px; /* Increased margin */
+            padding-bottom: 12px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .section-title {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 0;
+            font-size: 1.1rem; /* Slightly larger font */
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Increased gap */
+        }
+        
+        .section-title i {
+            font-size: 1.2rem; /* Larger icons */
+        }
+        
+        /* Enhanced form controls for registration */
+        #registerForm .form-control {
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 14px 18px; /* Increased padding for better UX */
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            background-color: #ffffff;
+            min-height: 48px; /* Minimum height for better touch targets */
+        }
+        
+        #registerForm .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.15);
+            background-color: #ffffff;
+        }
+        
+        #registerForm .form-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 10px; /* Increased margin */
+            font-size: 0.95rem; /* Slightly larger labels */
+        }
+        
+        #registerForm .form-text {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-top: 6px; /* Increased margin */
+        }
+        
+        /* Enhanced captcha container for registration */
+        #registerForm .captcha-container {
+            background: linear-gradient(135deg, #f1f3f4 0%, #ffffff 100%);
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px; /* Increased padding */
+            text-align: center;
+        }
+        
+        #registerForm #regCaptchaCanvas {
+            border: 2px solid #dee2e6;
+            border-radius: 6px;
+            background-color: #ffffff;
+        }
+        
+        /* Enhanced submit button */
+        #registerForm .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            border: none;
+            border-radius: 25px;
+            padding: 15px 40px; /* Increased padding */
+            font-weight: 600;
+            font-size: 1.1rem; /* Larger font */
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+            transition: all 0.3s ease;
+            min-width: 200px; /* Minimum width */
+        }
+        
+        #registerForm .btn-success:hover {
+            background: linear-gradient(135deg, #218838 0%, #1ea085 100%);
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        /* Responsive adjustments for registration sections */
+        @media (max-width: 768px) {
+            .registration-section {
+                padding: 20px 15px; /* Adjusted for mobile */
+                margin-bottom: 20px;
             }
+            
+            .section-title {
+                font-size: 1rem;
+            }
+            
+            #registerForm .form-control {
+                padding: 12px 15px;
+                font-size: 0.9rem;
+                min-height: 44px;
+            }
+            
+            .registration-header h5 {
+                font-size: 1.2rem;
+            }
+            
+            #registerForm .btn-success {
+                padding: 12px 30px;
+                font-size: 1rem;
+                min-width: 180px;
+            }
+        }
+        
+        /* Enhanced row spacing for registration form */
+        #registerForm .row {
+            margin-left: -12px; /* Increased spacing */
+            margin-right: -12px;
+        }
+        
+        #registerForm .row .col-md-6 {
+            padding-left: 12px;
+            padding-right: 12px;
+        }
+        
+        /* Better spacing for full-width fields */
+        #registerForm .row .col-12 {
+            padding-left: 12px;
+            padding-right: 12px;
+        }
+        
+        /* Animation for section appearance */
+        .registration-section:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+        
+        .registration-section:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+        
+        .registration-section:nth-child(4) {
+            animation-delay: 0.3s;
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Special styling for required fields */
+        #registerForm .form-label[for="regUsername"]:after,
+        #registerForm .form-label[for="regEmail"]:after,
+        #registerForm .form-label[for="regPassword"]:after,
+        #registerForm .form-label[for="regConfirmPassword"]:after,
+        #registerForm .form-label[for="regRole"]:after,
+        #registerForm .form-label[for="regNamaLengkap"]:after,
+        #registerForm .form-label[for="regJabatan"]:after {
+            content: " *";
+            color: #dc3545;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -158,7 +388,7 @@
     <div class="container">
         <div class="login-container">
             <div class="logo">
-                <h3>Sistem Prediksi Prestasi Siswa</h3>
+                <h3>EduPro - Educational Prediction System ( Sistem Prediksi Prestasi Siswa)</h3>
                 <h4 id="formTitle">Login</h4>
             </div>
             
@@ -193,78 +423,160 @@
             </form>
             
             <!-- Registration Form (Hidden by default) -->
-            <form id="registerForm" style="display: none;">
-                <div class="mb-3">
-                    <label for="regUsername" class="form-label">Username</label>
-                    <input type="text" class="form-control" id="regUsername" required minlength="3" maxlength="20">
-                    <small class="form-text text-muted">3-20 karakter, hanya huruf dan angka</small>
-                </div>
-                <div class="mb-3">
-                    <label for="regEmail" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="regEmail" required>
-                    <small class="form-text text-muted">Email akan digunakan untuk notifikasi</small>
-                </div>
-                <div class="mb-3">
-                    <label for="regPassword" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="regPassword" required minlength="6">
-                    <small class="form-text text-muted">Minimal 6 karakter</small>
-                </div>
-                <div class="mb-3">
-                    <label for="regConfirmPassword" class="form-label">Konfirmasi Password</label>
-                    <input type="password" class="form-control" id="regConfirmPassword" required>
-                    <small class="form-text text-muted">Masukkan ulang password</small>
-                </div>
-                <div class="mb-3">
-                    <label for="regRole" class="form-label">Role</label>
-                    <select class="form-control" id="regRole" required>
-                        <option value="">Pilih Role</option>
-                        <option value="guru">Guru</option>
-                        <option value="staf">Staf</option>
-                    </select>
-                    <small class="form-text text-muted">Pilih role sesuai jabatan Anda</small>
-                </div>
+             <div class="row">
+                <form id="registerForm" style="display: none;">
                 
-                <!-- Profile Information -->
-                <div class="mb-3">
-                    <label class="form-label">Informasi Profile</label>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <input type="text" class="form-control mb-2" id="regNip" placeholder="NIP (opsional)">
+                    <!-- Registration Header -->
+                    <div class="registration-header mb-4">
+                        <h5 class="text-center text-primary mb-1">
+                            <i class="fas fa-user-plus"></i> Buat Akun Baru
+                        </h5>
+                        <p class="text-center text-muted small mb-0">Lengkapi informasi di bawah untuk mendaftar</p>
+                    </div>
+                    
+                    <!-- Account Information Section -->
+                    <div class="registration-section mb-4">
+                        <div class="section-header">
+                            <h6 class="section-title">
+                                <i class="fas fa-key text-primary"></i> Informasi Akun
+                            </h6>
                         </div>
-                        <div class="col-md-6">
-                            <input type="text" class="form-control mb-2" id="regNamaLengkap" placeholder="Nama Lengkap" required>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="regUsername" class="form-label">Username</label>
+                                    <input type="text" class="form-control" id="regUsername" required minlength="3" maxlength="20">
+                                    <small class="form-text text-muted">3-20 karakter, hanya huruf dan angka</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="regEmail" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="regEmail" required>
+                                    <small class="form-text text-muted">Email untuk notifikasi</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="regPassword" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="regPassword" required minlength="6">
+                                    <small class="form-text text-muted">Minimal 6 karakter</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="regConfirmPassword" class="form-label">Konfirmasi Password</label>
+                                    <input type="password" class="form-control" id="regConfirmPassword" required>
+                                    <small class="form-text text-muted">Masukkan ulang password</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="regRole" class="form-label">Role</label>
+                                    <select class="form-control" id="regRole" required>
+                                        <option value="">Pilih Role</option>
+                                        <option value="guru">Guru</option>
+                                        <option value="staf">Staf</option>
+                                    </select>
+                                    <small class="form-text text-muted">Pilih role sesuai jabatan</small>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <input type="text" class="form-control mb-2" id="regJabatan" placeholder="Jabatan" required>
+                    
+                    <!-- Profile Information Section -->
+                    <div class="registration-section mb-4">
+                        <div class="section-header">
+                            <h6 class="section-title">
+                                <i class="fas fa-user text-success"></i> Informasi Profile
+                            </h6>
                         </div>
-                        <div class="col-md-6">
-                            <input type="text" class="form-control mb-2" id="regNoHp" placeholder="No. HP (opsional)">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="regNamaLengkap" class="form-label">Nama Lengkap</label>
+                                    <input type="text" class="form-control" id="regNamaLengkap" required>
+                                    <small class="form-text text-muted">Nama lengkap sesuai identitas</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="regNip" class="form-label">NIP</label>
+                                    <input type="text" class="form-control" id="regNip" placeholder="Nomor Induk Pegawai (opsional)">
+                                    <small class="form-text text-muted">Opsional</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="regJabatan" class="form-label">Jabatan</label>
+                                    <input type="text" class="form-control" id="regJabatan" required>
+                                    <small class="form-text text-muted">Jabatan di sekolah</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="regNoHp" class="form-label">No. HP</label>
+                                    <input type="text" class="form-control" id="regNoHp" placeholder="Nomor handphone (opsional)">
+                                    <small class="form-text text-muted">Opsional</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="mb-3">
+                                    <label for="regAlamat" class="form-label">Alamat</label>
+                                    <textarea class="form-control" id="regAlamat" placeholder="Alamat lengkap (opsional)" rows="2"></textarea>
+                                    <small class="form-text text-muted">Opsional</small>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <textarea class="form-control" id="regAlamat" placeholder="Alamat (opsional)" rows="2"></textarea>
-                </div>
-                
-                <!-- Captcha Section for Registration -->
-                <div class="mb-3">
-                    <label for="regCaptcha" class="form-label">Verifikasi Keamanan</label>
-                    <div class="captcha-container">
-                        <div class="d-flex align-items-center justify-content-between mb-2">
-                            <canvas id="regCaptchaCanvas" width="150" height="50" class="border"></canvas>
-                            <button type="button" class="btn btn-outline-secondary" id="regRefreshCaptcha" title="Refresh Captcha">
-                                <i class="fas fa-sync-alt"></i>
-                            </button>
+                    
+                    <!-- Security Verification Section -->
+                    <div class="registration-section mb-4">
+                        <div class="section-header">
+                            <h6 class="section-title">
+                                <i class="fas fa-shield-alt text-warning"></i> Verifikasi Keamanan
+                            </h6>
                         </div>
-                        <input type="text" class="form-control" id="regCaptcha" placeholder="Masukkan kode yang terlihat di atas" required>
-                        <small class="form-text text-muted mt-1">
-                            <i class="fas fa-info-circle"></i> Masukkan kode verifikasi untuk melanjutkan registrasi
-                        </small>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="captcha-container">
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                        <canvas id="regCaptchaCanvas" width="150" height="50" class="border rounded"></canvas>
+                                        <button type="button" class="btn btn-outline-secondary btn-sm" id="regRefreshCaptcha" title="Refresh Captcha">
+                                            <i class="fas fa-sync-alt"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="regCaptcha" class="form-label">Kode Verifikasi</label>
+                                    <input type="text" class="form-control" id="regCaptcha" placeholder="Masukkan kode di samping" required>
+                                    <small class="form-text text-muted">
+                                        <i class="fas fa-info-circle"></i> Masukkan kode untuk verifikasi
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                
-                <button type="submit" class="btn btn-success w-100">Daftar</button>
-            </form>
+                    
+                    <!-- Submit Button -->
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-success btn-lg px-5">
+                            <i class="fas fa-user-plus"></i> Daftar Sekarang
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
             
             <div class="text-center mt-3">
                 <a href="#" id="registerLink">Belum punya akun? Daftar disini</a>
@@ -594,6 +906,7 @@
                 
                 // Add registration mode class for better spacing
                 $('.login-container').addClass('registration-mode');
+                $('.container').addClass('registration-active'); // Add fallback class
                 
                 // Initialize registration captcha
                 drawRegCaptcha();
@@ -616,6 +929,7 @@
                 
                 // Remove registration mode class
                 $('.login-container').removeClass('registration-mode');
+                $('.container').removeClass('registration-active'); // Remove fallback class
                 
                 // Clear registration form
                 $('#registerForm')[0].reset();
@@ -697,6 +1011,7 @@
                         
                         // Remove registration mode class
                         $('.login-container').removeClass('registration-mode');
+                        $('.container').removeClass('registration-active'); // Remove fallback class
                         
                         // Clear registration form
                         $('#registerForm')[0].reset();

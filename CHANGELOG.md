@@ -1,6 +1,872 @@
 # CHANGELOG
 
-## [2024-12-19] - Enhanced Data Management dengan Auto-Calculation dan Bug Fixes
+## [2025-01-16] - Implementasi Opsi 2 Backend & Layout Form Presensi 2 Kolom
+
+### ✨ Fitur Baru - Implementasi Opsi 2 Backend
+- **Nama Siswa di Grid**: Implementasi opsi 2 untuk menampilkan nama siswa di grid nilai, presensi, dan penghasilan
+  - Endpoint `/nilai/` sekarang mengembalikan field `nama_siswa` melalui JOIN query
+  - Endpoint `/presensi/` sekarang mengembalikan field `nama_siswa` melalui JOIN query  
+  - Endpoint `/penghasilan/` sekarang mengembalikan field `nama_siswa` melalui JOIN query
+  - Menggunakan SQLAlchemy JOIN untuk efisiensi query
+  - Response manual dictionary untuk fleksibilitas data
+  - Backward compatibility dengan frontend yang sudah ada
+
+### 🎨 Fitur Baru - Layout Form Presensi 2 Kolom
+- **Template Presensi Baru**: Form presensi dengan layout 2 kolom yang profesional dan konsisten
+  - **Header Form**: Judul dengan icon `fas fa-calendar-check` dan deskripsi
+  - **Informasi Dasar**: Section full-width untuk siswa, semester, dan tahun ajaran
+  - **Layout 2 Kolom**:
+    - **Kolom Kiri**: Data Kehadiran (Jumlah Hadir, Jumlah Sakit)
+    - **Kolom Kanan**: Data Ketidakhadiran (Jumlah Izin, Jumlah Alpa) + Field Otomatis
+  - **Auto-Calculation**: Persentase kehadiran dan kategori dihitung otomatis
+  - **Tips Section**: Panduan pengisian yang komprehensif dengan styling menarik
+
+### 🔧 Peningkatan Backend
+- **Query Optimization**: Menggunakan JOIN query untuk efisiensi database
+  ```python
+  query = db.query(
+      NilaiRaport.id,
+      NilaiRaport.siswa_id,
+      Siswa.nama.label('nama_siswa'),
+      # ... field lainnya
+  ).join(Siswa, NilaiRaport.siswa_id == Siswa.id)
+  ```
+- **Response Structure**: Struktur response baru dengan field `nama_siswa`
+- **Manual Dictionary**: Menggunakan dictionary manual untuk fleksibilitas response
+- **Field Mapping**: Alias `nama_siswa` untuk konsistensi frontend
+
+### 🎨 Peningkatan Frontend
+- **Template System**: Template HTML terstruktur dengan section-based organization
+- **JavaScript Enhancement**: Auto-calculation untuk persentase dan kategori kehadiran
+- **Responsive Design**: Layout yang optimal untuk desktop, tablet, dan mobile
+- **Icon Integration**: FontAwesome icons untuk setiap field dengan warna yang sesuai
+- **Validation Enhancement**: Custom validation dengan pesan error yang informatif
+
+### 📱 Responsive Design yang Optimal
+- **Desktop (≥1200px)**: Layout 2 kolom penuh dengan padding optimal
+- **Tablet (768px-1199px)**: Layout 2 kolom dengan padding disesuaikan
+- **Mobile (<768px)**: Kolom menjadi stack vertikal dengan spacing yang baik
+- **Grid System**: Bootstrap grid dengan spacing yang konsisten
+
+### 🎯 Auto-Calculation Features
+- **Real-time Calculation**: Persentase kehadiran dihitung saat input berubah
+- **Kategori Otomatis**: 
+  - **Tinggi**: ≥80% kehadiran
+  - **Sedang**: 75-79% kehadiran
+  - **Rendah**: <75% kehadiran
+- **Input Validation**: Validasi input tidak boleh negatif dengan pesan error custom
+- **Model Update**: Update model Kendo UI secara real-time
+
+### 🔍 Technical Implementation
+- **Template Loading**: Kendo UI template dengan error handling
+- **Event Handlers**: Event listener untuk auto-calculation
+- **Dropdown Integration**: Siswa dropdown terintegrasi dengan API
+- **Field Styling**: Readonly fields dengan class `readonly-field`
+- **Form Validation**: Required field indicators dan validation messages
+
+### 📊 Data Structure Enhancement
+```json
+// Response structure baru dengan nama_siswa
+{
+  "id": 1,
+  "siswa_id": 123,
+  "nama_siswa": "Nama Siswa",  // ← Field baru
+  "semester": "Ganjil",
+  "tahun_ajaran": "2023/2024",
+  "jumlah_hadir": 80,
+  "persentase_kehadiran": 85.5,
+  "kategori_kehadiran": "Tinggi"
+}
+```
+
+### 🎨 Enhanced Styling
+- **Form Container**: Container dengan border-radius 12px dan shadow
+- **Section Headers**: Headers dengan gradient underline dan icons
+- **Column Content**: Background gradient dengan hover effects
+- **Alert Section**: Tips section dengan icon dan styling menarik
+- **Input Styling**: Enhanced input dengan border, padding, dan focus states
+
+### 🔄 Backward Compatibility
+- **Frontend Fallback**: Template function dengan fallback ke `dataItem.siswa?.nama`
+- **API Compatibility**: Endpoint lama tetap berfungsi
+- **Database Schema**: Tidak ada perubahan schema database
+- **Browser Support**: Chrome 80+, Firefox 75+, Safari 13+, Edge 80+
+
+### 🧪 Testing & Validation
+- **Backend Testing**: ✅ Semua endpoint mengembalikan field `nama_siswa`
+- **Frontend Testing**: ✅ Grid menampilkan nama siswa dengan benar
+- **Template Testing**: ✅ Template presensi ter-load dan berfungsi
+- **Responsive Testing**: ✅ Layout responsif di semua device
+- **Auto-calculation Testing**: ✅ Perhitungan otomatis berfungsi dengan benar
+- **Validation Testing**: ✅ Validasi input dan error handling berfungsi
+
+### 📈 Performance & Benefits
+- **Query Efficiency**: Satu query JOIN lebih efisien daripada multiple queries
+- **User Experience**: Grid lebih mudah dibaca dengan nama siswa
+- **Consistency**: Form presensi konsisten dengan form nilai raport
+- **Maintainability**: Kode yang lebih mudah dipelihara dan dikembangkan
+- **Scalability**: Struktur yang dapat dikembangkan untuk form lainnya
+
+---
+
+## [2025-06-15] - Layout 2 Kolom Registrasi yang Menarik
+
+### ✨ Fitur Baru - Layout 2 Kolom yang Modern
+- **Layout Responsif 2 Kolom**: Form registrasi diubah menjadi layout 2 kolom yang lebih menarik dan terorganisir
+- **Section-based Organization**: Form dibagi menjadi 3 section utama dengan header yang jelas:
+  - 📋 **Informasi Akun**: Username, Email, Password, Role (2 kolom layout)
+  - 👤 **Informasi Profile**: Nama Lengkap, NIP, Jabatan, No HP, Alamat (2 kolom layout)
+  - 🛡️ **Verifikasi Keamanan**: Captcha dengan layout horizontal (2 kolom layout)
+
+### 🎨 Peningkatan UI/UX yang Signifikan
+- **Registration Header**: Header menarik dengan icon dan deskripsi yang informatif
+- **Section Headers**: Setiap section memiliki header dengan icon berwarna dan styling yang konsisten
+- **Card-based Design**: Setiap section menggunakan card dengan gradient background dan shadow
+- **Hover Effects**: Animasi hover pada section cards dengan shadow enhancement dan transform
+- **Enhanced Form Controls**: 
+  - Border radius yang lebih besar (8px) untuk tampilan modern
+  - Padding yang lebih nyaman (12px 15px)
+  - Focus states dengan border biru dan shadow yang halus
+  - Background putih yang konsisten
+- **Gradient Submit Button**: Tombol submit dengan gradient hijau dan efek hover yang menarik
+- **Required Field Indicators**: Tanda asterisk (*) merah untuk field wajib yang jelas
+
+### 🎭 Animasi dan Transisi yang Smooth
+- **Slide-in Animation**: Section muncul dengan animasi slideInUp bertahap dengan delay
+- **Smooth Transitions**: Semua elemen memiliki transisi 0.3s ease untuk interaksi yang halus
+- **Button Hover Effects**: Transform translateY dan shadow enhancement pada tombol submit
+- **Card Hover Effects**: Lift effect pada section cards dengan translateY(-2px)
+- **Staggered Animation**: Setiap section memiliki delay animasi yang berbeda (0.1s, 0.2s, 0.3s)
+
+### 📱 Responsive Design yang Optimal
+- **Mobile Optimization**: Layout tetap rapi dan fungsional di perangkat mobile
+- **Tablet Friendly**: Optimasi khusus untuk tablet dengan breakpoint 768px
+- **Desktop Enhancement**: Layout 2 kolom penuh di desktop untuk efisiensi ruang
+- **Flexible Grid**: Menggunakan Bootstrap grid system dengan spacing yang disesuaikan
+
+### 🔧 Technical Improvements
+- **CSS Organization**: CSS terstruktur dengan komentar yang jelas dan logical grouping
+- **Performance Optimization**: Animasi menggunakan transform untuk performa optimal
+- **Accessibility Enhancement**: Label yang jelas, kontras warna yang baik, dan keyboard navigation
+- **Browser Compatibility**: Fallback untuk browser yang tidak mendukung CSS modern
+
+### 📋 Detail Layout Structure
+```
+┌─────────────────────────────────────────────────────────┐
+│                📋 INFORMASI AKUN                        │
+├─────────────────────────┬───────────────────────────────┤
+│      Username           │           Email               │
+├─────────────────────────┼───────────────────────────────┤
+│      Password           │     Konfirmasi Password       │
+├─────────────────────────┼───────────────────────────────┤
+│        Role             │                               │
+└─────────────────────────┴───────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────┐
+│               👤 INFORMASI PROFILE                      │
+├─────────────────────────┬───────────────────────────────┤
+│    Nama Lengkap         │            NIP                │
+├─────────────────────────┼───────────────────────────────┤
+│      Jabatan            │          No HP                │
+├─────────────────────────┴───────────────────────────────┤
+│                      Alamat                             │
+└─────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────┐
+│             🛡️ VERIFIKASI KEAMANAN                      │
+├─────────────────────────┬───────────────────────────────┤
+│     [Captcha Canvas]    │      Kode Verifikasi          │
+│     [Refresh Button]    │      [Input Field]            │
+└─────────────────────────┴───────────────────────────────┘
+```
+
+### 🎨 Enhanced Color Scheme
+- **Primary Blue**: #007bff (Headers, Focus states, Icons)
+- **Success Green**: #28a745 → #20c997 (Gradient button)
+- **Section Background**: #f8f9fa → #ffffff (Gradient backgrounds)
+- **Text Colors**: #495057 (Labels), #6c757d (Helper text)
+- **Border Colors**: #e9ecef, #dee2e6 (Section borders)
+- **Shadow Colors**: rgba(0,0,0,0.05) normal, rgba(0,0,0,0.1) hover
+
+### 🔍 CSS Features Implemented
+```css
+/* Section styling dengan gradient dan shadow */
+.registration-section {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+
+/* Enhanced form controls */
+#registerForm .form-control {
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 12px 15px;
+    transition: all 0.3s ease;
+}
+
+/* Gradient submit button */
+#registerForm .btn-success {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    border-radius: 25px;
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+}
+```
+
+## [2025-06-15] - Perbaikan Tampilan Form Registrasi
+
+### 🎨 UI/UX Improvements
+- **Spacing Enhancement**: Memperbaiki tampilan form registrasi yang terlalu mepet ke atas
+  - Menambahkan padding-top 20px dan margin-top 15px pada form registrasi
+  - Menambahkan class `registration-mode` pada container untuk spacing dinamis
+  - Padding-top container meningkat menjadi 30px saat mode registrasi
+  - Spacing yang lebih baik antara form title dan field pertama
+
+### 🔧 Technical Improvements
+- **Dynamic CSS Classes**: Implementasi class CSS dinamis untuk mode registrasi
+  - Auto-add class `registration-mode` saat form registrasi ditampilkan
+  - Auto-remove class saat kembali ke form login atau setelah registrasi berhasil
+  - Fallback CSS untuk browser yang tidak support `:has()` selector
+
+### 📱 Responsive Design
+- **Mobile Optimization**: Spacing yang optimal untuk semua ukuran layar
+  - Mobile: padding-top 40px dan margin-top 20px untuk registration mode
+  - Desktop: padding-top 40px dan margin-top 20px untuk registration mode
+  - Container menggunakan flexbox untuk centering yang lebih baik
+  - Min-height 100vh untuk full viewport coverage
+
+### 🎯 Form Field Improvements
+- **Better Field Spacing**: Spacing yang lebih baik antar field form
+  - Margin-bottom field meningkat menjadi 1.5rem
+  - Label dengan font-weight 500 dan margin-bottom 0.75rem
+  - Field pertama dengan margin-top 10px dari title
+  - Spacing khusus untuk profile information section
+
+### 📋 CSS Structure
+```css
+/* Registration mode spacing */
+.login-container.registration-mode {
+    padding-top: 40px;
+    margin-top: 20px;
+}
+
+#registerForm {
+    padding-top: 20px;
+    margin-top: 15px;
+}
+
+/* Better field spacing */
+#registerForm .mb-3 {
+    margin-bottom: 1.5rem;
+}
+```
+
+---
+
+## [2025-06-15] - Fitur Registrasi User pada Halaman Login
+
+### ✨ Fitur Baru
+- **Registrasi User Baru**: Menambahkan form registrasi lengkap pada halaman login
+  - Form registrasi dengan validasi client-side yang komprehensif
+  - Field registrasi: username, email, password, konfirmasi password, role, dan informasi profile
+  - Informasi profile: NIP, nama lengkap, jabatan, no HP, dan alamat
+  - Captcha terpisah untuk keamanan registrasi
+  - Validasi real-time untuk username (3-20 karakter, alphanumeric)
+  - Validasi email format dan konfirmasi password
+  - Role selection (Guru/Staf) - Admin hanya bisa dibuat melalui backend
+  - Animasi smooth transition antara form login dan registrasi
+
+### 🔧 Perbaikan
+- **UI/UX Enhancement**: 
+  - Judul dinamis yang berubah antara "Login" dan "Registrasi"
+  - Link toggle yang intuitif untuk beralih antara form
+  - Form responsif dengan layout yang optimal untuk mobile
+  - Error handling yang lebih informatif dengan pesan validasi detail
+  - Auto-clear form setelah registrasi berhasil
+
+### 🛡️ Keamanan
+- **Captcha Terpisah**: Implementasi captcha independen untuk form registrasi
+- **Validasi Ganda**: Client-side dan server-side validation
+- **Password Security**: Minimal 6 karakter dengan konfirmasi password
+
+### 📱 Responsivitas
+- **Mobile-First Design**: Form registrasi yang optimal untuk semua ukuran layar
+- **Grid Layout**: Penggunaan Bootstrap grid untuk layout field yang rapi
+- **Touch-Friendly**: Button dan input yang mudah diakses di perangkat mobile
+
+### 🔗 Integrasi Backend
+- **API Integration**: Koneksi dengan endpoint `/api/auth/register`
+- **Profile Structure**: Data profile terstruktur sesuai schema backend
+- **Error Handling**: Penanganan error validasi dari backend dengan pesan yang user-friendly
+
+### 📋 Detail Implementasi
+```javascript
+// Struktur data registrasi yang dikirim ke backend
+{
+    username: string,
+    email: string, 
+    password: string,
+    role: "guru" | "staf",
+    profile: {
+        nip: string,
+        nama_lengkap: string,
+        jabatan: string,
+        no_hp: string,
+        alamat: string
+    }
+}
+```
+
+### 🎯 Validasi Form
+- Username: 3-20 karakter, hanya huruf dan angka
+- Email: Format email yang valid
+- Password: Minimal 6 karakter
+- Konfirmasi Password: Harus sama dengan password
+- Role: Wajib dipilih (Guru/Staf)
+- Nama Lengkap: Field wajib
+- Jabatan: Field wajib
+- Captcha: Verifikasi keamanan wajib
+
+---
+
+## [2025-06-15] - Token Countdown Implementation
+
+## [2025-06-15] - Implementasi Captcha pada Halaman Login
+
+### 🔒 Security Features
+
+#### 1. **Visual Captcha System**
+- **Feature**: Captcha berbasis canvas dengan kode verifikasi 6 karakter
+- **Security**: Mencegah automated login attempts dan bot attacks
+- **Visual Design**: Canvas dengan noise lines, dots, dan text distortion
+- **Character Set**: Menggunakan karakter yang mudah dibedakan (tanpa 0, O, 1, I, l)
+
+#### 2. **Enhanced Security Measures**
+- **Case Insensitive**: Validasi captcha tidak case-sensitive untuk user experience
+- **Attempt Limiting**: Maksimal 3 percobaan sebelum captcha di-refresh otomatis
+- **Auto Refresh**: Captcha otomatis di-refresh setelah login gagal
+- **Input Validation**: Trim whitespace dan validasi input yang proper
+
+#### 3. **User Experience Improvements**
+- **Visual Feedback**: Gradient background dan text shadow untuk readability
+- **Refresh Button**: Tombol refresh dengan icon Font Awesome
+- **Keyboard Support**: Enter key support dan keyboard accessibility
+- **Auto Focus**: Auto focus pada input captcha saat canvas diklik
+- **Attempt Counter**: Menampilkan sisa percobaan kepada user
+
+### 🎨 **UI/UX Design**
+- **Modern Styling**: Container dengan background, border, dan shadow
+- **Responsive Layout**: Layout yang responsive dengan flexbox
+- **Visual Hierarchy**: Label "Verifikasi Keamanan" yang jelas
+- **Interactive Elements**: Hover effects dan visual feedback
+- **Accessibility**: Keyboard navigation dan screen reader friendly
+
+### 🔧 **Technical Implementation**
+- **Frontend Changes**: `frontend/login.html`
+- **Canvas API**: HTML5 Canvas untuk generate captcha image
+- **JavaScript Functions**:
+  ```javascript
+  - generateCaptchaText(): Generate random 6-character string
+  - drawCaptcha(): Render captcha dengan noise dan distortion
+  - validateCaptcha(): Validasi input user dengan captcha
+  - showCaptchaError(): Handle error dengan attempt counter
+  ```
+
+### 📋 **Captcha Features**
+- **Character Length**: 6 karakter random
+- **Character Set**: A-Z, a-z, 2-9 (exclude confusing characters)
+- **Visual Effects**: 
+  - Gradient background
+  - Random rotation per character
+  - Text shadow untuk depth
+  - Noise lines dan dots
+  - Random vertical offset
+- **Security**: Auto-refresh setelah max attempts
+
+### 🧪 **Security Testing**
+- ✅ Captcha validation berfungsi dengan benar
+- ✅ Case-insensitive validation
+- ✅ Attempt limiting (max 3 attempts)
+- ✅ Auto-refresh setelah max attempts
+- ✅ Input sanitization (trim whitespace)
+- ✅ Keyboard accessibility
+- ✅ Visual distortion untuk prevent OCR
+
+### 🎯 **User Flow**
+1. **Page Load**: Captcha otomatis di-generate
+2. **User Input**: User memasukkan username, password, dan captcha
+3. **Validation**: Captcha divalidasi sebelum login request
+4. **Error Handling**: Jika salah, tampilkan sisa percobaan
+5. **Auto Refresh**: Setelah 3x gagal atau login gagal, generate captcha baru
+6. **Success**: Jika valid, lanjutkan ke proses login
+
+---
+
+## [2025-06-15] - Implementasi Countdown Token Expired
+
+### ✨ New Features
+
+#### 1. **Token Countdown Display**
+- **Feature**: Countdown timer pada header-right yang menampilkan sisa waktu token sebelum expired
+- **UI Component**: Token countdown dengan icon clock dan format MM:SS
+- **Real-time Update**: Update setiap detik untuk menampilkan waktu yang tersisa
+- **Visual Indicators**: Perubahan warna berdasarkan sisa waktu (normal, warning, danger)
+
+#### 2. **Smart Token Management**
+- **JWT Decoding**: Otomatis decode JWT token untuk mendapatkan waktu expired
+- **Auto Refresh**: Countdown dimulai ulang saat halaman dimuat atau token diperbarui
+- **Auto Logout**: Otomatis logout saat token expired dengan notifikasi
+- **Warning System**: Notifikasi peringatan pada 10 menit dan 5 menit terakhir
+
+#### 3. **Enhanced User Experience**
+- **Visual Feedback**: Animasi pulse pada countdown saat mendekati expired
+- **Responsive Design**: Countdown terintegrasi dengan baik pada header
+- **Clean Logout**: Stop countdown saat user logout manual
+- **Error Handling**: Graceful handling untuk token yang tidak valid
+
+### 🎨 **UI/UX Improvements**
+- **Modern Styling**: Countdown dengan background transparan dan border radius
+- **Color Coding**: 
+  - Normal: White text
+  - Warning (≤10 min): Yellow/warning color dengan pulse animation
+  - Danger (≤5 min): Red/danger color dengan faster pulse animation
+- **Hover Effects**: Subtle hover effect untuk better interaction
+
+### 🔧 **Technical Implementation**
+- **Frontend Changes**: `frontend/index.html`, `frontend/js/app.js`
+- **JWT Integration**: Decode JWT payload untuk mendapatkan `exp` timestamp
+- **Interval Management**: Proper cleanup interval saat logout atau page unload
+- **Memory Management**: Prevent memory leaks dengan proper interval clearing
+
+### 📋 **Functions Added**
+```javascript
+- getTokenExpiryTime(): Decode JWT dan ambil waktu expired
+- formatCountdownTime(): Format milliseconds ke MM:SS
+- startTokenCountdown(): Mulai countdown timer
+- stopTokenCountdown(): Hentikan countdown timer
+- refreshTokenCountdown(): Refresh countdown setelah token update
+```
+
+### 🧪 **Testing Scenarios**
+- ✅ Countdown dimulai saat halaman dimuat
+- ✅ Visual warning pada 10 menit terakhir
+- ✅ Visual danger pada 5 menit terakhir
+- ✅ Auto logout saat token expired
+- ✅ Stop countdown saat manual logout
+- ✅ Proper cleanup saat page navigation
+
+---
+
+## [2025-06-15] - Perbaikan Event Handler Tombol Hapus Grid Riwayat Prediksi
+
+### 🐛 Bug Fixes
+
+#### 1. **Perbaikan Event Handler Tombol Hapus**
+- **Issue**: Event click pada tombol hapus grid riwayat prediksi tidak terbaca/tidak berfungsi
+- **Problem**: Command column dengan custom click handler tidak kompatibel dengan server-side paging
+- **Root Cause**: Kendo UI Grid dengan server-side paging tidak dapat menangani command column click events dengan baik
+
+#### 2. **Solusi yang Diterapkan**
+- **Template Column**: Mengganti command column dengan template column custom
+- **Event Delegation**: Menggunakan `$(document).on("click", ".btn-delete-riwayat")` untuk event delegation
+- **Data Attributes**: Menggunakan data attributes untuk menyimpan informasi row data
+- **Proper Event Handling**: Event handler yang dapat menangani dynamic content dengan baik
+
+#### 3. **Perubahan Frontend**
+- **File**: `frontend/js/app.js`
+- **Changes**:
+  ```javascript
+  // Sebelum (command column - tidak berfungsi)
+  {
+      command: [{
+          name: "destroy",
+          text: "Hapus",
+          iconClass: "k-icon k-i-delete",
+          click: function(e) {
+              e.preventDefault();
+              alert("Hapus");
+              const dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+              showDeleteConfirmationRiwayat(dataItem);
+              return false;
+          }
+      }],
+      title: "Aksi",
+      width: 100
+  }
+  
+  // Sesudah (template column - berfungsi)
+  {
+      field: "id",
+      title: "Aksi",
+      width: 100,
+      template: function(dataItem) {
+          return `<button class="k-button k-button-solid k-button-solid-error k-button-sm btn-delete-riwayat" 
+                         data-id="${dataItem.id}" 
+                         data-nama="${dataItem.nama_siswa}" 
+                         data-semester="${dataItem.semester}" 
+                         data-tahun="${dataItem.tahun_ajaran}" 
+                         data-prediksi="${dataItem.prediksi_prestasi}">
+                      <i class="k-icon k-i-delete"></i> Hapus
+                  </button>`;
+      }
+  }
+  
+  // Event handler dengan delegation
+  $(document).on("click", ".btn-delete-riwayat", function(e) {
+      e.preventDefault();
+      
+      const button = $(this);
+      const dataItem = {
+          id: button.data("id"),
+          nama_siswa: button.data("nama"),
+          semester: button.data("semester"),
+          tahun_ajaran: button.data("tahun"),
+          prediksi_prestasi: button.data("prediksi")
+      };
+      
+      console.log("Delete button clicked:", dataItem);
+      showDeleteConfirmationRiwayat(dataItem);
+  });
+  ```
+
+#### 4. **Keunggulan Solusi Baru**
+- **Event Delegation**: Event handler bekerja untuk dynamic content yang di-generate oleh grid
+- **Server-side Paging Compatible**: Kompatibel dengan server-side paging dan pagination
+- **Data Preservation**: Data row tersimpan dalam data attributes dan dapat diakses dengan mudah
+- **Consistent Styling**: Menggunakan Kendo UI button classes untuk konsistensi visual
+- **Debug Friendly**: Menambahkan console.log untuk debugging
+
+#### 5. **Testing dan Verifikasi**
+- ✅ **Event Detection**: Event click sekarang terdeteksi dengan baik
+- ✅ **Data Access**: Data row dapat diakses melalui data attributes
+- ✅ **Confirmation Dialog**: Dialog konfirmasi muncul dengan data yang benar
+- ✅ **Delete Functionality**: Proses delete berfungsi normal setelah konfirmasi
+- ✅ **Pagination Compatibility**: Berfungsi dengan baik pada semua halaman pagination
+- ✅ **Visual Consistency**: Tombol memiliki styling yang konsisten dengan Kendo UI
+
+#### 6. **Technical Details**
+- **Event Delegation**: Menggunakan `$(document).on()` untuk menangani dynamic content
+- **Data Attributes**: Menyimpan data dalam `data-*` attributes untuk akses mudah
+- **Template Function**: Menggunakan template function untuk generate HTML button
+- **CSS Classes**: Menggunakan Kendo UI button classes: `k-button k-button-solid k-button-solid-error k-button-sm`
+
+---
+
+## [2025-06-15] - Perbaikan Tombol Hapus Grid Riwayat Prediksi
+
+### 🐛 Bug Fixes
+
+#### 1. **Perbaikan Tombol Hapus Riwayat Prediksi**
+- **Issue**: Tombol hapus pada grid riwayat prediksi tidak berfungsi dan tidak mengirim request ke backend API
+- **Problem**: Fungsi `showDeleteConfirmationRiwayat` menggunakan `grid.dataSource.remove()` dan `grid.dataSource.sync()` yang tidak kompatibel dengan server-side paging
+- **Root Cause**: Grid menggunakan server-side paging tetapi delete operation menggunakan client-side method
+
+#### 2. **Solusi yang Diterapkan**
+- **Direct AJAX Call**: Mengganti `grid.dataSource.remove()` dengan AJAX call langsung ke endpoint `DELETE /api/prediksi/history/{id}`
+- **Proper Error Handling**: Menambahkan error handling yang komprehensif dengan notifikasi yang sesuai
+- **Grid Refresh**: Menggunakan `grid.dataSource.read()` untuk refresh data setelah penghapusan berhasil
+
+#### 3. **Perubahan Frontend**
+- **File**: `frontend/js/app.js`
+- **Function**: `showDeleteConfirmationRiwayat()`
+- **Changes**:
+  ```javascript
+  // Sebelum (tidak berfungsi)
+  const grid = $("#riwayat-grid").data("kendoGrid");
+  grid.dataSource.remove(data);
+  grid.dataSource.sync();
+  
+  // Sesudah (berfungsi dengan benar)
+  $.ajax({
+      url: `${API_URL}/prediksi/history/${data.id}`,
+      type: "DELETE",
+      beforeSend: function(xhr) {
+          const token = getToken();
+          if (token) {
+              xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+          }
+      },
+      success: function() {
+          showSuccessNotification("Riwayat prediksi berhasil dihapus", "Sukses");
+          const grid = $("#riwayat-grid").data("kendoGrid");
+          if (grid) {
+              grid.dataSource.read();
+          }
+      },
+      error: function(xhr) {
+          const errorMsg = xhr.responseJSON?.detail || "Gagal menghapus riwayat prediksi";
+          showErrorNotification(errorMsg, "Error");
+      }
+  });
+  ```
+
+#### 4. **Testing dan Verifikasi**
+- ✅ **Delete Request**: Tombol hapus sekarang mengirim DELETE request ke `/api/prediksi/history/{prestasi_id}`
+- ✅ **Authentication**: Request menggunakan bearer token authentication yang benar
+- ✅ **Success Notification**: Menampilkan notifikasi sukses setelah penghapusan berhasil
+- ✅ **Error Handling**: Menampilkan pesan error yang sesuai jika penghapusan gagal
+- ✅ **Grid Refresh**: Grid otomatis refresh setelah penghapusan berhasil
+- ✅ **Backend Response**: Backend mengembalikan HTTP 204 No Content untuk penghapusan berhasil
+
+#### 5. **Endpoint Backend yang Digunakan**
+- **URL**: `DELETE /api/prediksi/history/{prestasi_id}`
+- **Authentication**: Bearer Token required
+- **Response**: HTTP 204 No Content (sukses) atau HTTP 404/500 (error)
+- **File**: `backend/routes/prediksi_router.py`
+
+---
+
+## [2025-06-15] - Perbaikan Konflik Event Handler Pagination
+
+### 🐛 Bug Fixes
+
+#### 1. **Perbaikan Konflik Event Handler Pagination**
+- **Issue**: Konflik antara event handler `[data-page]` untuk navigasi halaman dengan pagination Kendo UI Grid
+- **Problem**: Pagination tidak berfungsi dan menyebabkan layar blank/hitam saat mengklik nomor halaman
+- **Root Cause**: Event handler navigasi menangkap semua elemen dengan atribut `data-page`, termasuk link pagination Kendo UI
+
+#### 2. **Solusi yang Diterapkan**
+- **Enhanced Event Handler**: Selector yang lebih spesifik `[data-page]:not(.k-link):not(.k-pager-nav)`
+- **Parent Container Check**: Pengecekan apakah elemen berada dalam container pagination
+- **Page Validation**: Validasi halaman yang valid untuk mencegah konflik dengan nomor halaman
+- **Event Bubbling Control**: Menggunakan `e.stopPropagation()` pada pagination untuk mencegah konflik
+
+### 🔧 Perubahan Frontend
+
+#### File: `frontend/js/app.js`
+- **Enhanced**: Event handler navigasi halaman dengan selector yang lebih spesifik
+- **Added**: Event handler khusus untuk pagination Kendo UI
+- **Improved**: Validasi halaman yang valid: `['dashboard', 'siswa', 'nilai', 'presensi', 'penghasilan', 'prediksi', 'users', 'profile', 'generate-dummy']`
+- **Added**: Debug logging untuk troubleshooting
+
+#### Event Handler Improvements
+```javascript
+// Event handler umum untuk navigasi halaman (kecuali pagination)
+$(document).on("click", "[data-page]:not(.k-link):not(.k-pager-nav)", function(e) {
+    // Skip jika ini adalah elemen pagination Kendo UI
+    if ($(this).closest('.k-pager-wrap, .k-pager, .k-grid-pager').length > 0) {
+        return; // Biarkan Kendo UI pagination yang menangani
+    }
+    
+    // Validasi halaman yang valid
+    const validPages = ['dashboard', 'siswa', 'nilai', 'presensi', 'penghasilan', 'prediksi', 'users', 'profile', 'generate-dummy'];
+    if (!validPages.includes(page)) {
+        return; // Bukan halaman navigasi yang valid
+    }
+    // ... rest of navigation logic
+});
+
+// Event handler khusus untuk pagination
+$(document).on("click", ".k-pager-wrap .k-link[data-page], .k-pager .k-link[data-page], .k-grid-pager .k-link[data-page]", function(e) {
+    console.log("Pagination link clicked, letting Kendo UI handle it");
+    e.stopPropagation(); // Hentikan event bubbling untuk mencegah konflik
+});
+```
+
+### 🎯 Fitur Perbaikan
+
+#### 1. **Selector yang Lebih Spesifik**
+- Menggunakan `:not(.k-link):not(.k-pager-nav)` untuk mengecualikan elemen Kendo UI
+- Menambahkan pengecekan parent container pagination dengan `.closest()`
+
+#### 2. **Validasi Halaman**
+- Daftar halaman valid untuk mencegah konflik dengan nomor halaman pagination
+- Return early jika bukan halaman navigasi yang valid
+
+#### 3. **Event Bubbling Control**
+- Event handler khusus untuk pagination dengan `e.stopPropagation()`
+- Mempertahankan fungsi pagination normal Kendo UI
+
+#### 4. **Debug Logging**
+- Console log untuk membantu troubleshooting
+- Membedakan antara navigasi halaman dan pagination
+
+### ✅ Hasil Perbaikan
+
+#### **Pagination Berfungsi Normal**
+- User dapat mengklik nomor halaman tanpa masalah
+- Semua grid (siswa, nilai, presensi, prediksi, users) pagination berfungsi normal
+
+#### **Navigasi Halaman Tetap Berfungsi**
+- Menu sidebar tetap berfungsi dengan baik
+- Link navigasi di header tetap berfungsi
+- Profile link dan navigasi lainnya tidak terpengaruh
+
+#### **Tidak Ada Layar Blank**
+- Pagination tidak lagi menyebabkan layar blank/hitam
+- User experience yang lebih baik
+
+#### **Event Conflict Resolved**
+- Tidak ada lagi konflik antara event handler
+- Kendo UI pagination dan navigasi halaman bekerja secara independen
+
+### 📝 Technical Details
+
+#### Kendo UI Pagination Structure
+```html
+<div class="k-pager-wrap">
+    <ul class="k-pager-numbers">
+        <li><a class="k-link" data-page="1">1</a></li>
+        <li><a class="k-link" data-page="2">2</a></li>
+        <!-- ... -->
+    </ul>
+</div>
+```
+
+#### Navigation Structure
+```html
+<nav class="sidebar">
+    <a class="sidebar-link" data-page="dashboard">Dashboard</a>
+    <a class="sidebar-link" data-page="siswa">Data Siswa</a>
+    <!-- ... -->
+</nav>
+```
+
+### 🧪 Testing
+
+#### Test Cases Verified
+1. **Navigasi Halaman Normal**: Menu sidebar dan header links berfungsi normal
+2. **Pagination Grid**: Semua grid dengan pagination berfungsi normal
+3. **Profile Link di Header**: Link profile di header berfungsi normal
+4. **Event Conflict**: Tidak ada konflik antara event handler
+
+### 📚 Documentation
+- **Added**: `DOKUMENTASI_PERBAIKAN_PAGINATION_CONFLICT.md` - Dokumentasi lengkap perbaikan konflik pagination
+
+---
+
+## [2025-06-15] - Enhanced Model Evaluation dengan Confusion Matrix dan Metrics
+
+### 🚀 Fitur Baru
+
+#### 1. **Confusion Matrix dan Model Metrics API**
+- **Confusion Matrix Endpoint**: `/api/prediksi/confusion-matrix` untuk mendapatkan confusion matrix
+- **Model Metrics Endpoint**: `/api/prediksi/model-metrics` untuk mendapatkan metrik evaluasi model
+- **Real-time Evaluation**: Evaluasi model real-time setelah training
+- **Comprehensive Metrics**: Accuracy, Precision, Recall, F1-Score
+
+#### 2. **Enhanced C4.5 Model dengan Evaluation Metrics**
+- **Automatic Metrics Calculation**: Otomatis hitung confusion matrix dan metrics saat training
+- **Weighted Metrics**: Menggunakan weighted average untuk multi-class classification
+- **Timestamp Tracking**: Tracking waktu terakhir model dilatih
+- **Error Handling**: Robust error handling untuk model evaluation
+
+### 🔧 Perubahan Backend
+
+#### File: `backend/models/c45_model.py`
+- **Added**: Import sklearn metrics (confusion_matrix, precision_score, recall_score, f1_score)
+- **Enhanced**: Model class dengan confusion matrix dan metrics storage
+- **Added**: `get_confusion_matrix()` method untuk mendapatkan confusion matrix
+- **Added**: `get_model_metrics()` method untuk mendapatkan model metrics
+- **Improved**: Training process dengan automatic metrics calculation
+
+#### File: `backend/routes/prediksi_router.py`
+- **Added**: `/confusion-matrix` endpoint dengan authentication
+- **Added**: `/model-metrics` endpoint dengan authentication
+- **Enhanced**: Error handling untuk model evaluation endpoints
+- **Improved**: Response format untuk consistency
+
+### 📊 API Endpoints Baru
+
+#### GET `/api/prediksi/confusion-matrix`
+```json
+{
+    "status": "success",
+    "confusion_matrix": [[10, 2, 1], [1, 15, 2], [0, 1, 12]],
+    "labels": ["Rendah", "Sedang", "Tinggi"]
+}
+```
+
+#### GET `/api/prediksi/model-metrics`
+```json
+{
+    "status": "success",
+    "metrics": {
+        "accuracy": 0.85,
+        "precision": 0.84,
+        "recall": 0.85,
+        "f1_score": 0.84
+    },
+    "last_trained": "2025-06-15T10:30:00"
+}
+```
+
+### 🎯 Model Evaluation Features
+
+#### Confusion Matrix
+- **Multi-class Support**: Support untuk 3 kelas (Rendah, Sedang, Tinggi)
+- **Visual Ready**: Format yang siap untuk visualisasi di frontend
+- **Label Mapping**: Mapping yang jelas antara index dan label kelas
+
+#### Model Metrics
+- **Accuracy**: Overall accuracy dari model
+- **Precision**: Weighted precision untuk semua kelas
+- **Recall**: Weighted recall untuk semua kelas
+- **F1-Score**: Weighted F1-score untuk balanced evaluation
+
+### 🔄 Integration dengan Frontend
+
+#### Dashboard Enhancement
+- **Confusion Matrix Display**: Tampilan confusion matrix dengan color coding
+- **Metrics Cards**: Card display untuk setiap metric
+- **Auto-refresh**: Otomatis refresh setelah model training
+- **Loading States**: Loading states untuk better UX
+
+#### JavaScript Functions
+```javascript
+// Load confusion matrix dan metrics
+loadModelEvaluation()
+displayConfusionMatrix(matrix, labels)
+displayModelMetrics(metrics, lastTrained)
+```
+
+### 🛡️ Security dan Authentication
+
+#### Protected Endpoints
+- **Authentication Required**: Semua endpoint evaluation memerlukan authentication
+- **User Validation**: Proper user validation dengan JWT token
+- **Error Handling**: Secure error handling tanpa data leakage
+
+### 📈 Performance Improvements
+
+#### Efficient Calculation
+- **Cached Results**: Confusion matrix dan metrics di-cache setelah training
+- **Lazy Loading**: Hanya calculate saat diperlukan
+- **Memory Efficient**: Efficient memory usage untuk large datasets
+
+### 🐛 Error Handling
+
+#### Comprehensive Error Messages
+- **Model Not Trained**: Clear message jika model belum dilatih
+- **Data Insufficient**: Informative message untuk data yang tidak cukup
+- **Calculation Errors**: Proper error handling untuk calculation errors
+
+### 📝 Technical Implementation
+
+#### Sklearn Integration
+```python
+from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score
+
+# Calculate metrics
+cm = confusion_matrix(y_test, y_pred, labels=self.class_labels)
+precision = precision_score(y_test, y_pred, average='weighted', zero_division=0)
+recall = recall_score(y_test, y_pred, average='weighted', zero_division=0)
+f1 = f1_score(y_test, y_pred, average='weighted', zero_division=0)
+```
+
+#### Model Enhancement
+```python
+class C45Model:
+    def __init__(self):
+        # ... existing code ...
+        self.confusion_matrix = None
+        self.model_metrics = None
+        self.class_labels = ['Rendah', 'Sedang', 'Tinggi']
+        self.last_trained = None
+```
+
+## [2025-06-15] - Enhanced Data Management dengan Auto-Calculation dan Bug Fixes
 
 ### 🚀 Fitur Baru
 
@@ -204,7 +1070,7 @@ except Exception as e:
 3. **Test Functionality**: Test semua functionality yang updated
 4. **Monitor Logs**: Monitor application logs untuk errors
 
-## [2024-12-19] - Implementasi Session Profile dan Role-Based Access Control
+## [2025-06-15] - Implementasi Session Profile dan Role-Based Access Control
 
 ### 🚀 Fitur Baru
 
@@ -875,3 +1741,139 @@ ALTER TABLE users ADD COLUMN is_active BOOLEAN DEFAULT TRUE;
 ---
 
 **Catatan**: Semua perubahan telah ditest dan divalidasi untuk memastikan kompatibilitas dan keamanan sistem. Implementasi mengikuti best practices untuk security, performance, dan maintainability. 
+
+# CHANGELOG - Fitur Registrasi User
+
+## [v1.3.0] - Layout 2 Kolom yang Menarik
+**Tanggal:** [Current Date]
+
+### ✨ Fitur Baru - Layout 2 Kolom Registrasi
+- **Layout Responsif 2 Kolom**: Form registrasi diubah menjadi layout 2 kolom yang lebih menarik dan terorganisir
+- **Section-based Organization**: Form dibagi menjadi 3 section utama:
+  - 📋 **Informasi Akun**: Username, Email, Password, Role
+  - 👤 **Informasi Profile**: Nama Lengkap, NIP, Jabatan, No HP, Alamat
+  - 🛡️ **Verifikasi Keamanan**: Captcha dengan layout horizontal
+
+### 🎨 Peningkatan UI/UX
+- **Header Registrasi**: Header dengan icon dan deskripsi yang menarik
+- **Section Headers**: Setiap section memiliki header dengan icon berwarna
+- **Card-based Design**: Setiap section menggunakan card dengan gradient background
+- **Hover Effects**: Animasi hover pada section cards dengan shadow dan transform
+- **Enhanced Form Controls**: 
+  - Border radius yang lebih besar (8px)
+  - Padding yang lebih nyaman (12px 15px)
+  - Focus states dengan border biru dan shadow
+- **Gradient Button**: Tombol submit dengan gradient hijau dan efek hover
+- **Required Field Indicators**: Tanda asterisk (*) merah untuk field wajib
+
+### 🎭 Animasi dan Transisi
+- **Slide-in Animation**: Section muncul dengan animasi slideInUp bertahap
+- **Smooth Transitions**: Semua elemen memiliki transisi 0.3s ease
+- **Button Hover Effects**: Transform dan shadow pada tombol submit
+- **Card Hover Effects**: Lift effect pada section cards
+
+### 📱 Responsive Design
+- **Mobile Optimization**: Layout tetap rapi di perangkat mobile
+- **Tablet Friendly**: Optimasi khusus untuk tablet (768px breakpoint)
+- **Desktop Enhancement**: Layout 2 kolom penuh di desktop
+- **Flexible Grid**: Menggunakan Bootstrap grid system yang responsif
+
+### 🔧 Technical Improvements
+- **CSS Organization**: CSS terstruktur dengan komentar yang jelas
+- **Performance**: Animasi menggunakan transform untuk performa optimal
+- **Accessibility**: Label yang jelas dan kontras warna yang baik
+- **Browser Compatibility**: Fallback untuk browser yang tidak mendukung CSS modern
+
+### 📋 Detail Layout 2 Kolom
+```
+┌─────────────────────────────────────────┐
+│           📋 INFORMASI AKUN             │
+├─────────────────┬───────────────────────┤
+│   Username      │      Email            │
+├─────────────────┼───────────────────────┤
+│   Password      │   Konfirmasi Password │
+├─────────────────┼───────────────────────┤
+│     Role        │                       │
+└─────────────────┴───────────────────────┘
+
+┌─────────────────────────────────────────┐
+│           👤 INFORMASI PROFILE          │
+├─────────────────┬───────────────────────┤
+│  Nama Lengkap   │        NIP            │
+├─────────────────┼───────────────────────┤
+│    Jabatan      │       No HP           │
+├─────────────────┴───────────────────────┤
+│              Alamat                     │
+└─────────────────────────────────────────┘
+
+┌─────────────────────────────────────────┐
+│         🛡️ VERIFIKASI KEAMANAN          │
+├─────────────────┬───────────────────────┤
+│   [Captcha]     │   Kode Verifikasi     │
+│   [Refresh]     │   [Input Field]       │
+└─────────────────┴───────────────────────┘
+```
+
+### 🎨 Color Scheme
+- **Primary Blue**: #007bff (Headers, Focus states)
+- **Success Green**: #28a745 → #20c997 (Gradient button)
+- **Background**: #f8f9fa → #ffffff (Section gradients)
+- **Text**: #495057 (Labels), #6c757d (Helper text)
+- **Borders**: #e9ecef, #dee2e6 (Section borders)
+
+## [v1.2.0] - UI/UX Improvements
+**Tanggal:** [Previous Date]
+
+### 🎯 Perbaikan Spacing dan Layout
+- **Form Spacing**: Perbaikan jarak antar elemen form registrasi
+- **Dynamic CSS Classes**: Implementasi class `registration-mode` untuk spacing dinamis
+- **Mobile Responsive**: Optimasi tampilan untuk perangkat mobile
+- **Container Centering**: Perbaikan posisi container dengan flexbox centering
+
+### 📱 Responsive Enhancements
+- **Mobile Padding**: `padding-top: 40px` dan `margin-top: 20px` untuk mode registrasi
+- **Desktop Consistency**: Spacing konsisten di semua ukuran layar
+- **Field Margins**: Peningkatan margin field menjadi `1.5rem`
+- **Viewport Awareness**: Penyesuaian berdasarkan ukuran viewport
+
+## [v1.1.0] - Bug Fixes dan Stabilitas
+**Tanggal:** [Previous Date]
+
+### 🐛 Perbaikan Bug
+- **Event Handler**: Perbaikan event delegation untuk form submission
+- **Multiple Fallbacks**: Implementasi multiple event handlers untuk reliability
+- **Error Handling**: Peningkatan parsing error message dari backend
+- **Loading States**: Implementasi loading state dengan spinner
+
+## [v1.0.0] - Implementasi Awal
+**Tanggal:** [Initial Date]
+
+### 🚀 Fitur Utama
+- **Form Registrasi**: Implementasi form registrasi lengkap
+- **Validasi Client-side**: Validasi username, email, password
+- **Role Selection**: Pilihan role Guru/Staf
+- **Profile Fields**: Input untuk NIP, Nama Lengkap, Jabatan, No HP, Alamat
+- **Captcha Security**: Sistem captcha terpisah untuk registrasi
+- **API Integration**: Integrasi dengan endpoint `/api/auth/register`
+
+---
+
+## 📝 Catatan Pengembangan
+
+### 🔄 Proses Iterasi
+1. **v1.0.0**: Implementasi dasar dengan form vertikal
+2. **v1.1.0**: Perbaikan bug dan stabilitas
+3. **v1.2.0**: Peningkatan spacing dan responsive design  
+4. **v1.3.0**: **Layout 2 kolom yang menarik dengan section-based organization**
+
+### 🎯 Fokus Pengembangan v1.3.0
+- **User Experience**: Layout yang lebih intuitif dan menarik
+- **Visual Hierarchy**: Pembagian informasi yang jelas dengan section
+- **Modern Design**: Penggunaan gradient, shadow, dan animasi modern
+- **Accessibility**: Peningkatan accessibility dengan label dan kontras yang baik
+
+### 🚀 Rencana Pengembangan Selanjutnya
+- **Form Wizard**: Implementasi multi-step registration
+- **Real-time Validation**: Validasi real-time saat user mengetik
+- **Profile Picture**: Upload foto profile saat registrasi
+- **Email Verification**: Sistem verifikasi email setelah registrasi 

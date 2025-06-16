@@ -64,7 +64,7 @@ def create_nilai(
     
     return new_nilai
 
-@router.get("/", response_model=List[NilaiRaportResponse])
+@router.get("/")
 def get_all_nilai(
     skip: int = 0, 
     limit: int = 100, 
@@ -72,7 +72,28 @@ def get_all_nilai(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    query = db.query(NilaiRaport)
+    # Join query untuk mengambil data nilai beserta nama siswa
+    query = db.query(
+        NilaiRaport.id,
+        NilaiRaport.siswa_id,
+        Siswa.nama.label('nama_siswa'),
+        NilaiRaport.semester,
+        NilaiRaport.tahun_ajaran,
+        NilaiRaport.matematika,
+        NilaiRaport.bahasa_indonesia,
+        NilaiRaport.bahasa_inggris,
+        NilaiRaport.ipa,
+        NilaiRaport.bahasa_jawa,
+        NilaiRaport.agama,
+        NilaiRaport.pjok,
+        NilaiRaport.pkn,
+        NilaiRaport.sejarah,
+        NilaiRaport.seni,
+        NilaiRaport.dasar_kejuruan,
+        NilaiRaport.rata_rata,
+        NilaiRaport.created_at,
+        NilaiRaport.updated_at
+    ).join(Siswa, NilaiRaport.siswa_id == Siswa.id)
     
     # Filter berdasarkan siswa_id jika ada
     if siswa_id:
@@ -80,7 +101,33 @@ def get_all_nilai(
     
     # Ambil data dengan pagination
     nilai_list = query.offset(skip).limit(limit).all()
-    return nilai_list
+    
+    # Convert hasil query ke dictionary
+    result = []
+    for row in nilai_list:
+        result.append({
+            "id": row.id,
+            "siswa_id": row.siswa_id,
+            "nama_siswa": row.nama_siswa,
+            "semester": row.semester,
+            "tahun_ajaran": row.tahun_ajaran,
+            "matematika": row.matematika,
+            "bahasa_indonesia": row.bahasa_indonesia,
+            "bahasa_inggris": row.bahasa_inggris,
+            "ipa": row.ipa,
+            "bahasa_jawa": row.bahasa_jawa,
+            "agama": row.agama,
+            "pjok": row.pjok,
+            "pkn": row.pkn,
+            "sejarah": row.sejarah,
+            "seni": row.seni,
+            "dasar_kejuruan": row.dasar_kejuruan,
+            "rata_rata": row.rata_rata,
+            "created_at": row.created_at,
+            "updated_at": row.updated_at
+        })
+    
+    return result
 
 @router.get("/{nilai_id}", response_model=NilaiRaportResponse)
 def get_nilai(

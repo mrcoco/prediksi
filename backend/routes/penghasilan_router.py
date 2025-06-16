@@ -59,7 +59,7 @@ def create_penghasilan(
     
     return new_penghasilan
 
-@router.get("/", response_model=List[PenghasilanOrtuResponse])
+@router.get("/")
 def get_all_penghasilan(
     skip: int = 0, 
     limit: int = 100, 
@@ -67,7 +67,22 @@ def get_all_penghasilan(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    query = db.query(PenghasilanOrtu)
+    # Join query untuk mengambil data penghasilan beserta nama siswa
+    query = db.query(
+        PenghasilanOrtu.id,
+        PenghasilanOrtu.siswa_id,
+        Siswa.nama.label('nama_siswa'),
+        PenghasilanOrtu.penghasilan_ayah,
+        PenghasilanOrtu.penghasilan_ibu,
+        PenghasilanOrtu.pekerjaan_ayah,
+        PenghasilanOrtu.pekerjaan_ibu,
+        PenghasilanOrtu.pendidikan_ayah,
+        PenghasilanOrtu.pendidikan_ibu,
+        PenghasilanOrtu.total_penghasilan,
+        PenghasilanOrtu.kategori_penghasilan,
+        PenghasilanOrtu.created_at,
+        PenghasilanOrtu.updated_at
+    ).join(Siswa, PenghasilanOrtu.siswa_id == Siswa.id)
     
     # Filter berdasarkan siswa_id jika ada
     if siswa_id:
@@ -75,7 +90,27 @@ def get_all_penghasilan(
     
     # Ambil data dengan pagination
     penghasilan_list = query.offset(skip).limit(limit).all()
-    return penghasilan_list
+    
+    # Convert hasil query ke dictionary
+    result = []
+    for row in penghasilan_list:
+        result.append({
+            "id": row.id,
+            "siswa_id": row.siswa_id,
+            "nama_siswa": row.nama_siswa,
+            "penghasilan_ayah": row.penghasilan_ayah,
+            "penghasilan_ibu": row.penghasilan_ibu,
+            "pekerjaan_ayah": row.pekerjaan_ayah,
+            "pekerjaan_ibu": row.pekerjaan_ibu,
+            "pendidikan_ayah": row.pendidikan_ayah,
+            "pendidikan_ibu": row.pendidikan_ibu,
+            "total_penghasilan": row.total_penghasilan,
+            "kategori_penghasilan": row.kategori_penghasilan,
+            "created_at": row.created_at,
+            "updated_at": row.updated_at
+        })
+    
+    return result
 
 @router.get("/{penghasilan_id}", response_model=PenghasilanOrtuResponse)
 def get_penghasilan(

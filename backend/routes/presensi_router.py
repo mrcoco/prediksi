@@ -66,7 +66,7 @@ def create_presensi(
     
     return new_presensi
 
-@router.get("/", response_model=List[PresensiResponse])
+@router.get("/")
 def get_all_presensi(
     skip: int = 0, 
     limit: int = 100, 
@@ -74,7 +74,22 @@ def get_all_presensi(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    query = db.query(Presensi)
+    # Join query untuk mengambil data presensi beserta nama siswa
+    query = db.query(
+        Presensi.id,
+        Presensi.siswa_id,
+        Siswa.nama.label('nama_siswa'),
+        Presensi.semester,
+        Presensi.tahun_ajaran,
+        Presensi.jumlah_hadir,
+        Presensi.jumlah_sakit,
+        Presensi.jumlah_izin,
+        Presensi.jumlah_alpa,
+        Presensi.persentase_kehadiran,
+        Presensi.kategori_kehadiran,
+        Presensi.created_at,
+        Presensi.updated_at
+    ).join(Siswa, Presensi.siswa_id == Siswa.id)
     
     # Filter berdasarkan siswa_id jika ada
     if siswa_id:
@@ -82,7 +97,27 @@ def get_all_presensi(
     
     # Ambil data dengan pagination
     presensi_list = query.offset(skip).limit(limit).all()
-    return presensi_list
+    
+    # Convert hasil query ke dictionary
+    result = []
+    for row in presensi_list:
+        result.append({
+            "id": row.id,
+            "siswa_id": row.siswa_id,
+            "nama_siswa": row.nama_siswa,
+            "semester": row.semester,
+            "tahun_ajaran": row.tahun_ajaran,
+            "jumlah_hadir": row.jumlah_hadir,
+            "jumlah_sakit": row.jumlah_sakit,
+            "jumlah_izin": row.jumlah_izin,
+            "jumlah_alpa": row.jumlah_alpa,
+            "persentase_kehadiran": row.persentase_kehadiran,
+            "kategori_kehadiran": row.kategori_kehadiran,
+            "created_at": row.created_at,
+            "updated_at": row.updated_at
+        })
+    
+    return result
 
 @router.get("/{presensi_id}", response_model=PresensiResponse)
 def get_presensi(

@@ -1031,6 +1031,7 @@ $(document).ready(function() {
                         fields: {
                             id: { editable: false, nullable: true },
                             siswa_id: { validation: { required: true } },
+                            nama_siswa: { editable: false },
                             semester: { validation: { required: true } },
                             tahun_ajaran: { validation: { required: true } },
                             matematika: { type: "number", validation: { required: true, min: 0, max: 100 } },
@@ -1074,7 +1075,15 @@ $(document).ready(function() {
                 }()
             },
             columns: [
-                { field: "siswa_id", title: "ID Siswa", editor: siswaDropDownEditor },
+                { 
+                    field: "nama_siswa", 
+                    title: "Nama Siswa", 
+                    width: 150,
+                    template: function(dataItem) {
+                        return dataItem.nama_siswa || dataItem.siswa?.nama || "-";
+                    }
+                },
+                { field: "siswa_id", title: "Siswa ID", hidden: true, editor: siswaDropDownEditor },
                 { field: "semester", title: "Semester" },
                 { field: "tahun_ajaran", title: "Tahun Ajaran" },
                 { field: "matematika", title: "Matematika", format: "{0:n1}" },
@@ -1118,7 +1127,14 @@ $(document).ready(function() {
                                 }
                             }
                         },
-                        optionLabel: "-- Pilih Siswa --"
+                        optionLabel: "-- Pilih Siswa --",
+                        change: function() {
+                            // Update nama_siswa field when siswa selection changes
+                            const selectedSiswa = this.dataItem();
+                            if (selectedSiswa) {
+                                e.model.set("nama_siswa", selectedSiswa.nama);
+                            }
+                        }
                     });
                     
                     // Auto-calculate rata-rata when grade values change
@@ -1246,6 +1262,7 @@ $(document).ready(function() {
                         fields: {
                             id: { editable: false, nullable: true },
                             siswa_id: { validation: { required: true } },
+                            nama_siswa: { editable: false },
                             semester: { validation: { required: true } },
                             tahun_ajaran: { validation: { required: true } },
                             jumlah_hadir: { type: "number", validation: { required: true, min: 0 } },
@@ -1271,9 +1288,27 @@ $(document).ready(function() {
                 filterable: true,
                 allPages: true
             },
-            editable: "popup",
+            editable: {
+                mode: "popup",
+                template: function() {
+                    const templateHtml = $("#presensi-template").html();
+                    if (!templateHtml) {
+                        console.error("Template #presensi-template tidak ditemukan");
+                        return "<div>Error: Template tidak ditemukan</div>";
+                    }
+                    return kendo.template(templateHtml);
+                }()
+            },
             columns: [
-                { field: "siswa_id", title: "ID Siswa", editor: siswaDropDownEditor },
+                { 
+                    field: "nama_siswa", 
+                    title: "Nama Siswa", 
+                    width: 150,
+                    template: function(dataItem) {
+                        return dataItem.nama_siswa || dataItem.siswa?.nama || "-";
+                    }
+                },
+                { field: "siswa_id", title: "Siswa ID", hidden: true, editor: siswaDropDownEditor },
                 { field: "semester", title: "Semester" },
                 { field: "tahun_ajaran", title: "Tahun Ajaran" },
                 { field: "jumlah_hadir", title: "Hadir" },
@@ -1283,7 +1318,111 @@ $(document).ready(function() {
                 { field: "persentase_kehadiran", title: "Persentase", format: "{0:n1}%" },
                 { field: "kategori_kehadiran", title: "Kategori" },
                 { command: ["edit", "destroy"], title: "Aksi", width: "200px" }
-            ]
+            ],
+            edit: function(e) {
+                // Set default values for new records
+                if (e.model.isNew()) {
+                    e.model.set("semester", "Ganjil");
+                    e.model.set("tahun_ajaran", new Date().getFullYear() + "/" + (new Date().getFullYear() + 1));
+                }
+                
+                // Initialize form components
+                setTimeout(function() {
+                    // Initialize siswa dropdown
+                    e.container.find("[name='siswa_id']").kendoDropDownList({
+                        dataTextField: "nama",
+                        dataValueField: "id",
+                        dataSource: {
+                            transport: {
+                                read: {
+                                    url: `${API_URL}/siswa`,
+                                    dataType: "json",
+                                    beforeSend: function(xhr) {
+                                        const token = getToken();
+                                        if (token) {
+                                            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        optionLabel: "-- Pilih Siswa --",
+                        change: function() {
+                            // Update nama_siswa field when siswa selection changes
+                            const selectedSiswa = this.dataItem();
+                            if (selectedSiswa) {
+                                e.model.set("nama_siswa", selectedSiswa.nama);
+                            }
+                        }
+                    });
+                    
+                    // Auto-calculate persentase and kategori when attendance values change
+                    const attendanceFields = ['jumlah_hadir', 'jumlah_sakit', 'jumlah_izin', 'jumlah_alpa'];
+                    
+                    attendanceFields.forEach(function(field) {
+                        e.container.find(`[name='${field}']`).on("input change", function() {
+                            calculateAttendancePercentage();
+                        });
+                    });
+                    
+                    function calculateAttendancePercentage() {
+                        const jumlahHadir = parseInt(e.container.find("[name='jumlah_hadir']").val()) || 0;
+                        const jumlahSakit = parseInt(e.container.find("[name='jumlah_sakit']").val()) || 0;
+                        const jumlahIzin = parseInt(e.container.find("[name='jumlah_izin']").val()) || 0;
+                        const jumlahAlpa = parseInt(e.container.find("[name='jumlah_alpa']").val()) || 0;
+                        
+                        const totalHari = jumlahHadir + jumlahSakit + jumlahIzin + jumlahAlpa;
+                        
+                        let persentase = 0;
+                        let kategori = "Rendah";
+                        
+                        if (totalHari > 0) {
+                            persentase = (jumlahHadir / totalHari) * 100;
+                            
+                            if (persentase >= 80) {
+                                kategori = "Tinggi";
+                            } else if (persentase >= 75) {
+                                kategori = "Sedang";
+                            } else {
+                                kategori = "Rendah";
+                            }
+                        }
+                        
+                        e.container.find("[name='persentase_kehadiran']").val(persentase.toFixed(2));
+                        e.container.find("[name='kategori_kehadiran']").val(kategori);
+                        
+                        // Update model values
+                        e.model.set("persentase_kehadiran", persentase);
+                        e.model.set("kategori_kehadiran", kategori);
+                    }
+                    
+                    // Calculate initial percentage if editing existing record
+                    if (!e.model.isNew()) {
+                        calculateAttendancePercentage();
+                    }
+                    
+                    // Add custom validation styling for number inputs
+                    e.container.find("input[type='number']").on("blur", function() {
+                        const $this = $(this);
+                        const value = parseInt($this.val());
+                        
+                        if ($this.prop("required") && ($this.val() === "" || isNaN(value))) {
+                            $this.addClass("k-invalid");
+                        } else if (!isNaN(value) && value < 0) {
+                            $this.addClass("k-invalid");
+                            // Show custom error for negative values
+                            const fieldName = $this.attr("name");
+                            const errorSpan = $this.siblings(".k-invalid-msg");
+                            if (errorSpan.length) {
+                                errorSpan.text("Nilai tidak boleh negatif");
+                            }
+                        } else {
+                            $this.removeClass("k-invalid");
+                        }
+                    });
+                    
+                }, 100);
+            }
         });
     }
     
@@ -1354,6 +1493,7 @@ $(document).ready(function() {
                         fields: {
                             id: { editable: false, nullable: true },
                             siswa_id: { validation: { required: true } },
+                            nama_siswa: { editable: false },
                             penghasilan_ayah: { type: "number", validation: { required: true, min: 0 } },
                             penghasilan_ibu: { type: "number", validation: { required: true, min: 0 } },
                             pekerjaan_ayah: { validation: { required: true } },
@@ -1373,10 +1513,33 @@ $(document).ready(function() {
             pageable: true,
             sortable: true,
             filterable: true,
-            toolbar: ["create"],
-            editable: "popup",
+            toolbar: ["create", "excel"],
+            excel: {
+                fileName: "Data Penghasilan Orang Tua.xlsx",
+                filterable: true,
+                allPages: true
+            },
+            editable: {
+                mode: "popup",
+                template: function() {
+                    const templateHtml = $("#penghasilan-template").html();
+                    if (!templateHtml) {
+                        console.error("Template #penghasilan-template tidak ditemukan");
+                        return "<div>Error: Template tidak ditemukan</div>";
+                    }
+                    return kendo.template(templateHtml);
+                }()
+            },
             columns: [
-                { field: "siswa_id", title: "ID Siswa", editor: siswaDropDownEditor },
+                { 
+                    field: "nama_siswa", 
+                    title: "Nama Siswa", 
+                    width: 150,
+                    template: function(dataItem) {
+                        return dataItem.nama_siswa || dataItem.siswa?.nama || "-";
+                    }
+                },
+                { field: "siswa_id", title: "Siswa ID", hidden: true, editor: siswaDropDownEditor },
                 { field: "penghasilan_ayah", title: "Penghasilan Ayah", format: "{0:n0}" },
                 { field: "penghasilan_ibu", title: "Penghasilan Ibu", format: "{0:n0}" },
                 { field: "pekerjaan_ayah", title: "Pekerjaan Ayah" },
@@ -1386,7 +1549,98 @@ $(document).ready(function() {
                 { field: "total_penghasilan", title: "Total", format: "{0:n0}" },
                 { field: "kategori_penghasilan", title: "Kategori" },
                 { command: ["edit", "destroy"], title: "Aksi", width: "200px" }
-            ]
+            ],
+            edit: function(e) {
+                // Initialize form components
+                setTimeout(function() {
+                    // Initialize siswa dropdown
+                    e.container.find("[name='siswa_id']").kendoDropDownList({
+                        dataTextField: "nama",
+                        dataValueField: "id",
+                        dataSource: {
+                            transport: {
+                                read: {
+                                    url: `${API_URL}/siswa`,
+                                    dataType: "json",
+                                    beforeSend: function(xhr) {
+                                        const token = getToken();
+                                        if (token) {
+                                            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        optionLabel: "-- Pilih Siswa --",
+                        change: function() {
+                            // Update nama_siswa field when siswa selection changes
+                            const selectedSiswa = this.dataItem();
+                            if (selectedSiswa) {
+                                e.model.set("nama_siswa", selectedSiswa.nama);
+                            }
+                        }
+                    });
+                    
+                    // Auto-calculate total and kategori when income values change
+                    const incomeFields = ['penghasilan_ayah', 'penghasilan_ibu'];
+                    
+                    incomeFields.forEach(function(field) {
+                        e.container.find(`[name='${field}']`).on("input change", function() {
+                            calculateIncomeTotal();
+                        });
+                    });
+                    
+                    function calculateIncomeTotal() {
+                        const penghasilanAyah = parseInt(e.container.find("[name='penghasilan_ayah']").val()) || 0;
+                        const penghasilanIbu = parseInt(e.container.find("[name='penghasilan_ibu']").val()) || 0;
+                        
+                        const totalPenghasilan = penghasilanAyah + penghasilanIbu;
+                        
+                        let kategori = "Rendah";
+                        
+                        if (totalPenghasilan > 5000000) {
+                            kategori = "Tinggi";
+                        } else if (totalPenghasilan >= 2000000) {
+                            kategori = "Sedang";
+                        } else {
+                            kategori = "Rendah";
+                        }
+                        
+                        e.container.find("[name='total_penghasilan']").val(totalPenghasilan);
+                        e.container.find("[name='kategori_penghasilan']").val(kategori);
+                        
+                        // Update model values
+                        e.model.set("total_penghasilan", totalPenghasilan);
+                        e.model.set("kategori_penghasilan", kategori);
+                    }
+                    
+                    // Calculate initial total if editing existing record
+                    if (!e.model.isNew()) {
+                        calculateIncomeTotal();
+                    }
+                    
+                    // Add custom validation styling for number inputs
+                    e.container.find("input[type='number']").on("blur", function() {
+                        const $this = $(this);
+                        const value = parseInt($this.val());
+                        
+                        if ($this.prop("required") && ($this.val() === "" || isNaN(value))) {
+                            $this.addClass("k-invalid");
+                        } else if (!isNaN(value) && value < 0) {
+                            $this.addClass("k-invalid");
+                            // Show custom error for negative values
+                            const fieldName = $this.attr("name");
+                            const errorSpan = $this.siblings(".k-invalid-msg");
+                            if (errorSpan.length) {
+                                errorSpan.text("Nilai tidak boleh negatif");
+                            }
+                        } else {
+                            $this.removeClass("k-invalid");
+                        }
+                    });
+                    
+                }, 100);
+            }
         });
     }
     

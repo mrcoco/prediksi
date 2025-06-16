@@ -1600,6 +1600,407 @@
         </div>
         </div>
     </script>
+
+    <script id="presensi-template" type="text/x-kendo-template">
+        <div class="k-edit-form-container">
+            <div class="form-header text-center mb-4">
+                <h4 class="text-primary mb-2">
+                    <i class="fas fa-calendar-check mr-2"></i>
+                    <span class="form-title">Formulir Data Presensi</span>
+                </h4>
+                <p class="text-muted">Lengkapi data presensi siswa dengan benar</p>
+            </div>
+            
+            <!-- Basic Information - Full Width -->
+            <div class="form-section-full">
+                <h6 class="section-title">
+                    <i class="fas fa-info-circle mr-2"></i>Informasi Dasar
+                </h6>
+                
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="k-edit-label">
+                            <label for="siswa_id">
+                                <i class="fas fa-user-graduate mr-1 text-primary"></i>
+                                Siswa <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input name="siswa_id" required validationMessage="Siswa harus dipilih" style="width: 100%;" />
+                            <span class="k-invalid-msg" data-for="siswa_id"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="k-edit-label">
+                            <label for="semester">
+                                <i class="fas fa-calendar-alt mr-1 text-primary"></i>
+                                Semester <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="text" class="k-textbox" name="semester" required 
+                                   placeholder="Contoh: Ganjil, Genap"
+                                   validationMessage="Semester harus diisi" />
+                            <span class="k-invalid-msg" data-for="semester"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="k-edit-label">
+                            <label for="tahun_ajaran">
+                                <i class="fas fa-calendar mr-1 text-primary"></i>
+                                Tahun Ajaran <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="text" class="k-textbox" name="tahun_ajaran" required 
+                                   placeholder="Contoh: 2023/2024"
+                                   validationMessage="Tahun ajaran harus diisi" />
+                            <span class="k-invalid-msg" data-for="tahun_ajaran"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Attendance Data in 2 Columns -->
+            <div class="row form-main-content">
+                <!-- Left Column -->
+                <div class="col-md-6">
+                    <div class="form-column-content">
+                        <div class="form-section">
+                            <h6 class="section-title">
+                                <i class="fas fa-check-circle mr-2"></i>Data Kehadiran
+                            </h6>
+                            
+                            <div class="k-edit-label">
+                                <label for="jumlah_hadir">
+                                    <i class="fas fa-check mr-1 text-success"></i>
+                                    Jumlah Hadir <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                            <div class="k-edit-field">
+                                <input type="number" class="k-textbox" name="jumlah_hadir" required 
+                                       placeholder="Masukkan jumlah hari hadir" min="0"
+                                       validationMessage="Jumlah hadir harus diisi (minimal 0)" />
+                                <span class="k-invalid-msg" data-for="jumlah_hadir"></span>
+                            </div>
+                            
+                            <div class="k-edit-label">
+                                <label for="jumlah_sakit">
+                                    <i class="fas fa-thermometer-half mr-1 text-warning"></i>
+                                    Jumlah Sakit <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                            <div class="k-edit-field">
+                                <input type="number" class="k-textbox" name="jumlah_sakit" required 
+                                       placeholder="Masukkan jumlah hari sakit" min="0"
+                                       validationMessage="Jumlah sakit harus diisi (minimal 0)" />
+                                <span class="k-invalid-msg" data-for="jumlah_sakit"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Column -->
+                <div class="col-md-6">
+                    <div class="form-column-content">
+                        <div class="form-section">
+                            <h6 class="section-title">
+                                <i class="fas fa-exclamation-triangle mr-2"></i>Data Ketidakhadiran
+                            </h6>
+                            
+                            <div class="k-edit-label">
+                                <label for="jumlah_izin">
+                                    <i class="fas fa-file-alt mr-1 text-info"></i>
+                                    Jumlah Izin <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                            <div class="k-edit-field">
+                                <input type="number" class="k-textbox" name="jumlah_izin" required 
+                                       placeholder="Masukkan jumlah hari izin" min="0"
+                                       validationMessage="Jumlah izin harus diisi (minimal 0)" />
+                                <span class="k-invalid-msg" data-for="jumlah_izin"></span>
+                            </div>
+                            
+                            <div class="k-edit-label">
+                                <label for="jumlah_alpa">
+                                    <i class="fas fa-times-circle mr-1 text-danger"></i>
+                                    Jumlah Alpa <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                            <div class="k-edit-field">
+                                <input type="number" class="k-textbox" name="jumlah_alpa" required 
+                                       placeholder="Masukkan jumlah hari alpa" min="0"
+                                       validationMessage="Jumlah alpa harus diisi (minimal 0)" />
+                                <span class="k-invalid-msg" data-for="jumlah_alpa"></span>
+                            </div>
+                            
+                            <!-- Auto-calculated fields -->
+                            <div class="k-edit-label">
+                                <label for="persentase_kehadiran">
+                                    <i class="fas fa-percentage mr-1 text-success"></i>
+                                    Persentase Kehadiran (Otomatis)
+                                </label>
+                            </div>
+                            <div class="k-edit-field">
+                                <input type="number" class="k-textbox" name="persentase_kehadiran" readonly 
+                                       placeholder="Dihitung otomatis" 
+                                       class="readonly-field" />
+                                <small class="form-text text-muted">
+                                    <i class="fas fa-info-circle mr-1"></i>Persentase dihitung otomatis dari total kehadiran
+                                </small>
+                            </div>
+                            
+                            <div class="k-edit-label">
+                                <label for="kategori_kehadiran">
+                                    <i class="fas fa-tags mr-1 text-primary"></i>
+                                    Kategori Kehadiran (Otomatis)
+                                </label>
+                            </div>
+                            <div class="k-edit-field">
+                                <input type="text" class="k-textbox" name="kategori_kehadiran" readonly 
+                                       placeholder="Ditentukan otomatis" 
+                                       class="readonly-field" />
+                                <small class="form-text text-muted">
+                                    <i class="fas fa-info-circle mr-1"></i>Kategori ditentukan berdasarkan persentase kehadiran
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tips Section -->
+            <div class="alert alert-info mt-4">
+                <div class="d-flex align-items-start">
+                    <div class="alert-icon mr-3">
+                        <i class="fas fa-lightbulb fa-lg"></i>
+                    </div>
+                    <div class="alert-content">
+                        <h6 class="alert-heading mb-2">
+                            <i class="fas fa-info-circle mr-1"></i>
+                            Tips Pengisian Data Presensi
+                        </h6>
+                        <ul class="mb-0 small">
+                            <li>Semua field jumlah kehadiran wajib diisi dengan angka minimal 0</li>
+                            <li>Pastikan nama siswa, semester, dan tahun ajaran sudah benar</li>
+                            <li>Persentase kehadiran akan dihitung otomatis</li>
+                            <li>Kategori kehadiran: Tinggi (≥80%), Sedang (75-79%), Rendah (<75%)</li>
+                            <li>Gunakan format tahun ajaran: 2023/2024</li>
+                            <li>Semester: Ganjil atau Genap</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script id="penghasilan-template" type="text/x-kendo-template">
+        <div class="k-edit-form-container">
+            <div class="form-header text-center mb-4">
+                <h4 class="text-primary mb-2">
+                    <i class="fas fa-money-bill-wave mr-2"></i>
+                    <span class="form-title">Formulir Data Penghasilan Orang Tua</span>
+                </h4>
+                <p class="text-muted">Lengkapi data penghasilan orang tua siswa dengan benar</p>
+            </div>
+            
+            <!-- Basic Information - Full Width -->
+            <div class="form-section-full">
+                <h6 class="section-title">
+                    <i class="fas fa-info-circle mr-2"></i>Informasi Dasar
+                </h6>
+                
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="k-edit-label">
+                            <label for="siswa_id">
+                                <i class="fas fa-user-graduate mr-1 text-primary"></i>
+                                Siswa <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input name="siswa_id" required validationMessage="Siswa harus dipilih" style="width: 100%;" />
+                            <span class="k-invalid-msg" data-for="siswa_id"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Parent Income Data in 2 Columns -->
+            <div class="row form-main-content">
+                <!-- Left Column -->
+                <div class="col-md-6">
+                    <div class="form-column-content">
+                        <div class="form-section">
+                            <h6 class="section-title">
+                                <i class="fas fa-male mr-2"></i>Data Ayah
+                            </h6>
+                            
+                            <div class="k-edit-label">
+                                <label for="penghasilan_ayah">
+                                    <i class="fas fa-dollar-sign mr-1 text-success"></i>
+                                    Penghasilan Ayah <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                            <div class="k-edit-field">
+                                <input type="number" class="k-textbox" name="penghasilan_ayah" required 
+                                       placeholder="Masukkan penghasilan ayah" min="0"
+                                       validationMessage="Penghasilan ayah harus diisi (minimal 0)" />
+                                <span class="k-invalid-msg" data-for="penghasilan_ayah"></span>
+                                <small class="form-text text-muted">
+                                    <i class="fas fa-info-circle mr-1"></i>Dalam rupiah per bulan
+                                </small>
+                            </div>
+                            
+                            <div class="k-edit-label">
+                                <label for="pekerjaan_ayah">
+                                    <i class="fas fa-briefcase mr-1 text-primary"></i>
+                                    Pekerjaan Ayah <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                            <div class="k-edit-field">
+                                <input type="text" class="k-textbox" name="pekerjaan_ayah" required 
+                                       placeholder="Contoh: PNS, Swasta, Wiraswasta"
+                                       validationMessage="Pekerjaan ayah harus diisi" />
+                                <span class="k-invalid-msg" data-for="pekerjaan_ayah"></span>
+                            </div>
+                            
+                            <div class="k-edit-label">
+                                <label for="pendidikan_ayah">
+                                    <i class="fas fa-graduation-cap mr-1 text-info"></i>
+                                    Pendidikan Ayah <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                            <div class="k-edit-field">
+                                <input type="text" class="k-textbox" name="pendidikan_ayah" required 
+                                       placeholder="Contoh: SD, SMP, SMA, D3, S1, S2"
+                                       validationMessage="Pendidikan ayah harus diisi" />
+                                <span class="k-invalid-msg" data-for="pendidikan_ayah"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Column -->
+                <div class="col-md-6">
+                    <div class="form-column-content">
+                        <div class="form-section">
+                            <h6 class="section-title">
+                                <i class="fas fa-female mr-2"></i>Data Ibu
+                            </h6>
+                            
+                            <div class="k-edit-label">
+                                <label for="penghasilan_ibu">
+                                    <i class="fas fa-dollar-sign mr-1 text-success"></i>
+                                    Penghasilan Ibu <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                            <div class="k-edit-field">
+                                <input type="number" class="k-textbox" name="penghasilan_ibu" required 
+                                       placeholder="Masukkan penghasilan ibu" min="0"
+                                       validationMessage="Penghasilan ibu harus diisi (minimal 0)" />
+                                <span class="k-invalid-msg" data-for="penghasilan_ibu"></span>
+                                <small class="form-text text-muted">
+                                    <i class="fas fa-info-circle mr-1"></i>Dalam rupiah per bulan
+                                </small>
+                            </div>
+                            
+                            <div class="k-edit-label">
+                                <label for="pekerjaan_ibu">
+                                    <i class="fas fa-briefcase mr-1 text-primary"></i>
+                                    Pekerjaan Ibu <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                            <div class="k-edit-field">
+                                <input type="text" class="k-textbox" name="pekerjaan_ibu" required 
+                                       placeholder="Contoh: PNS, Swasta, IRT, Wiraswasta"
+                                       validationMessage="Pekerjaan ibu harus diisi" />
+                                <span class="k-invalid-msg" data-for="pekerjaan_ibu"></span>
+                            </div>
+                            
+                            <div class="k-edit-label">
+                                <label for="pendidikan_ibu">
+                                    <i class="fas fa-graduation-cap mr-1 text-info"></i>
+                                    Pendidikan Ibu <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                            <div class="k-edit-field">
+                                <input type="text" class="k-textbox" name="pendidikan_ibu" required 
+                                       placeholder="Contoh: SD, SMP, SMA, D3, S1, S2"
+                                       validationMessage="Pendidikan ibu harus diisi" />
+                                <span class="k-invalid-msg" data-for="pendidikan_ibu"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Summary Section - Full Width -->
+            <div class="form-section-full">
+                <h6 class="section-title">
+                    <i class="fas fa-calculator mr-2"></i>Ringkasan Penghasilan
+                </h6>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="k-edit-label">
+                            <label for="total_penghasilan">
+                                <i class="fas fa-chart-line mr-1 text-success"></i>
+                                Total Penghasilan (Otomatis)
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="number" class="k-textbox" name="total_penghasilan" readonly 
+                                   placeholder="Dihitung otomatis" 
+                                   class="readonly-field" />
+                            <small class="form-text text-muted">
+                                <i class="fas fa-info-circle mr-1"></i>Total penghasilan ayah + ibu per bulan
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="k-edit-label">
+                            <label for="kategori_penghasilan">
+                                <i class="fas fa-tags mr-1 text-primary"></i>
+                                Kategori Penghasilan (Otomatis)
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="text" class="k-textbox" name="kategori_penghasilan" readonly 
+                                   placeholder="Ditentukan otomatis" 
+                                   class="readonly-field" />
+                            <small class="form-text text-muted">
+                                <i class="fas fa-info-circle mr-1"></i>Kategori berdasarkan total penghasilan
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tips Section -->
+            <div class="alert alert-info mt-4">
+                <div class="d-flex align-items-start">
+                    <div class="alert-icon mr-3">
+                        <i class="fas fa-lightbulb fa-lg"></i>
+                    </div>
+                    <div class="alert-content">
+                        <h6 class="alert-heading mb-2">
+                            <i class="fas fa-info-circle mr-1"></i>
+                            Tips Pengisian Data Penghasilan
+                        </h6>
+                        <ul class="mb-0 small">
+                            <li>Semua field wajib diisi dengan data yang akurat</li>
+                            <li>Penghasilan diisi dalam rupiah per bulan (tanpa titik atau koma)</li>
+                            <li>Jika tidak bekerja, isi penghasilan dengan 0</li>
+                            <li>Total penghasilan akan dihitung otomatis</li>
+                            <li>Kategori penghasilan: Tinggi (>5jt), Sedang (2-5jt), Rendah (<2jt)</li>
+                            <li>Pastikan data sesuai dengan kondisi sebenarnya</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
     
     
     <!-- jQuery, Bootstrap, and Kendo UI JS -->

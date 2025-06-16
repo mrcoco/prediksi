@@ -26,14 +26,14 @@ function getEnvVar(name, defaultValue = '') {
 // Konfigurasi aplikasi
 const config = {
     // API Configuration
-    API_URL: getEnvVar('EDUPRO', 'http://localhost:8000/api'),
+    API_URL: getEnvVar('EDUPRO_API_URL', 'http://localhost:8000/api'),
     
     // App Information
-    APP_NAME: getEnvVar('EDUPRO', 'EduPro'),
-    APP_VERSION: getEnvVar('EDUPRO', '1.0.0'),
+    APP_NAME: getEnvVar('EDUPRO_APP_NAME', 'EduPro'),
+    APP_VERSION: getEnvVar('EDUPRO_APP_VERSION', '1.0.0'),
     
     // Debug Settings
-    DEBUG: getEnvVar('EDUPRO', 'false') === 'true',
+    DEBUG: getEnvVar('EDUPRO_DEBUG', 'false') === 'true',
     
     // Token Configuration
     TOKEN_KEY: 'access_token',

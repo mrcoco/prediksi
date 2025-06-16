@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Environment Configuration - EduPro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .warning { background-color: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        pre {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            border: 1px solid #e9ecef;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #0056b3; }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Test Environment Configuration</h1>
+        <p>Halaman ini digunakan untuk memverifikasi bahwa konfigurasi environment variables bekerja dengan benar di Docker.</p>
+        
+        <div class="test-section">
+            <h2>1. Environment Detection</h2>
+            <div id="env-detection"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>2. Docker Environment Variables</h2>
+            <div id="docker-env"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>3. Application Configuration</h2>
+            <div id="app-config"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>4. API Connectivity Test</h2>
+            <button onclick="testApiConnectivity()">Test API Connection</button>
+            <div id="api-test"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>5. Configuration Override Test</h2>
+            <button onclick="testConfigOverride()">Test Override</button>
+            <button onclick="clearOverrides()">Clear Overrides</button>
+            <div id="override-test"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>6. Debug Information</h2>
+            <pre id="debug-info"></pre>
+        </div>
+    </div>
+
+    <!-- Load configuration -->
+    <script src="js/config.js"></script>
+    
+    <script>
+        // Test functions
+        function runAllTests() {
+            testEnvironmentDetection();
+            testDockerEnvironment();
+            testAppConfiguration();
+            showDebugInfo();
+        }
+        
+        function testEnvironmentDetection() {
+            const envInfo = window.AppConfig.getEnvironmentInfo();
+            const html = `
+                <div class="status info">
+                    <strong>Environment:</strong> ${envInfo.environment}<br>
+                    <strong>Hostname:</strong> ${envInfo.hostname}<br>
+                    <strong>API URL:</strong> ${envInfo.apiUrl}<br>
+                    <strong>Debug Mode:</strong> ${envInfo.debug ? 'Enabled' : 'Disabled'}
+                </div>
+            `;
+            document.getElementById('env-detection').innerHTML = html;
+        }
+        
+        function testDockerEnvironment() {
+            let html = '';
+            
+            if (typeof window.ENV !== 'undefined') {
+                html = `
+                    <div class="status success">
+                        <strong>✅ Docker Environment Variables Detected</strong>
+                        <pre>${JSON.stringify(window.ENV, null, 2)}</pre>
+                    </div>
+                `;
+            } else {
+                html = `
+                    <div class="status warning">
+                        <strong>⚠️ Docker Environment Variables Not Found</strong><br>
+                        This is normal for local development. In Docker, window.ENV should be available.
+                    </div>
+                `;
+            }
+            
+            document.getElementById('docker-env').innerHTML = html;
+        }
+        
+        function testAppConfiguration() {
+            const config = window.AppConfig.config;
+            const isValid = window.AppConfig.validateConfig();
+            
+            const html = `
+                <div class="status ${isValid ? 'success' : 'error'}">
+                    <strong>${isValid ? '✅' : '❌'} Configuration ${isValid ? 'Valid' : 'Invalid'}</strong>
+                </div>
+                <pre>${JSON.stringify(config, null, 2)}</pre>
+            `;
+            
+            document.getElementById('app-config').innerHTML = html;
+        }
+        
+        function testApiConnectivity() {
+            const apiUrl = window.AppConfig.config.API_URL;
+            const testUrl = apiUrl.replace('/api', '/health');
+            
+            document.getElementById('api-test').innerHTML = '<div class="status info">Testing API connectivity...</div>';
+            
+            fetch(testUrl, { 
+                method: 'GET',
+                timeout: 5000 
+            })
+            .then(response => {
+                if (response.ok) {
+                    document.getElementById('api-test').innerHTML = `
+                        <div class="status success">
+                            <strong>✅ API Connection Successful</strong><br>
+                            URL: ${testUrl}<br>
+                            Status: ${response.status} ${response.statusText}
+                        </div>
+                    `;
+                } else {
+                    document.getElementById('api-test').innerHTML = `
+                        <div class="status error">
+                            <strong>❌ API Connection Failed</strong><br>
+                            URL: ${testUrl}<br>
+                            Status: ${response.status} ${response.statusText}
+                        </div>
+                    `;
+                }
+            })
+            .catch(error => {
+                document.getElementById('api-test').innerHTML = `
+                    <div class="status error">
+                        <strong>❌ API Connection Error</strong><br>
+                        URL: ${testUrl}<br>
+                        Error: ${error.message}
+                    </div>
+                `;
+            });
+        }
+        
+        function testConfigOverride() {
+            if (window.AppConfig.config.DEBUG) {
+                window.AppConfig.setConfigOverride('EDUPRO_API_URL', 'http://test-override:8000/api');
+                document.getElementById('override-test').innerHTML = `
+                    <div class="status info">
+                        <strong>Override Set</strong><br>
+                        Page will reload to apply changes...
+                    </div>
+                `;
+            } else {
+                document.getElementById('override-test').innerHTML = `
+                    <div class="status warning">
+                        <strong>Override Not Available</strong><br>
+                        Debug mode must be enabled to use configuration overrides.
+                    </div>
+                `;
+            }
+        }
+        
+        function clearOverrides() {
+            window.AppConfig.clearConfigOverrides();
+            document.getElementById('override-test').innerHTML = `
+                <div class="status info">
+                    <strong>Overrides Cleared</strong><br>
+                    Refresh page to see default configuration.
+                </div>
+            `;
+        }
+        
+        function showDebugInfo() {
+            const debugInfo = {
+                userAgent: navigator.userAgent,
+                location: {
+                    href: window.location.href,
+                    hostname: window.location.hostname,
+                    protocol: window.location.protocol,
+                    port: window.location.port
+                },
+                windowEnv: typeof window.ENV !== 'undefined' ? window.ENV : 'Not available',
+                localStorage: {
+                    configOverrides: Object.keys(localStorage).filter(key => key.startsWith('config_'))
+                },
+                appConfig: window.AppConfig.getEnvironmentInfo()
+            };
+            
+            document.getElementById('debug-info').textContent = JSON.stringify(debugInfo, null, 2);
+        }
+        
+        // Run tests when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            runAllTests();
+        });
+    </script>
+</body>
+</html> 

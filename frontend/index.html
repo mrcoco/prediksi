@@ -2117,10 +2117,14 @@
     <!-- Select2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     
+    <!-- Configuration JS -->
+    <script src="js/config.js"></script>
+    
     <!-- Custom JS -->
     <!-- <script src="js/app.js?v=" + Date.now() + '"></script>'); -->
     <script>
         var timestamp = Math.floor(Date.now() / 1000);
+        document.write('<script src="js/config.js?v=' + timestamp + '"><\/script>');
         document.write('<script src="js/app.js?v=' + timestamp + '"><\/script>');
     </script>
     

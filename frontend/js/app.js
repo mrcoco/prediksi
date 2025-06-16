@@ -1,8 +1,18 @@
 $(document).ready(function() {
     // initGenerateDummyForm();
-    // Konfigurasi global
-    const API_URL = 'http://localhost:8000/api';
-    const TOKEN_KEY = 'access_token';
+    // Konfigurasi global dari environment variables
+    const API_URL = window.AppConfig ? window.AppConfig.config.API_URL : 'http://localhost:8000/api';
+    const TOKEN_KEY = window.AppConfig ? window.AppConfig.config.TOKEN_KEY : 'access_token';
+    
+    // Validasi konfigurasi
+    if (window.AppConfig && !window.AppConfig.validateConfig()) {
+        console.error('Konfigurasi aplikasi tidak valid. Menggunakan default values.');
+    }
+    
+    // Log environment info jika debug mode aktif
+    if (window.AppConfig && window.AppConfig.config.DEBUG) {
+        window.AppConfig.debugLog('App initialized with config', window.AppConfig.getEnvironmentInfo());
+    }
     
     // Fungsi untuk mendapatkan token dari localStorage
     function getToken() {

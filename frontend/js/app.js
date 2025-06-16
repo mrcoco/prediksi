@@ -827,12 +827,12 @@ $(document).ready(function() {
                 }()
             },
             columns: [
-                { field: "nama", title: "Nama" },
-                { field: "nis", title: "NIS" },
-                { field: "jenis_kelamin", title: "Jenis Kelamin" },
-                { field: "kelas", title: "Kelas" },
-                { field: "tanggal_lahir", title: "Tanggal Lahir", format: "{0:dd/MM/yyyy}" },
-                { field: "alamat", title: "Alamat" },
+                { field: "nama", title: "Nama", width: 180 },
+                { field: "nis", title: "NIS", width: 120 },
+                { field: "jenis_kelamin", title: "Jenis Kelamin", width: 130 },
+                { field: "kelas", title: "Kelas", width: 100 },
+                { field: "tanggal_lahir", title: "Tanggal Lahir", format: "{0:dd/MM/yyyy}", width: 130 },
+                { field: "alamat", title: "Alamat", width: 200 },
                 {
                     command: [
                         {
@@ -852,12 +852,12 @@ $(document).ready(function() {
                         // }
                     ],
                     title: "Edit", 
-                    width: "200px"
+                    width: 80
                 },
                 {
                     field: "id",
                     title: "Hapus",
-                    width: 100,
+                    width: 90,
                     template: function(dataItem) {
                         return `<button class="k-button k-button-solid k-button-solid-error k-button-sm btn-delete-siswa" 
                                        data-id="${dataItem.id}" 
@@ -1129,27 +1129,27 @@ $(document).ready(function() {
                 { 
                     field: "nama_siswa", 
                     title: "Nama Siswa", 
-                    width: 150,
+                    width: 160,
                     template: function(dataItem) {
                         return dataItem.nama_siswa || dataItem.siswa?.nama || "-";
                     }
                 },
                 { field: "siswa_id", title: "Siswa ID", hidden: true, editor: siswaDropDownEditor },
-                { field: "semester", title: "Semester", width: 100 },
-                { field: "tahun_ajaran", title: "Tahun Ajaran", width: 100   },
-                { field: "matematika", title: "Matematika", format: "{0:n1}", width: 100 },
-                { field: "bahasa_indonesia", title: "B. Indonesia", format: "{0:n1}", width: 100 },
-                { field: "bahasa_inggris", title: "B. Inggris", format: "{0:n1}", width: 100 },
-                { field: "ipa", title: "IPA", format: "{0:n1}", width: 100 },
-                { field: "bahasa_jawa", title: "B. Jawa", format: "{0:n1}" },
-                { field: "pkn", title: "PKN", format: "{0:n1}" },
-                { field: "seni", title: "Seni", format: "{0:n1}" },
-                { field: "pjok", title: "PJOK", format: "{0:n1}" },
-                { field: "sejarah", title: "Sejarah", format: "{0:n1}" },
-                { field: "agama", title: "Agama", format: "{0:n1}" },
-                { field: "dasar_kejuruan", title: "Dasar Kejuruan", format: "{0:n1}" },
-                { field: "rata_rata", title: "Rata-rata", format: "{0:n1}" },
-                { command: ["edit", "destroy"], title: "Aksi", width: "200px" }
+                { field: "semester", title: "Semester", width: 90 },
+                { field: "tahun_ajaran", title: "Tahun Ajaran", width: 110 },
+                { field: "matematika", title: "MTK", format: "{0:n1}", width: 80 },
+                { field: "bahasa_indonesia", title: "B.IND", format: "{0:n1}", width: 80 },
+                { field: "bahasa_inggris", title: "B.ING", format: "{0:n1}", width: 80 },
+                { field: "ipa", title: "IPA", format: "{0:n1}", width: 80 },
+                // { field: "bahasa_jawa", title: "B.JAW", format: "{0:n1}", width: 70 },
+                // { field: "pkn", title: "PKN", format: "{0:n1}", width: 70 },
+                // { field: "seni", title: "SENI", format: "{0:n1}", width: 70 },
+                // { field: "pjok", title: "PJOK", format: "{0:n1}", width: 70 },
+                // { field: "sejarah", title: "SEJ", format: "{0:n1}", width: 70 },
+                // { field: "agama", title: "AGM", format: "{0:n1}", width: 70 },
+                // { field: "dasar_kejuruan", title: "D.KEJ", format: "{0:n1}", width: 70 },
+                { field: "rata_rata", title: "Rata²", format: "{0:n1}", width: 80 },
+                { command: ["edit", "destroy"], title: "Aksi", width: 160 }
             ],
             edit: function(e) {
                 // Set default values for new records

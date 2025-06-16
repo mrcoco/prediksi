@@ -15,6 +15,15 @@ Selamat datang di dokumentasi lengkap aplikasi EduPro (Sistem Prestasi Siswa). D
 ### 🎨 **Frontend**
 - [`frontend/README-DOCKER-CONFIG.md`](frontend/README-DOCKER-CONFIG.md) - Konfigurasi Docker untuk frontend
 
+### 🤖 **Machine Learning & Algoritma**
+- [`ALGORITMA_C45_DOKUMENTASI_LENGKAP_2025-06-16.md`](ALGORITMA_C45_DOKUMENTASI_LENGKAP_2025-06-16.md) - Dokumentasi lengkap algoritma C4.5 dari konsep hingga implementasi
+- [`IMPLEMENTASI_C45_EDUPRO_2025-06-16.md`](IMPLEMENTASI_C45_EDUPRO_2025-06-16.md) - Implementasi spesifik C4.5 dalam aplikasi EduPro
+- [`IMPLEMENTASI_C45_DETAIL_EDUPRO_2025-06-16.md`](IMPLEMENTASI_C45_DETAIL_EDUPRO_2025-06-16.md) - Detail implementasi: Input data, preprocessing, dan struktur database
+- [`IMPLEMENTASI_C45_DETAIL_BAGIAN2_2025-06-16.md`](IMPLEMENTASI_C45_DETAIL_BAGIAN2_2025-06-16.md) - Detail implementasi: Konsep matematika, Gain Ratio, dan algoritma lengkap
+- [`IMPLEMENTASI_C45_DETAIL_BAGIAN3_2025-06-16.md`](IMPLEMENTASI_C45_DETAIL_BAGIAN3_2025-06-16.md) - Detail implementasi: Training model, visualisasi, dan integrasi sistem
+- [`RINGKASAN_IMPLEMENTASI_C45_EDUPRO_2025-06-16.md`](RINGKASAN_IMPLEMENTASI_C45_EDUPRO_2025-06-16.md) - Ringkasan lengkap implementasi C4.5 dalam EduPro
+- [`CHAT_HISTORY_DOKUMENTASI_C45_2025-06-16.md`](CHAT_HISTORY_DOKUMENTASI_C45_2025-06-16.md) - Riwayat percakapan pembuatan dokumentasi C4.5
+
 ### 🔧 **Backend & API**
 - [`DOKUMENTASI_DETAIL_BACKEND.md`](DOKUMENTASI_DETAIL_BACKEND.md) - Dokumentasi detail backend API
 - [`RINGKASAN_DOKUMENTASI_BACKEND.md`](RINGKASAN_DOKUMENTASI_BACKEND.md) - Ringkasan dokumentasi backend
@@ -74,6 +83,9 @@ Selamat datang di dokumentasi lengkap aplikasi EduPro (Sistem Prestasi Siswa). D
 - [Environment Setup](environment/ENVIRONMENT-SETUP.md)
 - [Frontend Docker Config](frontend/README-DOCKER-CONFIG.md)
 - [Backend Documentation](DOKUMENTASI_DETAIL_BACKEND.md)
+- [Algoritma C4.5 Lengkap](ALGORITMA_C45_DOKUMENTASI_LENGKAP_2025-06-16.md)
+- [Implementasi C4.5 EduPro](IMPLEMENTASI_C45_EDUPRO_2025-06-16.md)
+- [Detail Implementasi C4.5](RINGKASAN_IMPLEMENTASI_C45_EDUPRO_2025-06-16.md)
 
 ### **🚀 DevOps/Deployment**
 - [Docker Compose Review](docker/DOCKER-COMPOSE-REVIEW.md)
@@ -96,11 +108,13 @@ Selamat datang di dokumentasi lengkap aplikasi EduPro (Sistem Prestasi Siswa). D
 - **Docker**: `docs/docker/`
 - **Environment**: `docs/environment/`
 - **Frontend**: `docs/frontend/`
+- **Machine Learning**: Search "C45" atau "ALGORITMA"
 - **Authentication**: Search "BEARER_TOKEN"
 - **UI/Layout**: Search "LAYOUT" atau "PERBAIKAN"
 - **Bug Fixes**: Search "BUGFIX" atau "PERBAIKAN"
 
 ### **By Date:**
+- **2025-06-16**: Dokumentasi algoritma C4.5 dan reorganisasi dokumentasi
 - **2025-01-16**: Perubahan terbaru environment variables dan Docker
 - **Historical**: Dokumentasi fitur dan perbaikan sebelumnya
 
@@ -128,9 +142,11 @@ Jika menemukan masalah atau memerlukan klarifikasi dokumentasi, silakan:
 - `#bugfix` - Perbaikan bug dan issues
 - `#enhancement` - Peningkatan fitur dan performa
 - `#layout` - Perbaikan tampilan dan UI/UX
+- `#ml` - Machine Learning dan algoritma
+- `#c45` - Algoritma C4.5 dan decision tree
 
 ---
 
-**Last Updated**: 16 Januari 2025  
+**Last Updated**: 16 Juni 2025  
 **Version**: 1.0.0  
 **Maintainer**: EduPro Development Team 

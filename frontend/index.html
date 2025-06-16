@@ -142,6 +142,517 @@
             50% { opacity: 0.5; }
             100% { opacity: 1; }
         }
+        
+        /* Enhanced User Form Template Styling */
+        .k-edit-form-container {
+            max-width: 1100px !important;
+            width: 90% !important;
+            margin: 0 auto;
+            padding: 30px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+            min-height: 600px;
+            box-sizing: border-box;
+        }
+        
+        /* Form Header Styling */
+        .k-edit-form-container .form-header {
+            padding: 20px 0;
+            border-bottom: 2px solid #f1f5f9;
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        .k-edit-form-container .form-header h4 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+        
+        .k-edit-form-container .form-header .form-title {
+            position: relative;
+        }
+        
+        .k-edit-form-container .form-header p {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 0;
+        }
+        
+        .k-edit-form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #007bff 0%, #6c5ce7 50%, #00cec9 100%);
+            border-radius: 12px 12px 0 0;
+        }
+        
+        .k-edit-form-container .row {
+            margin-bottom: 20px;
+            margin-left: -10px;
+            margin-right: -10px;
+        }
+        
+        .k-edit-form-container .row .col-md-6,
+        .k-edit-form-container .row .col-md-8,
+        .k-edit-form-container .row .col-md-4,
+        .k-edit-form-container .row .col-md-12 {
+            padding-left: 10px;
+            padding-right: 10px;
+            box-sizing: border-box;
+        }
+        
+        /* Ensure columns don't break */
+        .k-edit-form-container .form-main-content .row {
+            margin-left: -5px;
+            margin-right: -5px;
+        }
+        
+        .k-edit-form-container .form-main-content .col-md-6 {
+            padding-left: 5px;
+            padding-right: 5px;
+            flex: 0 0 50%;
+            max-width: 50%;
+        }
+        
+        .k-edit-form-container .k-edit-label {
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 14px;
+            display: block;
+        }
+        
+        .k-edit-form-container .k-edit-field {
+            margin-bottom: 15px;
+            position: relative;
+        }
+        
+        /* Form Section Headers */
+        .k-edit-form-container h6,
+        .k-edit-form-container .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e2e8f0;
+            position: relative;
+        }
+        
+        .k-edit-form-container h6::after,
+        .k-edit-form-container .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background: #007bff;
+        }
+        
+        /* Main Form Layout */
+        .k-edit-form-container .form-main-content {
+            margin-bottom: 30px;
+        }
+        
+        .k-edit-form-container .form-column-content {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 25px;
+            height: 100%;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+            margin: 0 5px;
+            box-sizing: border-box;
+        }
+        
+        .k-edit-form-container .form-column-content:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border-color: #cbd5e0;
+        }
+        
+        .k-edit-form-container .form-section {
+            margin-bottom: 0;
+        }
+        
+        .k-edit-form-container .form-section-full {
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 25px;
+            margin-left: 5px;
+            margin-right: 5px;
+            position: relative;
+            box-sizing: border-box;
+        }
+        
+        .k-edit-form-container .form-section-full::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #10b981 0%, #3b82f6 50%, #8b5cf6 100%);
+            border-radius: 12px 12px 0 0;
+        }
+        
+        /* Status Check Enhancement */
+        .k-edit-form-container .status-check {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border: 2px solid #10b981;
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-top: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .k-edit-form-container .status-check:hover {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+        
+        .k-edit-form-container .text-danger {
+            color: #e53e3e !important;
+            font-weight: 500;
+        }
+        
+        .k-edit-form-container .text-primary {
+            color: #3182ce !important;
+        }
+        
+        .k-edit-form-container .form-text {
+            font-size: 12px;
+            color: #718096;
+            margin-top: 4px;
+            font-style: italic;
+        }
+        
+        /* Enhanced Alert Styling */
+        .k-edit-form-container .alert {
+            border-radius: 8px;
+            border: none;
+            padding: 15px 20px;
+            margin-top: 25px;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .k-edit-form-container .alert-info {
+            color: #065f46;
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border-left: 4px solid #10b981;
+        }
+        
+        .k-edit-form-container .alert i {
+            color: #10b981;
+            margin-right: 8px;
+        }
+        
+        .k-edit-form-container .alert .alert-icon {
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        
+        .k-edit-form-container .alert .alert-icon i {
+            color: #10b981;
+            opacity: 0.8;
+        }
+        
+        .k-edit-form-container .alert .alert-content {
+            flex: 1;
+        }
+        
+        .k-edit-form-container .alert .alert-heading {
+            font-size: 14px;
+            font-weight: 600;
+            color: #047857;
+            margin-bottom: 8px;
+        }
+        
+        .k-edit-form-container .alert ul {
+            padding-left: 18px;
+            line-height: 1.6;
+        }
+        
+        .k-edit-form-container .alert li {
+            color: #065f46;
+            margin-bottom: 3px;
+        }
+        
+        .k-edit-form-container .alert li:last-child {
+            margin-bottom: 0;
+        }
+        
+        /* Enhanced HR Styling */
+        .k-edit-form-container hr {
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, #e2e8f0 50%, transparent 100%);
+            margin: 30px 0;
+            position: relative;
+        }
+        
+        .k-edit-form-container hr::after {
+            content: '👤';
+            position: absolute;
+            left: 50%;
+            top: -12px;
+            transform: translateX(-50%);
+            background: white;
+            padding: 0 10px;
+            font-size: 16px;
+        }
+        
+        /* Enhanced Form Controls */
+        .k-edit-form-container .form-check {
+            display: flex;
+            align-items: center;
+            margin-top: 8px;
+            padding: 12px 16px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s ease;
+        }
+        
+        .k-edit-form-container .form-check:hover {
+            background: #edf2f7;
+            border-color: #cbd5e0;
+        }
+        
+        .k-edit-form-container .form-check-input {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+        }
+        
+        .k-edit-form-container .form-check-label {
+            margin-bottom: 0;
+            font-weight: 500;
+            color: #4a5568;
+            cursor: pointer;
+        }
+        
+        /* Enhanced Input Styling */
+        .k-edit-form-container .k-textbox,
+        .k-edit-form-container .k-dropdown,
+        .k-edit-form-container textarea {
+            width: 100% !important;
+            border-radius: 8px !important;
+            border: 2px solid #e2e8f0 !important;
+            padding: 12px 16px !important;
+            font-size: 14px !important;
+            transition: all 0.3s ease !important;
+            background: #ffffff !important;
+        }
+        
+        .k-edit-form-container .k-textbox:focus,
+        .k-edit-form-container .k-dropdown:focus,
+        .k-edit-form-container textarea:focus {
+            border-color: #3182ce !important;
+            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1) !important;
+            outline: none !important;
+        }
+        
+        .k-edit-form-container .k-textbox:hover,
+        .k-edit-form-container .k-dropdown:hover,
+        .k-edit-form-container textarea:hover {
+            border-color: #cbd5e0 !important;
+        }
+        
+        /* Enhanced Validation Styling */
+        .k-edit-form-container .k-invalid {
+            border-color: #e53e3e !important;
+            background-color: #fef5f5 !important;
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        .k-edit-form-container .k-invalid-msg {
+            color: #e53e3e;
+            font-size: 12px;
+            display: block;
+            margin-top: 6px;
+            padding: 6px 12px;
+            background: #fef5f5;
+            border-radius: 6px;
+            border-left: 3px solid #e53e3e;
+            font-weight: 500;
+        }
+        
+        /* Form Field Icons */
+        .k-edit-form-container .k-edit-field.with-icon {
+            position: relative;
+        }
+        
+        .k-edit-form-container .k-edit-field.with-icon::before {
+            content: '';
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            background-size: contain;
+            opacity: 0.5;
+            z-index: 2;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .k-edit-form-container {
+                padding: 20px;
+                margin: 10px;
+                max-width: calc(100% - 20px);
+            }
+            
+            .k-edit-form-container .row {
+                margin-left: -5px;
+                margin-right: -5px;
+            }
+            
+            .k-edit-form-container .row .col-md-6,
+            .k-edit-form-container .row .col-md-8,
+            .k-edit-form-container .row .col-md-4,
+            .k-edit-form-container .row .col-md-12 {
+                padding-left: 5px;
+                padding-right: 5px;
+                margin-bottom: 15px;
+            }
+            
+            /* Mobile: Stack columns vertically */
+            .k-edit-form-container .form-main-content .col-md-6 {
+                margin-bottom: 20px;
+            }
+            
+            .k-edit-form-container .form-column-content {
+                padding: 20px;
+                margin-bottom: 15px;
+            }
+            
+            .k-edit-form-container .form-section-full {
+                padding: 20px;
+                margin-top: 15px;
+            }
+            
+            /* Mobile: Adjust form header */
+            .k-edit-form-container .form-header {
+                padding: 15px 0;
+                margin-bottom: 20px;
+            }
+            
+            .k-edit-form-container .form-header h4 {
+                font-size: 20px;
+            }
+            
+            /* Mobile: Status check adjustment */
+            .k-edit-form-container .status-check {
+                padding: 12px 15px;
+                margin-top: 10px;
+            }
+        }
+        
+        /* Medium screens (tablets) */
+        @media (min-width: 768px) and (max-width: 991px) {
+            .k-edit-form-container {
+                max-width: 95%;
+                width: 95% !important;
+                padding: 20px;
+            }
+            
+            .k-edit-form-container .form-column-content {
+                padding: 20px;
+                margin: 0 3px;
+            }
+            
+            .k-edit-form-container .form-section-full {
+                padding: 20px;
+                margin-left: 3px;
+                margin-right: 3px;
+            }
+            
+            .k-edit-form-container .form-main-content .row {
+                margin-left: -3px;
+                margin-right: -3px;
+            }
+            
+            .k-edit-form-container .form-main-content .col-md-6 {
+                padding-left: 3px;
+                padding-right: 3px;
+            }
+        }
+        
+        /* Ensure 2-column layout on medium and larger screens */
+        @media (min-width: 768px) {
+            .k-edit-form-container .form-main-content .col-md-6 {
+                flex: 0 0 50% !important;
+                max-width: 50% !important;
+            }
+        }
+        
+        /* Large screens optimization */
+        @media (min-width: 1200px) {
+            .k-edit-form-container {
+                max-width: 1300px !important;
+                width: 95% !important;
+                padding: 30px;
+            }
+            
+            .k-edit-form-container .form-column-content {
+                padding: 25px;
+                margin: 0 8px;
+            }
+            
+            .k-edit-form-container .form-section-full {
+                padding: 30px;
+                margin-left: 8px;
+                margin-right: 8px;
+            }
+            
+            .k-edit-form-container .row {
+                margin-left: -12px;
+                margin-right: -12px;
+            }
+            
+            .k-edit-form-container .row .col-md-6,
+            .k-edit-form-container .row .col-md-8,
+            .k-edit-form-container .row .col-md-4,
+            .k-edit-form-container .row .col-md-12 {
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+            
+            .k-edit-form-container .form-main-content .row {
+                margin-left: -8px;
+                margin-right: -8px;
+            }
+            
+            .k-edit-form-container .form-main-content .col-md-6 {
+                padding-left: 8px;
+                padding-right: 8px;
+            }
+        }
+        
+        /* Animation for validation */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        /* Fix for readonly field styling */
+        .k-edit-form-container .readonly-field {
+            background-color: #f8f9fa !important;
+            color: #6c757d !important;
+        }
     </style>
 </head>
 <body>
@@ -608,36 +1119,485 @@
     </script>
     <script id="nilai-template" type="text/x-kendo-template">
         <div class="k-edit-form-container">
-            <div class="k-edit-label">
-                <label for="nama_siswa">Nama Siswa:</label>
+            <div class="form-header text-center mb-4">
+                <h4 class="text-primary mb-2">
+                    <i class="fas fa-book mr-2"></i>
+                    <span class="form-title">Formulir Nilai Raport</span>
+                </h4>
+                <p class="text-muted">Lengkapi data nilai raport siswa dengan benar</p>
             </div>
-            <div class="k-edit-field">
-                <input type="text" class="k-textbox" name="nama_siswa" required validationMessage="Nama siswa harus diisi" />
+            
+            <!-- Basic Information - Full Width -->
+            <div class="form-section-full">
+                <h6 class="section-title">
+                    <i class="fas fa-info-circle mr-2"></i>Informasi Dasar
+                </h6>
+                
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="k-edit-label">
+                            <label for="siswa_id">
+                                <i class="fas fa-user-graduate mr-1 text-primary"></i>
+                                Siswa <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input name="siswa_id" required validationMessage="Siswa harus dipilih" style="width: 100%;" />
+                            <span class="k-invalid-msg" data-for="siswa_id"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="k-edit-label">
+                            <label for="semester">
+                                <i class="fas fa-calendar-alt mr-1 text-primary"></i>
+                                Semester <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="text" class="k-textbox" name="semester" required 
+                                   placeholder="Contoh: Ganjil, Genap"
+                                   validationMessage="Semester harus diisi" />
+                            <span class="k-invalid-msg" data-for="semester"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="k-edit-label">
+                            <label for="tahun_ajaran">
+                                <i class="fas fa-calendar mr-1 text-primary"></i>
+                                Tahun Ajaran <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="text" class="k-textbox" name="tahun_ajaran" required 
+                                   placeholder="Contoh: 2023/2024"
+                                   validationMessage="Tahun ajaran harus diisi" />
+                            <span class="k-invalid-msg" data-for="tahun_ajaran"></span>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="k-edit-label">
-                <label for="semester">Semester:</label>
+            
+            <!-- Subject Grades in 2 Columns -->
+            <div class="row form-main-content">
+                <!-- Left Column -->
+                <div class="col-md-6">
+                    <div class="form-column-content">
+                        <div class="form-section">
+                            <h6 class="section-title">
+                                <i class="fas fa-calculator mr-2"></i>Mata Pelajaran Utama
+                            </h6>
+                            
+                            <div class="k-edit-label">
+                                <label for="matematika">
+                                    <i class="fas fa-square-root-alt mr-1 text-primary"></i>
+                                    Matematika <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                            <div class="k-edit-field">
+                                <input type="number" class="k-textbox" name="matematika" required 
+                                       placeholder="0-100" min="0" max="100"
+                                       validationMessage="Nilai matematika harus diisi (0-100)" />
+                                <span class="k-invalid-msg" data-for="matematika"></span>
+                            </div>
+                            
+                            <div class="k-edit-label">
+                                <label for="bahasa_indonesia">
+                                    <i class="fas fa-language mr-1 text-primary"></i>
+                                    Bahasa Indonesia <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                            <div class="k-edit-field">
+                                <input type="number" class="k-textbox" name="bahasa_indonesia" required 
+                                       placeholder="0-100" min="0" max="100"
+                                       validationMessage="Nilai bahasa Indonesia harus diisi (0-100)" />
+                                <span class="k-invalid-msg" data-for="bahasa_indonesia"></span>
+                            </div>
+                            
+                            <div class="k-edit-label">
+                                <label for="bahasa_inggris">
+                                    <i class="fas fa-globe mr-1 text-primary"></i>
+                                    Bahasa Inggris <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                            <div class="k-edit-field">
+                                <input type="number" class="k-textbox" name="bahasa_inggris" required 
+                                       placeholder="0-100" min="0" max="100"
+                                       validationMessage="Nilai bahasa Inggris harus diisi (0-100)" />
+                                <span class="k-invalid-msg" data-for="bahasa_inggris"></span>
+                            </div>
+                            
+                            <div class="k-edit-label">
+                                <label for="ipa">
+                                    <i class="fas fa-flask mr-1 text-primary"></i>
+                                    IPA <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                            <div class="k-edit-field">
+                                <input type="number" class="k-textbox" name="ipa" required 
+                                       placeholder="0-100" min="0" max="100"
+                                       validationMessage="Nilai IPA harus diisi (0-100)" />
+                                <span class="k-invalid-msg" data-for="ipa"></span>
+                            </div>
+                            
+                            <div class="k-edit-label">
+                                <label for="bahasa_jawa">
+                                    <i class="fas fa-map mr-1 text-primary"></i>
+                                    Bahasa Jawa <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                            <div class="k-edit-field">
+                                <input type="number" class="k-textbox" name="bahasa_jawa" required 
+                                       placeholder="0-100" min="0" max="100"
+                                       validationMessage="Nilai bahasa Jawa harus diisi (0-100)" />
+                                <span class="k-invalid-msg" data-for="bahasa_jawa"></span>
+                            </div>
+                            
+                            <div class="k-edit-label">
+                                <label for="pkn">
+                                    <i class="fas fa-flag mr-1 text-primary"></i>
+                                    PKN <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                            <div class="k-edit-field">
+                                <input type="number" class="k-textbox" name="pkn" required 
+                                       placeholder="0-100" min="0" max="100"
+                                       validationMessage="Nilai PKN harus diisi (0-100)" />
+                                <span class="k-invalid-msg" data-for="pkn"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Column -->
+                <div class="col-md-6">
+                    <div class="form-column-content">
+                        <div class="form-section">
+                            <h6 class="section-title">
+                                <i class="fas fa-palette mr-2"></i>Mata Pelajaran Penunjang
+                            </h6>
+                            
+                            <div class="k-edit-label">
+                                <label for="seni">
+                                    <i class="fas fa-paint-brush mr-1 text-secondary"></i>
+                                    Seni <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                            <div class="k-edit-field">
+                                <input type="number" class="k-textbox" name="seni" required 
+                                       placeholder="0-100" min="0" max="100"
+                                       validationMessage="Nilai seni harus diisi (0-100)" />
+                                <span class="k-invalid-msg" data-for="seni"></span>
+                            </div>
+                            
+                            <div class="k-edit-label">
+                                <label for="sejarah">
+                                    <i class="fas fa-landmark mr-1 text-secondary"></i>
+                                    Sejarah <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                            <div class="k-edit-field">
+                                <input type="number" class="k-textbox" name="sejarah" required 
+                                       placeholder="0-100" min="0" max="100"
+                                       validationMessage="Nilai sejarah harus diisi (0-100)" />
+                                <span class="k-invalid-msg" data-for="sejarah"></span>
+                            </div>
+                            
+                            <div class="k-edit-label">
+                                <label for="agama">
+                                    <i class="fas fa-praying-hands mr-1 text-secondary"></i>
+                                    Agama <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                            <div class="k-edit-field">
+                                <input type="number" class="k-textbox" name="agama" required 
+                                       placeholder="0-100" min="0" max="100"
+                                       validationMessage="Nilai agama harus diisi (0-100)" />
+                                <span class="k-invalid-msg" data-for="agama"></span>
+                            </div>
+                            
+                            <div class="k-edit-label">
+                                <label for="pjok">
+                                    <i class="fas fa-running mr-1 text-secondary"></i>
+                                    PJOK <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                            <div class="k-edit-field">
+                                <input type="number" class="k-textbox" name="pjok" required 
+                                       placeholder="0-100" min="0" max="100"
+                                       validationMessage="Nilai PJOK harus diisi (0-100)" />
+                                <span class="k-invalid-msg" data-for="pjok"></span>
+                            </div>
+                            
+                            <div class="k-edit-label">
+                                <label for="dasar_kejuruan">
+                                    <i class="fas fa-tools mr-1 text-secondary"></i>
+                                    Dasar Kejuruan <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                            <div class="k-edit-field">
+                                <input type="number" class="k-textbox" name="dasar_kejuruan" required 
+                                       placeholder="0-100" min="0" max="100"
+                                       validationMessage="Nilai dasar kejuruan harus diisi (0-100)" />
+                                <span class="k-invalid-msg" data-for="dasar_kejuruan"></span>
+                            </div>
+                            
+                            <!-- Auto-calculated field -->
+                            <div class="k-edit-label">
+                                <label for="rata_rata">
+                                    <i class="fas fa-chart-line mr-1 text-success"></i>
+                                    Rata-rata (Otomatis)
+                                </label>
+                            </div>
+                            <div class="k-edit-field">
+                                <input type="number" class="k-textbox" name="rata_rata" readonly 
+                                       placeholder="Dihitung otomatis" 
+                                       class="readonly-field" />
+                                <small class="form-text text-muted">
+                                    <i class="fas fa-info-circle mr-1"></i>Nilai rata-rata dihitung otomatis dari semua mata pelajaran
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="k-edit-field">
-                <input type="text" class="k-textbox" name="semester" required validationMessage="Semester harus diisi" />
+            
+            <!-- Tips Section -->
+            <div class="alert alert-info mt-4">
+                <div class="d-flex align-items-start">
+                    <div class="alert-icon mr-3">
+                        <i class="fas fa-lightbulb fa-lg"></i>
+                    </div>
+                    <div class="alert-content">
+                        <h6 class="alert-heading mb-2">
+                            <i class="fas fa-info-circle mr-1"></i>
+                            Tips Pengisian Nilai
+                        </h6>
+                        <ul class="mb-0 small">
+                            <li>Semua field nilai wajib diisi dengan rentang 0-100</li>
+                            <li>Pastikan nama siswa, semester, dan tahun ajaran sudah benar</li>
+                            <li>Nilai rata-rata akan dihitung otomatis</li>
+                            <li>Gunakan format tahun ajaran: 2023/2024</li>
+                            <li>Semester: Ganjil atau Genap</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            <div class="k-edit-label">
-                <label for="tahun_ajaran">Tahun Ajaran:</label>
+        </div>
+    </script>
+
+    <script id="users-template" type="text/x-kendo-template">
+        <div class="k-edit-form-container">
+        <div class="form-header text-center mb-4">
+            <h4 class="text-primary mb-2">
+                <i class="fas fa-user-plus mr-2"></i>
+                <span class="form-title">Formulir User</span>
+            </h4>
+            <p class="text-muted">Lengkapi informasi user dan profile dengan benar</p>
+        </div>
+        
+                        <!-- Main Form Content in 2 Columns -->
+        <div class="row form-main-content">
+            <!-- Left Column -->
+            <div class="col-md-6">
+                <div class="form-column-content">
+                    <!-- Account Information Section -->
+                    <div class="form-section">
+                        <h6 class="section-title">
+                            <i class="fas fa-key mr-2"></i>Informasi Akun
+                        </h6>
+                        
+                        <div class="k-edit-label">
+                            <label for="username">
+                                <i class="fas fa-user mr-1 text-primary"></i>
+                                Username <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="text" class="k-textbox" name="username" required 
+                                placeholder="Masukkan username (3-20 karakter)"
+                                validationMessage="Username harus diisi (3-20 karakter, huruf dan angka saja)"
+                                pattern="^[a-zA-Z0-9]+$" minlength="3" maxlength="20" />
+                            <span class="k-invalid-msg" data-for="username"></span>
+                        </div>
+                        
+                        <div class="k-edit-label">
+                            <label for="password">
+                                <i class="fas fa-lock mr-1 text-primary"></i>
+                                Password <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="password" class="k-textbox" name="password" required 
+                                placeholder="Masukkan password (min. 6 karakter)"
+                                validationMessage="Password harus diisi (minimal 6 karakter)" 
+                                minlength="6" maxlength="50" />
+                            <span class="k-invalid-msg" data-for="password"></span>
+                            <small class="form-text text-muted">
+                                <i class="fas fa-info-circle mr-1"></i>Kombinasi huruf dan angka
+                            </small>
+                        </div>
+                        
+                        <div class="k-edit-label">
+                            <label for="role">
+                                <i class="fas fa-user-tag mr-1 text-primary"></i>
+                                Role <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <select name="role" required validationMessage="Role harus dipilih" class="k-dropdown">
+                                <option value="">-- Pilih Role --</option>
+                                <option value="admin">👑 Admin</option>
+                                <option value="guru">📚 Guru</option>
+                                <option value="staf">👨‍💼 Staf</option>
+                            </select>
+                            <span class="k-invalid-msg" data-for="role"></span>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="k-edit-field">
-                <input type="text" class="k-textbox" name="tahun_ajaran" required validationMessage="Tahun ajaran harus diisi" />
+            
+            <!-- Right Column -->
+            <div class="col-md-6">
+                <div class="form-column-content">
+                    <!-- Profile Information Section -->
+                    <div class="form-section">
+                        <h6 class="section-title">
+                            <i class="fas fa-user-circle mr-2"></i>Informasi Profile
+                        </h6>
+                        
+                        <div class="k-edit-label">
+                            <label for="email">
+                                <i class="fas fa-envelope mr-1 text-primary"></i>
+                                Email <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="email" class="k-textbox" name="email" required 
+                                placeholder="Masukkan alamat email"
+                                validationMessage="Email harus diisi dengan format yang benar" />
+                            <span class="k-invalid-msg" data-for="email"></span>
+                        </div>
+                        
+                        <div class="k-edit-label">
+                            <label for="profile.nama_lengkap">
+                                <i class="fas fa-signature mr-1 text-primary"></i>
+                                Nama Lengkap <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="text" class="k-textbox" name="profile.nama_lengkap" required
+                                placeholder="Masukkan nama lengkap"
+                                validationMessage="Nama lengkap harus diisi" />
+                            <span class="k-invalid-msg" data-for="profile.nama_lengkap"></span>
+                        </div>
+                        
+                        <div class="k-edit-label">
+                            <label for="profile.jabatan">
+                                <i class="fas fa-briefcase mr-1 text-primary"></i>
+                                Jabatan <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="text" class="k-textbox" name="profile.jabatan" required
+                                placeholder="Contoh: Guru Matematika, Kepala Sekolah"
+                                validationMessage="Jabatan harus diisi" />
+                            <span class="k-invalid-msg" data-for="profile.jabatan"></span>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="k-edit-label">
-                <label for="mata_pelajaran">Mata Pelajaran:</label>
+        </div>
+        
+        <!-- Additional Information - Full Width -->
+        <div class="form-section-full">
+            <h6 class="section-title">
+                <i class="fas fa-info-circle mr-2"></i>Informasi Tambahan
+            </h6>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="k-edit-label">
+                        <label for="profile.nip">
+                            <i class="fas fa-id-card mr-1 text-secondary"></i>
+                            NIP
+                        </label>
+                    </div>
+                    <div class="k-edit-field">
+                        <input type="text" class="k-textbox" name="profile.nip" 
+                            placeholder="Nomor Induk Pegawai (opsional)" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="k-edit-label">
+                        <label for="profile.no_hp">
+                            <i class="fas fa-phone mr-1 text-secondary"></i>
+                            No. HP
+                        </label>
+                    </div>
+                    <div class="k-edit-field">
+                        <input type="text" class="k-textbox" name="profile.no_hp" 
+                            placeholder="Contoh: 08123456789" />
+                    </div>
+                </div>
             </div>
-            <div class="k-edit-field">
-                <input type="text" class="k-textbox" name="mata_pelajaran" required validationMessage="Mata pelajaran harus diisi" />
+            
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="k-edit-label">
+                        <label for="profile.alamat">
+                            <i class="fas fa-map-marker-alt mr-1 text-secondary"></i>
+                            Alamat Lengkap
+                        </label>
+                    </div>
+                    <div class="k-edit-field">
+                        <textarea name="profile.alamat" class="k-textbox" style="width: 100%; height: 80px;" 
+                                placeholder="Masukkan alamat lengkap (opsional)"></textarea>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="k-edit-label">
+                        <label for="is_active">
+                            <i class="fas fa-toggle-on mr-1 text-success"></i>
+                            Status Akun
+                        </label>
+                    </div>
+                    <div class="k-edit-field">
+                        <div class="form-check status-check">
+                            <input type="checkbox" name="is_active" id="is_active" class="form-check-input" />
+                            <label class="form-check-label" for="is_active">
+                                <i class="fas fa-check-circle mr-1 text-success"></i>
+                                User Aktif
+                            </label>
+                        </div>
+                        <small class="form-text text-muted mt-2">
+                            <i class="fas fa-info-circle mr-1"></i>
+                            Centang untuk mengaktifkan user
+                        </small>
+                    </div>
+                </div>
             </div>
-            <div class="k-edit-label">
-                <label for="nilai">Nilai:</label>
+        </div>
+    
+                        <div class="alert alert-info mt-4">
+            <div class="d-flex align-items-start">
+                <div class="alert-icon mr-3">
+                    <i class="fas fa-lightbulb fa-lg"></i>
+                </div>
+                <div class="alert-content">
+                    <h6 class="alert-heading mb-2">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        Tips Pengisian Form
+                    </h6>
+                    <ul class="mb-0 small">
+                        <li>Field yang bertanda <span class="text-danger">*</span> wajib diisi</li>
+                        <li>Password minimal 6 karakter (kombinasi huruf dan angka)</li>
+                        <li>Username hanya boleh huruf dan angka (3-20 karakter)</li>
+                        <li>Saat edit user, kosongkan password jika tidak ingin mengubah</li>
+                        <li>Pastikan email menggunakan format yang benar</li>
+                    </ul>
+                </div>
             </div>
-            <div class="k-edit-field">
-                <input type="number" class="k-textbox" name="nilai" required validationMessage="Nilai harus diisi" />
-            </div>
+        </div>
         </div>
     </script>
     
@@ -655,6 +1615,14 @@
     <script>
         var timestamp = Math.floor(Date.now() / 1000);
         document.write('<script src="js/app.js?v=' + timestamp + '"><\/script>');
+    </script>
+    
+    <!-- Force reload with new timestamp -->
+    <script>
+        // Clear any cached errors
+        if (typeof console !== 'undefined' && console.clear) {
+            console.clear();
+        }
     </script>
     
     <!-- Debug script (remove in production) -->

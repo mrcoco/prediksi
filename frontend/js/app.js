@@ -1064,7 +1064,14 @@ $(document).ready(function() {
             },
             editable: {
                 mode: "popup",
-                template: kendo.template($("#nilai-template").html())
+                template: function() {
+                    const templateHtml = $("#nilai-template").html();
+                    if (!templateHtml) {
+                        console.error("Template #nilai-template tidak ditemukan");
+                        return "<div>Error: Template tidak ditemukan</div>";
+                    }
+                    return kendo.template(templateHtml);
+                }()
             },
             columns: [
                 { field: "siswa_id", title: "ID Siswa", editor: siswaDropDownEditor },
@@ -1083,7 +1090,92 @@ $(document).ready(function() {
                 { field: "dasar_kejuruan", title: "Dasar Kejuruan", format: "{0:n1}" },
                 { field: "rata_rata", title: "Rata-rata", format: "{0:n1}" },
                 { command: ["edit", "destroy"], title: "Aksi", width: "200px" }
-            ]
+            ],
+            edit: function(e) {
+                // Set default values for new records
+                if (e.model.isNew()) {
+                    e.model.set("semester", "Ganjil");
+                    e.model.set("tahun_ajaran", new Date().getFullYear() + "/" + (new Date().getFullYear() + 1));
+                }
+                
+                // Initialize form components
+                setTimeout(function() {
+                    // Initialize siswa dropdown
+                    e.container.find("[name='siswa_id']").kendoDropDownList({
+                        dataTextField: "nama",
+                        dataValueField: "id",
+                        dataSource: {
+                            transport: {
+                                read: {
+                                    url: `${API_URL}/siswa`,
+                                    dataType: "json",
+                                    beforeSend: function(xhr) {
+                                        const token = getToken();
+                                        if (token) {
+                                            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        optionLabel: "-- Pilih Siswa --"
+                    });
+                    
+                    // Auto-calculate rata-rata when grade values change
+                    const gradeFields = ['matematika', 'bahasa_indonesia', 'bahasa_inggris', 'ipa', 'bahasa_jawa', 'pkn', 'seni', 'sejarah', 'agama', 'pjok', 'dasar_kejuruan'];
+                    
+                    gradeFields.forEach(function(field) {
+                        e.container.find(`[name='${field}']`).on("input change", function() {
+                            calculateAverage();
+                        });
+                    });
+                    
+                    function calculateAverage() {
+                        let total = 0;
+                        let count = 0;
+                        
+                        gradeFields.forEach(function(field) {
+                            const value = parseFloat(e.container.find(`[name='${field}']`).val());
+                            if (!isNaN(value) && value >= 0) {
+                                total += value;
+                                count++;
+                            }
+                        });
+                        
+                        const average = count > 0 ? (total / count) : 0;
+                        e.container.find("[name='rata_rata']").val(average.toFixed(2));
+                        
+                        // Update model value
+                        e.model.set("rata_rata", average);
+                    }
+                    
+                    // Calculate initial average if editing existing record
+                    if (!e.model.isNew()) {
+                        calculateAverage();
+                    }
+                    
+                    // Add custom validation styling for number inputs
+                    e.container.find("input[type='number']").on("blur", function() {
+                        const $this = $(this);
+                        const value = parseFloat($this.val());
+                        
+                        if ($this.prop("required") && ($this.val() === "" || isNaN(value))) {
+                            $this.addClass("k-invalid");
+                        } else if (!isNaN(value) && (value < 0 || value > 100)) {
+                            $this.addClass("k-invalid");
+                            // Show custom error for out of range
+                            const fieldName = $this.attr("name");
+                            const errorSpan = $this.siblings(".k-invalid-msg");
+                            if (errorSpan.length) {
+                                errorSpan.text("Nilai harus antara 0-100");
+                            }
+                        } else {
+                            $this.removeClass("k-invalid");
+                        }
+                    });
+                    
+                }, 100);
+            }
         });
     }
     
@@ -2237,7 +2329,15 @@ $(document).ready(function() {
             sortable: true,
             filterable: true,
             editable: {
-                mode: "popup"
+                mode: "popup",
+                template: function() {
+                    const templateHtml = $("#users-template").html();
+                    if (!templateHtml) {
+                        console.error("Template #users-template tidak ditemukan");
+                        return "<div>Error: Template tidak ditemukan</div>";
+                    }
+                    return kendo.template(templateHtml);
+                }()
             },
             columns: [
                 { field: "username", title: "Username", width: 120 },
@@ -2292,6 +2392,7 @@ $(document).ready(function() {
                 showErrorNotification(e.errors);
             },
             edit: function(e) {
+                // Set default values for new records
                 if (e.model.isNew()) {
                     e.model.set("role", "guru");
                     e.model.set("is_active", true);
@@ -2303,6 +2404,48 @@ $(document).ready(function() {
                         alamat: ""
                     });
                 }
+                
+                // Initialize form components
+                setTimeout(function() {
+                    // Initialize role dropdown
+                    e.container.find("[name='role']").kendoDropDownList({
+                        dataSource: [
+                            { text: "Admin", value: "admin" },
+                            { text: "Guru", value: "guru" },
+                            { text: "Staf", value: "staf" }
+                        ],
+                        dataTextField: "text",
+                        dataValueField: "value",
+                        optionLabel: "-- Pilih Role --"
+                    });
+                    
+                    // Handle password field for edit mode
+                    if (!e.model.isNew()) {
+                        const passwordField = e.container.find("[name='password']");
+                        passwordField.attr("placeholder", "Kosongkan jika tidak ingin mengubah password");
+                        passwordField.removeAttr("required");
+                        
+                        // Add info text for edit mode
+                        passwordField.after('<small class="form-text text-muted">Kosongkan jika tidak ingin mengubah password</small>');
+                    }
+                    
+                    // Set checkbox state
+                    const isActiveCheckbox = e.container.find("[name='is_active']");
+                    if (e.model.is_active) {
+                        isActiveCheckbox.prop("checked", true);
+                    }
+                    
+                    // Add custom validation styling
+                    e.container.find("input[required], select[required]").on("blur", function() {
+                        const $this = $(this);
+                        if (!$this.val()) {
+                            $this.addClass("k-invalid");
+                        } else {
+                            $this.removeClass("k-invalid");
+                        }
+                    });
+                    
+                }, 100);
             }
         });
     }

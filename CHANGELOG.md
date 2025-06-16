@@ -1,5 +1,86 @@
 # CHANGELOG
 
+## [2025-06-16] - Reorganisasi Dokumentasi Menyeluruh
+
+### 📚 Reorganisasi Dokumentasi
+- **Struktur Directory Baru**: Dokumentasi diorganisir ke dalam subdirectory berdasarkan kategori
+  - `docs/docker/` - Dokumentasi Docker dan deployment
+  - `docs/environment/` - Environment variables dan konfigurasi
+  - `docs/frontend/` - Dokumentasi frontend dan UI
+  - Root level docs untuk backend, features, bug fixes, dll.
+
+### 📖 Index Dokumentasi Komprehensif
+- **docs/README.md**: Index utama dengan navigasi berdasarkan topik dan role
+  - Navigasi berdasarkan kategori (Docker, Environment, Frontend, Backend, dll.)
+  - Panduan berdasarkan role (Developer, DevOps, Product Manager, System Admin)
+  - Quick start guide untuk development dan production
+  - Search tips dan navigation guidelines
+  - Tags & labels system untuk kategorisasi
+
+### 🎯 Subdirectory README Files
+- **docs/docker/README.md**: Panduan Docker dan deployment
+  - Quick reference untuk setup environment
+  - Troubleshooting guide untuk Docker issues
+  - Related documentation links
+- **docs/environment/README.md**: Environment variables dan konfigurasi
+  - Environment variables reference table
+  - Configuration examples untuk berbagai environment
+  - Testing dan verification guides
+- **docs/frontend/README.md**: Frontend development dan konfigurasi
+  - Frontend architecture overview
+  - Testing guides dan troubleshooting
+  - Development workflow best practices
+
+### 🔄 File Reorganization
+- **Files Moved**:
+  - `DOCKER-COMPOSE-REVIEW.md` → `docs/docker/`
+  - `DOCKER-COMPOSE-CHANGES-SUMMARY.md` → `docs/docker/`
+  - `ENVIRONMENT-SETUP.md` → `docs/environment/`
+  - `frontend/README-DOCKER-CONFIG.md` → `docs/frontend/`
+  - `docs/IMPLEMENTASI_ENVIRONMENT_VARIABLES_2025-01-16.md` → `docs/environment/`
+
+### 📋 Template Files
+- **.env.example**: Template untuk environment variables
+  - Dokumentasi inline untuk setiap variable
+  - Contoh konfigurasi untuk development, staging, production
+  - Comments dan guidelines untuk setup
+
+### 🎨 Enhanced README.md
+- **Updated Documentation Section**: Link ke dokumentasi yang terorganisir
+- **Quick Links**: Akses cepat ke setup guides dan konfigurasi
+- **Kategorisasi**: Dokumentasi dikelompokkan berdasarkan topik
+- **Role-based Navigation**: Panduan berdasarkan role pengguna
+
+### 🏷️ Tags & Labels System
+- `#docker` - Dokumentasi terkait Docker dan containerization
+- `#environment` - Konfigurasi environment variables
+- `#frontend` - Dokumentasi frontend dan UI
+- `#backend` - Dokumentasi backend dan API
+- `#security` - Implementasi keamanan dan authentication
+- `#bugfix` - Perbaikan bug dan issues
+- `#enhancement` - Peningkatan fitur dan performa
+- `#layout` - Perbaikan tampilan dan UI/UX
+
+### 📈 Documentation Metrics
+- **Total Files**: 54 file dokumentasi terorganisir
+- **Subdirectories**: 3 subdirectory (docker, environment, frontend)
+- **README Files**: 4 README files (1 utama + 3 subdirectory)
+- **Template Files**: 1 file (.env.example)
+
+### 🚀 Benefits Achieved
+- **Improved Organization**: Dokumentasi dikelompokkan berdasarkan kategori logis
+- **Enhanced Navigation**: Index dengan navigasi berdasarkan role dan topik
+- **Better Discoverability**: Tags, labels, dan search guidelines
+- **Improved Maintainability**: Template dan guidelines untuk dokumentasi baru
+- **Role-based Access**: Panduan khusus untuk berbagai role pengguna
+
+### 📞 Support & Contribution Guidelines
+- **Using Documentation**: Panduan menggunakan struktur dokumentasi baru
+- **Contributing**: Guidelines untuk menambah dokumentasi baru
+- **Cross-references**: Link antar dokumentasi yang terkait
+
+---
+
 ## [2025-01-16] - Implementasi Opsi 2 Backend & Layout Form Presensi 2 Kolom
 
 ### ✨ Fitur Baru - Implementasi Opsi 2 Backend

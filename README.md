@@ -26,10 +26,23 @@ Sistem prediksi prestasi siswa menggunakan algoritma C4.5 Decision Tree untuk me
 
 ## 📚 Dokumentasi
 
-Dokumentasi lengkap tersedia di directory [`docs/`](docs/):
+Dokumentasi lengkap tersedia di directory [`docs/`](docs/) dengan struktur yang terorganisir:
 
-- **[Overview Dokumentasi](docs/README.md)** - Panduan lengkap semua dokumentasi
-- **[Sidebar Collapse](docs/DOKUMENTASI_SIDEBAR_COLLAPSE.md)** - Implementasi fitur sidebar collapse
+- **[📖 docs/README.md](docs/README.md)** - Index dokumentasi lengkap dengan navigasi berdasarkan topik dan role
+- **[📋 CHANGELOG.md](CHANGELOG.md)** - Riwayat perubahan aplikasi
+
+### 🚀 Quick Links:
+- **🌍 Setup**: [Environment Setup Guide](docs/environment/ENVIRONMENT-SETUP.md)
+- **🐳 Docker**: [Docker Configuration](docs/docker/README.md)
+- **🎨 Frontend**: [Frontend Documentation](docs/frontend/README.md)
+- **🔧 Helper Script**: [setup-env.sh](setup-env.sh) - Interactive environment setup
+
+### 📁 Dokumentasi Berdasarkan Kategori:
+- **Docker & Deployment**: `docs/docker/`
+- **Environment & Configuration**: `docs/environment/`
+- **Frontend**: `docs/frontend/`
+- **Backend & API**: `docs/` (root level)
+- **Features & Enhancements**: `docs/` (root level)
 
 ## 🚀 Quick Start
 

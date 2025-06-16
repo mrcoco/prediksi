@@ -833,7 +833,42 @@ $(document).ready(function() {
                 { field: "kelas", title: "Kelas" },
                 { field: "tanggal_lahir", title: "Tanggal Lahir", format: "{0:dd/MM/yyyy}" },
                 { field: "alamat", title: "Alamat" },
-                { command: ["edit", "destroy"], title: "Aksi", width: "200px" }
+                {
+                    command: [
+                        {
+                            name: "edit",
+                            text: { edit: "Edit", update: "Simpan", cancel: "Batal" }
+                        },
+                        // {
+                        //     name: "destroy",
+                        //     text: "Hapus",
+                        //     iconClass: "k-icon k-i-delete",
+                        //     click: function(e) {
+                        //         e.preventDefault();
+                        //         const dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+                        //         showDeleteConfirmationSiswa(dataItem);
+                        //         return false;
+                        //     }
+                        // }
+                    ],
+                    title: "Edit", 
+                    width: "200px"
+                },
+                {
+                    field: "id",
+                    title: "Hapus",
+                    width: 100,
+                    template: function(dataItem) {
+                        return `<button class="k-button k-button-solid k-button-solid-error k-button-sm btn-delete-siswa" 
+                                       data-id="${dataItem.id}" 
+                                       data-nama="${dataItem.nama}" 
+                                       data-nis="${dataItem.nis}" 
+                                       data-kelas="${dataItem.kelas}" 
+                                       data-jenis_kelamin="${dataItem.jenis_kelamin}">
+                                    <i class="k-icon k-i-delete"></i> Hapus
+                                </button>`;
+                    }
+                }
             ],
             edit: function(e) {
                 // Inisialisasi DatePicker untuk tanggal lahir
@@ -849,6 +884,22 @@ $(document).ready(function() {
         });
     }
     
+    $(document).on("click", ".btn-delete-siswa", function(e) {
+        e.preventDefault();
+        
+        const button = $(this);
+        const dataItem = {
+            id: button.data("id"),
+            nama: button.data("nama"),
+            nis: button.data("nis"),
+            kelas: button.data("kelas"),
+            jenis_kelamin: button.data("jenis_kelamin")
+        };
+        
+        console.log("Delete button clicked:", dataItem);
+        showDeleteConfirmationSiswa(dataItem);
+    });
+
     // Fungsi untuk menangani upload file Excel
     function handleFileUpload(event) {
         const file = event.target.files[0];
@@ -1084,12 +1135,12 @@ $(document).ready(function() {
                     }
                 },
                 { field: "siswa_id", title: "Siswa ID", hidden: true, editor: siswaDropDownEditor },
-                { field: "semester", title: "Semester" },
-                { field: "tahun_ajaran", title: "Tahun Ajaran" },
-                { field: "matematika", title: "Matematika", format: "{0:n1}" },
-                { field: "bahasa_indonesia", title: "B. Indonesia", format: "{0:n1}" },
-                { field: "bahasa_inggris", title: "B. Inggris", format: "{0:n1}" },
-                { field: "ipa", title: "IPA", format: "{0:n1}" },
+                { field: "semester", title: "Semester", width: 100 },
+                { field: "tahun_ajaran", title: "Tahun Ajaran", width: 100   },
+                { field: "matematika", title: "Matematika", format: "{0:n1}", width: 100 },
+                { field: "bahasa_indonesia", title: "B. Indonesia", format: "{0:n1}", width: 100 },
+                { field: "bahasa_inggris", title: "B. Inggris", format: "{0:n1}", width: 100 },
+                { field: "ipa", title: "IPA", format: "{0:n1}", width: 100 },
                 { field: "bahasa_jawa", title: "B. Jawa", format: "{0:n1}" },
                 { field: "pkn", title: "PKN", format: "{0:n1}" },
                 { field: "seni", title: "Seni", format: "{0:n1}" },
@@ -2370,6 +2421,83 @@ $(document).ready(function() {
                 },
                 error: function(xhr) {
                     const errorMsg = xhr.responseJSON?.detail || "Gagal menghapus riwayat prediksi";
+                    showErrorNotification(errorMsg, "Error");
+                }
+            });
+        });
+
+        window.center().open();
+    }
+
+    // Fungsi untuk menampilkan konfirmasi penghapusan data siswa
+    function showDeleteConfirmationSiswa(data) {
+        // Hapus window yang mungkin masih ada
+        $(".k-window").remove();
+        
+        // Buat window baru
+        const windowElement = $("<div></div>").appendTo("body");
+        const window = windowElement.kendoWindow({
+            title: "Konfirmasi Hapus Data Siswa",
+            width: "450px",
+            modal: true,
+            visible: false,
+            actions: ["close"],
+            content: {
+                template: `
+                    <div class="delete-confirmation">
+                        <div class="icon-container">
+                            <i class="fas fa-exclamation-triangle text-warning"></i>
+                        </div>
+                        <div class="message">
+                            <h4>Konfirmasi Hapus Data Siswa</h4>
+                            <p><strong>Nama:</strong> ${data.nama}</p>
+                            <p><strong>NIS:</strong> ${data.nis}</p>
+                            <p><strong>Kelas:</strong> ${data.kelas}</p>
+                            <p><strong>Jenis Kelamin:</strong> ${data.jenis_kelamin}</p>
+                            <hr>
+                            <p class="text-danger">Apakah Anda yakin ingin menghapus data siswa ini? Tindakan ini tidak dapat dibatalkan dan akan menghapus semua data terkait (nilai, presensi, penghasilan).</p>
+                        </div>
+                        <div class="button-container">
+                            <button class="k-button k-button-solid-base" id="cancelDeleteSiswa">
+                                <i class="fas fa-times"></i> Batal
+                            </button>
+                            <button class="k-button k-button-solid-error" id="confirmDeleteSiswa">
+                                <i class="fas fa-trash"></i> Hapus Data Siswa
+                            </button>
+                        </div>
+                    </div>
+                `
+            }
+        }).data("kendoWindow");
+
+        // Event handlers
+        windowElement.on("click", "#cancelDeleteSiswa", function() {
+            window.close();
+        });
+
+        windowElement.on("click", "#confirmDeleteSiswa", function() {
+            window.close();
+            
+            // Lakukan AJAX call langsung ke backend untuk menghapus
+            $.ajax({
+                url: `${API_URL}/siswa/${data.id}`,
+                type: "DELETE",
+                beforeSend: function(xhr) {
+                    const token = getToken();
+                    if (token) {
+                        xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                    }
+                },
+                success: function() {
+                    showSuccessNotification("Data siswa berhasil dihapus", "Sukses");
+                    // Refresh grid setelah berhasil menghapus
+                    const grid = $("#siswa-grid").data("kendoGrid");
+                    if (grid) {
+                        grid.dataSource.read();
+                    }
+                },
+                error: function(xhr) {
+                    const errorMsg = xhr.responseJSON?.detail || "Gagal menghapus data siswa";
                     showErrorNotification(errorMsg, "Error");
                 }
             });

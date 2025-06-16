@@ -1376,3 +1376,549 @@ header {
 .header-right .user-menu .nav-link i {
     font-size: 1.2rem;
 }
+
+/* ========== GRID SISWA STYLES ========== */
+/* Grid siswa specific styling untuk layout yang rapi */
+#siswa-grid .k-grid-header th {
+    text-align: center;
+    vertical-align: middle;
+    font-weight: 600;
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+    padding: 12px 8px;
+}
+
+#siswa-grid .k-grid-content td {
+    vertical-align: middle;
+    padding: 10px 8px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+/* Kolom data siswa */
+#siswa-grid .k-grid-content td:nth-child(1) { /* Nama */
+    font-weight: 500;
+    color: #495057;
+}
+
+#siswa-grid .k-grid-content td:nth-child(2) { /* NIS */
+    font-family: 'Courier New', monospace;
+    font-weight: 500;
+    color: #6c757d;
+}
+
+#siswa-grid .k-grid-content td:nth-child(3) { /* Jenis Kelamin */
+    text-align: center;
+}
+
+#siswa-grid .k-grid-content td:nth-child(4) { /* Kelas */
+    text-align: center;
+    font-weight: 500;
+    color: #007bff;
+}
+
+#siswa-grid .k-grid-content td:nth-child(5) { /* Tanggal Lahir */
+    text-align: center;
+    font-family: 'Courier New', monospace;
+}
+
+#siswa-grid .k-grid-content td:nth-child(6) { /* Alamat */
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Kolom aksi - Edit dan Hapus */
+#siswa-grid .k-grid-content td:nth-child(7), /* Edit */
+#siswa-grid .k-grid-content td:nth-child(8) { /* Hapus */
+    text-align: center;
+    vertical-align: middle;
+    padding: 8px 4px;
+}
+
+/* Button styling dalam grid */
+#siswa-grid .k-button {
+    border-radius: 4px;
+    font-size: 0.875rem;
+    padding: 6px 12px;
+    transition: all 0.2s ease;
+    border: none;
+    font-weight: 500;
+}
+
+#siswa-grid .k-button-sm {
+    padding: 4px 8px;
+    font-size: 0.8rem;
+}
+
+/* Edit button */
+#siswa-grid .k-button-solid-primary {
+    background-color: #007bff;
+    color: white;
+    min-width: 60px;
+}
+
+#siswa-grid .k-button-solid-primary:hover {
+    background-color: #0056b3;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,123,255,0.3);
+}
+
+/* Delete button */
+#siswa-grid .btn-delete-siswa {
+    background-color: #dc3545;
+    color: white;
+    min-width: 50px;
+    border: none;
+}
+
+#siswa-grid .btn-delete-siswa:hover {
+    background-color: #c82333;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(220,53,69,0.3);
+}
+
+/* Icon dalam button */
+#siswa-grid .k-button i {
+    margin-right: 4px;
+    font-size: 0.875rem;
+}
+
+#siswa-grid .btn-delete-siswa i {
+    margin-right: 0;
+    font-size: 0.875rem;
+}
+
+/* Hover effect untuk baris */
+#siswa-grid .k-grid-content tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Responsive adjustments untuk grid siswa */
+@media (max-width: 1200px) {
+    #siswa-grid .k-grid-content td:nth-child(6) { /* Alamat */
+        max-width: 150px;
+    }
+}
+
+@media (max-width: 992px) {
+    #siswa-grid .k-grid-content td:nth-child(6) { /* Alamat */
+        max-width: 120px;
+    }
+    
+    #siswa-grid .k-button {
+        padding: 4px 8px;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 768px) {
+    #siswa-grid .k-grid-header th,
+    #siswa-grid .k-grid-content td {
+        padding: 8px 4px;
+        font-size: 0.875rem;
+    }
+    
+    #siswa-grid .k-grid-content td:nth-child(6) { /* Alamat */
+        max-width: 100px;
+    }
+    
+    #siswa-grid .k-button {
+        padding: 3px 6px;
+        font-size: 0.75rem;
+        min-width: auto;
+    }
+    
+    #siswa-grid .k-button i {
+        margin-right: 2px;
+        font-size: 0.75rem;
+    }
+}
+
+/* Tooltip untuk button hapus */
+#siswa-grid .btn-delete-siswa[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    z-index: 1000;
+    margin-bottom: 5px;
+}
+
+#siswa-grid .btn-delete-siswa[title]:hover::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid transparent;
+    border-top-color: #333;
+    z-index: 1000;
+}
+
+/* Alignment untuk text-center class */
+.text-center {
+    text-align: center !important;
+}
+
+/* Grid header alignment */
+#siswa-grid .k-grid-header th[style*="text-align: center"] {
+    text-align: center !important;
+}
+
+/* Grid cell alignment */
+#siswa-grid .k-grid-content td[style*="text-align: center"] {
+    text-align: center !important;
+}
+
+/* ========== GRID NILAI RESPONSIVE STYLES ========== */
+/* Grid nilai specific styling untuk layout yang rapi dan responsive */
+#nilai-grid {
+    min-width: 100%;
+    overflow-x: auto;
+}
+
+#nilai-grid .k-grid-header th {
+    text-align: center;
+    vertical-align: middle;
+    font-weight: 600;
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+    padding: 10px 6px;
+    font-size: 0.875rem;
+    white-space: nowrap;
+}
+
+#nilai-grid .k-grid-content td {
+    vertical-align: middle;
+    padding: 8px 6px;
+    border-bottom: 1px solid #dee2e6;
+    font-size: 0.875rem;
+}
+
+/* Kolom nama siswa */
+#nilai-grid .k-grid-content td:nth-child(1) {
+    font-weight: 500;
+    color: #495057;
+    min-width: 160px;
+}
+
+/* Kolom semester dan tahun ajaran */
+#nilai-grid .k-grid-content td:nth-child(3),
+#nilai-grid .k-grid-content td:nth-child(4) {
+    text-align: center;
+    font-weight: 500;
+    color: #6c757d;
+}
+
+/* Kolom nilai mata pelajaran */
+#nilai-grid .k-grid-content td:nth-child(n+5):nth-child(-n+15) {
+    text-align: center;
+    font-family: 'Courier New', monospace;
+    font-weight: 500;
+    color: #495057;
+    min-width: 70px;
+}
+
+/* Kolom rata-rata */
+#nilai-grid .k-grid-content td:nth-child(16) {
+    text-align: center;
+    font-weight: bold;
+    color: #007bff;
+    font-family: 'Courier New', monospace;
+    background-color: #f8f9fa;
+    min-width: 80px;
+}
+
+/* Kolom aksi */
+#nilai-grid .k-grid-content td:nth-child(17) {
+    text-align: center;
+    min-width: 160px;
+}
+
+/* Button styling dalam grid nilai */
+#nilai-grid .k-button {
+    margin: 2px;
+    font-size: 0.8rem;
+    padding: 4px 8px;
+}
+
+/* Hover effects untuk rows */
+#nilai-grid .k-grid-content tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Responsive adjustments untuk grid nilai */
+@media (max-width: 1400px) {
+    #nilai-grid .k-grid-header th,
+    #nilai-grid .k-grid-content td {
+        padding: 6px 4px;
+        font-size: 0.8rem;
+    }
+    
+    #nilai-grid .k-grid-content td:nth-child(n+5):nth-child(-n+15) {
+        min-width: 60px;
+    }
+}
+
+@media (max-width: 1200px) {
+    #nilai-grid .k-grid-header th,
+    #nilai-grid .k-grid-content td {
+        padding: 4px 3px;
+        font-size: 0.75rem;
+    }
+    
+    #nilai-grid .k-grid-content td:nth-child(1) {
+        min-width: 140px;
+    }
+    
+    #nilai-grid .k-grid-content td:nth-child(n+5):nth-child(-n+15) {
+        min-width: 55px;
+    }
+    
+    #nilai-grid .k-button {
+        font-size: 0.7rem;
+        padding: 3px 6px;
+    }
+}
+
+@media (max-width: 992px) {
+    #nilai-grid {
+        font-size: 0.7rem;
+    }
+    
+    #nilai-grid .k-grid-header th,
+    #nilai-grid .k-grid-content td {
+        padding: 3px 2px;
+    }
+    
+    #nilai-grid .k-grid-content td:nth-child(1) {
+        min-width: 120px;
+    }
+    
+    #nilai-grid .k-grid-content td:nth-child(n+5):nth-child(-n+15) {
+        min-width: 50px;
+    }
+}
+
+/* ========== GRID NILAI STYLES ========== */
+/* Grid nilai specific styling untuk layout yang rapi */
+#nilai-grid .k-grid-header th {
+    text-align: center;
+    vertical-align: middle;
+    font-weight: 600;
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+    padding: 10px 6px;
+    font-size: 0.875rem;
+}
+
+#nilai-grid .k-grid-content td {
+    vertical-align: middle;
+    padding: 8px 6px;
+    border-bottom: 1px solid #dee2e6;
+    font-size: 0.875rem;
+}
+
+/* Kolom data nilai */
+#nilai-grid .k-grid-content td:nth-child(1) { /* Nama Siswa */
+    font-weight: 500;
+    color: #495057;
+}
+
+#nilai-grid .k-grid-content td:nth-child(3) { /* Semester */
+    text-align: center;
+    font-weight: 500;
+    color: #6c757d;
+}
+
+#nilai-grid .k-grid-content td:nth-child(4) { /* Tahun Ajaran */
+    text-align: center;
+    font-family: 'Courier New', monospace;
+    font-weight: 500;
+    color: #6c757d;
+}
+
+/* Kolom nilai mata pelajaran */
+#nilai-grid .k-grid-content td:nth-child(5),  /* MTK */
+#nilai-grid .k-grid-content td:nth-child(6),  /* B.IND */
+#nilai-grid .k-grid-content td:nth-child(7),  /* B.ING */
+#nilai-grid .k-grid-content td:nth-child(8),  /* IPA */
+#nilai-grid .k-grid-content td:nth-child(9),  /* B.JAW */
+#nilai-grid .k-grid-content td:nth-child(10), /* PKN */
+#nilai-grid .k-grid-content td:nth-child(11), /* SENI */
+#nilai-grid .k-grid-content td:nth-child(12), /* PJOK */
+#nilai-grid .k-grid-content td:nth-child(13), /* SEJ */
+#nilai-grid .k-grid-content td:nth-child(14), /* AGM */
+#nilai-grid .k-grid-content td:nth-child(15) { /* D.KEJ */
+    text-align: center;
+    font-family: 'Courier New', monospace;
+    font-weight: 500;
+    color: #495057;
+}
+
+/* Kolom rata-rata */
+#nilai-grid .k-grid-content td:nth-child(16) { /* Rata² */
+    text-align: center;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    color: #007bff;
+    background-color: #f8f9fa;
+}
+
+/* Kolom aksi - Edit dan Hapus */
+#nilai-grid .k-grid-content td:nth-child(17), /* Edit */
+#nilai-grid .k-grid-content td:nth-child(18) { /* Hapus */
+    text-align: center;
+    vertical-align: middle;
+    padding: 6px 4px;
+}
+
+/* Button styling dalam grid nilai */
+#nilai-grid .k-button {
+    border-radius: 4px;
+    font-size: 0.8rem;
+    padding: 4px 8px;
+    transition: all 0.2s ease;
+    border: none;
+    font-weight: 500;
+}
+
+#nilai-grid .k-button-sm {
+    padding: 3px 6px;
+    font-size: 0.75rem;
+}
+
+/* Edit button */
+#nilai-grid .k-button-solid-primary {
+    background-color: #007bff;
+    color: white;
+    min-width: 50px;
+}
+
+#nilai-grid .k-button-solid-primary:hover {
+    background-color: #0056b3;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,123,255,0.3);
+}
+
+/* Delete button */
+#nilai-grid .btn-delete-nilai {
+    background-color: #dc3545;
+    color: white;
+    min-width: 40px;
+    border: none;
+}
+
+#nilai-grid .btn-delete-nilai:hover {
+    background-color: #c82333;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(220,53,69,0.3);
+}
+
+/* Icon dalam button */
+#nilai-grid .k-button i {
+    margin-right: 3px;
+    font-size: 0.75rem;
+}
+
+#nilai-grid .btn-delete-nilai i {
+    margin-right: 0;
+    font-size: 0.75rem;
+}
+
+/* Hover effect untuk baris */
+#nilai-grid .k-grid-content tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Responsive adjustments untuk grid nilai */
+@media (max-width: 1400px) {
+    #nilai-grid .k-grid-header th,
+    #nilai-grid .k-grid-content td {
+        padding: 6px 4px;
+        font-size: 0.8rem;
+    }
+    
+    #nilai-grid .k-button {
+        padding: 3px 6px;
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 1200px) {
+    #nilai-grid .k-grid-header th,
+    #nilai-grid .k-grid-content td {
+        padding: 5px 3px;
+        font-size: 0.75rem;
+    }
+    
+    #nilai-grid .k-button {
+        padding: 2px 4px;
+        font-size: 0.65rem;
+        min-width: auto;
+    }
+}
+
+@media (max-width: 992px) {
+    #nilai-grid .k-grid-header th,
+    #nilai-grid .k-grid-content td {
+        padding: 4px 2px;
+        font-size: 0.7rem;
+    }
+    
+    #nilai-grid .k-button {
+        padding: 2px 3px;
+        font-size: 0.6rem;
+    }
+    
+    #nilai-grid .k-button i {
+        margin-right: 1px;
+        font-size: 0.6rem;
+    }
+}
+
+/* Tooltip untuk button hapus nilai */
+#nilai-grid .btn-delete-nilai[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    white-space: nowrap;
+    z-index: 1000;
+    margin-bottom: 5px;
+}
+
+#nilai-grid .btn-delete-nilai[title]:hover::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid transparent;
+    border-top-color: #333;
+    z-index: 1000;
+}
+
+/* Grid header alignment untuk nilai */
+#nilai-grid .k-grid-header th[style*="text-align: center"] {
+    text-align: center !important;
+}
+
+/* Grid cell alignment untuk nilai */
+#nilai-grid .k-grid-content td[style*="text-align: center"] {
+    text-align: center !important;
+}

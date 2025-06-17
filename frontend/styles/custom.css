@@ -2322,3 +2322,711 @@ header {
     min-width: 80px !important;
     max-width: 80px !important;
 }
+
+/* ========== CORRELATION MATRIX STYLES ========== */
+.correlation-section {
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* ========== CORRELATION HEATMAP STYLES ========== */
+.correlation-heatmap-container {
+    margin: 20px 0;
+    text-align: center;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+}
+
+.heatmap-svg {
+    border-radius: 8px;
+    background: #fafafa;
+}
+
+.heatmap-cell {
+    stroke: #fff;
+    stroke-width: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.heatmap-cell:hover {
+    stroke: #333;
+    stroke-width: 3px;
+    filter: brightness(1.1);
+}
+
+.heatmap-text {
+    font-family: 'Arial', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    text-anchor: middle;
+    dominant-baseline: middle;
+    pointer-events: none;
+}
+
+.heatmap-label {
+    font-family: 'Arial', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    text-anchor: middle;
+    dominant-baseline: middle;
+}
+
+.heatmap-label.x-axis {
+    text-anchor: start;
+    transform: rotate(-45deg);
+    transform-origin: center;
+}
+
+.heatmap-label.y-axis {
+    text-anchor: end;
+}
+
+.heatmap-tooltip {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    pointer-events: none;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    max-width: 250px;
+    line-height: 1.4;
+}
+
+.heatmap-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, 0.9) transparent transparent transparent;
+}
+
+.heatmap-legend {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.heatmap-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.heatmap-legend-color {
+    width: 20px;
+    height: 15px;
+    border-radius: 3px;
+    border: 1px solid #ddd;
+}
+
+.heatmap-controls {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.heatmap-control-btn {
+    padding: 5px 12px;
+    border: 1px solid #ddd;
+    background: #f8f9fa;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.3s ease;
+}
+
+.heatmap-control-btn:hover {
+    background: #e9ecef;
+    border-color: #adb5bd;
+}
+
+.heatmap-control-btn.active {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.correlation-view-toggle {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.view-toggle-btn {
+    padding: 8px 16px;
+    margin: 0 5px;
+    border: 2px solid #007bff;
+    background: transparent;
+    color: #007bff;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.view-toggle-btn:hover {
+    background: #007bff;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,123,255,0.3);
+}
+
+.view-toggle-btn.active {
+    background: #007bff;
+    color: white;
+    box-shadow: 0 2px 4px rgba(0,123,255,0.3);
+}
+
+.correlation-heatmap-section {
+    display: none;
+}
+
+.correlation-heatmap-section.active {
+    display: block;
+}
+
+.correlation-table-section {
+    display: none;
+}
+
+.correlation-table-section.active {
+    display: block;
+}
+
+/* Responsive heatmap */
+@media (max-width: 768px) {
+    .heatmap-controls {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .heatmap-legend {
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+    }
+    
+    .correlation-view-toggle {
+        margin-bottom: 15px;
+    }
+    
+    .view-toggle-btn {
+        padding: 6px 12px;
+        font-size: 12px;
+        margin: 2px;
+    }
+    
+    .heatmap-svg {
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+/* Enhanced tooltip styling */
+.heatmap-tooltip {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+}
+
+.heatmap-tooltip hr {
+    border: none;
+    height: 1px;
+    background: #666;
+    margin: 8px 0;
+}
+
+/* Animation for view transitions */
+.correlation-table-section,
+.correlation-heatmap-section {
+    transition: opacity 0.3s ease-in-out;
+}
+
+.correlation-table-section.active,
+.correlation-heatmap-section.active {
+    opacity: 1;
+}
+
+/* Heatmap title styling */
+.heatmap-title {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.correlation-matrix-container {
+    overflow-x: auto;
+    margin: 20px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.correlation-matrix-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    font-size: 12px;
+    min-width: 600px;
+}
+
+.correlation-matrix-table .feature-header {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    font-weight: 600;
+    text-align: center;
+    padding: 12px 8px;
+    border: 1px solid #0056b3;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    font-size: 11px;
+    line-height: 1.2;
+}
+
+.correlation-matrix-table .feature-header:first-child {
+    background: linear-gradient(135deg, #6c757d, #495057);
+    border-color: #495057;
+    position: sticky;
+    left: 0;
+    z-index: 11;
+}
+
+.correlation-matrix-table .feature-label {
+    background: linear-gradient(135deg, #6c757d, #495057);
+    color: white;
+    font-weight: 600;
+    padding: 10px 12px;
+    border: 1px solid #495057;
+    position: sticky;
+    left: 0;
+    z-index: 9;
+    font-size: 11px;
+    line-height: 1.2;
+    max-width: 120px;
+    word-wrap: break-word;
+}
+
+.correlation-matrix-table .correlation-cell {
+    text-align: center;
+    padding: 8px 6px;
+    border: 1px solid #dee2e6;
+    font-weight: 600;
+    font-size: 11px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.correlation-matrix-table .correlation-cell:hover {
+    transform: scale(1.05);
+    z-index: 5;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+/* Correlation strength colors */
+.correlation-cell.strong-positive {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+}
+
+.correlation-cell.moderate-positive {
+    background: linear-gradient(135deg, #17a2b8, #20c997);
+    color: white;
+}
+
+.correlation-cell.weak-positive {
+    background: linear-gradient(135deg, #6f42c1, #e83e8c);
+    color: white;
+}
+
+.correlation-cell.no-correlation {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    color: #495057;
+}
+
+.correlation-cell.weak-negative {
+    background: linear-gradient(135deg, #fd7e14, #ffc107);
+    color: white;
+}
+
+.correlation-cell.moderate-negative {
+    background: linear-gradient(135deg, #dc3545, #fd7e14);
+    color: white;
+}
+
+.correlation-cell.strong-negative {
+    background: linear-gradient(135deg, #6f42c1, #dc3545);
+    color: white;
+}
+
+/* Correlation legend */
+.correlation-legend {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    border: 1px solid #dee2e6;
+}
+
+.correlation-legend h6 {
+    color: #495057;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 13px;
+}
+
+.legend-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    margin-right: 10px;
+    border: 1px solid rgba(0,0,0,0.1);
+    flex-shrink: 0;
+}
+
+.legend-color.strong-positive {
+    background: linear-gradient(135deg, #28a745, #20c997);
+}
+
+.legend-color.moderate-positive {
+    background: linear-gradient(135deg, #17a2b8, #20c997);
+}
+
+.legend-color.weak-positive {
+    background: linear-gradient(135deg, #6f42c1, #e83e8c);
+}
+
+.legend-color.no-correlation {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+}
+
+.legend-color.weak-negative {
+    background: linear-gradient(135deg, #fd7e14, #ffc107);
+}
+
+.legend-color.strong-negative {
+    background: linear-gradient(135deg, #6f42c1, #dc3545);
+}
+
+.legend-text {
+    color: #495057;
+    font-weight: 500;
+}
+
+/* Responsive design for correlation matrix */
+@media (max-width: 768px) {
+    .correlation-matrix-container {
+        margin: 10px -15px;
+        border-radius: 0;
+    }
+    
+    .correlation-matrix-table {
+        font-size: 10px;
+        min-width: 500px;
+    }
+    
+    .correlation-matrix-table .feature-header,
+    .correlation-matrix-table .feature-label {
+        font-size: 9px;
+        padding: 8px 4px;
+    }
+    
+    .correlation-matrix-table .correlation-cell {
+        font-size: 9px;
+        padding: 6px 3px;
+    }
+    
+    .correlation-legend {
+        margin: 10px -15px;
+        border-radius: 0;
+        padding: 15px;
+    }
+    
+    .legend-item {
+        font-size: 12px;
+    }
+    
+    .legend-color {
+        width: 16px;
+        height: 16px;
+        margin-right: 8px;
+    }
+}
+
+/* Statistics tabs enhancement for correlation */
+.statistics-tabs {
+    display: flex;
+    border-bottom: 2px solid #dee2e6;
+    margin-bottom: 20px;
+    overflow-x: auto;
+}
+
+.statistics-tab {
+    background: none;
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-weight: 500;
+    color: #6c757d;
+    transition: all 0.3s ease;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.statistics-tab:hover {
+    color: #007bff;
+    background: rgba(0,123,255,0.1);
+}
+
+.statistics-tab.active {
+    color: #007bff;
+    border-bottom-color: #007bff;
+    background: rgba(0,123,255,0.1);
+}
+
+.statistics-tab i {
+    margin-right: 6px;
+}
+
+.statistics-content {
+    display: none;
+}
+
+.statistics-content.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Feature statistics summary enhancement */
+.statistics-summary {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 8px;
+    padding: 20px;
+    border: 1px solid #dee2e6;
+}
+
+.statistics-summary .category-item {
+    background: white;
+    border-radius: 6px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+}
+
+.statistics-summary .category-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.statistics-summary .category-label {
+    font-size: 12px;
+    color: #6c757d;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.statistics-summary .category-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #007bff;
+}
+
+/* ========== HEATMAP LEGEND STYLES ========== */
+.heatmap-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.heatmap-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #495057;
+}
+
+.heatmap-legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    border: 1px solid #dee2e6;
+}
+
+/* ========== BAR CHART STYLES ========== */
+.barchart-analysis-section {
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.barchart-controls {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+}
+
+.barchart-container {
+    margin-top: 20px;
+    background: #ffffff;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 20px;
+    min-height: 400px;
+    position: relative;
+}
+
+.barchart-tooltip {
+    position: absolute;
+    text-align: center;
+    width: auto;
+    height: auto;
+    padding: 8px 12px;
+    font-size: 12px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    backdrop-filter: blur(4px);
+}
+
+.barchart-legend {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+}
+
+.barchart-svg {
+    width: 100%;
+    height: auto;
+}
+
+.bar {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.bar:hover {
+    filter: brightness(1.1);
+}
+
+.bar.selected {
+    stroke: #333;
+    stroke-width: 3;
+    filter: brightness(1.2);
+}
+
+.bar-label {
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+    fill: #333;
+    pointer-events: none;
+}
+
+/* ========== DASHBOARD BAR CHART STYLES ========== */
+.dashboard-barchart-controls {
+    background: #f8f9fa;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+    margin-bottom: 15px;
+}
+
+.dashboard-barchart-controls select {
+    font-size: 12px;
+}
+
+.dashboard-barchart-tooltip {
+    position: absolute;
+    text-align: center;
+    width: auto;
+    height: auto;
+    padding: 6px 10px;
+    font-size: 11px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    border: 0px;
+    border-radius: 6px;
+    pointer-events: none;
+    z-index: 1000;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    backdrop-filter: blur(4px);
+}
+
+.dashboard-barchart-svg {
+    width: 100%;
+    height: auto;
+}
+
+.dashboard-bar {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dashboard-bar:hover {
+    filter: brightness(1.1);
+}
+
+.dashboard-bar-label {
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+    fill: #333;
+    pointer-events: none;
+}
+
+/* Responsive adjustments for dashboard bar chart */
+@media (max-width: 768px) {
+    .dashboard-barchart-controls .row {
+        margin: 0;
+    }
+    
+    .dashboard-barchart-controls .col-md-6 {
+        padding: 2px;
+        margin-bottom: 5px;
+    }
+    
+    .dashboard-barchart-controls select {
+        font-size: 11px;
+    }
+}

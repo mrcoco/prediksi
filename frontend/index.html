@@ -30,6 +30,9 @@
     <!-- Select2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     
+    D3.js
+    <!-- <script src="https://d3js.org/d3.v7.min.js"></script> -->
+    
     <!-- Custom CSS -->
     <link rel="stylesheet" href="styles/custom.css">
     
@@ -214,17 +217,189 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .dual-tree-container {
-                min-height: 300px;
-            }
-            
-            #static-tree-container, #visualization-container {
-                min-height: 250px;
-                margin-bottom: 20px;
-            }
-        }
+                 /* Responsive adjustments */
+         @media (max-width: 768px) {
+             .dual-tree-container {
+                 min-height: 300px;
+             }
+             
+             #static-tree-container, #visualization-container {
+                 min-height: 250px;
+                 margin-bottom: 20px;
+             }
+         }
+         
+         /* Feature Statistics Styling */
+         .feature-statistics-table {
+             width: 100%;
+             border-collapse: collapse;
+             margin-top: 15px;
+             background: white;
+             border-radius: 8px;
+             overflow: hidden;
+             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+         }
+         
+         .feature-statistics-table th {
+             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+             color: white;
+             padding: 12px 15px;
+             text-align: left;
+             font-weight: 600;
+             font-size: 14px;
+             border: none;
+         }
+         
+         .feature-statistics-table td {
+             padding: 10px 15px;
+             border-bottom: 1px solid #e9ecef;
+             font-size: 13px;
+             vertical-align: middle;
+         }
+         
+         .feature-statistics-table tbody tr:hover {
+             background-color: #f8f9fa;
+         }
+         
+         .feature-statistics-table tbody tr:last-child td {
+             border-bottom: none;
+         }
+         
+         .feature-label {
+             font-weight: 600;
+             color: #495057;
+             min-width: 180px;
+         }
+         
+         .stat-value {
+             text-align: right;
+             font-family: 'Courier New', monospace;
+             font-weight: 500;
+         }
+         
+         .stat-value.currency {
+             color: #28a745;
+         }
+         
+         .stat-value.percentage {
+             color: #007bff;
+         }
+         
+         .stat-value.score {
+             color: #6f42c1;
+         }
+         
+         .stat-value.count {
+             color: #fd7e14;
+         }
+         
+         .statistics-tabs {
+             display: flex;
+             margin-bottom: 20px;
+             border-bottom: 2px solid #e9ecef;
+         }
+         
+         .statistics-tab {
+             padding: 10px 20px;
+             background: none;
+             border: none;
+             border-bottom: 3px solid transparent;
+             cursor: pointer;
+             font-weight: 500;
+             color: #6c757d;
+             transition: all 0.3s ease;
+         }
+         
+         .statistics-tab.active {
+             color: #007bff;
+             border-bottom-color: #007bff;
+             background: rgba(0, 123, 255, 0.05);
+         }
+         
+         .statistics-tab:hover {
+             color: #007bff;
+             background: rgba(0, 123, 255, 0.05);
+         }
+         
+         .statistics-content {
+             display: none;
+         }
+         
+         .statistics-content.active {
+             display: block;
+         }
+         
+         .category-distribution {
+             display: flex;
+             flex-wrap: wrap;
+             gap: 15px;
+             margin-top: 15px;
+         }
+         
+         .category-item {
+             background: #f8f9fa;
+             border: 1px solid #dee2e6;
+             border-radius: 8px;
+             padding: 15px;
+             min-width: 150px;
+             text-align: center;
+             transition: all 0.3s ease;
+         }
+         
+         .category-item:hover {
+             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+             transform: translateY(-2px);
+         }
+         
+         .category-label {
+             font-size: 12px;
+             color: #6c757d;
+             margin-bottom: 5px;
+             text-transform: uppercase;
+             font-weight: 600;
+         }
+         
+         .category-value {
+             font-size: 24px;
+             font-weight: 700;
+             color: #495057;
+         }
+         
+         .category-percentage {
+             font-size: 11px;
+             color: #6c757d;
+             margin-top: 3px;
+         }
+         
+         /* Responsive table */
+         @media (max-width: 768px) {
+             .feature-statistics-table {
+                 font-size: 12px;
+             }
+             
+             .feature-statistics-table th,
+             .feature-statistics-table td {
+                 padding: 8px 10px;
+             }
+             
+             .statistics-tabs {
+                 flex-wrap: wrap;
+             }
+             
+             .statistics-tab {
+                 padding: 8px 15px;
+                 font-size: 14px;
+             }
+             
+             .category-distribution {
+                 justify-content: center;
+             }
+             
+             .category-item {
+                 min-width: 120px;
+                 padding: 12px;
+             }
+         }
         
         /* Token Countdown Styling */
         .token-countdown {
@@ -1046,13 +1221,81 @@
                         </div>
                         
                         <div class="row mt-4">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <div class="card dashboard-card">
                                     <div class="card-header bg-light">
-                                        <h5 class="mb-0">Distribusi Prestasi</h5>
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-chart-pie mr-2 text-primary"></i>
+                                            Distribusi Prestasi
+                                        </h5>
                                     </div>
                                     <div class="card-body">
                                         <div id="chart-prestasi" style="height: 300px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card dashboard-card">
+                                    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-chart-bar mr-2 text-success"></i>
+                                            Bar Chart Kategori
+                                        </h5>
+                                        <span class="badge badge-success">D3.js</span>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="dashboard-barchart-container">
+                                            <div class="dashboard-barchart-controls mb-3">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <select id="dashboard-chart-type" class="form-control form-control-sm" onchange="updateDashboardBarChart()">
+                                                            <option value="status-sosial">Status Sosial</option>
+                                                            <option value="penghasilan">Penghasilan</option>
+                                                            <option value="nilai-raport">Nilai Raport</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <select id="dashboard-chart-mode" class="form-control form-control-sm" onchange="updateDashboardBarChart()">
+                                                            <option value="count">Jumlah</option>
+                                                            <option value="percentage">Persentase</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="dashboard-barchart" style="height: 250px; display: flex; align-items: center; justify-content: center;">
+                                                <div class="text-center">
+                                                    <i class="fas fa-spinner fa-spin fa-2x text-muted mb-3"></i>
+                                                    <p class="text-muted">Memuat bar chart...</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Feature Statistics Section -->
+                        <div class="row mt-4">
+                            <div class="col-md-12">
+                                <div class="card dashboard-card">
+                                    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-chart-bar mr-2 text-info"></i>
+                                            Statistik Distribusi Fitur
+                                        </h5>
+                                        <button class="btn btn-sm btn-outline-primary" onclick="refreshFeatureStatistics()">
+                                            <i class="fas fa-sync-alt mr-1"></i>
+                                            Refresh
+                                        </button>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="feature-statistics-container">
+                                            <div class="text-center p-4">
+                                                <i class="fas fa-spinner fa-spin fa-2x text-muted mb-3"></i>
+                                                <p class="text-muted">Memuat statistik fitur...</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1099,6 +1342,8 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        
                         
                         <div class="row mt-4">
                             <div class="col-md-6">
@@ -2280,7 +2525,7 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     
     <!-- Configuration JS -->
-    <script src="js/config.js"></script>
+    <!-- <script src="js/config.js"></script> -->
     
     <!-- Custom JS -->
     <!-- <script src="js/app.js?v=" + Date.now() + '"></script>'); -->

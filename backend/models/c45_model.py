@@ -105,17 +105,43 @@ class C45Model:
         self.last_trained = pd.Timestamp.now().isoformat()
         
         # Buat visualisasi pohon keputusan
-        dot_data = StringIO()
-        export_graphviz(self.model, out_file=dot_data, feature_names=self.features,
-                        class_names=['Rendah', 'Sedang', 'Tinggi'], filled=True, rounded=True,
-                        special_characters=True)
-        graph = pydotplus.graph_from_dot_data(dot_data.getvalue())
-        self.tree_visualization = graph
-        
-        # Simpan visualisasi ke file
-        if not os.path.exists('static'):
-            os.makedirs('static')
-        graph.write_png('static/decision_tree.png')
+        try:
+            dot_data = StringIO()
+            export_graphviz(self.model, out_file=dot_data, feature_names=self.features,
+                            class_names=['Rendah', 'Sedang', 'Tinggi'], filled=True, rounded=True,
+                            special_characters=True)
+            
+            # Pastikan dot_data tidak kosong
+            dot_string = dot_data.getvalue()
+            if not dot_string.strip():
+                raise ValueError("DOT data is empty")
+            
+            # Buat graph dari dot data
+            graph = pydotplus.graph_from_dot_data(dot_string)
+            
+            # Pastikan graph adalah objek yang valid, bukan list
+            if isinstance(graph, list):
+                if len(graph) > 0:
+                    graph = graph[0]  # Ambil graph pertama jika berupa list
+                else:
+                    raise ValueError("Graph list is empty")
+            
+            # Pastikan graph memiliki method write_png
+            if not hasattr(graph, 'write_png'):
+                raise ValueError("Graph object does not have write_png method")
+            
+            self.tree_visualization = graph
+            
+            # Simpan visualisasi ke file
+            if not os.path.exists('static'):
+                os.makedirs('static')
+                
+            graph.write_png('static/decision_tree.png')
+            
+        except Exception as e:
+            print(f"Warning: Failed to create tree visualization: {str(e)}")
+            # Set visualization to None if failed
+            self.tree_visualization = None
         
         self.trained = True
         
@@ -253,18 +279,35 @@ class C45Model:
         if not self.tree_visualization:
             raise ValueError("No tree visualization available")
             
+        try:
         # Generate PNG data in memory
-        import io
-        import base64
+            import io
+            import base64
         
-        png_data = io.BytesIO()
-        self.tree_visualization.write_png(png_data)
-        png_data.seek(0)
-        
-        # Convert to base64
-        base64_image = base64.b64encode(png_data.read()).decode('utf-8')
-        
-        return f"data:image/png;base64,{base64_image}"
+            # Pastikan tree_visualization adalah objek yang valid
+            graph = self.tree_visualization
+            if isinstance(graph, list):
+                if len(graph) > 0:
+                    graph = graph[0]
+                else:
+                    raise ValueError("Graph list is empty")
+            
+            # Pastikan graph memiliki method write_png
+            if not hasattr(graph, 'write_png'):
+                raise ValueError("Graph object does not have write_png method")
+            
+            png_data = io.BytesIO()
+            graph.write_png(png_data)
+            png_data.seek(0)
+            
+            # Convert to base64
+            base64_image = base64.b64encode(png_data.read()).decode('utf-8')
+            
+            return f"data:image/png;base64,{base64_image}"
+            
+        except Exception as e:
+            print(f"Error generating visualization: {str(e)}")
+            raise ValueError(f"Failed to generate tree visualization: {str(e)}")
 
 # Inisialisasi model global
 c45_model = C45Model()

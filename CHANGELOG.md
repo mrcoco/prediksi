@@ -1,5 +1,54 @@
 # CHANGELOG
 
+## [2025-06-17] - Perbaikan Error Tree-Data Endpoint untuk D3.js Visualization
+
+### 🐛 Bug Fixes - Tree-Data Endpoint
+- **Perbaikan Serialisasi JSON**: Mengatasi error `numpy.longlong object is not iterable` pada endpoint `/prediksi/tree-data`
+  - **Root Cause**: FastAPI tidak dapat melakukan serialisasi JSON untuk tipe data numpy secara otomatis
+  - **Solution**: Konversi semua tipe data numpy ke Python native types dalam fungsi `build_tree_dict`
+  - **Files Modified**: `backend/routes/prediksi_router.py`
+
+### 🔧 Technical Improvements
+- **Data Type Conversion**: Konversi eksplisit numpy types ke Python native types
+  ```python
+  # Sebelum (Error)
+  feature_name = feature_names[tree.feature[node_id]]
+  threshold = tree.threshold[node_id]
+  predicted_class_idx = np.argmax(class_counts)
+  confidence = class_counts[predicted_class_idx] / np.sum(class_counts)
+  
+  # Sesudah (Fixed)
+  feature_name = feature_names[int(tree.feature[node_id])]
+  threshold = float(tree.threshold[node_id])
+  predicted_class_idx = int(np.argmax(class_counts))
+  confidence = float(class_counts[predicted_class_idx] / np.sum(class_counts))
+  ```
+
+### 🔐 Security Enhancement
+- **Authentication Consistency**: Menambahkan `current_user: User = Depends(get_current_user)` ke endpoint tree-data
+  - Konsistensi dengan endpoint lain yang memerlukan authentication
+  - Keamanan akses data pohon keputusan
+
+### 📚 Documentation Updates
+- **Troubleshooting Guide**: Menambahkan section troubleshooting di dokumentasi D3.js implementation
+  - Error description dan root cause analysis
+  - Step-by-step solution dengan code examples
+  - Files modified reference untuk maintenance
+
+### ✅ Impact & Results
+- **D3.js Visualization**: Endpoint tree-data sekarang berfungsi normal tanpa error
+- **JSON Serialization**: Data tree dapat di-serialize ke JSON dengan benar
+- **Frontend Integration**: Visualisasi pohon keputusan interaktif dapat memuat data dari backend
+- **User Experience**: User dapat mengakses visualisasi D3.js melalui dashboard tanpa error
+
+### 🎯 Error Resolution Details
+- **Error Message**: `ValueError: [TypeError("'numpy.longlong' object is not iterable"), TypeError('vars() argument must have __dict__ attribute')]`
+- **Affected Endpoint**: `GET /api/prediksi/tree-data`
+- **Resolution Time**: Immediate fix applied
+- **Testing**: Verified through backend restart and API testing
+
+---
+
 ## [2025-06-16] - Reorganisasi Dokumentasi Menyeluruh & Dokumentasi Algoritma C4.5
 
 ### 🤖 Dokumentasi Machine Learning & Algoritma C4.5

@@ -10,6 +10,7 @@ import random
 import pandas as pd
 from routes.auth_router import get_current_user
 from models.user import User
+import numpy as np
 
 router = APIRouter()
 
@@ -925,4 +926,90 @@ def get_model_metrics(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Terjadi kesalahan saat mengambil model metrics: {str(e)}"
+        )
+
+@router.get("/tree-data")
+def get_tree_data(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Mendapatkan data pohon keputusan dalam format JSON untuk D3.js"""
+    if not c45_model.trained:
+        try:
+            c45_model.train(db)
+        except ValueError as e:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=str(e)
+            )
+    
+    try:
+        # Ekstrak struktur tree dari model sklearn
+        tree = c45_model.model.tree_
+        feature_names = c45_model.features
+        class_names = ['Rendah', 'Sedang', 'Tinggi']
+        
+        def build_tree_dict(node_id):
+            """Recursively build tree dictionary"""
+            if tree.feature[node_id] != -2:  # Not a leaf node
+                feature_name = feature_names[int(tree.feature[node_id])]
+                threshold = float(tree.threshold[node_id])
+                
+                # Get children
+                left_child = build_tree_dict(int(tree.children_left[node_id]))
+                right_child = build_tree_dict(int(tree.children_right[node_id]))
+                
+                return {
+                    "name": f"{feature_name}",
+                    "attribute": feature_name,
+                    "threshold": round(threshold, 2),
+                    "condition": f"{feature_name} <= {threshold:.2f}",
+                    "samples": int(tree.n_node_samples[node_id]),
+                    "type": "internal",
+                    "children": [
+                        {
+                            **left_child,
+                            "edge_label": f"<= {threshold:.2f}"
+                        },
+                        {
+                            **right_child,
+                            "edge_label": f"> {threshold:.2f}"
+                        }
+                    ]
+                }
+            else:  # Leaf node
+                # Get class prediction
+                class_counts = tree.value[node_id][0]
+                predicted_class_idx = int(np.argmax(class_counts))
+                predicted_class = class_names[predicted_class_idx]
+                confidence = float(class_counts[predicted_class_idx] / np.sum(class_counts))
+                
+                return {
+                    "name": predicted_class,
+                    "prediction": predicted_class,
+                    "confidence": round(confidence, 3),
+                    "samples": int(tree.n_node_samples[node_id]),
+                    "class_distribution": {
+                        class_names[i]: int(count) for i, count in enumerate(class_counts)
+                    },
+                    "type": "leaf"
+                }
+        
+        tree_data = build_tree_dict(0)
+        
+        return {
+            "status": "success",
+            "tree_data": tree_data,
+            "feature_names": feature_names,
+            "class_names": class_names,
+            "model_info": {
+                "accuracy": getattr(c45_model, 'accuracy', None),
+                "samples": int(tree.n_node_samples[0])
+            }
+        }
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Terjadi kesalahan saat mengambil data tree: {str(e)}"
         )

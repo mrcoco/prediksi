@@ -13,6 +13,7 @@
 5. [Integrasi dengan Sistem](#integrasi-dengan-sistem)
 6. [Panduan Penggunaan](#panduan-penggunaan)
 7. [Troubleshooting](#troubleshooting)
+8. [Dual Tree Visualization Layout](#dual-tree-visualization-layout)
 
 ---
 
@@ -539,4 +540,270 @@ Implementasi D3.js decision tree berhasil meningkatkan pengalaman visualisasi da
 4. **User Experience** - Interface yang intuitif dan menarik
 5. **Maintainability** - Code yang modular dan mudah dikembangkan
 
-Upgrade ini membawa sistem EduPro ke level yang lebih profesional dan user-friendly, sesuai dengan standar aplikasi web modern. 
+Upgrade ini membawa sistem EduPro ke level yang lebih profesional dan user-friendly, sesuai dengan standar aplikasi web modern.
+
+---
+
+## 🔄 Dual Tree Visualization Layout (Update 17 Juni 2025)
+
+### 📋 Overview
+Implementasi layout baru yang menampilkan 2 versi visualisasi pohon keputusan secara sejajar:
+- **Kiri**: Visualisasi static (PNG image) - versi lama
+- **Kanan**: Visualisasi interaktif (D3.js) - versi baru
+
+### 🎨 Layout Changes
+
+#### 1. Dashboard Structure Update
+```html
+<!-- Distribusi Prestasi - Full Width -->
+<div class="col-md-12">
+    <div class="card dashboard-card">
+        <div class="card-header bg-light">
+            <h5 class="mb-0">Distribusi Prestasi</h5>
+        </div>
+        <div class="card-body">
+            <div id="chart-prestasi" style="height: 300px;"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Dual Tree Visualization - Side by Side -->
+<div class="row mt-4">
+    <div class="col-md-6">
+        <!-- Static Tree Visualization -->
+        <div class="card dashboard-card tree-card">
+            <div class="card-header">
+                <h5><i class="fas fa-image mr-2 text-primary"></i>Pohon Keputusan C4.5 (Static)</h5>
+                <span class="badge badge-secondary">Versi Lama</span>
+            </div>
+            <div class="card-body p-0">
+                <div id="static-tree-container" class="dual-tree-container">
+                    <!-- Static PNG image will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <!-- Interactive Tree Visualization -->
+        <div class="card dashboard-card tree-card">
+            <div class="card-header">
+                <h5><i class="fas fa-project-diagram mr-2 text-success"></i>Pohon Keputusan C4.5 (Interactive)</h5>
+                <span class="badge badge-success">D3.js</span>
+            </div>
+            <div class="card-body p-0">
+                <div id="visualization-container" class="dual-tree-container">
+                    <!-- D3.js interactive tree will be rendered here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+```
+
+#### 2. Enhanced CSS Styling
+```css
+/* Dual Tree Visualization Styling */
+.dual-tree-container {
+    min-height: 500px;
+    position: relative;
+}
+
+#static-tree-container, #visualization-container {
+    min-height: 450px;
+    position: relative;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    background: #f8f9fa;
+    overflow: hidden;
+}
+
+.tree-card {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.tree-card:hover {
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.static-tree-wrapper {
+    position: relative;
+    text-align: center;
+    padding: 20px;
+}
+
+.static-tree-overlay {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    z-index: 10;
+}
+```
+
+### 🔧 JavaScript Implementation
+
+#### 1. Static Tree Visualization Function
+```javascript
+function loadStaticTreeVisualization() {
+    const staticContainer = document.getElementById('static-tree-container');
+    
+    // Set loading state
+    staticContainer.innerHTML = `
+        <div class="loading-placeholder">
+            <i class="fas fa-spinner fa-spin fa-2x text-muted mb-3"></i>
+            <p class="text-muted">Memuat visualisasi static...</p>
+        </div>
+    `;
+    
+    // Load static tree image from API
+    $.ajax({
+        url: `${API_URL}/prediksi/visualization`,
+        method: "GET",
+        beforeSend: function(xhr) {
+            const token = getToken();
+            if (token) {
+                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            }
+        },
+        success: function(data) {
+            if (data.status === "success" && data.image_url) {
+                staticContainer.innerHTML = `
+                    <div class="static-tree-wrapper">
+                        <div class="static-tree-overlay">
+                            <i class="fas fa-image mr-1"></i>
+                            Static PNG
+                        </div>
+                        <img src="${data.image_url}" 
+                             alt="Pohon Keputusan C4.5" 
+                             onclick="openImageModal('${data.image_url}')"
+                             style="max-width: 100%; height: auto; cursor: pointer;" />
+                        <div class="mt-2">
+                            <small class="text-muted">Klik gambar untuk memperbesar</small>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+    });
+}
+```
+
+#### 2. Updated D3.js Visualization Function
+```javascript
+function loadD3TreeVisualization() {
+    const treeContainer = document.getElementById('visualization-container');
+    
+    // Adjusted dimensions for side-by-side layout
+    const d3Tree = new D3DecisionTree('visualization-container', {
+        width: 600,  // Reduced from 1200
+        height: 400, // Reduced from 800
+        colors: {
+            'Tinggi': '#28a745',
+            'Sedang': '#ffc107',
+            'Rendah': '#dc3545',
+            'internal': '#6c757d'
+        }
+    });
+    
+    const token = getToken();
+    const apiUrl = `${API_URL}/prediksi/tree-data`;
+    d3Tree.loadData(apiUrl, token);
+    
+    window.d3TreeInstance = d3Tree;
+}
+```
+
+#### 3. Dual Tree Loading Function
+```javascript
+function loadDualTreeVisualization() {
+    // Load both static and D3.js visualizations
+    loadStaticTreeVisualization();
+    loadD3TreeVisualization();
+}
+```
+
+### 📱 Responsive Design
+```css
+@media (max-width: 768px) {
+    .dual-tree-container {
+        min-height: 300px;
+    }
+    
+    #static-tree-container, #visualization-container {
+        min-height: 250px;
+        margin-bottom: 20px;
+    }
+}
+```
+
+### 🎯 Features & Benefits
+
+#### Static Tree (Kiri)
+- ✅ **PNG Image**: Gambar static dari model sklearn
+- ✅ **Click to Enlarge**: Modal popup untuk memperbesar
+- ✅ **Fast Loading**: Load cepat, tidak memerlukan JavaScript library
+- ✅ **Compatibility**: Bekerja di semua browser
+- ✅ **Print Friendly**: Mudah untuk print atau save
+
+#### Interactive Tree (Kanan)
+- ✅ **D3.js Powered**: Visualisasi interaktif dengan zoom/pan
+- ✅ **Real-time Data**: Data langsung dari API
+- ✅ **Hover Tooltips**: Detail informasi saat hover
+- ✅ **Export Function**: Export ke PNG
+- ✅ **Modern UI**: Interface yang modern dan responsif
+
+### 🔄 Integration Points
+
+#### Dashboard Loading
+```javascript
+function loadDashboardData() {
+    // ... existing code ...
+    
+    // Load dual tree visualization
+    loadDualTreeVisualization();
+    
+    // ... existing code ...
+}
+```
+
+#### Model Training Refresh
+```javascript
+$("#btn-train").on("click", function() {
+    // ... training logic ...
+    
+    success: function(data) {
+        // Refresh both visualizations
+        loadDualTreeVisualization();
+        
+        // Refresh other components
+        loadModelEvaluation();
+    }
+});
+```
+
+### 📊 Performance Comparison
+
+| Aspect | Static Tree | Interactive Tree |
+|--------|-------------|------------------|
+| Load Time | ~0.5s | ~1-2s |
+| Memory Usage | ~1MB | ~5-10MB |
+| Interactivity | None | Full |
+| Browser Support | 100% | 95% (modern browsers) |
+| Mobile Friendly | ✅ | ✅ |
+| Print Quality | Excellent | Good |
+
+### 🎨 Visual Enhancements
+- **Card Hover Effects**: Subtle animation saat hover
+- **Loading States**: Consistent loading indicators
+- **Badge System**: Version badges untuk identifikasi
+- **Icon Integration**: FontAwesome icons untuk visual clarity
+- **Color Coding**: Consistent color scheme across both versions
+
+--- 

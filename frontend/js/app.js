@@ -509,43 +509,123 @@ $(document).ready(function() {
             }
         });
         
-        // Ambil visualisasi pohon keputusan
-        $.ajax({
-            url: `${API_URL}/prediksi/visualization`,
-            method: "GET",
-            beforeSend: function() {
-                $("#visualization-container").addClass("loading").html("");
-            },
-            success: function(data) {
-                $("#visualization-container").removeClass("loading");
-                if (data.status === "success") {
-                    const imgHtml = `<img src="${data.image}" alt="Pohon Keputusan C4.5" onclick="openImageModal(this.src)" title="Klik untuk memperbesar" />`;
-                    $("#visualization-container").html(imgHtml);
-                } else {
-                    $("#visualization-container").html('<p>Visualisasi tidak tersedia. Silakan latih model terlebih dahulu.</p>');
-                }
-            },
-            error: function(xhr) {
-                $("#visualization-container").removeClass("loading");
-                console.error("Error loading visualization:", xhr.responseText);
-                const errorMsg = xhr.responseJSON ? xhr.responseJSON.detail : 'Terjadi kesalahan saat mengambil data';
-                $("#visualization-container").html('<p>Gagal memuat visualisasi. Silakan coba lagi.</p>');
-                $("#toast-container").kendoNotification({
-                    position: {
-                        pinned: false,
-                        top: 30,
-                        right: 30
-                    },
-                    autoHideAfter: 3000,
-                    stacking: "up"
-                }).data("kendoNotification").error(errorMsg);
-            }
-        });
+        // Ambil visualisasi pohon keputusan (dual: static + D3.js)
+        loadDualTreeVisualization();
         
         // Ambil confusion matrix dan metrik evaluasi
         loadModelEvaluation();
     }
     
+    // ========== FUNGSI LOAD STATIC TREE VISUALIZATION ==========
+    function loadStaticTreeVisualization() {
+        const staticContainer = document.getElementById('static-tree-container');
+        if (!staticContainer) {
+            console.error('Static tree container not found');
+            return;
+        }
+        
+        // Set loading state
+        staticContainer.innerHTML = `
+            <div class="loading-placeholder">
+                <i class="fas fa-spinner fa-spin fa-2x text-muted mb-3"></i>
+                <p class="text-muted">Memuat visualisasi static...</p>
+            </div>
+        `;
+        
+        // Load static tree image
+        const token = getToken();
+        $.ajax({
+            url: `${API_URL}/prediksi/visualization`,
+            method: "GET",
+            beforeSend: function(xhr) {
+                if (token) {
+                    xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                }
+            },
+            success: function(data) {
+                if (data.status === "success" && data.image) {
+                    staticContainer.innerHTML = `
+                        <div class="static-tree-wrapper">
+                            <div class="static-tree-overlay">
+                                <i class="fas fa-image mr-1"></i>
+                                Static PNG
+                            </div>
+                            <img src="${data.image}" 
+                                 alt="Pohon Keputusan C4.5" 
+                                 onclick="openImageModal('${data.image}')"
+                                 style="max-width: 100%; height: auto; cursor: pointer;" />
+                            <div class="mt-2">
+                                <small class="text-muted">Klik gambar untuk memperbesar</small>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    staticContainer.innerHTML = `
+                        <div class="text-center p-4">
+                            <i class="fas fa-exclamation-triangle fa-2x text-warning mb-3"></i>
+                            <p class="text-muted">Visualisasi static tidak tersedia.<br/>Silakan latih model terlebih dahulu.</p>
+                        </div>
+                    `;
+                }
+            },
+            error: function(xhr) {
+                console.error("Error loading static tree:", xhr.responseText);
+                staticContainer.innerHTML = `
+                    <div class="text-center p-4">
+                        <i class="fas fa-times-circle fa-2x text-danger mb-3"></i>
+                        <p class="text-muted">Gagal memuat visualisasi static.<br/>Silakan coba lagi.</p>
+                    </div>
+                `;
+            }
+        });
+    }
+
+    // ========== FUNGSI LOAD D3 TREE VISUALIZATION ==========
+    function loadD3TreeVisualization() {
+        // Inisialisasi D3 Decision Tree
+        const treeContainer = document.getElementById('visualization-container');
+        if (!treeContainer) {
+            console.error('Visualization container not found');
+            return;
+        }
+        
+        // Clear container dan set loading
+        treeContainer.innerHTML = `
+            <div class="loading-placeholder">
+                <i class="fas fa-spinner fa-spin fa-2x text-muted mb-3"></i>
+                <p class="text-muted">Memuat visualisasi interaktif...</p>
+            </div>
+        `;
+        
+        // Buat instance D3DecisionTree
+        const d3Tree = new D3DecisionTree('visualization-container', {
+            width: 600,  // Reduced width for side-by-side layout
+            height: 400, // Reduced height for better fit
+            colors: {
+                'Tinggi': '#28a745',
+                'Sedang': '#ffc107',
+                'Rendah': '#dc3545',
+                'internal': '#6c757d'
+            }
+        });
+        
+        // Load data dari API
+        const token = getToken();
+        const apiUrl = `${API_URL}/prediksi/tree-data`;
+        
+        d3Tree.loadData(apiUrl, token);
+        
+        // Simpan instance untuk refresh nanti
+        window.d3TreeInstance = d3Tree;
+    }
+    
+    // ========== FUNGSI LOAD DUAL TREE VISUALIZATION ==========
+    function loadDualTreeVisualization() {
+        // Load both static and D3.js visualizations
+        loadStaticTreeVisualization();
+        loadD3TreeVisualization();
+    }
+
     // ========== FUNGSI LOAD MODEL EVALUATION ==========
     function loadModelEvaluation() {
         // Load confusion matrix
@@ -1970,34 +2050,8 @@ $(document).ready(function() {
                 success: function(data) {
                     alert(`Model berhasil dilatih dengan akurasi ${(data.data.accuracy * 100).toFixed(2)}% menggunakan ${data.data.samples} sampel data.`);
                     
-                    // Refresh visualisasi
-                    $.ajax({
-                        url: `${API_URL}/prediksi/visualization`,
-                        method: "GET",
-                        beforeSend: function(xhr) {
-                            $("#visualization-container").addClass("loading").html("");
-                            const token = getToken();
-                            if (token) {
-                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-                            }
-                        },
-                        success: function(data) {
-                            $("#visualization-container").removeClass("loading");
-                            if (data.status === "success") {
-                                const imgSrc = data.visualization_base64 ? 
-                                    `data:image/png;base64,${data.visualization_base64}` : 
-                                    data.image;
-                                const imgHtml = `<img src="${imgSrc}" alt="Pohon Keputusan C4.5" onclick="openImageModal(this.src)" title="Klik untuk memperbesar" />`;
-                                $("#visualization-container").html(imgHtml);
-                            } else {
-                                $("#visualization-container").html('<p>Visualisasi tidak tersedia.</p>');
-                            }
-                        },
-                        error: function() {
-                            $("#visualization-container").removeClass("loading");
-                            $("#visualization-container").html('<p>Gagal memuat visualisasi.</p>');
-                        }
-                    });
+                    // Refresh visualisasi dual tree (static + D3.js)
+                    loadDualTreeVisualization();
                     
                     // Refresh confusion matrix dan metrik evaluasi
                     loadModelEvaluation();

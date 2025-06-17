@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Body
+from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from database import get_db, Siswa, NilaiRaport, PenghasilanOrtu, Presensi, Prestasi
@@ -11,6 +12,7 @@ import pandas as pd
 from routes.auth_router import get_current_user
 from models.user import User
 import numpy as np
+from io import BytesIO
 
 router = APIRouter()
 
@@ -456,6 +458,60 @@ def delete_prediction_history(
     db.commit()
     
     return None
+
+@router.get("/history/export/excel")
+def export_riwayat_prediksi_excel(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Export riwayat prediksi ke file Excel"""
+    # Query dengan JOIN ke tabel siswa untuk mendapatkan semua riwayat prediksi
+    query = db.query(
+        Prestasi.id,
+        Prestasi.siswa_id,
+        Siswa.nama.label('nama_siswa'),
+        Prestasi.semester,
+        Prestasi.tahun_ajaran,
+        Prestasi.prediksi_prestasi,
+        Prestasi.confidence,
+        Prestasi.created_at,
+        Prestasi.updated_at
+    ).join(Siswa, Prestasi.siswa_id == Siswa.id)
+    
+    # Ambil semua data riwayat prediksi
+    prestasi_list = query.order_by(Prestasi.updated_at.desc()).all()
+    
+    # Konversi data riwayat prediksi ke DataFrame
+    data = [{
+        'ID': row.id,
+        'Siswa ID': row.siswa_id,
+        'Nama Siswa': row.nama_siswa,
+        'Semester': row.semester,
+        'Tahun Ajaran': row.tahun_ajaran,
+        'Prediksi Prestasi': row.prediksi_prestasi,
+        'Confidence': f"{row.confidence:.2%}",  # Format percentage
+        'Tanggal Dibuat': row.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+        'Tanggal Diperbarui': row.updated_at.strftime('%Y-%m-%d %H:%M:%S') if row.updated_at else ''
+    } for row in prestasi_list]
+    
+    df = pd.DataFrame(data)
+    
+    # Buat file Excel di memory
+    output = BytesIO()
+    with pd.ExcelWriter(output, engine='openpyxl') as writer:
+        df.to_excel(writer, index=False, sheet_name='Riwayat Prediksi Prestasi')
+    
+    output.seek(0)
+    
+    # Return file Excel sebagai response
+    headers = {
+        'Content-Disposition': 'attachment; filename=Riwayat_Prediksi_Prestasi.xlsx'
+    }
+    return StreamingResponse(
+        output,
+        media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        headers=headers
+    )
 
 @router.post("/generate-dummy-data", status_code=status.HTTP_201_CREATED)
 def generate_dummy_data(count: int = 10, db: Session = Depends(get_db)):

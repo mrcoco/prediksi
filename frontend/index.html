@@ -1100,6 +1100,10 @@
                 <div class="token-countdown" id="tokenCountdown">
                     <i class="fas fa-clock text-warning"></i>
                     <span class="countdown-text">Token: <span id="countdown-timer">--:--</span></span>
+                    <span id="token-status-indicator" class="token-valid" title="Status Token"></span>
+                    <button class="btn btn-sm btn-outline-light ms-2" onclick="showTokenInfoDialog()" title="Cek Status Token" data-toggle="tooltip">
+                        <i class="fas fa-info-circle"></i>
+                    </button>
                 </div>
                 <span class="text-white me-3" id="user-info">
                     <i class="fas fa-user me-1"></i>
@@ -1145,10 +1149,7 @@
                     <i class="sidebar-icon fas fa-book"></i>
                     <span>Nilai Raport</span>
                 </a>
-                <a href="#" class="sidebar-link" data-page="users" data-tooltip="Manajemen User">
-                    <i class="sidebar-icon fas fa-users"></i>
-                    <span>Manajemen User</span>
-                </a>
+                
                 <a href="#" class="sidebar-link" data-page="presensi" data-tooltip="Presensi">
                     <i class="sidebar-icon fas fa-calendar-check"></i>
                     <span>Presensi</span>
@@ -1160,6 +1161,10 @@
                 <a href="#" class="sidebar-link" data-page="prediksi" data-tooltip="Prediksi Prestasi">
                     <i class="sidebar-icon fas fa-chart-line"></i>
                     <span>Prediksi Prestasi</span>
+                </a>
+                <a href="#" class="sidebar-link" data-page="users" data-tooltip="Manajemen User">
+                    <i class="sidebar-icon fas fa-users"></i>
+                    <span>Manajemen User</span>
                 </a>
                 <a href="#profile" class="sidebar-link" data-page="profile" data-tooltip="Profile">
                     <i class="sidebar-icon fas fa-user-circle"></i>

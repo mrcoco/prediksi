@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from database import get_db, Presensi, Siswa
@@ -6,6 +7,8 @@ from schemas import PresensiCreate, PresensiUpdate, PresensiResponse
 from datetime import datetime
 from routes.auth_router import get_current_user
 from models.user import User
+import pandas as pd
+from io import BytesIO
 
 router = APIRouter()
 
@@ -220,3 +223,64 @@ def delete_presensi(
     db.commit()
     
     return None
+
+@router.get("/export/excel")
+def export_presensi_excel(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    # Join query untuk mengambil data presensi beserta nama siswa
+    query = db.query(
+        Presensi.id,
+        Presensi.siswa_id,
+        Siswa.nama.label('nama_siswa'),
+        Presensi.semester,
+        Presensi.tahun_ajaran,
+        Presensi.jumlah_hadir,
+        Presensi.jumlah_sakit,
+        Presensi.jumlah_izin,
+        Presensi.jumlah_alpa,
+        Presensi.persentase_kehadiran,
+        Presensi.kategori_kehadiran,
+        Presensi.created_at,
+        Presensi.updated_at
+    ).join(Siswa, Presensi.siswa_id == Siswa.id)
+    
+    # Ambil semua data presensi
+    presensi_list = query.all()
+    
+    # Konversi data presensi ke DataFrame
+    data = [{
+        'ID': row.id,
+        'Siswa ID': row.siswa_id,
+        'Nama Siswa': row.nama_siswa,
+        'Semester': row.semester,
+        'Tahun Ajaran': row.tahun_ajaran,
+        'Jumlah Hadir': row.jumlah_hadir,
+        'Jumlah Sakit': row.jumlah_sakit,
+        'Jumlah Izin': row.jumlah_izin,
+        'Jumlah Alpa': row.jumlah_alpa,
+        'Persentase Kehadiran': row.persentase_kehadiran,
+        'Kategori Kehadiran': row.kategori_kehadiran,
+        'Dibuat': row.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+        'Diperbarui': row.updated_at.strftime('%Y-%m-%d %H:%M:%S') if row.updated_at else ''
+    } for row in presensi_list]
+    
+    df = pd.DataFrame(data)
+    
+    # Buat file Excel di memory
+    output = BytesIO()
+    with pd.ExcelWriter(output, engine='openpyxl') as writer:
+        df.to_excel(writer, index=False, sheet_name='Data Presensi')
+    
+    output.seek(0)
+    
+    # Return file Excel sebagai response
+    headers = {
+        'Content-Disposition': 'attachment; filename=Data_Presensi.xlsx'
+    }
+    return StreamingResponse(
+        output,
+        media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        headers=headers
+    )

@@ -2271,23 +2271,23 @@ header {
 /* Override Kendo UI default column widths */
 #nilai-grid .k-grid-header th[data-field="nama_siswa"],
 #nilai-grid .k-grid-content td[data-field="nama_siswa"] {
-    width: 160px !important;
-    min-width: 160px !important;
-    max-width: 160px !important;
+    width: 180px !important;
+    min-width: 180px !important;
+    max-width: 180px !important;
 }
 
 #nilai-grid .k-grid-header th[data-field="semester"],
 #nilai-grid .k-grid-content td[data-field="semester"] {
-    width: 90px !important;
-    min-width: 90px !important;
-    max-width: 90px !important;
+    width: 100px !important;
+    min-width: 100px !important;
+    max-width: 100px !important;
 }
 
 #nilai-grid .k-grid-header th[data-field="tahun_ajaran"],
 #nilai-grid .k-grid-content td[data-field="tahun_ajaran"] {
-    width: 110px !important;
-    min-width: 110px !important;
-    max-width: 110px !important;
+    width: 120px !important;
+    min-width: 120px !important;
+    max-width: 120px !important;
 }
 
 #nilai-grid .k-grid-header th[data-field="matematika"],
@@ -2311,17 +2311,56 @@ header {
 #nilai-grid .k-grid-content td[data-field="pjok"],
 #nilai-grid .k-grid-content td[data-field="sejarah"],
 #nilai-grid .k-grid-content td[data-field="agama"],
-#nilai-grid .k-grid-content td[data-field="dasar_kejuruan"] {
-    width: 70px !important;
-    min-width: 70px !important;
-    max-width: 70px !important;
+#nilai-grid .k-grid-content td[data-field="dasar_kejuruan"],
+#nilai-grid .k-grid-content td[data-field="rata_rata"] {
+    width: 85px !important;
+    min-width: 85px !important;
+    max-width: 85px !important;
+    text-align: center !important;
 }
 
 #nilai-grid .k-grid-header th[data-field="rata_rata"],
 #nilai-grid .k-grid-content td[data-field="rata_rata"] {
-    width: 80px !important;
-    min-width: 80px !important;
-    max-width: 80px !important;
+    width: 85px !important;
+    min-width: 85px !important;
+    max-width: 85px !important;
+}
+
+/* Kolom Aksi */
+#nilai-grid .k-grid-header th.k-header:last-child,
+#nilai-grid .k-grid-content td:last-child {
+    width: 140px !important;
+    min-width: 140px !important;
+    max-width: 140px !important;
+    text-align: center !important;
+}
+
+/* Text alignment untuk kolom nilai */
+#nilai-grid .k-grid-header th[data-field="matematika"],
+#nilai-grid .k-grid-header th[data-field="bahasa_indonesia"],
+#nilai-grid .k-grid-header th[data-field="bahasa_inggris"],
+#nilai-grid .k-grid-header th[data-field="ipa"],
+#nilai-grid .k-grid-header th[data-field="bahasa_jawa"],
+#nilai-grid .k-grid-header th[data-field="pkn"],
+#nilai-grid .k-grid-header th[data-field="seni"],
+#nilai-grid .k-grid-header th[data-field="pjok"],
+#nilai-grid .k-grid-header th[data-field="sejarah"],
+#nilai-grid .k-grid-header th[data-field="agama"],
+#nilai-grid .k-grid-header th[data-field="dasar_kejuruan"],
+#nilai-grid .k-grid-header th[data-field="rata_rata"],
+#nilai-grid .k-grid-content td[data-field="matematika"],
+#nilai-grid .k-grid-content td[data-field="bahasa_indonesia"],
+#nilai-grid .k-grid-content td[data-field="bahasa_inggris"],
+#nilai-grid .k-grid-content td[data-field="ipa"],
+#nilai-grid .k-grid-content td[data-field="bahasa_jawa"],
+#nilai-grid .k-grid-content td[data-field="pkn"],
+#nilai-grid .k-grid-content td[data-field="seni"],
+#nilai-grid .k-grid-content td[data-field="pjok"],
+#nilai-grid .k-grid-content td[data-field="sejarah"],
+#nilai-grid .k-grid-content td[data-field="agama"],
+#nilai-grid .k-grid-content td[data-field="dasar_kejuruan"],
+#nilai-grid .k-grid-content td[data-field="rata_rata"] {
+    text-align: center !important;
 }
 
 /* ========== CORRELATION MATRIX STYLES ========== */
@@ -3029,5 +3068,1102 @@ header {
     
     .dashboard-barchart-controls select {
         font-size: 11px;
+    }
+}
+
+/* ========== TOKEN EXPIRY CHECKER STYLING ========== */
+
+/* Token Status Indicator Styling */
+#token-status-indicator {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-left: 8px;
+    transition: all 0.3s ease;
+}
+
+#token-status-indicator.token-valid {
+    background-color: #28a745;
+    box-shadow: 0 0 4px rgba(40, 167, 69, 0.5);
+}
+
+#token-status-indicator.token-notice {
+    background-color: #17a2b8;
+    box-shadow: 0 0 4px rgba(23, 162, 184, 0.5);
+}
+
+#token-status-indicator.token-warning {
+    background-color: #ffc107;
+    box-shadow: 0 0 4px rgba(255, 193, 7, 0.5);
+    animation: pulse 2s infinite;
+}
+
+#token-status-indicator.token-urgent {
+    background-color: #fd7e14;
+    box-shadow: 0 0 6px rgba(253, 126, 20, 0.7);
+    animation: pulse 1.5s infinite;
+}
+
+#token-status-indicator.token-critical {
+    background-color: #dc3545;
+    box-shadow: 0 0 8px rgba(220, 53, 69, 0.8);
+    animation: blink 1s infinite;
+}
+
+/* Token Countdown Enhanced Styling */
+.token-countdown {
+    display: flex;
+    align-items: center;
+    background-color: rgba(255,255,255,0.1);
+    padding: 6px 12px;
+    border-radius: 20px;
+    margin-right: 15px;
+    transition: all 0.3s ease;
+}
+
+.token-countdown:hover {
+    background-color: rgba(255,255,255,0.2);
+}
+
+.token-countdown .countdown-text {
+    font-size: 14px;
+    font-weight: 500;
+    margin-left: 8px;
+}
+
+.token-countdown .btn {
+    border: 1px solid rgba(255,255,255,0.3);
+    color: rgba(255,255,255,0.9);
+    transition: all 0.3s ease;
+}
+
+.token-countdown .btn:hover {
+    background-color: rgba(255,255,255,0.2);
+    border-color: rgba(255,255,255,0.5);
+    color: white;
+}
+
+/* Countdown timer enhanced styling */
+.countdown-timer-warning {
+    color: #ffc107 !important;
+    animation: pulse 2s infinite;
+}
+
+.countdown-timer-danger {
+    color: #dc3545 !important;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.3; }
+    100% { opacity: 1; }
+}
+
+/* Token Info Dialog Styling */
+.token-info-dialog {
+    padding: 15px;
+}
+
+.token-info-dialog .alert {
+    margin-bottom: 15px;
+    border-radius: 8px;
+}
+
+.token-info-dialog .alert h6 {
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.token-info-dialog .token-details {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.token-info-dialog .token-details h6 {
+    color: #495057;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.token-info-dialog .table {
+    margin-bottom: 0;
+    background-color: white;
+}
+
+.token-info-dialog .table td {
+    padding: 8px 12px;
+    border-top: 1px solid #dee2e6;
+    vertical-align: middle;
+}
+
+.token-info-dialog .table td:first-child {
+    font-weight: 500;
+    color: #495057;
+    width: 35%;
+}
+
+.token-info-dialog .token-actions {
+    text-align: center;
+    padding-top: 15px;
+    border-top: 1px solid #e9ecef;
+}
+
+.token-info-dialog .token-actions .btn {
+    margin: 0 5px;
+    padding: 8px 16px;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.token-info-dialog .token-actions .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Enhanced Notification Styling for Token Alerts */
+.token-notification {
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border: none;
+    overflow: hidden;
+    position: relative;
+}
+
+.token-notification::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(45deg, #ffc107, #fd7e14);
+}
+
+.token-notification.critical::before {
+    background: linear-gradient(45deg, #dc3545, #c82333);
+    animation: blink 1s infinite;
+}
+
+.token-notification h4 {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.token-notification .token-content {
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.token-notification .token-content small {
+    opacity: 0.9;
+    font-size: 12px;
+}
+
+/* Mobile responsive adjustments for token features */
+@media (max-width: 768px) {
+    .token-countdown {
+        padding: 4px 8px;
+        margin-right: 10px;
+    }
+    
+    .token-countdown .countdown-text {
+        font-size: 12px;
+    }
+    
+    .token-countdown .btn {
+        padding: 4px 8px;
+        font-size: 12px;
+    }
+    
+    .token-info-dialog {
+        padding: 10px;
+    }
+    
+    .token-info-dialog .token-details {
+        padding: 10px;
+    }
+    
+    .token-info-dialog .table td {
+        padding: 6px 8px;
+        font-size: 13px;
+    }
+}
+
+/* ========== GRID PRESENSI LAYOUT FIXES ========== */
+/* Kolom Nama Siswa */
+#presensi-grid .k-grid-header th[data-field="nama_siswa"],
+#presensi-grid .k-grid-content td[data-field="nama_siswa"] {
+    width: 180px !important;
+    min-width: 180px !important;
+    max-width: 180px !important;
+}
+
+/* Kolom Semester */
+#presensi-grid .k-grid-header th[data-field="semester"],
+#presensi-grid .k-grid-content td[data-field="semester"] {
+    width: 100px !important;
+    min-width: 100px !important;
+    max-width: 100px !important;
+    text-align: center !important;
+}
+
+/* Kolom Tahun Ajaran */
+#presensi-grid .k-grid-header th[data-field="tahun_ajaran"],
+#presensi-grid .k-grid-content td[data-field="tahun_ajaran"] {
+    width: 120px !important;
+    min-width: 120px !important;
+    max-width: 120px !important;
+    text-align: center !important;
+}
+
+/* Kolom Presensi (Hadir, Sakit, Izin, Alpa) */
+#presensi-grid .k-grid-header th[data-field="jumlah_hadir"],
+#presensi-grid .k-grid-header th[data-field="jumlah_sakit"],
+#presensi-grid .k-grid-header th[data-field="jumlah_izin"],
+#presensi-grid .k-grid-header th[data-field="jumlah_alpa"],
+#presensi-grid .k-grid-content td[data-field="jumlah_hadir"],
+#presensi-grid .k-grid-content td[data-field="jumlah_sakit"],
+#presensi-grid .k-grid-content td[data-field="jumlah_izin"],
+#presensi-grid .k-grid-content td[data-field="jumlah_alpa"] {
+    width: 80px !important;
+    min-width: 80px !important;
+    max-width: 80px !important;
+    text-align: center !important;
+}
+
+/* Kolom Persentase Kehadiran */
+#presensi-grid .k-grid-header th[data-field="persentase_kehadiran"],
+#presensi-grid .k-grid-content td[data-field="persentase_kehadiran"] {
+    width: 100px !important;
+    min-width: 100px !important;
+    max-width: 100px !important;
+    text-align: center !important;
+}
+
+/* Kolom Kategori Kehadiran */
+#presensi-grid .k-grid-header th[data-field="kategori_kehadiran"],
+#presensi-grid .k-grid-content td[data-field="kategori_kehadiran"] {
+    width: 100px !important;
+    min-width: 100px !important;
+    max-width: 100px !important;
+    text-align: center !important;
+}
+
+/* Kolom Aksi */
+#presensi-grid .k-grid-header th.k-header:last-child,
+#presensi-grid .k-grid-content td:last-child {
+    width: 140px !important;
+    min-width: 140px !important;
+    max-width: 140px !important;
+    text-align: center !important;
+}
+
+/* Grid presensi general styling */
+#presensi-grid {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#presensi-grid .k-grid-header {
+    background: #f8f9fa;
+}
+
+#presensi-grid .k-grid-header th {
+    background: #f8f9fa !important;
+    border-color: #dee2e6 !important;
+    font-weight: 600;
+    text-align: center;
+    vertical-align: middle;
+    padding: 12px 8px;
+}
+
+#presensi-grid .k-grid-content {
+    background: #fff;
+}
+
+#presensi-grid .k-grid-content td {
+    border-color: #dee2e6 !important;
+    padding: 10px 8px;
+    vertical-align: middle;
+}
+
+/* Hover effects untuk grid presensi */
+#presensi-grid .k-grid-content tr:hover {
+    background-color: #f8f9fa !important;
+}
+
+/* Button styling dalam grid presensi */
+#presensi-grid .k-button {
+    margin: 2px;
+    padding: 4px 8px;
+    font-size: 12px;
+    border-radius: 4px;
+}
+
+#presensi-grid .k-button-sm {
+    padding: 2px 6px;
+    font-size: 11px;
+}
+
+#presensi-grid .k-button-solid-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: #fff;
+}
+
+#presensi-grid .k-button-solid-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+#presensi-grid .btn-delete-presensi {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: #fff;
+}
+
+#presensi-grid .btn-delete-presensi:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+#presensi-grid .k-button i {
+    margin-right: 4px;
+}
+
+/* Responsive design untuk grid presensi */
+@media (max-width: 1400px) {
+    #presensi-grid .k-grid-header th,
+    #presensi-grid .k-grid-content td {
+        padding: 8px 6px;
+        font-size: 13px;
+    }
+    
+    #presensi-grid .k-grid-header th[data-field="jumlah_hadir"],
+    #presensi-grid .k-grid-header th[data-field="jumlah_sakit"],
+    #presensi-grid .k-grid-header th[data-field="jumlah_izin"],
+    #presensi-grid .k-grid-header th[data-field="jumlah_alpa"],
+    #presensi-grid .k-grid-content td[data-field="jumlah_hadir"],
+    #presensi-grid .k-grid-content td[data-field="jumlah_sakit"],
+    #presensi-grid .k-grid-content td[data-field="jumlah_izin"],
+    #presensi-grid .k-grid-content td[data-field="jumlah_alpa"] {
+        width: 75px !important;
+        min-width: 75px !important;
+        max-width: 75px !important;
+    }
+}
+
+@media (max-width: 1200px) {
+    #presensi-grid .k-grid-header th,
+    #presensi-grid .k-grid-content td {
+        padding: 6px 4px;
+        font-size: 12px;
+    }
+    
+    #presensi-grid .k-grid-header th[data-field="nama_siswa"],
+    #presensi-grid .k-grid-content td[data-field="nama_siswa"] {
+        width: 160px !important;
+        min-width: 160px !important;
+        max-width: 160px !important;
+    }
+    
+    #presensi-grid .k-grid-header th[data-field="jumlah_hadir"],
+    #presensi-grid .k-grid-header th[data-field="jumlah_sakit"],
+    #presensi-grid .k-grid-header th[data-field="jumlah_izin"],
+    #presensi-grid .k-grid-header th[data-field="jumlah_alpa"],
+    #presensi-grid .k-grid-content td[data-field="jumlah_hadir"],
+    #presensi-grid .k-grid-content td[data-field="jumlah_sakit"],
+    #presensi-grid .k-grid-content td[data-field="jumlah_izin"],
+    #presensi-grid .k-grid-content td[data-field="jumlah_alpa"] {
+        width: 70px !important;
+        min-width: 70px !important;
+        max-width: 70px !important;
+    }
+    
+    #presensi-grid .k-button {
+        padding: 3px 6px;
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 992px) {
+    #presensi-grid .k-grid-header th,
+    #presensi-grid .k-grid-content td {
+        padding: 5px 3px;
+        font-size: 11px;
+    }
+    
+    #presensi-grid .k-grid-header th[data-field="nama_siswa"],
+    #presensi-grid .k-grid-content td[data-field="nama_siswa"] {
+        width: 140px !important;
+        min-width: 140px !important;
+        max-width: 140px !important;
+    }
+    
+    #presensi-grid .k-grid-header th[data-field="semester"],
+    #presensi-grid .k-grid-content td[data-field="semester"] {
+        width: 80px !important;
+        min-width: 80px !important;
+        max-width: 80px !important;
+    }
+    
+    #presensi-grid .k-grid-header th[data-field="tahun_ajaran"],
+    #presensi-grid .k-grid-content td[data-field="tahun_ajaran"] {
+        width: 100px !important;
+        min-width: 100px !important;
+        max-width: 100px !important;
+    }
+    
+    #presensi-grid .k-grid-header th[data-field="jumlah_hadir"],
+    #presensi-grid .k-grid-header th[data-field="jumlah_sakit"],
+    #presensi-grid .k-grid-header th[data-field="jumlah_izin"],
+    #presensi-grid .k-grid-header th[data-field="jumlah_alpa"],
+    #presensi-grid .k-grid-content td[data-field="jumlah_hadir"],
+    #presensi-grid .k-grid-content td[data-field="jumlah_sakit"],
+    #presensi-grid .k-grid-content td[data-field="jumlah_izin"],
+    #presensi-grid .k-grid-content td[data-field="jumlah_alpa"] {
+        width: 60px !important;
+        min-width: 60px !important;
+        max-width: 60px !important;
+    }
+    
+    #presensi-grid .k-grid-header th[data-field="persentase_kehadiran"],
+    #presensi-grid .k-grid-content td[data-field="persentase_kehadiran"] {
+        width: 85px !important;
+        min-width: 85px !important;
+        max-width: 85px !important;
+    }
+    
+    #presensi-grid .k-grid-header th[data-field="kategori_kehadiran"],
+    #presensi-grid .k-grid-content td[data-field="kategori_kehadiran"] {
+        width: 85px !important;
+        min-width: 85px !important;
+        max-width: 85px !important;
+    }
+    
+    #presensi-grid .k-grid-header th.k-header:last-child,
+    #presensi-grid .k-grid-content td:last-child {
+        width: 120px !important;
+        min-width: 120px !important;
+        max-width: 120px !important;
+    }
+    
+    #presensi-grid .k-button {
+        padding: 2px 4px;
+        font-size: 10px;
+    }
+    
+    #presensi-grid .k-button i {
+        margin-right: 2px;
+    }
+}
+
+/* ========== GRID PENGHASILAN LAYOUT FIXES ========== */
+/* Kolom Nama Siswa */
+#penghasilan-grid .k-grid-header th[data-field="nama_siswa"],
+#penghasilan-grid .k-grid-content td[data-field="nama_siswa"] {
+    width: 180px !important;
+    min-width: 180px !important;
+    max-width: 180px !important;
+}
+
+/* Kolom Penghasilan (Ayah & Ibu) */
+#penghasilan-grid .k-grid-header th[data-field="penghasilan_ayah"],
+#penghasilan-grid .k-grid-header th[data-field="penghasilan_ibu"],
+#penghasilan-grid .k-grid-content td[data-field="penghasilan_ayah"],
+#penghasilan-grid .k-grid-content td[data-field="penghasilan_ibu"] {
+    width: 120px !important;
+    min-width: 120px !important;
+    max-width: 120px !important;
+    text-align: right !important;
+}
+
+/* Kolom Pekerjaan (Ayah & Ibu) */
+#penghasilan-grid .k-grid-header th[data-field="pekerjaan_ayah"],
+#penghasilan-grid .k-grid-header th[data-field="pekerjaan_ibu"],
+#penghasilan-grid .k-grid-content td[data-field="pekerjaan_ayah"],
+#penghasilan-grid .k-grid-content td[data-field="pekerjaan_ibu"] {
+    width: 120px !important;
+    min-width: 120px !important;
+    max-width: 120px !important;
+    text-align: center !important;
+}
+
+/* Kolom Pendidikan (Ayah & Ibu) */
+#penghasilan-grid .k-grid-header th[data-field="pendidikan_ayah"],
+#penghasilan-grid .k-grid-header th[data-field="pendidikan_ibu"],
+#penghasilan-grid .k-grid-content td[data-field="pendidikan_ayah"],
+#penghasilan-grid .k-grid-content td[data-field="pendidikan_ibu"] {
+    width: 120px !important;
+    min-width: 120px !important;
+    max-width: 120px !important;
+    text-align: center !important;
+}
+
+/* Kolom Total Penghasilan */
+#penghasilan-grid .k-grid-header th[data-field="total_penghasilan"],
+#penghasilan-grid .k-grid-content td[data-field="total_penghasilan"] {
+    width: 110px !important;
+    min-width: 110px !important;
+    max-width: 110px !important;
+    text-align: right !important;
+}
+
+/* Kolom Kategori Penghasilan */
+#penghasilan-grid .k-grid-header th[data-field="kategori_penghasilan"],
+#penghasilan-grid .k-grid-content td[data-field="kategori_penghasilan"] {
+    width: 100px !important;
+    min-width: 100px !important;
+    max-width: 100px !important;
+    text-align: center !important;
+}
+
+/* Kolom Aksi */
+#penghasilan-grid .k-grid-header th.k-header:last-child,
+#penghasilan-grid .k-grid-content td:last-child {
+    width: 140px !important;
+    min-width: 140px !important;
+    max-width: 140px !important;
+    text-align: center !important;
+}
+
+/* Grid penghasilan general styling */
+#penghasilan-grid {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#penghasilan-grid .k-grid-header {
+    background: #f8f9fa;
+}
+
+#penghasilan-grid .k-grid-header th {
+    background: #f8f9fa !important;
+    border-color: #dee2e6 !important;
+    font-weight: 600;
+    text-align: center;
+    vertical-align: middle;
+    padding: 12px 8px;
+}
+
+#penghasilan-grid .k-grid-content {
+    background: #fff;
+}
+
+#penghasilan-grid .k-grid-content td {
+    border-color: #dee2e6 !important;
+    padding: 10px 8px;
+    vertical-align: middle;
+}
+
+/* Hover effects untuk grid penghasilan */
+#penghasilan-grid .k-grid-content tr:hover {
+    background-color: #f8f9fa !important;
+}
+
+/* Button styling dalam grid penghasilan */
+#penghasilan-grid .k-button {
+    margin: 2px;
+    padding: 4px 8px;
+    font-size: 12px;
+    border-radius: 4px;
+}
+
+#penghasilan-grid .k-button-sm {
+    padding: 2px 6px;
+    font-size: 11px;
+}
+
+#penghasilan-grid .k-button-solid-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: #fff;
+}
+
+#penghasilan-grid .k-button-solid-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+#penghasilan-grid .btn-delete-penghasilan {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: #fff;
+}
+
+#penghasilan-grid .btn-delete-penghasilan:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+#penghasilan-grid .k-button i {
+    margin-right: 4px;
+}
+
+/* Responsive design untuk grid penghasilan */
+@media (max-width: 1400px) {
+    #penghasilan-grid .k-grid-header th,
+    #penghasilan-grid .k-grid-content td {
+        padding: 8px 6px;
+        font-size: 13px;
+    }
+    
+    #penghasilan-grid .k-grid-header th[data-field="penghasilan_ayah"],
+    #penghasilan-grid .k-grid-header th[data-field="penghasilan_ibu"],
+    #penghasilan-grid .k-grid-header th[data-field="pekerjaan_ayah"],
+    #penghasilan-grid .k-grid-header th[data-field="pekerjaan_ibu"],
+    #penghasilan-grid .k-grid-header th[data-field="pendidikan_ayah"],
+    #penghasilan-grid .k-grid-header th[data-field="pendidikan_ibu"],
+    #penghasilan-grid .k-grid-content td[data-field="penghasilan_ayah"],
+    #penghasilan-grid .k-grid-content td[data-field="penghasilan_ibu"],
+    #penghasilan-grid .k-grid-content td[data-field="pekerjaan_ayah"],
+    #penghasilan-grid .k-grid-content td[data-field="pekerjaan_ibu"],
+    #penghasilan-grid .k-grid-content td[data-field="pendidikan_ayah"],
+    #penghasilan-grid .k-grid-content td[data-field="pendidikan_ibu"] {
+        width: 110px !important;
+        min-width: 110px !important;
+        max-width: 110px !important;
+    }
+    
+    #penghasilan-grid .k-grid-header th[data-field="total_penghasilan"],
+    #penghasilan-grid .k-grid-content td[data-field="total_penghasilan"] {
+        width: 100px !important;
+        min-width: 100px !important;
+        max-width: 100px !important;
+    }
+}
+
+@media (max-width: 1200px) {
+    #penghasilan-grid .k-grid-header th,
+    #penghasilan-grid .k-grid-content td {
+        padding: 6px 4px;
+        font-size: 12px;
+    }
+    
+    #penghasilan-grid .k-grid-header th[data-field="nama_siswa"],
+    #penghasilan-grid .k-grid-content td[data-field="nama_siswa"] {
+        width: 160px !important;
+        min-width: 160px !important;
+        max-width: 160px !important;
+    }
+    
+    #penghasilan-grid .k-grid-header th[data-field="penghasilan_ayah"],
+    #penghasilan-grid .k-grid-header th[data-field="penghasilan_ibu"],
+    #penghasilan-grid .k-grid-header th[data-field="pekerjaan_ayah"],
+    #penghasilan-grid .k-grid-header th[data-field="pekerjaan_ibu"],
+    #penghasilan-grid .k-grid-header th[data-field="pendidikan_ayah"],
+    #penghasilan-grid .k-grid-header th[data-field="pendidikan_ibu"],
+    #penghasilan-grid .k-grid-content td[data-field="penghasilan_ayah"],
+    #penghasilan-grid .k-grid-content td[data-field="penghasilan_ibu"],
+    #penghasilan-grid .k-grid-content td[data-field="pekerjaan_ayah"],
+    #penghasilan-grid .k-grid-content td[data-field="pekerjaan_ibu"],
+    #penghasilan-grid .k-grid-content td[data-field="pendidikan_ayah"],
+    #penghasilan-grid .k-grid-content td[data-field="pendidikan_ibu"] {
+        width: 100px !important;
+        min-width: 100px !important;
+        max-width: 100px !important;
+    }
+    
+    #penghasilan-grid .k-grid-header th[data-field="total_penghasilan"],
+    #penghasilan-grid .k-grid-content td[data-field="total_penghasilan"] {
+        width: 95px !important;
+        min-width: 95px !important;
+        max-width: 95px !important;
+    }
+    
+    #penghasilan-grid .k-grid-header th[data-field="kategori_penghasilan"],
+    #penghasilan-grid .k-grid-content td[data-field="kategori_penghasilan"] {
+        width: 90px !important;
+        min-width: 90px !important;
+        max-width: 90px !important;
+    }
+    
+    #penghasilan-grid .k-button {
+        padding: 3px 6px;
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 992px) {
+    #penghasilan-grid .k-grid-header th,
+    #penghasilan-grid .k-grid-content td {
+        padding: 5px 3px;
+        font-size: 11px;
+    }
+    
+    #penghasilan-grid .k-grid-header th[data-field="nama_siswa"],
+    #penghasilan-grid .k-grid-content td[data-field="nama_siswa"] {
+        width: 140px !important;
+        min-width: 140px !important;
+        max-width: 140px !important;
+    }
+    
+    #penghasilan-grid .k-grid-header th[data-field="penghasilan_ayah"],
+    #penghasilan-grid .k-grid-header th[data-field="penghasilan_ibu"],
+    #penghasilan-grid .k-grid-content td[data-field="penghasilan_ayah"],
+    #penghasilan-grid .k-grid-content td[data-field="penghasilan_ibu"] {
+        width: 90px !important;
+        min-width: 90px !important;
+        max-width: 90px !important;
+    }
+    
+    #penghasilan-grid .k-grid-header th[data-field="pekerjaan_ayah"],
+    #penghasilan-grid .k-grid-header th[data-field="pekerjaan_ibu"],
+    #penghasilan-grid .k-grid-header th[data-field="pendidikan_ayah"],
+    #penghasilan-grid .k-grid-header th[data-field="pendidikan_ibu"],
+    #penghasilan-grid .k-grid-content td[data-field="pekerjaan_ayah"],
+    #penghasilan-grid .k-grid-content td[data-field="pekerjaan_ibu"],
+    #penghasilan-grid .k-grid-content td[data-field="pendidikan_ayah"],
+    #penghasilan-grid .k-grid-content td[data-field="pendidikan_ibu"] {
+        width: 85px !important;
+        min-width: 85px !important;
+        max-width: 85px !important;
+    }
+    
+    #penghasilan-grid .k-grid-header th[data-field="total_penghasilan"],
+    #penghasilan-grid .k-grid-content td[data-field="total_penghasilan"] {
+        width: 85px !important;
+        min-width: 85px !important;
+        max-width: 85px !important;
+    }
+    
+    #penghasilan-grid .k-grid-header th[data-field="kategori_penghasilan"],
+    #penghasilan-grid .k-grid-content td[data-field="kategori_penghasilan"] {
+        width: 80px !important;
+        min-width: 80px !important;
+        max-width: 80px !important;
+    }
+    
+    #penghasilan-grid .k-grid-header th.k-header:last-child,
+    #penghasilan-grid .k-grid-content td:last-child {
+        width: 120px !important;
+        min-width: 120px !important;
+        max-width: 120px !important;
+    }
+    
+    #penghasilan-grid .k-button {
+        padding: 2px 4px;
+        font-size: 10px;
+    }
+    
+    #penghasilan-grid .k-button i {
+        margin-right: 2px;
+    }
+}
+
+/* ========== GRID USERS LAYOUT FIXES ========== */
+/* Kolom Username */
+#users-grid .k-grid-header th[data-field="username"],
+#users-grid .k-grid-content td[data-field="username"] {
+    width: 130px !important;
+    min-width: 130px !important;
+    max-width: 130px !important;
+    text-align: center !important;
+}
+
+/* Kolom Email */
+#users-grid .k-grid-header th[data-field="email"],
+#users-grid .k-grid-content td[data-field="email"] {
+    width: 200px !important;
+    min-width: 200px !important;
+    max-width: 200px !important;
+}
+
+/* Kolom Role */
+#users-grid .k-grid-header th[data-field="role"],
+#users-grid .k-grid-content td[data-field="role"] {
+    width: 100px !important;
+    min-width: 100px !important;
+    max-width: 100px !important;
+    text-align: center !important;
+}
+
+/* Kolom Nama Lengkap */
+#users-grid .k-grid-header th[data-field="profile.nama_lengkap"],
+#users-grid .k-grid-content td[data-field="profile.nama_lengkap"] {
+    width: 180px !important;
+    min-width: 180px !important;
+    max-width: 180px !important;
+}
+
+/* Kolom Jabatan */
+#users-grid .k-grid-header th[data-field="profile.jabatan"],
+#users-grid .k-grid-content td[data-field="profile.jabatan"] {
+    width: 130px !important;
+    min-width: 130px !important;
+    max-width: 130px !important;
+    text-align: center !important;
+}
+
+/* Kolom Status */
+#users-grid .k-grid-header th[data-field="is_active"],
+#users-grid .k-grid-content td[data-field="is_active"] {
+    width: 100px !important;
+    min-width: 100px !important;
+    max-width: 100px !important;
+    text-align: center !important;
+}
+
+/* Kolom Aksi */
+#users-grid .k-grid-header th.k-header:last-child,
+#users-grid .k-grid-content td:last-child {
+    width: 140px !important;
+    min-width: 140px !important;
+    max-width: 140px !important;
+    text-align: center !important;
+}
+
+/* Grid users general styling */
+#users-grid {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#users-grid .k-grid-header {
+    background: #f8f9fa;
+}
+
+#users-grid .k-grid-header th {
+    background: #f8f9fa !important;
+    border-color: #dee2e6 !important;
+    font-weight: 600;
+    text-align: center;
+    vertical-align: middle;
+    padding: 12px 8px;
+}
+
+#users-grid .k-grid-content {
+    background: #fff;
+}
+
+#users-grid .k-grid-content td {
+    border-color: #dee2e6 !important;
+    padding: 10px 8px;
+    vertical-align: middle;
+}
+
+/* Hover effects untuk grid users */
+#users-grid .k-grid-content tr:hover {
+    background-color: #f8f9fa !important;
+}
+
+/* Badge styling dalam grid users */
+#users-grid .badge {
+    padding: 4px 8px;
+    font-size: 11px;
+    font-weight: 500;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+#users-grid .badge-primary {
+    background-color: #007bff;
+    color: #fff;
+}
+
+#users-grid .badge-success {
+    background-color: #28a745;
+    color: #fff;
+}
+
+#users-grid .badge-info {
+    background-color: #17a2b8;
+    color: #fff;
+}
+
+/* Button styling dalam grid users */
+#users-grid .k-button {
+    margin: 2px;
+    padding: 4px 8px;
+    font-size: 12px;
+    border-radius: 4px;
+}
+
+#users-grid .k-button-sm {
+    padding: 2px 6px;
+    font-size: 11px;
+}
+
+#users-grid .k-button-solid-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: #fff;
+}
+
+#users-grid .k-button-solid-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+#users-grid .btn-delete-user {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: #fff;
+}
+
+#users-grid .btn-delete-user:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+#users-grid .k-button i {
+    margin-right: 4px;
+}
+
+/* Status styling */
+#users-grid .k-grid-content td[data-field="is_active"] {
+    font-weight: 500;
+}
+
+/* Responsive design untuk grid users */
+@media (max-width: 1400px) {
+    #users-grid .k-grid-header th,
+    #users-grid .k-grid-content td {
+        padding: 8px 6px;
+        font-size: 13px;
+    }
+    
+    #users-grid .k-grid-header th[data-field="email"],
+    #users-grid .k-grid-content td[data-field="email"] {
+        width: 180px !important;
+        min-width: 180px !important;
+        max-width: 180px !important;
+    }
+    
+    #users-grid .k-grid-header th[data-field="profile.nama_lengkap"],
+    #users-grid .k-grid-content td[data-field="profile.nama_lengkap"] {
+        width: 160px !important;
+        min-width: 160px !important;
+        max-width: 160px !important;
+    }
+    
+    #users-grid .k-grid-header th[data-field="profile.jabatan"],
+    #users-grid .k-grid-content td[data-field="profile.jabatan"] {
+        width: 120px !important;
+        min-width: 120px !important;
+        max-width: 120px !important;
+    }
+}
+
+@media (max-width: 1200px) {
+    #users-grid .k-grid-header th,
+    #users-grid .k-grid-content td {
+        padding: 6px 4px;
+        font-size: 12px;
+    }
+    
+    #users-grid .k-grid-header th[data-field="username"],
+    #users-grid .k-grid-content td[data-field="username"] {
+        width: 120px !important;
+        min-width: 120px !important;
+        max-width: 120px !important;
+    }
+    
+    #users-grid .k-grid-header th[data-field="email"],
+    #users-grid .k-grid-content td[data-field="email"] {
+        width: 160px !important;
+        min-width: 160px !important;
+        max-width: 160px !important;
+    }
+    
+    #users-grid .k-grid-header th[data-field="profile.nama_lengkap"],
+    #users-grid .k-grid-content td[data-field="profile.nama_lengkap"] {
+        width: 150px !important;
+        min-width: 150px !important;
+        max-width: 150px !important;
+    }
+    
+    #users-grid .k-grid-header th[data-field="profile.jabatan"],
+    #users-grid .k-grid-content td[data-field="profile.jabatan"] {
+        width: 110px !important;
+        min-width: 110px !important;
+        max-width: 110px !important;
+    }
+    
+    #users-grid .k-grid-header th[data-field="role"],
+    #users-grid .k-grid-header th[data-field="is_active"],
+    #users-grid .k-grid-content td[data-field="role"],
+    #users-grid .k-grid-content td[data-field="is_active"] {
+        width: 90px !important;
+        min-width: 90px !important;
+        max-width: 90px !important;
+    }
+    
+    #users-grid .k-button {
+        padding: 3px 6px;
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 992px) {
+    #users-grid .k-grid-header th,
+    #users-grid .k-grid-content td {
+        padding: 5px 3px;
+        font-size: 11px;
+    }
+    
+    #users-grid .k-grid-header th[data-field="username"],
+    #users-grid .k-grid-content td[data-field="username"] {
+        width: 100px !important;
+        min-width: 100px !important;
+        max-width: 100px !important;
+    }
+    
+    #users-grid .k-grid-header th[data-field="email"],
+    #users-grid .k-grid-content td[data-field="email"] {
+        width: 140px !important;
+        min-width: 140px !important;
+        max-width: 140px !important;
+    }
+    
+    #users-grid .k-grid-header th[data-field="profile.nama_lengkap"],
+    #users-grid .k-grid-content td[data-field="profile.nama_lengkap"] {
+        width: 130px !important;
+        min-width: 130px !important;
+        max-width: 130px !important;
+    }
+    
+    #users-grid .k-grid-header th[data-field="profile.jabatan"],
+    #users-grid .k-grid-content td[data-field="profile.jabatan"] {
+        width: 100px !important;
+        min-width: 100px !important;
+        max-width: 100px !important;
+    }
+    
+    #users-grid .k-grid-header th[data-field="role"],
+    #users-grid .k-grid-header th[data-field="is_active"],
+    #users-grid .k-grid-content td[data-field="role"],
+    #users-grid .k-grid-content td[data-field="is_active"] {
+        width: 80px !important;
+        min-width: 80px !important;
+        max-width: 80px !important;
+    }
+    
+    #users-grid .k-grid-header th.k-header:last-child,
+    #users-grid .k-grid-content td:last-child {
+        width: 120px !important;
+        min-width: 120px !important;
+        max-width: 120px !important;
+    }
+    
+    #users-grid .k-button {
+        padding: 2px 4px;
+        font-size: 10px;
+    }
+    
+    #users-grid .k-button i {
+        margin-right: 2px;
+    }
+    
+    #users-grid .badge {
+        padding: 2px 4px;
+        font-size: 9px;
     }
 }

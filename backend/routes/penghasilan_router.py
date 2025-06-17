@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from database import get_db, PenghasilanOrtu, Siswa
@@ -6,6 +7,8 @@ from schemas import PenghasilanOrtuCreate, PenghasilanOrtuUpdate, PenghasilanOrt
 from datetime import datetime
 from routes.auth_router import get_current_user
 from models.user import User
+import pandas as pd
+from io import BytesIO
 
 router = APIRouter()
 
@@ -196,3 +199,64 @@ def delete_penghasilan(
     db.commit()
     
     return None
+
+@router.get("/export/excel")
+def export_penghasilan_excel(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    # Join query untuk mengambil data penghasilan beserta nama siswa
+    query = db.query(
+        PenghasilanOrtu.id,
+        PenghasilanOrtu.siswa_id,
+        Siswa.nama.label('nama_siswa'),
+        PenghasilanOrtu.penghasilan_ayah,
+        PenghasilanOrtu.penghasilan_ibu,
+        PenghasilanOrtu.pekerjaan_ayah,
+        PenghasilanOrtu.pekerjaan_ibu,
+        PenghasilanOrtu.pendidikan_ayah,
+        PenghasilanOrtu.pendidikan_ibu,
+        PenghasilanOrtu.total_penghasilan,
+        PenghasilanOrtu.kategori_penghasilan,
+        PenghasilanOrtu.created_at,
+        PenghasilanOrtu.updated_at
+    ).join(Siswa, PenghasilanOrtu.siswa_id == Siswa.id)
+    
+    # Ambil semua data penghasilan
+    penghasilan_list = query.all()
+    
+    # Konversi data penghasilan ke DataFrame
+    data = [{
+        'ID': row.id,
+        'Siswa ID': row.siswa_id,
+        'Nama Siswa': row.nama_siswa,
+        'Penghasilan Ayah': row.penghasilan_ayah,
+        'Penghasilan Ibu': row.penghasilan_ibu,
+        'Pekerjaan Ayah': row.pekerjaan_ayah,
+        'Pekerjaan Ibu': row.pekerjaan_ibu,
+        'Pendidikan Ayah': row.pendidikan_ayah,
+        'Pendidikan Ibu': row.pendidikan_ibu,
+        'Total Penghasilan': row.total_penghasilan,
+        'Kategori Penghasilan': row.kategori_penghasilan,
+        'Dibuat': row.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+        'Diperbarui': row.updated_at.strftime('%Y-%m-%d %H:%M:%S') if row.updated_at else ''
+    } for row in penghasilan_list]
+    
+    df = pd.DataFrame(data)
+    
+    # Buat file Excel di memory
+    output = BytesIO()
+    with pd.ExcelWriter(output, engine='openpyxl') as writer:
+        df.to_excel(writer, index=False, sheet_name='Data Penghasilan Orang Tua')
+    
+    output.seek(0)
+    
+    # Return file Excel sebagai response
+    headers = {
+        'Content-Disposition': 'attachment; filename=Data_Penghasilan_Orang_Tua.xlsx'
+    }
+    return StreamingResponse(
+        output,
+        media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        headers=headers
+    )

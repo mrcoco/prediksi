@@ -36,6 +36,17 @@ $(document).ready(function() {
     let countdownInterval = null;
     let tokenExpiryTime = null;
     
+    // ========== TOKEN EXPIRY CHECKER VARIABLES ==========
+    let tokenExpiryChecker = null;
+    let lastNotificationTime = 0;
+    let notificationShown = {
+        '15min': false,
+        '10min': false,
+        '5min': false,
+        '2min': false,
+        '1min': false
+    };
+    
     // Fungsi untuk mendapatkan waktu expired token dari JWT
     function getTokenExpiryTime() {
         const token = getToken();
@@ -104,16 +115,30 @@ $(document).ready(function() {
             // Add warning classes based on time left
             $timer.removeClass("countdown-timer-warning countdown-timer-danger");
             
-            if (timeLeft <= 5 * 60 * 1000) { // 5 minutes or less
+            // Update token status indicator based on time left
+            const minutesLeft = Math.floor(timeLeft / (60 * 1000));
+            const $indicator = $("#token-status-indicator");
+            $indicator.removeClass("token-valid token-notice token-warning token-urgent token-critical");
+            
+            if (timeLeft <= 1 * 60 * 1000) { // 1 minute or less - CRITICAL
                 $timer.addClass("countdown-timer-danger");
+                $indicator.addClass("token-critical").attr("title", `Token KRITIS - ${minutesLeft} menit lagi`);
+            } else if (timeLeft <= 2 * 60 * 1000) { // 2 minutes or less - URGENT
+                $timer.addClass("countdown-timer-danger");
+                $indicator.addClass("token-urgent").attr("title", `Token MENDESAK - ${minutesLeft} menit lagi`);
+            } else if (timeLeft <= 5 * 60 * 1000) { // 5 minutes or less - WARNING
+                $timer.addClass("countdown-timer-danger");
+                $indicator.addClass("token-warning").attr("title", `Token PERINGATAN - ${minutesLeft} menit lagi`);
                 
                 // Show warning notification every minute in last 5 minutes
-                const minutesLeft = Math.floor(timeLeft / (60 * 1000));
                 if (timeLeft % (60 * 1000) < 1000 && minutesLeft > 0) {
                     showInfoNotification(`Token akan expired dalam ${minutesLeft} menit`, "Peringatan Token");
                 }
-            } else if (timeLeft <= 10 * 60 * 1000) { // 10 minutes or less
+            } else if (timeLeft <= 10 * 60 * 1000) { // 10 minutes or less - NOTICE
                 $timer.addClass("countdown-timer-warning");
+                $indicator.addClass("token-notice").attr("title", `Token PERHATIAN - ${minutesLeft} menit lagi`);
+            } else { // More than 10 minutes - VALID
+                $indicator.addClass("token-valid").attr("title", `Token VALID - ${minutesLeft} menit lagi`);
             }
         }, 1000);
     }
@@ -125,6 +150,8 @@ $(document).ready(function() {
             countdownInterval = null;
         }
         $("#countdown-timer").text("--:--").removeClass("countdown-timer-warning countdown-timer-danger");
+        // Reset token status indicator
+        $("#token-status-indicator").removeClass("token-valid token-notice token-warning token-urgent token-critical").addClass("token-valid").attr("title", "Status Token");
     }
     
     // Fungsi untuk refresh token countdown (dipanggil setelah login atau refresh token)
@@ -363,6 +390,9 @@ $(document).ready(function() {
     
     // Start token countdown
     startTokenCountdown();
+    
+    // Start token expiry checker
+    startTokenExpiryChecker();
     
     // Initialize tooltips
     $('[data-toggle="tooltip"]').tooltip();
@@ -1989,9 +2019,13 @@ $(document).ready(function() {
             pageable: true,
             sortable: true,
             filterable: true,
-            toolbar: ["create", "excel"],
+            toolbar: ["create", {
+                name: "export",
+                text: "Export Excel",
+                template: `<button class="k-button k-button-md k-rounded-md k-button-solid k-button-solid-primary" onclick="exportNilaiExcel()"><span class="k-icon k-i-excel"></span> Export Excel</button>`
+            }],
             excel: {
-                fileName: "Data Siswa.xlsx",
+                fileName: "Data Nilai Raport.xlsx",
                 filterable: true,
                 allPages: true
             },
@@ -2010,18 +2044,18 @@ $(document).ready(function() {
                 { 
                     field: "nama_siswa", 
                     title: "Nama Siswa", 
-                    width: 160,
+                    width: 180,
                     template: function(dataItem) {
                         return dataItem.nama_siswa || dataItem.siswa?.nama || "-";
                     }
                 },
                 { field: "siswa_id", title: "Siswa ID", hidden: true, editor: siswaDropDownEditor },
-                { field: "semester", title: "Semester", width: 90 },
-                { field: "tahun_ajaran", title: "Tahun Ajaran", width: 110 },
-                { field: "matematika", title: "MTK", format: "{0:n1}", width: 80 },
-                { field: "bahasa_indonesia", title: "B.IND", format: "{0:n1}", width: 80 },
-                { field: "bahasa_inggris", title: "B.ING", format: "{0:n1}", width: 80 },
-                { field: "ipa", title: "IPA", format: "{0:n1}", width: 80 },
+                { field: "semester", title: "Semester", width: 100 },
+                { field: "tahun_ajaran", title: "Tahun Ajaran", width: 120 },
+                { field: "matematika", title: "MTK", format: "{0:n1}", width: 85 },
+                { field: "bahasa_indonesia", title: "B.IND", format: "{0:n1}", width: 85 },
+                { field: "bahasa_inggris", title: "B.ING", format: "{0:n1}", width: 85 },
+                { field: "ipa", title: "IPA", format: "{0:n1}", width: 85 },
                 // { field: "bahasa_jawa", title: "B.JAW", format: "{0:n1}", width: 70 },
                 // { field: "pkn", title: "PKN", format: "{0:n1}", width: 70 },
                 // { field: "seni", title: "SENI", format: "{0:n1}", width: 70 },
@@ -2029,8 +2063,8 @@ $(document).ready(function() {
                 // { field: "sejarah", title: "SEJ", format: "{0:n1}", width: 70 },
                 // { field: "agama", title: "AGM", format: "{0:n1}", width: 70 },
                 // { field: "dasar_kejuruan", title: "D.KEJ", format: "{0:n1}", width: 70 },
-                { field: "rata_rata", title: "Rata²", format: "{0:n1}", width: 80 },
-                { command: ["edit", "destroy"], title: "Aksi", width: 160 }
+                { field: "rata_rata", title: "Rata²", format: "{0:n1}", width: 85 },
+                { command: ["edit", "destroy"], title: "Aksi", width: 140 }
             ],
             edit: function(e) {
                 // Set default values for new records
@@ -2127,6 +2161,170 @@ $(document).ready(function() {
         });
     }
     
+    // Export function for nilai raport
+    window.exportNilaiExcel = function() {
+        const token = getToken();
+        if (!token) {
+            showErrorNotification("Anda harus login terlebih dahulu");
+            return;
+        }
+
+        // Buat link untuk download
+        const link = document.createElement('a');
+        link.href = `${API_URL}/nilai/export/excel`;
+        link.download = 'Data_Nilai_Raport.xlsx';
+        
+        // Tambahkan header Authorization
+        fetch(link.href, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.blob();
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            link.href = url;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+            
+            showSuccessNotification("File Excel berhasil diunduh");
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showErrorNotification('Gagal mengunduh file Excel');
+        });
+    };
+    
+    // Export function for presensi
+    window.exportPresensiExcel = function() {
+        const token = getToken();
+        if (!token) {
+            showErrorNotification("Anda harus login terlebih dahulu");
+            return;
+        }
+
+        // Buat link untuk download
+        const link = document.createElement('a');
+        link.href = `${API_URL}/presensi/export/excel`;
+        link.download = 'Data_Presensi.xlsx';
+        
+        // Tambahkan header Authorization
+        fetch(link.href, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.blob();
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            link.href = url;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+            
+            showSuccessNotification("File Excel berhasil diunduh");
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showErrorNotification('Gagal mengunduh file Excel');
+        });
+    };
+    
+    // Export function for penghasilan orang tua
+    window.exportPenghasilanExcel = function() {
+        const token = getToken();
+        if (!token) {
+            showErrorNotification("Anda harus login terlebih dahulu");
+            return;
+        }
+
+        // Buat link untuk download
+        const link = document.createElement('a');
+        link.href = `${API_URL}/penghasilan/export/excel`;
+        link.download = 'Data_Penghasilan_Orang_Tua.xlsx';
+        
+        // Tambahkan header Authorization
+        fetch(link.href, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.blob();
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            link.href = url;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+            
+            showSuccessNotification("File Excel berhasil diunduh");
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showErrorNotification('Gagal mengunduh file Excel');
+        });
+    };
+    
+    // Export function for riwayat prediksi prestasi
+    window.exportRiwayatPrediksiExcel = function() {
+        const token = getToken();
+        if (!token) {
+            showErrorNotification("Anda harus login terlebih dahulu");
+            return;
+        }
+
+        // Buat link untuk download
+        const link = document.createElement('a');
+        link.href = `${API_URL}/prediksi/history/export/excel`;
+        link.download = 'Riwayat_Prediksi_Prestasi.xlsx';
+        
+        // Tambahkan header Authorization
+        fetch(link.href, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.blob();
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            link.href = url;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+            
+            showSuccessNotification("File Excel riwayat prediksi berhasil diunduh");
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showErrorNotification('Gagal mengunduh file Excel riwayat prediksi');
+        });
+    };
+    
     // ========== FUNGSI DATA PRESENSI ==========
     function initPresensiGrid() {
         $("#presensi-grid").kendoGrid({
@@ -2214,12 +2412,7 @@ $(document).ready(function() {
             pageable: true,
             sortable: true,
             filterable: true,
-            toolbar: ["create", "excel"],
-            excel: {
-                fileName: "Data Siswa.xlsx",
-                filterable: true,
-                allPages: true
-            },
+            toolbar: ["create", { template: '<button class="k-button k-button-icontext" onclick="exportPresensiExcel()"><span class="k-icon k-i-excel"></span>Export Excel</button>' }],
             editable: {
                 mode: "popup",
                 template: function() {
@@ -2235,21 +2428,21 @@ $(document).ready(function() {
                 { 
                     field: "nama_siswa", 
                     title: "Nama Siswa", 
-                    width: 150,
+                    width: 180,
                     template: function(dataItem) {
                         return dataItem.nama_siswa || dataItem.siswa?.nama || "-";
                     }
                 },
                 { field: "siswa_id", title: "Siswa ID", hidden: true, editor: siswaDropDownEditor },
-                { field: "semester", title: "Semester" },
-                { field: "tahun_ajaran", title: "Tahun Ajaran" },
-                { field: "jumlah_hadir", title: "Hadir" },
-                { field: "jumlah_sakit", title: "Sakit" },
-                { field: "jumlah_izin", title: "Izin" },
-                { field: "jumlah_alpa", title: "Alpa" },
-                { field: "persentase_kehadiran", title: "Persentase", format: "{0:n1}%" },
-                { field: "kategori_kehadiran", title: "Kategori" },
-                { command: ["edit", "destroy"], title: "Aksi", width: "200px" }
+                { field: "semester", title: "Semester", width: 100 },
+                { field: "tahun_ajaran", title: "Tahun Ajaran", width: 120 },
+                { field: "jumlah_hadir", title: "Hadir", width: 80 },
+                { field: "jumlah_sakit", title: "Sakit", width: 80 },
+                { field: "jumlah_izin", title: "Izin", width: 80 },
+                { field: "jumlah_alpa", title: "Alpa", width: 80 },
+                { field: "persentase_kehadiran", title: "Persentase", format: "{0:n1}%", width: 100 },
+                { field: "kategori_kehadiran", title: "Kategori", width: 100 },
+                { command: ["edit", "destroy"], title: "Aksi", width: 140 }
             ],
             edit: function(e) {
                 // Set default values for new records
@@ -2445,12 +2638,7 @@ $(document).ready(function() {
             pageable: true,
             sortable: true,
             filterable: true,
-            toolbar: ["create", "excel"],
-            excel: {
-                fileName: "Data Penghasilan Orang Tua.xlsx",
-                filterable: true,
-                allPages: true
-            },
+            toolbar: ["create", { template: '<button class="k-button k-button-icontext" onclick="exportPenghasilanExcel()"><span class="k-icon k-i-excel"></span>Export Excel</button>' }],
             editable: {
                 mode: "popup",
                 template: function() {
@@ -2466,21 +2654,36 @@ $(document).ready(function() {
                 { 
                     field: "nama_siswa", 
                     title: "Nama Siswa", 
-                    width: 150,
+                    width: 180,
                     template: function(dataItem) {
                         return dataItem.nama_siswa || dataItem.siswa?.nama || "-";
                     }
                 },
                 { field: "siswa_id", title: "Siswa ID", hidden: true, editor: siswaDropDownEditor },
-                { field: "penghasilan_ayah", title: "Penghasilan Ayah", format: "{0:n0}" },
-                { field: "penghasilan_ibu", title: "Penghasilan Ibu", format: "{0:n0}" },
-                { field: "pekerjaan_ayah", title: "Pekerjaan Ayah" },
-                { field: "pekerjaan_ibu", title: "Pekerjaan Ibu" },
-                { field: "pendidikan_ayah", title: "Pendidikan Ayah" },
-                { field: "pendidikan_ibu", title: "Pendidikan Ibu" },
-                { field: "total_penghasilan", title: "Total", format: "{0:n0}" },
-                { field: "kategori_penghasilan", title: "Kategori" },
-                { command: ["edit", "destroy"], title: "Aksi", width: "200px" }
+                { field: "penghasilan_ayah", title: "Penghasilan Ayah", format: "{0:n0}", width: 120 },
+                { field: "penghasilan_ibu", title: "Penghasilan Ibu", format: "{0:n0}", width: 120 },
+                { field: "pekerjaan_ayah", title: "Pekerjaan Ayah", width: 120 },
+                { field: "pekerjaan_ibu", title: "Pekerjaan Ibu", width: 120 },
+                { field: "pendidikan_ayah", title: "Pendidikan Ayah", width: 120 },
+                { field: "pendidikan_ibu", title: "Pendidikan Ibu", width: 120 },
+                { field: "total_penghasilan", title: "Total", format: "{0:n0}", width: 110 },
+                { field: "kategori_penghasilan", title: "Kategori", width: 100 },
+                { command: ["edit"], title: "Edit", width: 70 },
+                {
+                    title: "Hapus",
+                    width: 70,
+                    template: function(dataItem) {
+                        return `<button class="k-button k-button-solid k-button-solid-error k-button-sm btn-delete-penghasilan" 
+                                       data-id="${dataItem.id}" 
+                                       data-nama="${dataItem.nama_siswa || dataItem.siswa?.nama || '-'}" 
+                                       data-penghasilan_ayah="${dataItem.penghasilan_ayah}" 
+                                       data-penghasilan_ibu="${dataItem.penghasilan_ibu}" 
+                                       data-total_penghasilan="${dataItem.total_penghasilan}" 
+                                       data-kategori_penghasilan="${dataItem.kategori_penghasilan}">
+                                    <i class="k-icon k-i-delete"></i> Hapus
+                                </button>`;
+                    }
+                }
             ],
             edit: function(e) {
                 // Initialize form components
@@ -2575,6 +2778,24 @@ $(document).ready(function() {
             }
         });
     }
+    
+    // Event handler untuk button delete penghasilan
+    $(document).on("click", ".btn-delete-penghasilan", function(e) {
+        e.preventDefault();
+        
+        const button = $(this);
+        const dataItem = {
+            id: button.data("id"),
+            nama_siswa: button.data("nama"),
+            penghasilan_ayah: button.data("penghasilan_ayah"),
+            penghasilan_ibu: button.data("penghasilan_ibu"),
+            total_penghasilan: button.data("total_penghasilan"),
+            kategori_penghasilan: button.data("kategori_penghasilan")
+        };
+        
+        console.log("Delete penghasilan button clicked:", dataItem);
+        showDeleteConfirmationPenghasilan(dataItem);
+    });
     
     // ========== FUNGSI PREDIKSI PRESTASI ==========
     function initGenerateDummyForm() {
@@ -2703,6 +2924,7 @@ $(document).ready(function() {
                 serverPaging: true
             },
             height: 400,
+            toolbar: [{ template: '<button class="k-button k-button-icontext" onclick="exportRiwayatPrediksiExcel()"><span class="k-icon k-i-excel"></span>Export Excel</button>' }],
             pageable: {
                 refresh: true,
                 pageSizes: [5, 10, 20, 50],
@@ -3577,8 +3799,8 @@ $(document).ready(function() {
                 }()
             },
             columns: [
-                { field: "username", title: "Username", width: 120 },
-                { field: "email", title: "Email", width: 180 },
+                { field: "username", title: "Username", width: 130 },
+                { field: "email", title: "Email", width: 200 },
                 { 
                     field: "role", 
                     title: "Role", 
@@ -3595,12 +3817,12 @@ $(document).ready(function() {
                 { 
                     field: "profile.nama_lengkap", 
                     title: "Nama Lengkap", 
-                    width: 150 
+                    width: 180 
                 },
                 { 
                     field: "profile.jabatan", 
                     title: "Jabatan", 
-                    width: 120 
+                    width: 130 
                 },
                 { field: "is_active", title: "Status", width: 100, template: "#= is_active ? 'Aktif' : 'Nonaktif' #" },
                 {
@@ -3621,7 +3843,8 @@ $(document).ready(function() {
                             }
                         }
                     ],
-                    width: 180
+                    title: "Aksi",
+                    width: 140
                 }
             ],
             error: function(e) {
@@ -4476,6 +4699,413 @@ $(document).ready(function() {
     // Make dashboard bar chart functions globally accessible
     window.initializeDashboardBarChart = initializeDashboardBarChart;
     window.updateDashboardBarChart = updateDashboardBarChart;
+
+    // ========== TOKEN EXPIRY CHECKER SYSTEM ==========
+    
+    // Fungsi untuk mengecek status token expiry
+    function checkTokenExpiry() {
+        const token = getToken();
+        if (!token) {
+            return {
+                isValid: false,
+                timeLeft: 0,
+                status: 'no_token',
+                message: 'Token tidak ditemukan'
+            };
+        }
+        
+        const expiryTime = getTokenExpiryTime();
+        if (!expiryTime) {
+            return {
+                isValid: false,
+                timeLeft: 0,
+                status: 'invalid_token',
+                message: 'Token tidak valid'
+            };
+        }
+        
+        const now = Date.now();
+        const timeLeft = expiryTime - now;
+        
+        if (timeLeft <= 0) {
+            return {
+                isValid: false,
+                timeLeft: 0,
+                status: 'expired',
+                message: 'Token telah expired'
+            };
+        }
+        
+        // Determine status based on time left
+        let status = 'valid';
+        let urgency = 'low';
+        
+        if (timeLeft <= 1 * 60 * 1000) { // 1 minute
+            status = 'critical';
+            urgency = 'critical';
+        } else if (timeLeft <= 2 * 60 * 1000) { // 2 minutes
+            status = 'very_urgent';
+            urgency = 'high';
+        } else if (timeLeft <= 5 * 60 * 1000) { // 5 minutes
+            status = 'urgent';
+            urgency = 'high';
+        } else if (timeLeft <= 10 * 60 * 1000) { // 10 minutes
+            status = 'warning';
+            urgency = 'medium';
+        } else if (timeLeft <= 15 * 60 * 1000) { // 15 minutes
+            status = 'notice';
+            urgency = 'low';
+        }
+        
+        return {
+            isValid: true,
+            timeLeft: timeLeft,
+            timeLeftFormatted: formatCountdownTime(timeLeft),
+            status: status,
+            urgency: urgency,
+            minutesLeft: Math.floor(timeLeft / (60 * 1000)),
+            secondsLeft: Math.floor((timeLeft % (60 * 1000)) / 1000),
+            message: getExpiryMessage(status, Math.floor(timeLeft / (60 * 1000)))
+        };
+    }
+    
+    // Fungsi untuk mendapatkan pesan expiry berdasarkan status
+    function getExpiryMessage(status, minutesLeft) {
+        const messages = {
+            'valid': 'Token masih valid',
+            'notice': `Token akan expired dalam ${minutesLeft} menit`,
+            'warning': `⚠️ Token akan expired dalam ${minutesLeft} menit`,
+            'urgent': `🚨 Token akan expired dalam ${minutesLeft} menit!`,
+            'very_urgent': `🔥 Token akan expired dalam ${minutesLeft} menit! Segera simpan pekerjaan Anda!`,
+            'critical': `❌ Token akan expired dalam kurang dari 1 menit! Sistem akan logout otomatis!`,
+            'expired': '❌ Token telah expired'
+        };
+        
+        return messages[status] || 'Status token tidak diketahui';
+    }
+    
+    // Fungsi untuk menampilkan notifikasi berdasarkan status token
+    function showTokenExpiryNotification(tokenStatus) {
+        const now = Date.now();
+        const minutesLeft = tokenStatus.minutesLeft;
+        
+        // Prevent spam notifications (minimum 30 seconds between notifications)
+        if (now - lastNotificationTime < 30000) {
+            return;
+        }
+        
+        let shouldShow = false;
+        let notificationType = 'info';
+        let title = 'Peringatan Token';
+        
+        // Check if we should show notification based on time thresholds
+        if (minutesLeft <= 1 && !notificationShown['1min']) {
+            shouldShow = true;
+            notificationType = 'error';
+            title = 'Token Akan Expired!';
+            notificationShown['1min'] = true;
+        } else if (minutesLeft <= 2 && !notificationShown['2min']) {
+            shouldShow = true;
+            notificationType = 'error';
+            title = 'Token Akan Expired!';
+            notificationShown['2min'] = true;
+        } else if (minutesLeft <= 5 && !notificationShown['5min']) {
+            shouldShow = true;
+            notificationType = 'error';
+            title = 'Peringatan Token';
+            notificationShown['5min'] = true;
+        } else if (minutesLeft <= 10 && !notificationShown['10min']) {
+            shouldShow = true;
+            notificationType = 'info';
+            title = 'Pemberitahuan Token';
+            notificationShown['10min'] = true;
+        } else if (minutesLeft <= 15 && !notificationShown['15min']) {
+            shouldShow = true;
+            notificationType = 'info';
+            title = 'Pemberitahuan Token';
+            notificationShown['15min'] = true;
+        }
+        
+        if (shouldShow) {
+            const message = `${tokenStatus.message}<br/><small>Waktu tersisa: ${tokenStatus.timeLeftFormatted}</small>`;
+            
+            if (notificationType === 'error') {
+                showErrorNotification(message, title);
+            } else {
+                showInfoNotification(message, title);
+            }
+            
+            lastNotificationTime = now;
+            
+            // Log untuk debugging
+            console.log(`Token Expiry Notification: ${title} - ${tokenStatus.message}`);
+        }
+    }
+    
+    // Fungsi untuk memulai token expiry checker
+    function startTokenExpiryChecker() {
+        // Clear existing checker
+        if (tokenExpiryChecker) {
+            clearInterval(tokenExpiryChecker);
+        }
+        
+        // Reset notification flags
+        notificationShown = {
+            '15min': false,
+            '10min': false,
+            '5min': false,
+            '2min': false,
+            '1min': false
+        };
+        
+        tokenExpiryChecker = setInterval(function() {
+            const tokenStatus = checkTokenExpiry();
+            
+            if (!tokenStatus.isValid) {
+                // Token is invalid or expired
+                clearInterval(tokenExpiryChecker);
+                
+                if (tokenStatus.status === 'expired') {
+                    showErrorNotification("Token telah expired. Anda akan dialihkan ke halaman login.", "Session Expired");
+                    setTimeout(() => {
+                        logout();
+                    }, 3000);
+                }
+                return;
+            }
+            
+            // Show notifications based on token status
+            showTokenExpiryNotification(tokenStatus);
+            
+            // Update token status indicator if exists
+            updateTokenStatusIndicator(tokenStatus);
+            
+        }, 5000); // Check every 5 seconds
+    }
+    
+    // Fungsi untuk stop token expiry checker
+    function stopTokenExpiryChecker() {
+        if (tokenExpiryChecker) {
+            clearInterval(tokenExpiryChecker);
+            tokenExpiryChecker = null;
+        }
+    }
+    
+    // Fungsi untuk update token status indicator
+    function updateTokenStatusIndicator(tokenStatus) {
+        const $indicator = $("#token-status-indicator");
+        if ($indicator.length === 0) return;
+        
+        // Remove all status classes
+        $indicator.removeClass("token-valid token-notice token-warning token-urgent token-critical");
+        
+        // Add appropriate class based on status
+        $indicator.addClass(`token-${tokenStatus.status}`);
+        
+        // Update tooltip or title
+        $indicator.attr("title", tokenStatus.message);
+    }
+    
+    // Fungsi untuk mendapatkan informasi lengkap token
+    function getTokenInfo() {
+        const tokenStatus = checkTokenExpiry();
+        const token = getToken();
+        
+        let tokenInfo = {
+            ...tokenStatus,
+            hasToken: !!token
+        };
+        
+        if (token) {
+            try {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                tokenInfo.issuedAt = new Date(payload.iat * 1000);
+                tokenInfo.expiresAt = new Date(payload.exp * 1000);
+                tokenInfo.username = payload.sub || payload.username;
+                tokenInfo.role = payload.role;
+            } catch (e) {
+                console.error('Error parsing token:', e);
+            }
+        }
+        
+        return tokenInfo;
+    }
+    
+    // Fungsi untuk menampilkan dialog informasi token
+    function showTokenInfoDialog() {
+        const tokenInfo = getTokenInfo();
+        
+        let content = '';
+        if (!tokenInfo.hasToken) {
+            content = `
+                <div class="token-info-dialog">
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>Tidak ada token</strong><br/>
+                        Anda belum login atau session telah berakhir.
+                    </div>
+                </div>
+            `;
+        } else {
+            const statusClass = tokenInfo.urgency === 'critical' ? 'danger' : 
+                              tokenInfo.urgency === 'high' ? 'warning' : 
+                              tokenInfo.urgency === 'medium' ? 'info' : 'success';
+            
+            content = `
+                <div class="token-info-dialog">
+                    <div class="alert alert-${statusClass}">
+                        <h6><i class="fas fa-info-circle"></i> Status Token</h6>
+                        <p><strong>Status:</strong> ${tokenInfo.message}</p>
+                        <p><strong>Waktu Tersisa:</strong> ${tokenInfo.timeLeftFormatted}</p>
+                    </div>
+                    
+                    <div class="token-details mt-3">
+                        <h6>Detail Token:</h6>
+                        <table class="table table-sm">
+                            <tr>
+                                <td><strong>Username:</strong></td>
+                                <td>${tokenInfo.username || '-'}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Role:</strong></td>
+                                <td>${tokenInfo.role || '-'}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Dibuat:</strong></td>
+                                <td>${tokenInfo.issuedAt ? tokenInfo.issuedAt.toLocaleString('id-ID') : '-'}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Expired:</strong></td>
+                                <td>${tokenInfo.expiresAt ? tokenInfo.expiresAt.toLocaleString('id-ID') : '-'}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <div class="token-actions mt-3">
+                        <button class="btn btn-primary btn-sm" onclick="refreshTokenCountdown(); closeTokenInfoDialog();">
+                            <i class="fas fa-sync"></i> Refresh Display
+                        </button>
+                        <button class="btn btn-danger btn-sm ml-2" onclick="logout();">
+                            <i class="fas fa-sign-out-alt"></i> Logout Sekarang
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Remove existing dialog
+        $(".token-info-window").remove();
+        
+        // Create new dialog
+        const windowElement = $("<div></div>").appendTo("body");
+        const window = windowElement.kendoWindow({
+            title: "Informasi Token Session",
+            width: "450px",
+            modal: true,
+            visible: false,
+            actions: ["close"],
+            content: content
+        }).data("kendoWindow");
+        
+        windowElement.addClass("token-info-window");
+        window.center().open();
+    }
+    
+    // Fungsi untuk menutup dialog token info
+    function closeTokenInfoDialog() {
+        $(".token-info-window").each(function() {
+            const window = $(this).data("kendoWindow");
+            if (window) {
+                window.close();
+            }
+        });
+    }
+    
+    // Make token functions globally accessible
+    window.checkTokenExpiry = checkTokenExpiry;
+    window.getTokenInfo = getTokenInfo;
+    window.showTokenInfoDialog = showTokenInfoDialog;
+    window.closeTokenInfoDialog = closeTokenInfoDialog;
+    window.startTokenExpiryChecker = startTokenExpiryChecker;
+    window.stopTokenExpiryChecker = stopTokenExpiryChecker;
+
+    // Fungsi untuk menampilkan konfirmasi penghapusan data penghasilan
+    function showDeleteConfirmationPenghasilan(data) {
+        // Hapus window yang mungkin masih ada
+        $(".k-window").remove();
+        
+        // Buat window baru
+        const windowElement = $("<div></div>").appendTo("body");
+        const window = windowElement.kendoWindow({
+            title: "Konfirmasi Hapus Data Penghasilan",
+            width: "500px",
+            modal: true,
+            visible: false,
+            actions: ["close"],
+            content: {
+                template: `
+                    <div class="delete-confirmation">
+                        <div class="icon-container">
+                            <i class="fas fa-exclamation-triangle text-warning"></i>
+                        </div>
+                        <div class="message">
+                            <h4>Konfirmasi Hapus Data Penghasilan</h4>
+                            <p><strong>Nama Siswa:</strong> ${data.nama_siswa || '-'}</p>
+                            <p><strong>Penghasilan Ayah:</strong> Rp ${(data.penghasilan_ayah || 0).toLocaleString('id-ID')}</p>
+                            <p><strong>Penghasilan Ibu:</strong> Rp ${(data.penghasilan_ibu || 0).toLocaleString('id-ID')}</p>
+                            <p><strong>Total Penghasilan:</strong> Rp ${(data.total_penghasilan || 0).toLocaleString('id-ID')}</p>
+                            <p><strong>Kategori:</strong> ${data.kategori_penghasilan || '-'}</p>
+                            <hr>
+                            <p class="text-danger">Apakah Anda yakin ingin menghapus data penghasilan ini? Tindakan ini tidak dapat dibatalkan.</p>
+                        </div>
+                        <div class="button-container">
+                            <button class="k-button k-button-solid-base" id="cancelDeletePenghasilan">
+                                <i class="fas fa-times"></i> Batal
+                            </button>
+                            <button class="k-button k-button-solid-error" id="confirmDeletePenghasilan">
+                                <i class="fas fa-trash"></i> Hapus Data Penghasilan
+                            </button>
+                        </div>
+                    </div>
+                `
+            }
+        }).data("kendoWindow");
+
+        // Event handlers
+        windowElement.on("click", "#cancelDeletePenghasilan", function() {
+            window.close();
+        });
+
+        windowElement.on("click", "#confirmDeletePenghasilan", function() {
+            window.close();
+            
+            // Lakukan AJAX call langsung ke backend untuk menghapus
+            $.ajax({
+                url: `${API_URL}/penghasilan/${data.id}`,
+                type: "DELETE",
+                beforeSend: function(xhr) {
+                    const token = getToken();
+                    if (token) {
+                        xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                    }
+                },
+                success: function() {
+                    showSuccessNotification("Data penghasilan berhasil dihapus", "Sukses");
+                    // Refresh grid setelah berhasil menghapus
+                    const grid = $("#penghasilan-grid").data("kendoGrid");
+                    if (grid) {
+                        grid.dataSource.read();
+                    }
+                },
+                error: function(xhr) {
+                    const errorMsg = xhr.responseJSON?.detail || "Gagal menghapus data penghasilan";
+                    showErrorNotification(errorMsg, "Error");
+                }
+            });
+        });
+
+        window.center().open();
+    }
 });
 
 // Global function for opening image modal

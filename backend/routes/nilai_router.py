@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from database import get_db, NilaiRaport, Siswa
@@ -6,6 +7,8 @@ from schemas import NilaiRaportCreate, NilaiRaportUpdate, NilaiRaportResponse
 from datetime import datetime
 from routes.auth_router import get_current_user
 from models.user import User
+import pandas as pd
+from io import BytesIO
 
 router = APIRouter()
 
@@ -220,3 +223,76 @@ def delete_nilai(
     db.commit()
     
     return None
+
+@router.get("/export/excel")
+def export_nilai_excel(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    # Join query untuk mengambil data nilai beserta nama siswa
+    query = db.query(
+        NilaiRaport.id,
+        NilaiRaport.siswa_id,
+        Siswa.nama.label('nama_siswa'),
+        NilaiRaport.semester,
+        NilaiRaport.tahun_ajaran,
+        NilaiRaport.matematika,
+        NilaiRaport.bahasa_indonesia,
+        NilaiRaport.bahasa_inggris,
+        NilaiRaport.ipa,
+        NilaiRaport.bahasa_jawa,
+        NilaiRaport.agama,
+        NilaiRaport.pjok,
+        NilaiRaport.pkn,
+        NilaiRaport.sejarah,
+        NilaiRaport.seni,
+        NilaiRaport.dasar_kejuruan,
+        NilaiRaport.rata_rata,
+        NilaiRaport.created_at,
+        NilaiRaport.updated_at
+    ).join(Siswa, NilaiRaport.siswa_id == Siswa.id)
+    
+    # Ambil semua data nilai
+    nilai_list = query.all()
+    
+    # Konversi data nilai ke DataFrame
+    data = [{
+        'ID': row.id,
+        'Siswa ID': row.siswa_id,
+        'Nama Siswa': row.nama_siswa,
+        'Semester': row.semester,
+        'Tahun Ajaran': row.tahun_ajaran,
+        'Matematika': row.matematika,
+        'Bahasa Indonesia': row.bahasa_indonesia,
+        'Bahasa Inggris': row.bahasa_inggris,
+        'IPA': row.ipa,
+        'Bahasa Jawa': row.bahasa_jawa,
+        'Agama': row.agama,
+        'PJOK': row.pjok,
+        'PKN': row.pkn,
+        'Sejarah': row.sejarah,
+        'Seni': row.seni,
+        'Dasar Kejuruan': row.dasar_kejuruan,
+        'Rata-rata': row.rata_rata,
+        'Dibuat': row.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+        'Diperbarui': row.updated_at.strftime('%Y-%m-%d %H:%M:%S') if row.updated_at else ''
+    } for row in nilai_list]
+    
+    df = pd.DataFrame(data)
+    
+    # Buat file Excel di memory
+    output = BytesIO()
+    with pd.ExcelWriter(output, engine='openpyxl') as writer:
+        df.to_excel(writer, index=False, sheet_name='Data Nilai Raport')
+    
+    output.seek(0)
+    
+    # Return file Excel sebagai response
+    headers = {
+        'Content-Disposition': 'attachment; filename=Data_Nilai_Raport.xlsx'
+    }
+    return StreamingResponse(
+        output,
+        media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        headers=headers
+    )

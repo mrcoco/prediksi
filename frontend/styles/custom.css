@@ -1243,7 +1243,8 @@ header {
 }
 
 .card-title {
-    color: #343a40;
+    /* color: #343a40; */
+    color: #f6f6f6;
     font-weight: 600;
     margin-bottom: 20px;
     padding-bottom: 15px;

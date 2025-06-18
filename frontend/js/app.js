@@ -3240,6 +3240,195 @@ $(document).ready(function() {
                 }
             });
         });
+        
+        // Handler untuk tombol prediksi batch
+        $("#btn-prediksi-batch").on("click", function() {
+            const semester = $("#batch-semester-input").val();
+            const tahunAjaran = $("#batch-tahun-ajaran-input").val();
+            
+            if (!semester || !tahunAjaran) {
+                showErrorNotification("Mohon lengkapi semester dan tahun ajaran!");
+                return;
+            }
+            
+            $(this).prop("disabled", true).html('<i class="fas fa-spinner fa-spin mr-2"></i> Memprediksi...');
+            
+            $.ajax({
+                url: `${API_URL}/prediksi/batch`,
+                method: "POST",
+                contentType: "application/json",
+                beforeSend: function(xhr) {
+                    const token = getToken();
+                    if (token) {
+                        xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                    }
+                },
+                data: JSON.stringify({
+                    semester: semester,
+                    tahun_ajaran: tahunAjaran
+                }),
+                success: function(data) {
+                    // Tampilkan ringkasan
+                    displayBatchSummary(data.summary, data.semester, data.tahun_ajaran);
+                    
+                    // Tampilkan grid hasil
+                    displayBatchResults(data.results);
+                    
+                    // Tampilkan notifikasi sukses
+                    showSuccessNotification(data.message);
+                    
+                    // Refresh grid riwayat
+                    $("#riwayat-grid").data("kendoGrid").dataSource.read();
+                },
+                error: function(xhr) {
+                    let errorMsg = "Terjadi kesalahan saat melakukan prediksi batch.";
+                    
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        errorMsg = response.detail || errorMsg;
+                    } catch (e) {}
+                    
+                    showErrorNotification(errorMsg);
+                },
+                complete: function() {
+                    $("#btn-prediksi-batch").prop("disabled", false).html('<i class="fas fa-users mr-2"></i> Prediksi Semua Siswa');
+                }
+            });
+        });
+    }
+    
+    // Function to display batch prediction summary
+    function displayBatchSummary(summary, semester, tahunAjaran) {
+        const summaryHTML = `
+            <div class="alert alert-info">
+                <h6><i class="fas fa-info-circle mr-2"></i>Semester ${semester} - ${tahunAjaran}</h6>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p class="mb-1"><strong>Total Siswa:</strong> ${summary.total_siswa}</p>
+                        <p class="mb-1"><strong>Berhasil:</strong> ${summary.success_count}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="mb-1"><strong>Gagal:</strong> ${summary.error_count}</p>
+                        <p class="mb-1"><strong>Success Rate:</strong> ${summary.success_rate.toFixed(1)}%</p>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        $("#batch-summary-content").html(summaryHTML);
+        $("#batch-summary").removeClass("d-none");
+    }
+    
+    // Function to display batch prediction results in grid
+    function displayBatchResults(results) {
+        // Destroy existing grid if exists
+        if ($("#batch-results-grid").data("kendoGrid")) {
+            $("#batch-results-grid").data("kendoGrid").destroy();
+        }
+        
+        $("#batch-results-grid").kendoGrid({
+            dataSource: {
+                data: results,
+                pageSize: 10
+            },
+            height: 400,
+            toolbar: [{ template: '<button class="k-button k-button-icontext" onclick="exportBatchResultsExcel()"><span class="k-icon k-i-excel"></span>Export Excel</button>' }],
+            pageable: {
+                refresh: true,
+                pageSizes: [5, 10, 20, 50],
+                buttonCount: 5,
+                info: true,
+                input: true,
+                numeric: true,
+                previousNext: true
+            },
+            sortable: true,
+            filterable: true,
+            columns: [
+                { field: "nama_siswa", title: "Nama Siswa", width: 180 },
+                { field: "kelas", title: "Kelas", width: 100 },
+                { 
+                    field: "prediksi_prestasi", 
+                    title: "Prediksi", 
+                    width: 120,
+                    template: function(dataItem) {
+                        const badgeClass = dataItem.prediksi_prestasi === "Tinggi" ? "success" : 
+                                         dataItem.prediksi_prestasi === "Sedang" ? "warning" : "danger";
+                        return `<span class="badge badge-${badgeClass}">${dataItem.prediksi_prestasi}</span>`;
+                    }
+                },
+                { 
+                    field: "confidence", 
+                    title: "Confidence", 
+                    width: 100,
+                    template: function(dataItem) {
+                        return `${(dataItem.confidence * 100).toFixed(1)}%`;
+                    }
+                },
+                { 
+                    field: "detail_faktor.nilai_rata_rata", 
+                    title: "Nilai Rata-rata", 
+                    width: 120,
+                    template: function(dataItem) {
+                        return dataItem.detail_faktor.nilai_rata_rata.toFixed(2);
+                    }
+                },
+                { field: "detail_faktor.kategori_penghasilan", title: "Kategori Penghasilan", width: 150 },
+                { field: "detail_faktor.kategori_kehadiran", title: "Kategori Kehadiran", width: 150 }
+            ]
+        });
+        
+        $("#batch-results-grid").show();
+    }
+    
+    // Function to export batch results to Excel  
+    function exportBatchResultsExcel() {
+        const grid = $("#batch-results-grid").data("kendoGrid");
+        if (!grid) {
+            showErrorNotification("Tidak ada data untuk diexport");
+            return;
+        }
+        
+        const semester = $("#batch-semester-input").val();
+        const tahunAjaran = $("#batch-tahun-ajaran-input").val();
+        
+        // Get all data from grid
+        const data = grid.dataSource.data();
+        
+        if (data.length === 0) {
+            showErrorNotification("Tidak ada data untuk diexport");
+            return;
+        }
+        
+        // Create CSV content
+        const headers = ['Nama Siswa', 'Kelas', 'Prediksi Prestasi', 'Confidence (%)', 'Nilai Rata-rata', 'Kategori Penghasilan', 'Kategori Kehadiran'];
+        let csvContent = headers.join(',') + '\n';
+        
+        data.forEach(item => {
+            const row = [
+                `"${item.nama_siswa}"`,
+                `"${item.kelas}"`,
+                `"${item.prediksi_prestasi}"`,
+                `"${(item.confidence * 100).toFixed(1)}"`,
+                `"${item.detail_faktor.nilai_rata_rata.toFixed(2)}"`,
+                `"${item.detail_faktor.kategori_penghasilan}"`,
+                `"${item.detail_faktor.kategori_kehadiran}"`
+            ];
+            csvContent += row.join(',') + '\n';
+        });
+        
+        // Create and download file
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', `Prediksi_Batch_${semester}_${tahunAjaran.replace('/', '-')}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        showSuccessNotification("File CSV berhasil didownload");
     }
     
     // ========== FUNGSI HELPER ==========

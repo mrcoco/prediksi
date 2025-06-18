@@ -1569,6 +1569,50 @@
                         
                         </div>
                     </div>
+                    
+                    <!-- Prediksi Batch Section -->
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div class="card border-info">
+                                <div class="card-header bg-info text-white">
+                                    <h5 class="mb-0">
+                                        <i class="fas fa-users mr-2"></i> Prediksi Data Keseluruhan Siswa
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <form id="batch-prediksi-form">
+                                                <div class="form-group">
+                                                    <label for="batch-semester-input">Semester:</label>
+                                                    <input id="batch-semester-input" class="form-control" placeholder="Contoh: Ganjil" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="batch-tahun-ajaran-input">Tahun Ajaran:</label>
+                                                    <input id="batch-tahun-ajaran-input" class="form-control" placeholder="Contoh: 2023/2024" />
+                                                </div>
+                                                <button type="button" id="btn-prediksi-batch" class="btn btn-info btn-block">
+                                                    <i class="fas fa-users mr-2"></i> Prediksi Semua Siswa
+                                                </button>
+                                            </form>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div id="batch-summary" class="d-none">
+                                                <h6 class="text-info">Ringkasan Prediksi Batch</h6>
+                                                <div id="batch-summary-content"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Grid Hasil Prediksi Batch -->
+                                    <div class="mt-3">
+                                        <div id="batch-results-grid" style="display: none;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card dashboard-card mt-3">

@@ -176,6 +176,171 @@ def predict_prestasi(
             detail=f"Terjadi kesalahan saat melakukan prediksi: {str(e)}"
         )
 
+@router.post("/batch", status_code=status.HTTP_200_OK)
+def predict_all_students(
+    request: dict = Body(...),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Memprediksi prestasi untuk semua siswa berdasarkan semester dan tahun ajaran"""
+    semester = request.get('semester')
+    tahun_ajaran = request.get('tahun_ajaran')
+    
+    if not semester or not tahun_ajaran:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Semester dan tahun ajaran harus diisi"
+        )
+    
+    # Cek apakah model sudah dilatih
+    if not c45_model.trained:
+        try:
+            c45_model.train(db)
+        except ValueError as e:
+            if "Data berlabel tidak cukup" in str(e):
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=f"{str(e)}. Gunakan endpoint /prediksi/generate-dummy-data untuk membuat data dummy untuk pengujian."
+                )
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=str(e)
+            )
+    
+    try:
+        # Ambil semua siswa yang memiliki data lengkap untuk semester dan tahun ajaran tersebut
+        siswa_query = db.query(Siswa).join(NilaiRaport).join(Presensi).join(PenghasilanOrtu).filter(
+            NilaiRaport.semester == semester,
+            NilaiRaport.tahun_ajaran == tahun_ajaran,
+            Presensi.semester == semester,
+            Presensi.tahun_ajaran == tahun_ajaran
+        ).all()
+        
+        if not siswa_query:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Tidak ada siswa dengan data lengkap untuk semester {semester} tahun ajaran {tahun_ajaran}"
+            )
+        
+        results = []
+        success_count = 0
+        error_count = 0
+        errors = []
+        
+        for siswa in siswa_query:
+            try:
+                # Ambil data nilai raport
+                nilai = db.query(NilaiRaport).filter(
+                    NilaiRaport.siswa_id == siswa.id,
+                    NilaiRaport.semester == semester,
+                    NilaiRaport.tahun_ajaran == tahun_ajaran
+                ).first()
+                
+                # Ambil data presensi
+                presensi = db.query(Presensi).filter(
+                    Presensi.siswa_id == siswa.id,
+                    Presensi.semester == semester,
+                    Presensi.tahun_ajaran == tahun_ajaran
+                ).first()
+                
+                # Ambil data penghasilan ortu
+                penghasilan = db.query(PenghasilanOrtu).filter(
+                    PenghasilanOrtu.siswa_id == siswa.id
+                ).first()
+                
+                if not nilai or not presensi or not penghasilan:
+                    error_count += 1
+                    errors.append(f"Data tidak lengkap untuk siswa {siswa.nama}")
+                    continue
+                
+                # Siapkan data untuk prediksi
+                prediction_data = {
+                    'rata_rata': nilai.rata_rata,
+                    'kategori_penghasilan': penghasilan.kategori_penghasilan,
+                    'kategori_kehadiran': presensi.kategori_kehadiran
+                }
+                
+                # Lakukan prediksi
+                result = c45_model.predict(prediction_data)
+                
+                # Simpan hasil prediksi ke database
+                prestasi_data = {
+                    'siswa_id': siswa.id,
+                    'semester': semester,
+                    'tahun_ajaran': tahun_ajaran,
+                    'prediksi_prestasi': result['prediksi'],
+                    'confidence': result['confidence']
+                }
+                
+                # Cek apakah sudah ada prediksi untuk siswa, semester, dan tahun ajaran ini
+                existing_prestasi = db.query(Prestasi).filter(
+                    Prestasi.siswa_id == siswa.id,
+                    Prestasi.semester == semester,
+                    Prestasi.tahun_ajaran == tahun_ajaran
+                ).first()
+                
+                if existing_prestasi:
+                    # Update prediksi yang sudah ada
+                    for key, value in prestasi_data.items():
+                        setattr(existing_prestasi, key, value)
+                    existing_prestasi.updated_at = datetime.now()
+                else:
+                    # Buat prediksi baru
+                    new_prestasi = Prestasi(**prestasi_data)
+                    db.add(new_prestasi)
+                
+                # Siapkan data untuk response
+                result_data = {
+                    'siswa_id': siswa.id,
+                    'nama_siswa': siswa.nama,
+                    'kelas': siswa.kelas,
+                    'prediksi_prestasi': result['prediksi'],
+                    'confidence': result['confidence'],
+                    'detail_faktor': {
+                        'nilai_rata_rata': nilai.rata_rata,
+                        'kategori_penghasilan': penghasilan.kategori_penghasilan,
+                        'kategori_kehadiran': presensi.kategori_kehadiran
+                    }
+                }
+                
+                results.append(result_data)
+                success_count += 1
+                
+            except Exception as e:
+                error_count += 1
+                errors.append(f"Error untuk siswa {siswa.nama}: {str(e)}")
+                continue
+        
+        # Commit semua perubahan
+        db.commit()
+        
+        # Siapkan summary
+        summary = {
+            'total_siswa': len(siswa_query),
+            'success_count': success_count,
+            'error_count': error_count,
+            'success_rate': (success_count / len(siswa_query)) * 100 if len(siswa_query) > 0 else 0
+        }
+        
+        response = {
+            'status': 'success',
+            'message': f'Prediksi batch selesai. {success_count} siswa berhasil diprediksi, {error_count} siswa gagal.',
+            'semester': semester,
+            'tahun_ajaran': tahun_ajaran,
+            'summary': summary,
+            'results': results,
+            'errors': errors if error_count > 0 else None
+        }
+        
+        return response
+        
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Terjadi kesalahan saat melakukan prediksi batch: {str(e)}"
+        )
+
 @router.get("/rules")
 def get_rules(
     db: Session = Depends(get_db),

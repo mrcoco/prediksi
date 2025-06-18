@@ -39,6 +39,7 @@ $(document).ready(function() {
     // ========== TOKEN EXPIRY CHECKER VARIABLES ==========
     let tokenExpiryChecker = null;
     let lastNotificationTime = 0;
+    let lastAutoRefreshTime = 0;
     let notificationShown = {
         '15min': false,
         '10min': false,
@@ -5156,6 +5157,11 @@ $(document).ready(function() {
                 return;
             }
             
+            // Auto refresh token when it's about to expire (5 minutes left)
+            if (tokenStatus.minutesLeft <= 5 && tokenStatus.minutesLeft > 2) {
+                autoRefreshToken();
+            }
+            
             // Show notifications based on token status
             showTokenExpiryNotification(tokenStatus);
             
@@ -5205,6 +5211,24 @@ $(document).ready(function() {
                 tokenInfo.expiresAt = new Date(payload.exp * 1000);
                 tokenInfo.username = payload.sub || payload.username;
                 tokenInfo.role = payload.role;
+                
+                // Ambil data profile dari localStorage
+                const userData = localStorage.getItem('user_data');
+                if (userData) {
+                    try {
+                        const userProfile = JSON.parse(userData);
+                        tokenInfo.email = userProfile.email;
+                        tokenInfo.profile = {
+                            nama_lengkap: userProfile.profile?.nama_lengkap || '',
+                            nip: userProfile.profile?.nip || '',
+                            jabatan: userProfile.profile?.jabatan || '',
+                            no_hp: userProfile.profile?.no_hp || '',
+                            alamat: userProfile.profile?.alamat || ''
+                        };
+                    } catch (e) {
+                        console.error('Error parsing user profile data:', e);
+                    }
+                }
             } catch (e) {
                 console.error('Error parsing token:', e);
             }
@@ -5216,6 +5240,9 @@ $(document).ready(function() {
     // Fungsi untuk menampilkan dialog informasi token
     function showTokenInfoDialog() {
         const tokenInfo = getTokenInfo();
+        
+        // Debug: Log token info untuk troubleshooting
+        console.log('Token Info:', tokenInfo);
         
         let content = '';
         if (!tokenInfo.hasToken) {
@@ -5233,27 +5260,71 @@ $(document).ready(function() {
                               tokenInfo.urgency === 'high' ? 'warning' : 
                               tokenInfo.urgency === 'medium' ? 'info' : 'success';
             
+            // Format role dengan badge styling
+            const roleBadgeClass = tokenInfo.role === 'Admin' ? 'primary' : 
+                                 tokenInfo.role === 'Guru' ? 'success' : 'info';
+            
             content = `
                 <div class="token-info-dialog">
                     <div class="alert alert-${statusClass}">
-                        <h6><i class="fas fa-info-circle"></i> Status Token</h6>
-                        <p><strong>Status:</strong> ${tokenInfo.message}</p>
-                        <p><strong>Waktu Tersisa:</strong> ${tokenInfo.timeLeftFormatted}</p>
+                        <h6><i class="fas fa-info-circle"></i> Status Token Session</h6>
+                        <p><strong>Status:</strong> ${tokenInfo.message || 'N/A'}</p>
+                        <p><strong>Waktu Tersisa:</strong> ${tokenInfo.timeLeftFormatted || 'N/A'}</p>
                     </div>
                     
+                    <!-- Informasi Pengguna -->
+                    <div class="user-profile-info mt-3">
+                        <h6><i class="fas fa-user"></i> Informasi Pengguna</h6>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table table-sm table-borderless">
+                                    <tr>
+                                        <td width="35%"><strong>Username:</strong></td>
+                                        <td>${tokenInfo.username || '-'}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Email:</strong></td>
+                                        <td>${tokenInfo.email || '-'}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Role:</strong></td>
+                                        <td><span class="badge badge-${roleBadgeClass}">${tokenInfo.role || '-'}</span></td>
+                                    </tr>
+                                    ${tokenInfo.profile?.nama_lengkap ? `
+                                    <tr>
+                                        <td><strong>Nama Lengkap:</strong></td>
+                                        <td>${tokenInfo.profile.nama_lengkap}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${tokenInfo.profile?.nip ? `
+                                    <tr>
+                                        <td><strong>NIP:</strong></td>
+                                        <td>${tokenInfo.profile.nip}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${tokenInfo.profile?.jabatan ? `
+                                    <tr>
+                                        <td><strong>Jabatan:</strong></td>
+                                        <td>${tokenInfo.profile.jabatan}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${tokenInfo.profile?.no_hp ? `
+                                    <tr>
+                                        <td><strong>No. HP:</strong></td>
+                                        <td>${tokenInfo.profile.no_hp}</td>
+                                    </tr>
+                                    ` : ''}
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Detail Token -->
                     <div class="token-details mt-3">
-                        <h6>Detail Token:</h6>
-                        <table class="table table-sm">
+                        <h6><i class="fas fa-key"></i> Detail Token</h6>
+                        <table class="table table-sm table-borderless">
                             <tr>
-                                <td><strong>Username:</strong></td>
-                                <td>${tokenInfo.username || '-'}</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Role:</strong></td>
-                                <td>${tokenInfo.role || '-'}</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Dibuat:</strong></td>
+                                <td width="35%"><strong>Dibuat:</strong></td>
                                 <td>${tokenInfo.issuedAt ? tokenInfo.issuedAt.toLocaleString('id-ID') : '-'}</td>
                             </tr>
                             <tr>
@@ -5263,9 +5334,13 @@ $(document).ready(function() {
                         </table>
                     </div>
                     
+                    <!-- Tombol Aksi -->
                     <div class="token-actions mt-3">
                         <button class="btn btn-primary btn-sm" onclick="refreshTokenCountdown(); closeTokenInfoDialog();">
                             <i class="fas fa-sync"></i> Refresh Display
+                        </button>
+                        <button class="btn btn-success btn-sm ml-2" onclick="manualRefreshToken().then(() => closeTokenInfoDialog());">
+                            <i class="fas fa-sync-alt"></i> Refresh Token
                         </button>
                         <button class="btn btn-danger btn-sm ml-2" onclick="logout();">
                             <i class="fas fa-sign-out-alt"></i> Logout Sekarang
@@ -5275,22 +5350,37 @@ $(document).ready(function() {
             `;
         }
         
+        // Debug: Log generated content
+        console.log('Generated content:', content);
+        
         // Remove existing dialog
         $(".token-info-window").remove();
         
-        // Create new dialog
+        // Create new dialog with content
         const windowElement = $("<div></div>").appendTo("body");
-        const window = windowElement.kendoWindow({
-            title: "Informasi Token Session",
-            width: "450px",
+        
+        // Set content before creating the window
+        windowElement.html(content);
+        
+        // Create Kendo Window
+        const kendoWindow = windowElement.kendoWindow({
+            title: "Informasi Token Session & Profile",
+            width: "550px",
+            height: "auto",
             modal: true,
             visible: false,
             actions: ["close"],
-            content: content
+            resizable: false
         }).data("kendoWindow");
         
+        // Add class for styling
         windowElement.addClass("token-info-window");
-        window.center().open();
+        
+        // Center and open the window
+        kendoWindow.center().open();
+        
+        // Debug: Log that window is opened
+        console.log('Token info window opened');
     }
     
     // Fungsi untuk menutup dialog token info
@@ -5310,6 +5400,8 @@ $(document).ready(function() {
     window.closeTokenInfoDialog = closeTokenInfoDialog;
     window.startTokenExpiryChecker = startTokenExpiryChecker;
     window.stopTokenExpiryChecker = stopTokenExpiryChecker;
+    window.refreshToken = refreshToken;
+    window.manualRefreshToken = manualRefreshToken;
 
     // Fungsi untuk menampilkan konfirmasi penghapusan data penghasilan
     function showDeleteConfirmationPenghasilan(data) {
@@ -5549,6 +5641,110 @@ $(document).ready(function() {
         });
 
         window.center().open();
+    }
+
+    // Fungsi untuk refresh token
+    function refreshToken() {
+        return new Promise((resolve, reject) => {
+            const currentToken = getToken();
+            if (!currentToken) {
+                reject(new Error('No token available to refresh'));
+                return;
+            }
+            
+            $.ajax({
+                url: `${API_URL}/auth/refresh`,
+                method: "POST",
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', `Bearer ${currentToken}`);
+                },
+                success: function(data) {
+                    // Update token in localStorage
+                    localStorage.setItem('access_token', data.access_token);
+                    
+                    // Reset notification flags untuk token baru
+                    notificationShown = {
+                        '15min': false,
+                        '10min': false,
+                        '5min': false,
+                        '2min': false,
+                        '1min': false
+                    };
+                    
+                    // Reset last auto refresh time
+                    lastAutoRefreshTime = Date.now();
+                    
+                    // Refresh countdown timer dengan token baru
+                    refreshTokenCountdown();
+                    
+                    console.log('Token berhasil di-refresh');
+                    showSuccessNotification('Token berhasil diperbaharui', 'Token Refresh');
+                    
+                    resolve(data);
+                },
+                error: function(xhr) {
+                    console.error('Error refreshing token:', xhr);
+                    
+                    let errorMsg = "Gagal refresh token";
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        errorMsg = response.detail || errorMsg;
+                    } catch (e) {}
+                    
+                    if (xhr.status === 401) {
+                        // Token sudah tidak valid, logout
+                        showErrorNotification("Session telah berakhir. Anda akan dialihkan ke halaman login.", "Session Expired");
+                        setTimeout(() => {
+                            logout();
+                        }, 3000);
+                    } else {
+                        showErrorNotification(errorMsg, "Error Refresh Token");
+                    }
+                    
+                    reject(new Error(errorMsg));
+                }
+            });
+        });
+    }
+    
+    // Fungsi untuk auto refresh token (dipanggil otomatis saat token mendekati expired)
+    function autoRefreshToken() {
+        const now = Date.now();
+        
+        // Prevent multiple auto-refresh in short time (minimum 60 seconds between auto-refresh)
+        if (now - lastAutoRefreshTime < 60000) {
+            return Promise.resolve();
+        }
+        
+        console.log('Auto-refreshing token...');
+        return refreshToken().catch(error => {
+            console.error('Auto-refresh failed:', error);
+            // Don't show error notification for auto-refresh failures
+            // User will be notified through normal expiry notifications
+        });
+    }
+    
+    // Fungsi untuk manual refresh token (dipanggil dari UI)
+    function manualRefreshToken() {
+        const tokenStatus = checkTokenExpiry();
+        
+        if (!tokenStatus.isValid) {
+            showErrorNotification("Token tidak valid atau sudah expired", "Error Refresh Token");
+            return Promise.reject(new Error('Invalid token'));
+        }
+        
+        // Show loading state
+        const $refreshBtn = $("#btn-refresh-token");
+        if ($refreshBtn.length > 0) {
+            $refreshBtn.prop("disabled", true).html('<i class="fas fa-spinner fa-spin mr-2"></i> Refreshing...');
+        }
+        
+        return refreshToken().finally(() => {
+            // Reset button state
+            if ($refreshBtn.length > 0) {
+                $refreshBtn.prop("disabled", false).html('<i class="fas fa-sync-alt mr-2"></i> Refresh Token');
+            }
+        });
     }
 });
 

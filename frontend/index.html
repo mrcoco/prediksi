@@ -1104,6 +1104,9 @@
                     <button class="btn btn-sm btn-outline-light ms-2" onclick="showTokenInfoDialog()" title="Cek Status Token" data-toggle="tooltip">
                         <i class="fas fa-info-circle"></i>
                     </button>
+                    <button class="btn btn-sm btn-outline-success ms-1" id="btn-refresh-token" onclick="manualRefreshToken()" title="Refresh Token" data-toggle="tooltip">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
                 </div>
                 <span class="text-white me-3" id="user-info">
                     <i class="fas fa-user me-1"></i>
@@ -2240,27 +2243,8 @@
                                     validationMessage="Jumlah hadir harus diisi (minimal 0)" />
                             <span class="k-invalid-msg" data-for="jumlah_hadir"></span>
                         </div>
-                        
-                        <div class="k-edit-label">
-                            <label for="jumlah_sakit">
-                                <i class="fas fa-thermometer-half mr-1 text-warning"></i>
-                                Jumlah Sakit <span class="text-danger">*</span>
-                            </label>
-                        </div>
-                        <div class="k-edit-field">
-                            <input type="number" class="k-textbox" name="jumlah_sakit" required 
-                                    placeholder="Masukkan jumlah hari sakit" min="0"
-                                    validationMessage="Jumlah sakit harus diisi (minimal 0)" />
-                            <span class="k-invalid-msg" data-for="jumlah_sakit"></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Right Column -->
-            <div class="col-md-6">
-                <div class="form-column-content">
-                    <div class="form-section">
+                        <br>
+
                         <h6 class="section-title">
                             <i class="fas fa-exclamation-triangle mr-2"></i>Data Ketidakhadiran
                         </h6>
@@ -2290,6 +2274,28 @@
                                     validationMessage="Jumlah alpa harus diisi (minimal 0)" />
                             <span class="k-invalid-msg" data-for="jumlah_alpa"></span>
                         </div>
+                        
+                        <div class="k-edit-label">
+                            <label for="jumlah_sakit">
+                                <i class="fas fa-thermometer-half mr-1 text-warning"></i>
+                                Jumlah Sakit <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="number" class="k-textbox" name="jumlah_sakit" required 
+                                    placeholder="Masukkan jumlah hari sakit" min="0"
+                                    validationMessage="Jumlah sakit harus diisi (minimal 0)" />
+                            <span class="k-invalid-msg" data-for="jumlah_sakit"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Column -->
+            <div class="col-md-6">
+                <div class="form-column-content">
+                    <div class="form-section">
+                        
                         
                         <!-- Auto-calculated fields -->
                         <div class="k-edit-label">

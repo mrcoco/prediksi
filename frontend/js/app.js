@@ -1578,134 +1578,143 @@ $(document).ready(function() {
     
     // ========== FUNGSI DATA SISWA ==========
     function initSiswaGrid() {
-        $("#siswa-grid").kendoGrid({
-            dataSource: {
-                transport: {
-                    read: {
-                        url: `${API_URL}/siswa`,
-                        dataType: "json",
-                        beforeSend: function(xhr) {
-                            const token = getToken();
-                            if (token) {
-                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-                            }
-                        },
-                        error: function(xhr) {
-                            const errorMsg = xhr.responseJSON ? xhr.responseJSON.detail : 'Terjadi kesalahan saat mengambil data';
-                            $("#toast-container").kendoNotification({
-                                position: {
-                                    pinned: false,
-                                    top: 30,
-                                    right: 30
-                                },
-                                autoHideAfter: 3000,
-                                stacking: "up"
-                            }).data("kendoNotification").error(errorMsg);
+        var dataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: `${API_URL}/siswa`,
+                    dataType: "json",
+                    beforeSend: function(xhr) {
+                        const token = getToken();
+                        if (token) {
+                            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
                         }
                     },
-                    create: {
-                        url: `${API_URL}/siswa`,
-                        dataType: "json",
-                        type: "POST",
-                        contentType: "application/json",
-                        beforeSend: function(xhr) {
-                            const token = getToken();
-                            if (token) {
-                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-                            }
-                        },
-                        complete: function(xhr, status) {
-                            console.log("Complete:", xhr, status);
-                        },
-                        error: function(xhr) {
-                            const errorMsg = xhr.responseJSON ? xhr.responseJSON.detail : 'Terjadi kesalahan saat menambah data';
-                            $("#toast-container").kendoNotification({
-                                position: {
-                                    pinned: false,
-                                    top: 30,
-                                    right: 30
-                                },
-                                autoHideAfter: 3000,
-                                stacking: "up"
-                            }).data("kendoNotification").error(errorMsg);
-                        }
-                    },
-                    update: {
-                        url: function(data) {
-                            return `${API_URL}/siswa/${data.id}`;
-                        },
-                        dataType: "json",
-                        type: "PUT",
-                        contentType: "application/json",
-                        beforeSend: function(xhr) {
-                            const token = getToken();
-                            if (token) {
-                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-                            }
-                        },
-                        error: function(xhr) {
-                            const errorMsg = xhr.responseJSON ? xhr.responseJSON.detail : 'Terjadi kesalahan saat mengupdate data';
-                            $("#toast-container").kendoNotification({
-                                position: {
-                                    pinned: false,
-                                    top: 30,
-                                    right: 30
-                                },
-                                autoHideAfter: 3000,
-                                stacking: "up"
-                            }).data("kendoNotification").error(errorMsg);
-                        }
-                    },
-                    destroy: {
-                        url: function(data) {
-                            return `${API_URL}/siswa/${data.id}`;
-                        },
-                        dataType: "json",
-                        type: "DELETE",
-                        beforeSend: function(xhr) {
-                            const token = getToken();
-                            if (token) {
-                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-                            }
-                        },
-                        error: function(xhr) {
-                            const errorMsg = xhr.responseJSON ? xhr.responseJSON.detail : 'Terjadi kesalahan saat menghapus data';
-                            $("#toast-container").kendoNotification({
-                                position: {
-                                    pinned: false,
-                                    top: 30,
-                                    right: 30
-                                },
-                                autoHideAfter: 3000,
-                                stacking: "up"
-                            }).data("kendoNotification").error(errorMsg);
-                        }
-                    },
-                    parameterMap: function(data, type) {
-                        if (type === "create" || type === "update") {
-                            return JSON.stringify(data);
-                        }
-                        return data;
+                    error: function(xhr) {
+                        const errorMsg = xhr.responseJSON ? xhr.responseJSON.detail : 'Terjadi kesalahan saat mengambil data';
+                        $("#toast-container").kendoNotification({
+                            position: {
+                                pinned: false,
+                                top: 30,
+                                right: 30
+                            },
+                            autoHideAfter: 3000,
+                            stacking: "up"
+                        }).data("kendoNotification").error(errorMsg);
                     }
                 },
-                schema: {
-                    model: {
-                        id: "id",
-                        fields: {
-                            id: { editable: false, nullable: true },
-                            nama: { validation: { required: true } },
-                            nis: { validation: { required: true } },
-                            jenis_kelamin: { validation: { required: true } },
-                            kelas: { validation: { required: true } },
-                            tanggal_lahir: { type: "date", validation: { required: true } },
-                            alamat: { },
-                            created_at: { editable: false },
-                            updated_at: { editable: false }
+                create: {
+                    url: `${API_URL}/siswa`,
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json",
+                    beforeSend: function(xhr) {
+                        const token = getToken();
+                        if (token) {
+                            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
                         }
+                    },
+                    complete: function(xhr, status) {
+                        console.log("Complete:", xhr, status);
+                        dataSource.read();
+                    },
+                    error: function(xhr) {
+                        const errorMsg = xhr.responseJSON ? xhr.responseJSON.detail : 'Terjadi kesalahan saat menambah data';
+                        $("#toast-container").kendoNotification({
+                            position: {
+                                pinned: false,
+                                top: 30,
+                                right: 30
+                            },
+                            autoHideAfter: 3000,
+                            stacking: "up"
+                        }).data("kendoNotification").error(errorMsg);
                     }
                 },
-                pageSize: 10
+                update: {
+                    url: function(data) {
+                        return `${API_URL}/siswa/${data.id}`;
+                    },
+                    dataType: "json",
+                    type: "PUT",
+                    contentType: "application/json",
+                    beforeSend: function(xhr) {
+                        const token = getToken();
+                        if (token) {
+                            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                        }
+                    },
+                    complete: function(e) {
+                        dataSource.read();
+                    },
+                    error: function(xhr) {
+                        const errorMsg = xhr.responseJSON ? xhr.responseJSON.detail : 'Terjadi kesalahan saat mengupdate data';
+                        $("#toast-container").kendoNotification({
+                            position: {
+                                pinned: false,
+                                top: 30,
+                                right: 30
+                            },
+                            autoHideAfter: 3000,
+                            stacking: "up"
+                        }).data("kendoNotification").error(errorMsg);
+                    }
+                },
+                destroy: {
+                    url: function(data) {
+                        return `${API_URL}/siswa/${data.id}`;
+                    },
+                    dataType: "json",
+                    type: "DELETE",
+                    beforeSend: function(xhr) {
+                        const token = getToken();
+                        if (token) {
+                            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                        }
+                    },
+                    complete: function(e) {
+                        dataSource.read();
+                    },
+                    error: function(xhr) {
+                        const errorMsg = xhr.responseJSON ? xhr.responseJSON.detail : 'Terjadi kesalahan saat menghapus data';
+                        $("#toast-container").kendoNotification({
+                            position: {
+                                pinned: false,
+                                top: 30,
+                                right: 30
+                            },
+                            autoHideAfter: 3000,
+                            stacking: "up"
+                        }).data("kendoNotification").error(errorMsg);
+                    }
+                },
+                parameterMap: function(data, type) {
+                    if (type === "create" || type === "update") {
+                        return JSON.stringify(data);
+                    }
+                    return data;
+                }
             },
+            schema: {
+                model: {
+                    id: "id",
+                    fields: {
+                        id: { editable: false, nullable: true },
+                        nama: { validation: { required: true } },
+                        nis: { validation: { required: true } },
+                        jenis_kelamin: { validation: { required: true } },
+                        kelas: { validation: { required: true } },
+                        tanggal_lahir: { type: "date", validation: { required: true } },
+                        alamat: { },
+                        created_at: { editable: false },
+                        updated_at: { editable: false }
+                    }
+                }
+            },
+            pageSize: 10
+        });
+        
+        $("#siswa-grid").kendoGrid({
+            dataSource: dataSource,
             height: 550,
             pageable: true,
             sortable: true,
@@ -1809,6 +1818,25 @@ $(document).ready(function() {
         
         console.log("Delete button clicked:", dataItem);
         showDeleteConfirmationSiswa(dataItem);
+    });
+
+    $(document).on("click", ".btn-delete-user", function(e) {
+        e.preventDefault();
+        
+        const button = $(this);
+        const dataItem = {
+            id: button.data("id"),
+            username: button.data("username"),
+            email: button.data("email"),
+            role: button.data("role"),
+            nama_lengkap: button.data("nama_lengkap"),
+            nip: button.data("nip"),
+            jabatan: button.data("jabatan"),
+            is_active: button.data("is_active")
+        };
+        
+        console.log("Delete button clicked:", dataItem);
+        showDeleteConfirmationUsers(dataItem);
     });
     
     // Fungsi untuk menangani upload file Excel
@@ -1928,93 +1956,104 @@ $(document).ready(function() {
 
 // ========== FUNGSI DATA NILAI RAPORT ==========
     function initNilaiGrid() {
-        $("#nilai-grid").kendoGrid({
-            dataSource: {
-                transport: {
-                    read: {
-                        url: `${API_URL}/nilai`,
-                        dataType: "json",
-                        beforeSend: function(xhr) {
-                            const token = getToken();
-                            if (token) {
-                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-                            }
-                        }
-                    },
-                    create: {
-                        url: `${API_URL}/nilai`,
-                        dataType: "json",
-                        type: "POST",
-                        contentType: "application/json",
-                        beforeSend: function(xhr) {
-                            const token = getToken();
-                            if (token) {
-                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-                            }
-                        }
-                    },
-                    update: {
-                        url: function(data) {
-                            return `${API_URL}/nilai/${data.id}`;
-                        },
-                        dataType: "json",
-                        type: "PUT",
-                        contentType: "application/json",
-                        beforeSend: function(xhr) {
-                            const token = getToken();
-                            if (token) {
-                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-                            }
-                        }
-                    },
-                    destroy: {
-                        url: function(data) {
-                            return `${API_URL}/nilai/${data.id}`;
-                        },
-                        dataType: "json",
-                        type: "DELETE",
-                        beforeSend: function(xhr) {
-                            const token = getToken();
-                            if (token) {
-                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-                            }
-                        }
-                    },
-                    parameterMap: function(data, type) {
-                        if (type === "create" || type === "update") {
-                            return JSON.stringify(data);
-                        }
-                        return data;
-                    }
-                },
-                schema: {
-                    model: {
-                        id: "id",
-                        fields: {
-                            id: { editable: false, nullable: true },
-                            siswa_id: { validation: { required: true } },
-                            nama_siswa: { editable: false },
-                            semester: { validation: { required: true } },
-                            tahun_ajaran: { validation: { required: true } },
-                            matematika: { type: "number", validation: { required: true, min: 0, max: 100 } },
-                            bahasa_indonesia: { type: "number", validation: { required: true, min: 0, max: 100 } },
-                            bahasa_inggris: { type: "number", validation: { required: true, min: 0, max: 100 } },
-                            ipa: { type: "number", validation: { required: true, min: 0, max: 100 } },
-                            bahasa_jawa: { type: "number", validation: { required: true, min: 0, max: 100 } },
-                            pkn: { type: "number", validation: { required: true, min: 0, max: 100 } },
-                            seni: { type: "number", validation: { required: true, min: 0, max: 100 } },
-                            sejarah: { type: "number", validation: { required: true, min: 0, max: 100 } },
-                            agama: { type: "number", validation: { required: true, min: 0, max: 100 } },
-                            pjok: { type: "number", validation: { required: true, min: 0, max: 100 } },
-                            dasar_kejuruan: { type: "number", validation: { required: true, min: 0, max: 100 } },
-                            rata_rata: { type: "number", editable: false },
-                            created_at: { editable: false },
-                            updated_at: { editable: false }
+        var dataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: `${API_URL}/nilai`,
+                    dataType: "json",
+                    beforeSend: function(xhr) {
+                        const token = getToken();
+                        if (token) {
+                            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
                         }
                     }
                 },
-                pageSize: 10
+                create: {
+                    url: `${API_URL}/nilai`,
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json",
+                    beforeSend: function(xhr) {
+                        const token = getToken();
+                        if (token) {
+                            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                        }
+                    },
+                    complete: function(e) {
+                        dataSource.read();
+                    }
+                },
+                update: {
+                    url: function(data) {
+                        return `${API_URL}/nilai/${data.id}`;
+                    },
+                    dataType: "json",
+                    type: "PUT",
+                    contentType: "application/json",
+                    beforeSend: function(xhr) {
+                        const token = getToken();
+                        if (token) {
+                            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                        }
+                    },
+                    complete: function(e) {
+                        dataSource.read();
+                    }
+                },
+                destroy: {
+                    url: function(data) {
+                        return `${API_URL}/nilai/${data.id}`;
+                    },
+                    dataType: "json",
+                    type: "DELETE",
+                    beforeSend: function(xhr) {
+                        const token = getToken();
+                        if (token) {
+                            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                        }
+                    },
+                    complete: function(e) {
+                        dataSource.read();
+                    }
+                },
+                parameterMap: function(data, type) {
+                    if (type === "create" || type === "update") {
+                        return JSON.stringify(data);
+                    }
+                    return data;
+                }
             },
+            schema: {
+                model: {
+                    id: "id",
+                    fields: {
+                        id: { editable: false, nullable: true },
+                        siswa_id: { validation: { required: true } },
+                        nama_siswa: { editable: false },
+                        semester: { validation: { required: true } },
+                        tahun_ajaran: { validation: { required: true } },
+                        matematika: { type: "number", validation: { required: true, min: 0, max: 100 } },
+                        bahasa_indonesia: { type: "number", validation: { required: true, min: 0, max: 100 } },
+                        bahasa_inggris: { type: "number", validation: { required: true, min: 0, max: 100 } },
+                        ipa: { type: "number", validation: { required: true, min: 0, max: 100 } },
+                        bahasa_jawa: { type: "number", validation: { required: true, min: 0, max: 100 } },
+                        pkn: { type: "number", validation: { required: true, min: 0, max: 100 } },
+                        seni: { type: "number", validation: { required: true, min: 0, max: 100 } },
+                        sejarah: { type: "number", validation: { required: true, min: 0, max: 100 } },
+                        agama: { type: "number", validation: { required: true, min: 0, max: 100 } },
+                        pjok: { type: "number", validation: { required: true, min: 0, max: 100 } },
+                        dasar_kejuruan: { type: "number", validation: { required: true, min: 0, max: 100 } },
+                        rata_rata: { type: "number", editable: false },
+                        created_at: { editable: false },
+                        updated_at: { editable: false }
+                    }
+                }
+            },
+            pageSize: 10
+        });
+        
+        $("#nilai-grid").kendoGrid({
+            dataSource: dataSource,
             height: 550,
             pageable: true,
             sortable: true,
@@ -2327,87 +2366,82 @@ $(document).ready(function() {
     
     // ========== FUNGSI DATA PRESENSI ==========
     function initPresensiGrid() {
-        $("#presensi-grid").kendoGrid({
-            dataSource: {
-                transport: {
-                    read: {
-                        url: `${API_URL}/presensi`,
-                        dataType: "json",
-                        beforeSend: function(xhr) {
-                            const token = getToken();
-                            if (token) {
-                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-                            }
-                        }
-                    },
-                    create: {
-                        url: `${API_URL}/presensi`,
-                        dataType: "json",
-                        type: "POST",
-                        contentType: "application/json",
-                        beforeSend: function(xhr) {
-                            const token = getToken();
-                            if (token) {
-                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-                            }
-                        }
-                    },
-                    update: {
-                        url: function(data) {
-                            return `${API_URL}/presensi/${data.id}`;
-                        },
-                        dataType: "json",
-                        type: "PUT",
-                        contentType: "application/json",
-                        beforeSend: function(xhr) {
-                            const token = getToken();
-                            if (token) {
-                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-                            }
-                        }
-                    },
-                    destroy: {
-                        url: function(data) {
-                            return `${API_URL}/presensi/${data.id}`;
-                        },
-                        dataType: "json",
-                        type: "DELETE",
-                        beforeSend: function(xhr) {
-                            const token = getToken();
-                            if (token) {
-                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-                            }
-                        }
-                    },
-                    parameterMap: function(data, type) {
-                        if (type === "create" || type === "update") {
-                            return JSON.stringify(data);
-                        }
-                        return data;
-                    }
-                },
-                schema: {
-                    model: {
-                        id: "id",
-                        fields: {
-                            id: { editable: false, nullable: true },
-                            siswa_id: { validation: { required: true } },
-                            nama_siswa: { editable: false },
-                            semester: { validation: { required: true } },
-                            tahun_ajaran: { validation: { required: true } },
-                            jumlah_hadir: { type: "number", validation: { required: true, min: 0 } },
-                            jumlah_sakit: { type: "number", validation: { required: true, min: 0 } },
-                            jumlah_izin: { type: "number", validation: { required: true, min: 0 } },
-                            jumlah_alpa: { type: "number", validation: { required: true, min: 0 } },
-                            persentase_kehadiran: { type: "number", editable: false },
-                            kategori_kehadiran: { editable: false },
-                            created_at: { editable: false },
-                            updated_at: { editable: false }
+        var dataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: `${API_URL}/presensi`,
+                    dataType: "json",
+                    beforeSend: function(xhr) {
+                        const token = getToken();
+                        if (token) {
+                            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
                         }
                     }
                 },
-                pageSize: 10
+                create: {
+                    url: `${API_URL}/presensi`,
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json",
+                    beforeSend: function(xhr) {
+                        const token = getToken();
+                        if (token) {
+                            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                        }
+                    },
+                    complete: function(e) {
+                        dataSource.read();
+                    }
+                },
+                update: {
+                    url: function(data) {
+                        return `${API_URL}/presensi/${data.id}`;
+                    },
+                    dataType: "json",
+                    type: "PUT",
+                    contentType: "application/json",
+                    beforeSend: function(xhr) {
+                        const token = getToken();
+                        if (token) {
+                            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                        }
+                    },
+                    complete: function(e) {
+                        dataSource.read();
+                    }
+                },
+                parameterMap: function(data, type) {
+                    if (type === "create" || type === "update") {
+                        return JSON.stringify(data);
+                    }
+                    return data;
+                }
             },
+            schema: {
+                model: {
+                    id: "id",
+                    fields: {
+                        id: { editable: false, nullable: true },
+                        siswa_id: { validation: { required: true } },
+                        nama_siswa: { editable: false },
+                        semester: { validation: { required: true } },
+                        tahun_ajaran: { validation: { required: true } },
+                        jumlah_hadir: { type: "number", validation: { required: true, min: 0 } },
+                        jumlah_sakit: { type: "number", validation: { required: true, min: 0 } },
+                        jumlah_izin: { type: "number", validation: { required: true, min: 0 } },
+                        jumlah_alpa: { type: "number", validation: { required: true, min: 0 } },
+                        persentase_kehadiran: { type: "number", editable: false },
+                        kategori_kehadiran: { editable: false },
+                        created_at: { editable: false },
+                        updated_at: { editable: false }
+                    }
+                }
+            },
+            pageSize: 10
+        });
+        
+        $("#presensi-grid").kendoGrid({
+            dataSource: dataSource,
             height: 550,
             pageable: true,
             sortable: true,
@@ -2442,7 +2476,26 @@ $(document).ready(function() {
                 { field: "jumlah_alpa", title: "Alpa", width: 80 },
                 { field: "persentase_kehadiran", title: "Persentase", format: "{0:n1}%", width: 100 },
                 { field: "kategori_kehadiran", title: "Kategori", width: 100 },
-                { command: ["edit", "destroy"], title: "Aksi", width: 140 }
+                { command: ["edit"], title: "Edit", width: 70 },
+                {
+                    title: "Hapus",
+                    width: 70,
+                    template: function(dataItem) {
+                        return `<button class="k-button k-button-solid k-button-solid-error k-button-sm btn-delete-presensi" 
+                                       data-id="${dataItem.id}" 
+                                       data-nama="${dataItem.nama_siswa || dataItem.siswa?.nama || '-'}" 
+                                       data-semester="${dataItem.semester}" 
+                                       data-tahun_ajaran="${dataItem.tahun_ajaran}" 
+                                       data-jumlah_hadir="${dataItem.jumlah_hadir}" 
+                                       data-jumlah_sakit="${dataItem.jumlah_sakit}" 
+                                       data-jumlah_izin="${dataItem.jumlah_izin}" 
+                                       data-jumlah_alpa="${dataItem.jumlah_alpa}" 
+                                       data-persentase_kehadiran="${dataItem.persentase_kehadiran}" 
+                                       data-kategori_kehadiran="${dataItem.kategori_kehadiran}">
+                                    <i class="k-icon k-i-delete"></i> Hapus
+                                </button>`;
+                    }
+                }
             ],
             edit: function(e) {
                 // Set default values for new records
@@ -2551,89 +2604,115 @@ $(document).ready(function() {
         });
     }
     
+    // Event handler untuk button delete presensi
+    $(document).on("click", ".btn-delete-presensi", function(e) {
+        e.preventDefault();
+        
+        const button = $(this);
+        const dataItem = {
+            id: button.data("id"),
+            nama_siswa: button.data("nama"),
+            semester: button.data("semester"),
+            tahun_ajaran: button.data("tahun_ajaran"),
+            jumlah_hadir: button.data("jumlah_hadir"),
+            jumlah_sakit: button.data("jumlah_sakit"),
+            jumlah_izin: button.data("jumlah_izin"),
+            jumlah_alpa: button.data("jumlah_alpa"),
+            persentase_kehadiran: button.data("persentase_kehadiran"),
+            kategori_kehadiran: button.data("kategori_kehadiran")
+        };
+        
+        console.log("Delete presensi button clicked:", dataItem);
+        showDeleteConfirmationPresensi(dataItem);
+    });
+    
     // ========== FUNGSI DATA PENGHASILAN ORTU ==========
     function initPenghasilanGrid() {
-        $("#penghasilan-grid").kendoGrid({
-            dataSource: {
-                transport: {
-                    read: {
-                        url: `${API_URL}/penghasilan`,
-                        dataType: "json",
-                        beforeSend: function(xhr) {
-                            const token = getToken();
-                            if (token) {
-                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-                            }
-                        }
-                    },
-                    create: {
-                        url: `${API_URL}/penghasilan`,
-                        dataType: "json",
-                        type: "POST",
-                        contentType: "application/json",
-                        beforeSend: function(xhr) {
-                            const token = getToken();
-                            if (token) {
-                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-                            }
-                        }
-                    },
-                    update: {
-                        url: function(data) {
-                            return `${API_URL}/penghasilan/${data.id}`;
-                        },
-                        dataType: "json",
-                        type: "PUT",
-                        contentType: "application/json",
-                        beforeSend: function(xhr) {
-                            const token = getToken();
-                            if (token) {
-                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-                            }
-                        }
-                    },
-                    destroy: {
-                        url: function(data) {
-                            return `${API_URL}/penghasilan/${data.id}`;
-                        },
-                        dataType: "json",
-                        type: "DELETE",
-                        beforeSend: function(xhr) {
-                            const token = getToken();
-                            if (token) {
-                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-                            }
-                        }
-                    },
-                    parameterMap: function(data, type) {
-                        if (type === "create" || type === "update") {
-                            return JSON.stringify(data);
-                        }
-                        return data;
-                    }
-                },
-                schema: {
-                    model: {
-                        id: "id",
-                        fields: {
-                            id: { editable: false, nullable: true },
-                            siswa_id: { validation: { required: true } },
-                            nama_siswa: { editable: false },
-                            penghasilan_ayah: { type: "number", validation: { required: true, min: 0 } },
-                            penghasilan_ibu: { type: "number", validation: { required: true, min: 0 } },
-                            pekerjaan_ayah: { validation: { required: true } },
-                            pekerjaan_ibu: { validation: { required: true } },
-                            pendidikan_ayah: { validation: { required: true } },
-                            pendidikan_ibu: { validation: { required: true } },
-                            total_penghasilan: { type: "number", editable: false },
-                            kategori_penghasilan: { editable: false },
-                            created_at: { editable: false },
-                            updated_at: { editable: false }
+        dataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: `${API_URL}/penghasilan`,
+                    dataType: "json",
+                    beforeSend: function(xhr) {
+                        const token = getToken();
+                        if (token) {
+                            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
                         }
                     }
                 },
-                pageSize: 10
+                create: {
+                    url: `${API_URL}/penghasilan`,
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json",
+                    beforeSend: function(xhr) {
+                        const token = getToken();
+                        if (token) {
+                            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                        }
+                    }
+                },
+                update: {
+                    url: function(data) {
+                        return `${API_URL}/penghasilan/${data.id}`;
+                    },
+                    dataType: "json",
+                    type: "PUT",
+                    contentType: "application/json",
+                    beforeSend: function(xhr) {
+                        const token = getToken();
+                        if (token) {
+                            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                        }
+                    },
+                    complete:function(e){
+                        dataSource.read();
+                    }
+                },
+                destroy: {
+                    url: function(data) {
+                        return `${API_URL}/penghasilan/${data.id}`;
+                    },
+                    dataType: "json",
+                    type: "DELETE",
+                    beforeSend: function(xhr) {
+                        const token = getToken();
+                        if (token) {
+                            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                        }
+                    }
+                },
+                parameterMap: function(data, type) {
+                    if (type === "create" || type === "update") {
+                        return JSON.stringify(data);
+                    }
+                    return data;
+                }
             },
+            schema: {
+                model: {
+                    id: "id",
+                    fields: {
+                        id: { editable: false, nullable: true },
+                        siswa_id: { validation: { required: true } },
+                        nama_siswa: { editable: false },
+                        penghasilan_ayah: { type: "number", validation: { required: true, min: 0 } },
+                        penghasilan_ibu: { type: "number", validation: { required: true, min: 0 } },
+                        pekerjaan_ayah: { validation: { required: true } },
+                        pekerjaan_ibu: { validation: { required: true } },
+                        pendidikan_ayah: { validation: { required: true } },
+                        pendidikan_ibu: { validation: { required: true } },
+                        total_penghasilan: { type: "number", editable: false },
+                        kategori_penghasilan: { editable: false },
+                        created_at: { editable: false },
+                        updated_at: { editable: false }
+                    }
+                }
+            },
+            pageSize: 10
+        });
+        $("#penghasilan-grid").kendoGrid({
+            dataSource: dataSource,
             height: 550,
             pageable: true,
             sortable: true,
@@ -3832,14 +3911,22 @@ $(document).ready(function() {
                             text: { edit: "Edit", update: "Simpan", cancel: "Batal" }
                         },
                         {
-                            name: "destroy",
-                            text: "Hapus",
-                            iconClass: "k-icon k-i-delete",
-                            click: function(e) {
-                                e.preventDefault();
-                                const dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-                                showDeleteConfirmation(dataItem);
-                                return false;
+                            field: "id",
+                            title: "Hapus",
+                            width: 90,
+                            template: function(dataItem) {
+                                console.log(dataItem);
+                                return `<button class="k-button k-button-solid k-button-solid-error k-button-sm btn-delete-user" 
+                                               data-id="${dataItem.id}"
+                                               data-username="${dataItem.username || ''}"
+                                               data-email="${dataItem.email || ''}"
+                                               data-role="${dataItem.role || ''}"
+                                               data-nama_lengkap="${dataItem.profile?.nama_lengkap || ''}"
+                                               data-nip="${dataItem.profile?.nip || ''}"
+                                               data-jabatan="${dataItem.profile?.jabatan || ''}"
+                                               data-is_active="${dataItem.is_active}">
+                                            <i class="k-icon k-i-delete"></i> Hapus
+                                        </button>`;
                             }
                         }
                     ],
@@ -5099,6 +5186,168 @@ $(document).ready(function() {
                 },
                 error: function(xhr) {
                     const errorMsg = xhr.responseJSON?.detail || "Gagal menghapus data penghasilan";
+                    showErrorNotification(errorMsg, "Error");
+                }
+            });
+        });
+
+        window.center().open();
+    }
+
+    // Fungsi untuk menampilkan konfirmasi penghapusan data presensi
+    function showDeleteConfirmationPresensi(data) {
+        // Hapus window yang mungkin masih ada
+        $(".k-window").remove();
+        
+        // Buat window baru
+        const windowElement = $("<div></div>").appendTo("body");
+        const window = windowElement.kendoWindow({
+            title: "Konfirmasi Hapus Data Presensi",
+            width: "500px",
+            modal: true,
+            visible: false,
+            actions: ["close"],
+            content: {
+                template: `
+                    <div class="delete-confirmation">
+                        <div class="icon-container">
+                            <i class="fas fa-exclamation-triangle text-warning"></i>
+                        </div>
+                        <div class="message">
+                            <h4>Konfirmasi Hapus Data Presensi</h4>
+                            <p><strong>Nama Siswa:</strong> ${data.nama_siswa || '-'}</p>
+                            <p><strong>Semester:</strong> ${data.semester || '-'}</p>
+                            <p><strong>Tahun Ajaran:</strong> ${data.tahun_ajaran || '-'}</p>
+                            <p><strong>Jumlah Hadir:</strong> ${data.jumlah_hadir || 0} hari</p>
+                            <p><strong>Jumlah Sakit:</strong> ${data.jumlah_sakit || 0} hari</p>
+                            <p><strong>Jumlah Izin:</strong> ${data.jumlah_izin || 0} hari</p>
+                            <p><strong>Jumlah Alpa:</strong> ${data.jumlah_alpa || 0} hari</p>
+                            <p><strong>Persentase Kehadiran:</strong> ${(data.persentase_kehadiran || 0).toFixed(1)}%</p>
+                            <p><strong>Kategori:</strong> ${data.kategori_kehadiran || '-'}</p>
+                            <hr>
+                            <p class="text-danger">Apakah Anda yakin ingin menghapus data presensi ini? Tindakan ini tidak dapat dibatalkan.</p>
+                        </div>
+                        <div class="button-container">
+                            <button class="k-button k-button-solid-base" id="cancelDeletePresensi">
+                                <i class="fas fa-times"></i> Batal
+                            </button>
+                            <button class="k-button k-button-solid-error" id="confirmDeletePresensi">
+                                <i class="fas fa-trash"></i> Hapus Data Presensi
+                            </button>
+                        </div>
+                    </div>
+                `
+            }
+        }).data("kendoWindow");
+
+        // Event handlers
+        windowElement.on("click", "#cancelDeletePresensi", function() {
+            window.close();
+        });
+
+        windowElement.on("click", "#confirmDeletePresensi", function() {
+            window.close();
+            
+            // Lakukan AJAX call langsung ke backend untuk menghapus
+            $.ajax({
+                url: `${API_URL}/presensi/${data.id}`,
+                type: "DELETE",
+                beforeSend: function(xhr) {
+                    const token = getToken();
+                    if (token) {
+                        xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                    }
+                },
+                success: function() {
+                    showSuccessNotification("Data presensi berhasil dihapus", "Sukses");
+                    // Refresh grid setelah berhasil menghapus
+                    const grid = $("#presensi-grid").data("kendoGrid");
+                    if (grid) {
+                        grid.dataSource.read();
+                    }
+                },
+                error: function(xhr) {
+                    const errorMsg = xhr.responseJSON?.detail || "Gagal menghapus data presensi";
+                    showErrorNotification(errorMsg, "Error");
+                }
+            });
+        });
+
+        window.center().open();
+    }
+
+    // Fungsi untuk menampilkan konfirmasi penghapusan data users
+    function showDeleteConfirmationUsers(data) {
+        // Hapus window yang mungkin masih ada
+        $(".k-window").remove();
+        
+        // Buat window baru
+        const windowElement = $("<div></div>").appendTo("body");
+        const window = windowElement.kendoWindow({
+            title: "Konfirmasi Hapus Data User",
+            width: "500px",
+            modal: true,
+            visible: false,
+            actions: ["close"],
+            content: {
+                template: `
+                    <div class="delete-confirmation">
+                        <div class="icon-container">
+                            <i class="fas fa-exclamation-triangle text-warning"></i>
+                        </div>
+                        <div class="message">
+                            <h4>Konfirmasi Hapus Data User</h4>
+                            <p><strong>Username:</strong> ${data.username || '-'}</p>
+                            <p><strong>Email:</strong> ${data.email || '-'}</p>
+                            <p><strong>Role:</strong> ${data.role || '-'}</p>
+                            <p><strong>Nama Lengkap:</strong> ${data.nama_lengkap || '-'}</p>
+                            <p><strong>NIP:</strong> ${data.nip || '-'}</p>
+                            <p><strong>Jabatan:</strong> ${data.jabatan || '-'}</p>
+                            <p><strong>Status:</strong> ${data.is_active ? 'Aktif' : 'Nonaktif'}</p>
+                            <hr>
+                            <p class="text-danger">Apakah Anda yakin ingin menghapus data user ini? Tindakan ini tidak dapat dibatalkan.</p>
+                        </div>
+                        <div class="button-container">
+                            <button class="k-button k-button-solid-base" id="cancelDeleteUsers">
+                                <i class="fas fa-times"></i> Batal
+                            </button>
+                            <button class="k-button k-button-solid-error" id="confirmDeleteUsers">
+                                <i class="fas fa-trash"></i> Hapus Data User
+                            </button>
+                        </div>
+                    </div>
+                `
+            }
+        }).data("kendoWindow");
+
+        // Event handlers
+        windowElement.on("click", "#cancelDeleteUsers", function() {
+            window.close();
+        });
+
+        windowElement.on("click", "#confirmDeleteUsers", function() {
+            window.close();
+            
+            // Lakukan AJAX call langsung ke backend untuk menghapus
+            $.ajax({
+                url: `${API_URL}/auth/users/${data.id}`,
+                type: "DELETE",
+                beforeSend: function(xhr) {
+                    const token = getToken();
+                    if (token) {
+                        xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                    }
+                },
+                success: function() {
+                    showSuccessNotification("Data user berhasil dihapus", "Sukses");
+                    // Refresh grid setelah berhasil menghapus
+                    const grid = $("#users-grid").data("kendoGrid");
+                    if (grid) {
+                        grid.dataSource.read();
+                    }
+                },
+                error: function(xhr) {
+                    const errorMsg = xhr.responseJSON?.detail || "Gagal menghapus data user";
                     showErrorNotification(errorMsg, "Error");
                 }
             });

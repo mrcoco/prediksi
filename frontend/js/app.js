@@ -469,15 +469,21 @@ $(document).ready(function() {
     
     // ========== FUNGSI DASHBOARD ==========
     function loadDashboardData() {
-        // Ambil data untuk dashboard
+        // Ambil total count siswa dari endpoint khusus
         $.ajax({
-            url: `${API_URL}/siswa`,
+            url: `${API_URL}/siswa/count`,
             method: "GET",
+            beforeSend: function(xhr) {
+                const token = getToken();
+                if (token) {
+                    xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                }
+            },
             success: function(data) {
-                $("#total-siswa").text(data.length);
+                $("#total-siswa").text(data.total_count);
             },
             error: function(xhr) {
-                console.error("Error loading siswa data:", xhr.responseText);
+                console.error("Error loading siswa count:", xhr.responseText);
                 const errorMsg = xhr.responseJSON ? xhr.responseJSON.detail : 'Terjadi kesalahan saat mengambil data';
                 $("#toast-container").kendoNotification({
                     position: {

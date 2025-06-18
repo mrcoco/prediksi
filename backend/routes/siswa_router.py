@@ -174,6 +174,33 @@ def get_all_siswa(
     siswa = query.offset(skip).limit(limit).all()
     return siswa
 
+@router.get("/count", response_model=Dict)
+def get_siswa_count(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Get total count of siswa in database"""
+    total_count = db.query(Siswa).count()
+    return {"total_count": total_count}
+
+@router.get("/dropdown", response_model=List[Dict])
+def get_siswa_dropdown(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Mendapatkan daftar siswa untuk dropdown"""
+    siswa_list = db.query(Siswa.id, Siswa.nama, Siswa.kelas).order_by(Siswa.nama).all()
+    
+    # Format data untuk dropdown
+    result = []
+    for siswa in siswa_list:
+        result.append({
+            "id": siswa.id,
+            "text": f"{siswa.nama} ({siswa.kelas})"
+        })
+    
+    return result
+
 @router.get("/{siswa_id}", response_model=SiswaResponse)
 def get_siswa(
     siswa_id: int,
@@ -245,21 +272,3 @@ def delete_siswa(
     db.commit()
     
     return None
-
-@router.get("/dropdown", response_model=List[Dict])
-def get_siswa_dropdown(
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
-):
-    """Mendapatkan daftar siswa untuk dropdown"""
-    siswa_list = db.query(Siswa.id, Siswa.nama, Siswa.kelas).order_by(Siswa.nama).all()
-    
-    # Format data untuk dropdown
-    result = []
-    for siswa in siswa_list:
-        result.append({
-            "id": siswa.id,
-            "text": f"{siswa.nama} ({siswa.kelas})"
-        })
-    
-    return result

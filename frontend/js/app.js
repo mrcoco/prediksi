@@ -1236,7 +1236,7 @@ $(document).ready(function() {
                 <div class="mb-4">
                     <h6 class="mb-3">
                         <i class="fas fa-chart-bar mr-2 text-primary"></i>
-                        Analisis Bar Chart - Status Sosial Ekonomi, Penghasilan, dan Nilai
+                        Analisis Bar Chart - Penghasilan Orang Tua, Presensi Kehadiran, dan Nilai Raport
                     </h6>
                     <p class="text-muted small">Visualisasi interaktif distribusi data menggunakan bar chart D3.js</p>
                 </div>
@@ -1247,8 +1247,8 @@ $(document).ready(function() {
                         <div class="col-md-4">
                             <label class="control-label">Pilih Analisis:</label>
                             <select id="chart-type-selector" class="form-control form-control-sm" onchange="updateBarChart()">
-                                <option value="status-sosial">Status Sosial Ekonomi</option>
                                 <option value="penghasilan">Penghasilan Orang Tua</option>
+                                <option value="kehadiran">Presensi Kehadiran</option>
                                 <option value="nilai-raport">Nilai Raport</option>
                             </select>
                         </div>
@@ -4401,7 +4401,7 @@ $(document).ready(function() {
             return;
         }
         
-        const chartType = document.getElementById('chart-type-selector')?.value || 'status-sosial';
+        const chartType = document.getElementById('chart-type-selector')?.value || 'penghasilan';
         const displayMode = document.getElementById('chart-display-mode')?.value || 'count';
         const colorScheme = document.getElementById('chart-color-scheme')?.value || 'blue';
         
@@ -4568,9 +4568,11 @@ $(document).ready(function() {
             .attr("x", (width + margin.left + margin.right) / 2)
             .attr("y", 25)
             .attr("text-anchor", "middle")
+            .attr("class", "heatmap-title")
             .style("font-size", "16px")
             .style("font-weight", "bold")
-            .text(getChartTitle(chartType));
+            .style("fill", "#333")
+            .text("Heatmap Korelasi Antar Fitur Numerik");
         
         // Store instance for updates
         barChartInstance = { svg, g, tooltip, chartData, xScale, yScale };
@@ -4590,8 +4592,7 @@ $(document).ready(function() {
         let data = [];
         
         switch(chartType) {
-            case 'status-sosial':
-                // Combine penghasilan categories as social status
+            case 'penghasilan':
                 if (categorical.kategori_penghasilan) {
                     const penghasilan = categorical.kategori_penghasilan;
                     Object.keys(penghasilan.data).forEach(key => {
@@ -4605,15 +4606,15 @@ $(document).ready(function() {
                 }
                 break;
                 
-            case 'penghasilan':
-                if (categorical.kategori_penghasilan) {
-                    const penghasilan = categorical.kategori_penghasilan;
-                    Object.keys(penghasilan.data).forEach(key => {
+            case 'kehadiran':
+                if (categorical.kategori_kehadiran) {
+                    const kehadiran = categorical.kategori_kehadiran;
+                    Object.keys(kehadiran.data).forEach(key => {
                         data.push({
                             label: key,
-                            value: penghasilan.data[key],
-                            total: penghasilan.total,
-                            percentage: (penghasilan.data[key] / penghasilan.total) * 100
+                            value: kehadiran.data[key],
+                            total: kehadiran.total,
+                            percentage: (kehadiran.data[key] / kehadiran.total) * 100
                         });
                     });
                 }
@@ -4621,313 +4622,18 @@ $(document).ready(function() {
                 
             case 'nilai-raport':
                 // Create ranges based on numerical statistics
-                if (currentBarChartData.numerical_statistics && currentBarChartData.numerical_statistics.rata_rata_nilai) {
-                    const nilaiStats = currentBarChartData.numerical_statistics.rata_rata_nilai;
+                if (currentBarChartData.numerical_statistics && currentBarChartData.numerical_statistics.nilai_raport) {
+                    const nilaiStats = currentBarChartData.numerical_statistics.nilai_raport;
                     
                     // Create value ranges
                     data = [
-                        { label: 'Rendah (< 70)', value: 0, total: 0, percentage: 0 },
+                        { label: 'Rendah (<70)', value: 0, total: 0, percentage: 0 },
                         { label: 'Sedang (70-80)', value: 0, total: 0, percentage: 0 },
                         { label: 'Tinggi (80-90)', value: 0, total: 0, percentage: 0 },
-                        { label: 'Sangat Tinggi (> 90)', value: 0, total: 0, percentage: 0 }
+                        { label: 'S.Tinggi (>90)', value: 0, total: 0, percentage: 0 }
                     ];
                     
                     // Simulate distribution based on mean and std
-                    const mean = nilaiStats.mean;
-                    const count = nilaiStats.count;
-                    
-                    if (mean < 70) {
-                        data[0].value = Math.round(count * 0.6);
-                        data[1].value = Math.round(count * 0.3);
-                        data[2].value = Math.round(count * 0.1);
-                        data[3].value = count - data[0].value - data[1].value - data[2].value;
-                    } else if (mean < 80) {
-                        data[0].value = Math.round(count * 0.2);
-                        data[1].value = Math.round(count * 0.5);
-                        data[2].value = Math.round(count * 0.25);
-                        data[3].value = count - data[0].value - data[1].value - data[2].value;
-                    } else if (mean < 90) {
-                        data[0].value = Math.round(count * 0.1);
-                        data[1].value = Math.round(count * 0.2);
-                        data[2].value = Math.round(count * 0.5);
-                        data[3].value = count - data[0].value - data[1].value - data[2].value;
-                    } else {
-                        data[0].value = Math.round(count * 0.05);
-                        data[1].value = Math.round(count * 0.15);
-                        data[2].value = Math.round(count * 0.3);
-                        data[3].value = count - data[0].value - data[1].value - data[2].value;
-                    }
-                    
-                    data.forEach(item => {
-                        item.total = count;
-                        item.percentage = (item.value / count) * 100;
-                    });
-                }
-                break;
-        }
-        
-        return data;
-    }
-    
-    function getColorScale(scheme, length) {
-        const colorSchemes = {
-            blue: d3.scaleOrdinal(d3.schemeBlues[Math.max(3, Math.min(9, length + 2))]),
-            green: d3.scaleOrdinal(d3.schemeGreens[Math.max(3, Math.min(9, length + 2))]),
-            orange: d3.scaleOrdinal(d3.schemeOranges[Math.max(3, Math.min(9, length + 2))]),
-            purple: d3.scaleOrdinal(d3.schemePurples[Math.max(3, Math.min(9, length + 2))])
-        };
-        
-        return colorSchemes[scheme] || colorSchemes.blue;
-    }
-    
-    function getChartTitle(chartType) {
-        const titles = {
-            'status-sosial': 'Distribusi Status Sosial Ekonomi',
-            'penghasilan': 'Distribusi Penghasilan Orang Tua',
-            'nilai-raport': 'Distribusi Nilai Raport Siswa'
-        };
-        
-        return titles[chartType] || 'Analisis Bar Chart';
-    }
-    
-    function updateBarChart() {
-        if (currentBarChartData) {
-            generateBarChart();
-        }
-    }
-    
-    function showBarChartError(message) {
-        d3.select("#d3-barchart").html(`
-            <div class="text-center p-4">
-                <i class="fas fa-exclamation-triangle fa-2x text-warning mb-3"></i>
-                <p class="text-muted">${message}</p>
-            </div>
-        `);
-    }
-    
-    // Make bar chart functions globally accessible
-    window.initializeBarChart = initializeBarChart;
-    window.updateBarChart = updateBarChart;
-    
-    // ========== DASHBOARD BAR CHART FUNCTIONS ==========
-    let dashboardBarChartData = null;
-    let dashboardBarChartInstance = null;
-    
-    function initializeDashboardBarChart() {
-        // Load data untuk dashboard bar chart
-        setTimeout(() => {
-            loadDashboardBarChartData();
-        }, 2000); // Delay untuk memastikan feature statistics sudah loaded
-    }
-    
-    function loadDashboardBarChartData() {
-        $.ajax({
-            url: `${API_URL}/prediksi/feature-statistics`,
-            method: "GET",
-            beforeSend: function(xhr) {
-                const token = getToken();
-                if (token) {
-                    xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-                }
-            },
-            success: function(data) {
-                if (data.status === "success") {
-                    dashboardBarChartData = data.data;
-                    generateDashboardBarChart();
-                } else {
-                    showDashboardBarChartError("Data tidak tersedia");
-                }
-            },
-            error: function(xhr) {
-                console.error("Error loading dashboard bar chart data:", xhr.responseText);
-                showDashboardBarChartError("Gagal memuat data");
-            }
-        });
-    }
-    
-    function generateDashboardBarChart() {
-        if (!dashboardBarChartData) {
-            showDashboardBarChartError("Data tidak tersedia");
-            return;
-        }
-        
-        const chartType = document.getElementById('dashboard-chart-type')?.value || 'status-sosial';
-        const displayMode = document.getElementById('dashboard-chart-mode')?.value || 'count';
-        
-        // Clear previous chart
-        d3.select("#dashboard-barchart").selectAll("*").remove();
-        
-        // Get data based on chart type
-        const chartData = getDashboardChartData(chartType);
-        
-        if (!chartData || chartData.length === 0) {
-            showDashboardBarChartError("Data tidak tersedia untuk jenis chart yang dipilih");
-            return;
-        }
-        
-        // Set dimensions and margins for dashboard
-        const margin = { top: 20, right: 20, bottom: 60, left: 50 };
-        const width = 400 - margin.left - margin.right;
-        const height = 220 - margin.top - margin.bottom;
-        
-        // Create SVG
-        const svg = d3.select("#dashboard-barchart")
-            .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .attr("class", "dashboard-barchart-svg");
-        
-        const g = svg.append("g")
-            .attr("transform", `translate(${margin.left},${margin.top})`);
-        
-        // Create scales
-        const xScale = d3.scaleBand()
-            .domain(chartData.map(d => d.label))
-            .range([0, width])
-            .padding(0.1);
-        
-        const maxValue = d3.max(chartData, d => displayMode === 'percentage' ? d.percentage : d.value);
-        const yScale = d3.scaleLinear()
-            .domain([0, maxValue * 1.1])
-            .range([height, 0]);
-        
-        // Create color scale - use green theme for dashboard
-        const colorScale = d3.scaleOrdinal(d3.schemeGreens[Math.max(3, Math.min(9, chartData.length + 2))]);
-        
-        // Create tooltip
-        const tooltip = d3.select("body").append("div")
-            .attr("class", "dashboard-barchart-tooltip")
-            .style("opacity", 0);
-        
-        // Create bars
-        const bars = g.selectAll(".dashboard-bar")
-            .data(chartData)
-            .enter()
-            .append("rect")
-            .attr("class", "dashboard-bar")
-            .attr("x", d => xScale(d.label))
-            .attr("width", xScale.bandwidth())
-            .attr("y", height)
-            .attr("height", 0)
-            .attr("fill", (d, i) => colorScale(i))
-            .on("mouseover", function(event, d) {
-                d3.select(this)
-                    .attr("stroke", "#333")
-                    .attr("stroke-width", 2)
-                    .style("filter", "brightness(1.1)");
-                
-                tooltip.transition()
-                    .duration(200)
-                    .style("opacity", .9);
-                
-                tooltip.html(`
-                    <strong>${d.label}</strong><br/>
-                    <strong>Jumlah:</strong> ${d.value}<br/>
-                    <strong>Persentase:</strong> ${d.percentage.toFixed(1)}%
-                `)
-                    .style("left", (event.pageX + 10) + "px")
-                    .style("top", (event.pageY - 10) + "px");
-            })
-            .on("mouseout", function(d) {
-                d3.select(this)
-                    .attr("stroke", "none")
-                    .style("filter", "brightness(1)");
-                
-                tooltip.transition()
-                    .duration(500)
-                    .style("opacity", 0);
-            });
-        
-        // Animate bars
-        bars.transition()
-            .duration(800)
-            .ease(d3.easeBackOut)
-            .attr("y", d => yScale(displayMode === 'percentage' ? d.percentage : d.value))
-            .attr("height", d => height - yScale(displayMode === 'percentage' ? d.percentage : d.value));
-        
-        // Add value labels on bars
-        g.selectAll(".dashboard-bar-label")
-            .data(chartData)
-            .enter()
-            .append("text")
-            .attr("class", "dashboard-bar-label")
-            .attr("x", d => xScale(d.label) + xScale.bandwidth() / 2)
-            .attr("y", d => yScale(displayMode === 'percentage' ? d.percentage : d.value) - 5)
-            .attr("text-anchor", "middle")
-            .style("font-size", "10px")
-            .style("font-weight", "bold")
-            .style("fill", "#333")
-            .text(d => {
-                const value = displayMode === 'percentage' ? d.percentage : d.value;
-                return displayMode === 'percentage' ? `${value.toFixed(1)}%` : value;
-            })
-            .style("opacity", 0)
-            .transition()
-            .delay(800)
-            .duration(400)
-            .style("opacity", 1);
-        
-        // Add X axis
-        g.append("g")
-            .attr("transform", `translate(0,${height})`)
-            .call(d3.axisBottom(xScale))
-            .selectAll("text")
-            .style("text-anchor", "end")
-            .attr("dx", "-.8em")
-            .attr("dy", ".15em")
-            .attr("transform", "rotate(-45)")
-            .style("font-size", "10px");
-        
-        // Add Y axis
-        g.append("g")
-            .call(d3.axisLeft(yScale).ticks(5))
-            .selectAll("text")
-            .style("font-size", "10px");
-        
-        // Store instance for updates
-        dashboardBarChartInstance = { svg, g, tooltip, chartData, xScale, yScale };
-        
-        // Cleanup tooltip on window resize or navigation
-        window.addEventListener('beforeunload', () => {
-            tooltip.remove();
-        });
-    }
-    
-    function getDashboardChartData(chartType) {
-        if (!dashboardBarChartData || !dashboardBarChartData.categorical_distributions) {
-            return [];
-        }
-        
-        const categorical = dashboardBarChartData.categorical_distributions;
-        let data = [];
-        
-        switch(chartType) {
-            case 'status-sosial':
-            case 'penghasilan':
-                if (categorical.kategori_penghasilan) {
-                    const penghasilan = categorical.kategori_penghasilan;
-                    Object.keys(penghasilan.data).forEach(key => {
-                        data.push({
-                            label: key,
-                            value: penghasilan.data[key],
-                            total: penghasilan.total,
-                            percentage: (penghasilan.data[key] / penghasilan.total) * 100
-                        });
-                    });
-                }
-                break;
-                
-            case 'nilai-raport':
-                if (dashboardBarChartData.numerical_statistics && dashboardBarChartData.numerical_statistics.rata_rata_nilai) {
-                    const nilaiStats = dashboardBarChartData.numerical_statistics.rata_rata_nilai;
-                    
-                    data = [
-                        { label: 'Rendah', value: 0, total: 0, percentage: 0 },
-                        { label: 'Sedang', value: 0, total: 0, percentage: 0 },
-                        { label: 'Tinggi', value: 0, total: 0, percentage: 0 },
-                        { label: 'S.Tinggi', value: 0, total: 0, percentage: 0 }
-                    ];
-                    
                     const mean = nilaiStats.mean;
                     const count = nilaiStats.count;
                     
@@ -4968,6 +4674,40 @@ $(document).ready(function() {
         if (dashboardBarChartData) {
             generateDashboardBarChart();
         }
+    }
+    
+    // Fungsi error handler untuk bar chart analisis
+    function showBarChartError(message) {
+        d3.select("#d3-barchart").html(`
+            <div class="text-center p-3">
+                <i class="fas fa-exclamation-triangle fa-lg text-warning mb-2"></i>
+                <p class="text-muted small">${message}</p>
+            </div>
+        `);
+    }
+    
+    // Fungsi untuk mendapatkan color scale berdasarkan scheme
+    function getColorScale(colorScheme, dataLength) {
+        const colorSchemes = {
+            'blue': ['#1f77b4', '#aec7e8', '#3182bd', '#6baed6', '#9ecae1', '#c6dbef'],
+            'green': ['#2ca02c', '#98df8a', '#31a354', '#74c476', '#a1d99b', '#c7e9c0'],
+            'orange': ['#ff7f0e', '#ffbb78', '#fd8d3c', '#fdae6b', '#fdd0a2', '#fee6ce'],
+            'purple': ['#9467bd', '#c5b0d5', '#8c6bb1', '#9ebcda', '#bfd3e6', '#e0ecf4']
+        };
+        
+        const colors = colorSchemes[colorScheme] || colorSchemes.blue;
+        return d3.scaleOrdinal().range(colors);
+    }
+    
+    // Fungsi untuk mendapatkan judul chart berdasarkan tipe
+    function getChartTitle(chartType) {
+        const titles = {
+            'penghasilan': 'Distribusi Penghasilan Orang Tua',
+            'kehadiran': 'Distribusi Kehadiran Siswa', 
+            'nilai-raport': 'Distribusi Nilai Raport'
+        };
+        
+        return titles[chartType] || 'Analisis Bar Chart';
     }
     
     function showDashboardBarChartError(message) {
@@ -5746,95 +5486,1162 @@ $(document).ready(function() {
             }
         });
     }
-});
 
-// Global function for opening image modal
-function openImageModal(imageSrc) {
-    // Remove any existing modal
-    $(".image-modal").remove();
+    // ========== DASHBOARD BAR CHART FUNCTIONS ==========
+    let dashboardBarChartData = null;
+    let dashboardBarChartInstance = null;
     
-    // Create modal HTML
-    const modalHtml = `
-        <div class="image-modal" style="
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.8);
-            z-index: 10000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        ">
-            <div style="
-                position: relative;
-                max-width: 95%;
-                max-height: 95%;
-                background: white;
-                border-radius: 8px;
-                padding: 20px;
-                box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    function initializeDashboardBarChart() {
+        // Load data untuk dashboard bar chart
+        setTimeout(() => {
+            loadDashboardBarChartData();
+        }, 2000); // Delay untuk memastikan feature statistics sudah loaded
+    }
+    
+    function loadDashboardBarChartData() {
+        $.ajax({
+            url: `${API_URL}/prediksi/feature-statistics`,
+            method: "GET",
+            beforeSend: function(xhr) {
+                const token = getToken();
+                if (token) {
+                    xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                }
+            },
+            success: function(data) {
+                if (data.status === "success") {
+                    dashboardBarChartData = data.data;
+                    generateDashboardBarChart();
+                } else {
+                    showDashboardBarChartError("Data tidak tersedia");
+                }
+            },
+            error: function(xhr) {
+                console.error("Error loading dashboard bar chart data:", xhr.responseText);
+                showDashboardBarChartError("Gagal memuat data");
+            }
+        });
+    }
+    
+    function generateDashboardBarChart() {
+        if (!dashboardBarChartData) {
+            showDashboardBarChartError("Data tidak tersedia");
+            return;
+        }
+        
+        const chartType = document.getElementById('dashboard-chart-type')?.value || 'penghasilan';
+        const displayMode = document.getElementById('dashboard-chart-mode')?.value || 'count';
+        
+        // Clear previous chart
+        d3.select("#dashboard-barchart").selectAll("*").remove();
+        
+        // Get data based on chart type
+        const chartData = getDashboardChartData(chartType);
+        
+        if (!chartData || chartData.length === 0) {
+            showDashboardBarChartError("Data tidak tersedia untuk jenis chart yang dipilih");
+            return;
+        }
+        
+        // Set dimensions and margins for dashboard
+        const margin = { top: 20, right: 20, bottom: 60, left: 50 };
+        const width = 400 - margin.left - margin.right;
+        const height = 220 - margin.top - margin.bottom;
+        
+        // Create SVG
+        const svg = d3.select("#dashboard-barchart")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .attr("class", "dashboard-barchart-svg");
+        
+        const g = svg.append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+        
+        // Create scales
+        const xScale = d3.scaleBand()
+            .domain(chartData.map(d => d.label))
+            .range([0, width])
+            .padding(0.1);
+        
+        const maxValue = d3.max(chartData, d => displayMode === 'percentage' ? d.percentage : d.value);
+        const yScale = d3.scaleLinear()
+            .domain([0, maxValue * 1.1])
+            .range([height, 0]);
+        
+        // Create color scale - use green theme for dashboard
+        const colorScale = d3.scaleOrdinal(d3.schemeGreens[Math.max(3, Math.min(9, chartData.length + 2))]);
+        
+        // Create tooltip
+        const tooltip = d3.select("body").append("div")
+            .attr("class", "dashboard-barchart-tooltip")
+            .style("opacity", 0);
+        
+        // Create bars
+        const bars = g.selectAll(".dashboard-bar")
+            .data(chartData)
+            .enter()
+            .append("rect")
+            .attr("class", "dashboard-bar")
+            .attr("x", d => xScale(d.label))
+            .attr("width", xScale.bandwidth())
+            .attr("y", height)
+            .attr("height", 0)
+            .attr("fill", (d, i) => colorScale(i))
+            .on("mouseover", function(event, d) {
+                d3.select(this)
+                    .attr("stroke", "#333")
+                    .attr("stroke-width", 2)
+                    .style("filter", "brightness(1.1)");
+                
+                tooltip.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+                
+                tooltip.html(`
+                    <strong>${d.label}</strong><br/>
+                    <strong>Jumlah:</strong> ${d.value}<br/>
+                    <strong>Persentase:</strong> ${d.percentage.toFixed(1)}%
+                `)
+                    .style("left", (event.pageX + 10) + "px")
+                    .style("top", (event.pageY - 10) + "px");
+            })
+            .on("mouseout", function(d) {
+                d3.select(this)
+                    .attr("stroke", "none")
+                    .style("filter", "brightness(1)");
+                
+                tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            });
+        
+        // Animate bars
+        bars.transition()
+            .duration(800)
+            .ease(d3.easeBackOut)
+            .attr("y", d => yScale(displayMode === 'percentage' ? d.percentage : d.value))
+            .attr("height", d => height - yScale(displayMode === 'percentage' ? d.percentage : d.value));
+        
+        // Add value labels on bars
+        g.selectAll(".dashboard-bar-label")
+            .data(chartData)
+            .enter()
+            .append("text")
+            .attr("class", "dashboard-bar-label")
+            .attr("x", d => xScale(d.label) + xScale.bandwidth() / 2)
+            .attr("y", d => yScale(displayMode === 'percentage' ? d.percentage : d.value) - 5)
+            .attr("text-anchor", "middle")
+            .style("font-size", "10px")
+            .style("font-weight", "bold")
+            .style("fill", "#333")
+            .text(d => {
+                const value = displayMode === 'percentage' ? d.percentage : d.value;
+                return displayMode === 'percentage' ? `${value.toFixed(1)}%` : value;
+            })
+            .style("opacity", 0)
+            .transition()
+            .delay(800)
+            .duration(400)
+            .style("opacity", 1);
+        
+        // Add X axis
+        g.append("g")
+            .attr("transform", `translate(0,${height})`)
+            .call(d3.axisBottom(xScale))
+            .selectAll("text")
+            .style("text-anchor", "end")
+            .attr("dx", "-.8em")
+            .attr("dy", ".15em")
+            .attr("transform", "rotate(-45)")
+            .style("font-size", "10px");
+        
+        // Add Y axis
+        g.append("g")
+            .call(d3.axisLeft(yScale).tickFormat(d => {
+                return displayMode === 'percentage' ? `${d}%` : d;
+            }))
+            .style("font-size", "10px");
+        
+        // Add chart title
+        svg.append("text")
+            .attr("x", (width + margin.left + margin.right) / 2)
+            .attr("y", margin.top / 2)
+            .attr("text-anchor", "middle")
+            .style("font-size", "12px")
+            .style("font-weight", "bold")
+            .style("fill", "#333")
+            .text(getChartTitle(chartType));
+    }
+    
+    function getDashboardChartData(chartType) {
+        if (!dashboardBarChartData || !dashboardBarChartData.categorical_distributions) {
+            return [];
+        }
+        
+        const categorical = dashboardBarChartData.categorical_distributions;
+        let data = [];
+        
+        switch(chartType) {
+            case 'penghasilan':
+                if (categorical.kategori_penghasilan) {
+                    const penghasilan = categorical.kategori_penghasilan;
+                    Object.keys(penghasilan.data).forEach(key => {
+                        data.push({
+                            label: key,
+                            value: penghasilan.data[key],
+                            total: penghasilan.total,
+                            percentage: (penghasilan.data[key] / penghasilan.total) * 100
+                        });
+                    });
+                }
+                break;
+                
+            case 'kehadiran':
+                if (categorical.kategori_kehadiran) {
+                    const kehadiran = categorical.kategori_kehadiran;
+                    Object.keys(kehadiran.data).forEach(key => {
+                        data.push({
+                            label: key,
+                            value: kehadiran.data[key],
+                            total: kehadiran.total,
+                            percentage: (kehadiran.data[key] / kehadiran.total) * 100
+                        });
+                    });
+                }
+                break;
+                
+            case 'nilai-raport':
+                if (dashboardBarChartData.numerical_statistics && dashboardBarChartData.numerical_statistics.nilai_raport) {
+                    const nilaiStats = dashboardBarChartData.numerical_statistics.nilai_raport;
+                    
+                    data = [
+                        { label: 'Rendah (<70)', value: 0, total: 0, percentage: 0 },
+                        { label: 'Sedang (70-80)', value: 0, total: 0, percentage: 0 },
+                        { label: 'Tinggi (80-90)', value: 0, total: 0, percentage: 0 },
+                        { label: 'S.Tinggi (>90)', value: 0, total: 0, percentage: 0 }
+                    ];
+                    
+                    const mean = nilaiStats.mean;
+                    const count = nilaiStats.count;
+                    
+                    if (mean < 70) {
+                        data[0].value = Math.round(count * 0.6);
+                        data[1].value = Math.round(count * 0.3);
+                        data[2].value = Math.round(count * 0.1);
+                        data[3].value = count - data[0].value - data[1].value - data[2].value;
+                    } else if (mean < 80) {
+                        data[0].value = Math.round(count * 0.2);
+                        data[1].value = Math.round(count * 0.5);
+                        data[2].value = Math.round(count * 0.25);
+                        data[3].value = count - data[0].value - data[1].value - data[2].value;
+                    } else if (mean < 90) {
+                        data[0].value = Math.round(count * 0.1);
+                        data[1].value = Math.round(count * 0.2);
+                        data[2].value = Math.round(count * 0.5);
+                        data[3].value = count - data[0].value - data[1].value - data[2].value;
+                    } else {
+                        data[0].value = Math.round(count * 0.05);
+                        data[1].value = Math.round(count * 0.15);
+                        data[2].value = Math.round(count * 0.3);
+                        data[3].value = count - data[0].value - data[1].value - data[2].value;
+                    }
+                    
+                    data.forEach(item => {
+                        item.total = count;
+                        item.percentage = (item.value / count) * 100;
+                    });
+                }
+                break;
+        }
+        
+        return data;
+    }
+    
+    function getChartTitle(chartType) {
+        const titles = {
+            'penghasilan': 'Distribusi Penghasilan Orang Tua',
+            'kehadiran': 'Distribusi Kehadiran Siswa',
+            'nilai-raport': 'Distribusi Nilai Raport Siswa'
+        };
+        
+        return titles[chartType] || 'Analisis Bar Chart';
+    }
+    
+    function showDashboardBarChartError(message) {
+        d3.select("#dashboard-barchart").html(`
+            <div class="text-center p-3">
+                <i class="fas fa-exclamation-triangle fa-lg text-warning mb-2"></i>
+                <p class="text-muted small">${message}</p>
+            </div>
+        `);
+    }
+    
+    // Make dashboard bar chart functions globally accessible
+    window.initializeDashboardBarChart = initializeDashboardBarChart;
+    window.updateDashboardBarChart = updateDashboardBarChart;
+
+    // ========== TOKEN EXPIRY CHECKER SYSTEM ==========
+    
+    // Fungsi untuk mengecek status token expiry
+    function checkTokenExpiry() {
+        const token = getToken();
+        if (!token) {
+            return {
+                isValid: false,
+                timeLeft: 0,
+                status: 'no_token',
+                message: 'Token tidak ditemukan'
+            };
+        }
+        
+        const expiryTime = getTokenExpiryTime();
+        if (!expiryTime) {
+            return {
+                isValid: false,
+                timeLeft: 0,
+                status: 'invalid_token',
+                message: 'Token tidak valid'
+            };
+        }
+        
+        const now = Date.now();
+        const timeLeft = expiryTime - now;
+        
+        if (timeLeft <= 0) {
+            return {
+                isValid: false,
+                timeLeft: 0,
+                status: 'expired',
+                message: 'Token telah expired'
+            };
+        }
+        
+        // Determine status based on time left
+        let status = 'valid';
+        let urgency = 'low';
+        
+        if (timeLeft <= 1 * 60 * 1000) { // 1 minute
+            status = 'critical';
+            urgency = 'critical';
+        } else if (timeLeft <= 2 * 60 * 1000) { // 2 minutes
+            status = 'very_urgent';
+            urgency = 'high';
+        } else if (timeLeft <= 5 * 60 * 1000) { // 5 minutes
+            status = 'urgent';
+            urgency = 'high';
+        } else if (timeLeft <= 10 * 60 * 1000) { // 10 minutes
+            status = 'warning';
+            urgency = 'medium';
+        } else if (timeLeft <= 15 * 60 * 1000) { // 15 minutes
+            status = 'notice';
+            urgency = 'low';
+        }
+        
+        return {
+            isValid: true,
+            timeLeft: timeLeft,
+            timeLeftFormatted: formatCountdownTime(timeLeft),
+            status: status,
+            urgency: urgency,
+            minutesLeft: Math.floor(timeLeft / (60 * 1000)),
+            secondsLeft: Math.floor((timeLeft % (60 * 1000)) / 1000),
+            message: getExpiryMessage(status, Math.floor(timeLeft / (60 * 1000)))
+        };
+    }
+    
+    // Fungsi untuk mendapatkan pesan expiry berdasarkan status
+    function getExpiryMessage(status, minutesLeft) {
+        const messages = {
+            'valid': 'Token masih valid',
+            'notice': `Token akan expired dalam ${minutesLeft} menit`,
+            'warning': `⚠️ Token akan expired dalam ${minutesLeft} menit`,
+            'urgent': `🚨 Token akan expired dalam ${minutesLeft} menit!`,
+            'very_urgent': `🔥 Token akan expired dalam ${minutesLeft} menit! Segera simpan pekerjaan Anda!`,
+            'critical': `❌ Token akan expired dalam kurang dari 1 menit! Sistem akan logout otomatis!`,
+            'expired': '❌ Token telah expired'
+        };
+        
+        return messages[status] || 'Status token tidak diketahui';
+    }
+    
+    // Fungsi untuk menampilkan notifikasi berdasarkan status token
+    function showTokenExpiryNotification(tokenStatus) {
+        const now = Date.now();
+        const minutesLeft = tokenStatus.minutesLeft;
+        
+        // Prevent spam notifications (minimum 30 seconds between notifications)
+        if (now - lastNotificationTime < 30000) {
+            return;
+        }
+        
+        let shouldShow = false;
+        let notificationType = 'info';
+        let title = 'Peringatan Token';
+        
+        // Check if we should show notification based on time thresholds
+        if (minutesLeft <= 1 && !notificationShown['1min']) {
+            shouldShow = true;
+            notificationType = 'error';
+            title = 'Token Akan Expired!';
+            notificationShown['1min'] = true;
+        } else if (minutesLeft <= 2 && !notificationShown['2min']) {
+            shouldShow = true;
+            notificationType = 'error';
+            title = 'Token Akan Expired!';
+            notificationShown['2min'] = true;
+        } else if (minutesLeft <= 5 && !notificationShown['5min']) {
+            shouldShow = true;
+            notificationType = 'error';
+            title = 'Peringatan Token';
+            notificationShown['5min'] = true;
+        } else if (minutesLeft <= 10 && !notificationShown['10min']) {
+            shouldShow = true;
+            notificationType = 'info';
+            title = 'Pemberitahuan Token';
+            notificationShown['10min'] = true;
+        } else if (minutesLeft <= 15 && !notificationShown['15min']) {
+            shouldShow = true;
+            notificationType = 'info';
+            title = 'Pemberitahuan Token';
+            notificationShown['15min'] = true;
+        }
+        
+        if (shouldShow) {
+            const message = `${tokenStatus.message}<br/><small>Waktu tersisa: ${tokenStatus.timeLeftFormatted}</small>`;
+            
+            if (notificationType === 'error') {
+                showErrorNotification(message, title);
+            } else {
+                showInfoNotification(message, title);
+            }
+            
+            lastNotificationTime = now;
+            
+            // Log untuk debugging
+            console.log(`Token Expiry Notification: ${title} - ${tokenStatus.message}`);
+        }
+    }
+    
+    // Fungsi untuk memulai token expiry checker
+    function startTokenExpiryChecker() {
+        // Clear existing checker
+        if (tokenExpiryChecker) {
+            clearInterval(tokenExpiryChecker);
+        }
+        
+        // Reset notification flags
+        notificationShown = {
+            '15min': false,
+            '10min': false,
+            '5min': false,
+            '2min': false,
+            '1min': false
+        };
+        
+        tokenExpiryChecker = setInterval(function() {
+            const tokenStatus = checkTokenExpiry();
+            
+            if (!tokenStatus.isValid) {
+                // Token is invalid or expired
+                clearInterval(tokenExpiryChecker);
+                
+                if (tokenStatus.status === 'expired') {
+                    showErrorNotification("Token telah expired. Anda akan dialihkan ke halaman login.", "Session Expired");
+                    setTimeout(() => {
+                        logout();
+                    }, 3000);
+                }
+                return;
+            }
+            
+            // Auto refresh token when it's about to expire (5 minutes left)
+            if (tokenStatus.minutesLeft <= 5 && tokenStatus.minutesLeft > 2) {
+                autoRefreshToken();
+            }
+            
+            // Show notifications based on token status
+            showTokenExpiryNotification(tokenStatus);
+            
+            // Update token status indicator if exists
+            updateTokenStatusIndicator(tokenStatus);
+            
+        }, 5000); // Check every 5 seconds
+    }
+    
+    // Fungsi untuk stop token expiry checker
+    function stopTokenExpiryChecker() {
+        if (tokenExpiryChecker) {
+            clearInterval(tokenExpiryChecker);
+            tokenExpiryChecker = null;
+        }
+    }
+    
+    // Fungsi untuk update token status indicator
+    function updateTokenStatusIndicator(tokenStatus) {
+        const $indicator = $("#token-status-indicator");
+        if ($indicator.length === 0) return;
+        
+        // Remove all status classes
+        $indicator.removeClass("token-valid token-notice token-warning token-urgent token-critical");
+        
+        // Add appropriate class based on status
+        $indicator.addClass(`token-${tokenStatus.status}`);
+        
+        // Update tooltip or title
+        $indicator.attr("title", tokenStatus.message);
+    }
+    
+    // Fungsi untuk mendapatkan informasi lengkap token
+    function getTokenInfo() {
+        const tokenStatus = checkTokenExpiry();
+        const token = getToken();
+        
+        let tokenInfo = {
+            ...tokenStatus,
+            hasToken: !!token
+        };
+        
+        if (token) {
+            try {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                tokenInfo.issuedAt = new Date(payload.iat * 1000);
+                tokenInfo.expiresAt = new Date(payload.exp * 1000);
+                tokenInfo.username = payload.sub || payload.username;
+                tokenInfo.role = payload.role;
+                
+                // Ambil data profile dari localStorage
+                const userData = localStorage.getItem('user_data');
+                if (userData) {
+                    try {
+                        const userProfile = JSON.parse(userData);
+                        tokenInfo.email = userProfile.email;
+                        tokenInfo.profile = {
+                            nama_lengkap: userProfile.profile?.nama_lengkap || '',
+                            nip: userProfile.profile?.nip || '',
+                            jabatan: userProfile.profile?.jabatan || '',
+                            no_hp: userProfile.profile?.no_hp || '',
+                            alamat: userProfile.profile?.alamat || ''
+                        };
+                    } catch (e) {
+                        console.error('Error parsing user profile data:', e);
+                    }
+                }
+            } catch (e) {
+                console.error('Error parsing token:', e);
+            }
+        }
+        
+        return tokenInfo;
+    }
+    
+    // Fungsi untuk menampilkan dialog informasi token
+    function showTokenInfoDialog() {
+        const tokenInfo = getTokenInfo();
+        
+        // Debug: Log token info untuk troubleshooting
+        console.log('Token Info:', tokenInfo);
+        
+        let content = '';
+        if (!tokenInfo.hasToken) {
+            content = `
+                <div class="token-info-dialog">
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>Tidak ada token</strong><br/>
+                        Anda belum login atau session telah berakhir.
+                    </div>
+                </div>
+            `;
+        } else {
+            const statusClass = tokenInfo.urgency === 'critical' ? 'danger' : 
+                              tokenInfo.urgency === 'high' ? 'warning' : 
+                              tokenInfo.urgency === 'medium' ? 'info' : 'success';
+            
+            // Format role dengan badge styling
+            const roleBadgeClass = tokenInfo.role === 'Admin' ? 'primary' : 
+                                 tokenInfo.role === 'Guru' ? 'success' : 'info';
+            
+            content = `
+                <div class="token-info-dialog">
+                    <div class="alert alert-${statusClass}">
+                        <h6><i class="fas fa-info-circle"></i> Status Token Session</h6>
+                        <p><strong>Status:</strong> ${tokenInfo.message || 'N/A'}</p>
+                        <p><strong>Waktu Tersisa:</strong> ${tokenInfo.timeLeftFormatted || 'N/A'}</p>
+                    </div>
+                    
+                    <!-- Informasi Pengguna -->
+                    <div class="user-profile-info mt-3">
+                        <h6><i class="fas fa-user"></i> Informasi Pengguna</h6>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table table-sm table-borderless">
+                                    <tr>
+                                        <td width="35%"><strong>Username:</strong></td>
+                                        <td>${tokenInfo.username || '-'}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Email:</strong></td>
+                                        <td>${tokenInfo.email || '-'}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Role:</strong></td>
+                                        <td><span class="badge badge-${roleBadgeClass}">${tokenInfo.role || '-'}</span></td>
+                                    </tr>
+                                    ${tokenInfo.profile?.nama_lengkap ? `
+                                    <tr>
+                                        <td><strong>Nama Lengkap:</strong></td>
+                                        <td>${tokenInfo.profile.nama_lengkap}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${tokenInfo.profile?.nip ? `
+                                    <tr>
+                                        <td><strong>NIP:</strong></td>
+                                        <td>${tokenInfo.profile.nip}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${tokenInfo.profile?.jabatan ? `
+                                    <tr>
+                                        <td><strong>Jabatan:</strong></td>
+                                        <td>${tokenInfo.profile.jabatan}</td>
+                                    </tr>
+                                    ` : ''}
+                                    ${tokenInfo.profile?.no_hp ? `
+                                    <tr>
+                                        <td><strong>No. HP:</strong></td>
+                                        <td>${tokenInfo.profile.no_hp}</td>
+                                    </tr>
+                                    ` : ''}
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Detail Token -->
+                    <div class="token-details mt-3">
+                        <h6><i class="fas fa-key"></i> Detail Token</h6>
+                        <table class="table table-sm table-borderless">
+                            <tr>
+                                <td width="35%"><strong>Dibuat:</strong></td>
+                                <td>${tokenInfo.issuedAt ? tokenInfo.issuedAt.toLocaleString('id-ID') : '-'}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Expired:</strong></td>
+                                <td>${tokenInfo.expiresAt ? tokenInfo.expiresAt.toLocaleString('id-ID') : '-'}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <!-- Tombol Aksi -->
+                    <div class="token-actions mt-3">
+                        <button class="btn btn-primary btn-sm" onclick="refreshTokenCountdown(); closeTokenInfoDialog();">
+                            <i class="fas fa-sync"></i> Refresh Display
+                        </button>
+                        <button class="btn btn-success btn-sm ml-2" onclick="manualRefreshToken().then(() => closeTokenInfoDialog());">
+                            <i class="fas fa-sync-alt"></i> Refresh Token
+                        </button>
+                        <button class="btn btn-danger btn-sm ml-2" onclick="logout();">
+                            <i class="fas fa-sign-out-alt"></i> Logout Sekarang
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Debug: Log generated content
+        console.log('Generated content:', content);
+        
+        // Remove existing dialog
+        $(".token-info-window").remove();
+        
+        // Create new dialog with content
+        const windowElement = $("<div></div>").appendTo("body");
+        
+        // Set content before creating the window
+        windowElement.html(content);
+        
+        // Create Kendo Window
+        const kendoWindow = windowElement.kendoWindow({
+            title: "Informasi Token Session & Profile",
+            width: "550px",
+            height: "auto",
+            modal: true,
+            visible: false,
+            actions: ["close"],
+            resizable: false
+        }).data("kendoWindow");
+        
+        // Add class for styling
+        windowElement.addClass("token-info-window");
+        
+        // Center and open the window
+        kendoWindow.center().open();
+        
+        // Debug: Log that window is opened
+        console.log('Token info window opened');
+    }
+    
+    // Fungsi untuk menutup dialog token info
+    function closeTokenInfoDialog() {
+        $(".token-info-window").each(function() {
+            const window = $(this).data("kendoWindow");
+            if (window) {
+                window.close();
+            }
+        });
+    }
+    
+    // Make token functions globally accessible
+    window.checkTokenExpiry = checkTokenExpiry;
+    window.getTokenInfo = getTokenInfo;
+    window.showTokenInfoDialog = showTokenInfoDialog;
+    window.closeTokenInfoDialog = closeTokenInfoDialog;
+    window.startTokenExpiryChecker = startTokenExpiryChecker;
+    window.stopTokenExpiryChecker = stopTokenExpiryChecker;
+    window.refreshToken = refreshToken;
+    window.manualRefreshToken = manualRefreshToken;
+
+    // Fungsi untuk menampilkan konfirmasi penghapusan data penghasilan
+    function showDeleteConfirmationPenghasilan(data) {
+        // Hapus window yang mungkin masih ada
+        $(".k-window").remove();
+        
+        // Buat window baru
+        const windowElement = $("<div></div>").appendTo("body");
+        const window = windowElement.kendoWindow({
+            title: "Konfirmasi Hapus Data Penghasilan",
+            width: "500px",
+            modal: true,
+            visible: false,
+            actions: ["close"],
+            content: {
+                template: `
+                    <div class="delete-confirmation">
+                        <div class="icon-container">
+                            <i class="fas fa-exclamation-triangle text-warning"></i>
+                        </div>
+                        <div class="message">
+                            <h4>Konfirmasi Hapus Data Penghasilan</h4>
+                            <p><strong>Nama Siswa:</strong> ${data.nama_siswa || '-'}</p>
+                            <p><strong>Penghasilan Ayah:</strong> Rp ${(data.penghasilan_ayah || 0).toLocaleString('id-ID')}</p>
+                            <p><strong>Penghasilan Ibu:</strong> Rp ${(data.penghasilan_ibu || 0).toLocaleString('id-ID')}</p>
+                            <p><strong>Total Penghasilan:</strong> Rp ${(data.total_penghasilan || 0).toLocaleString('id-ID')}</p>
+                            <p><strong>Kategori:</strong> ${data.kategori_penghasilan || '-'}</p>
+                            <hr>
+                            <p class="text-danger">Apakah Anda yakin ingin menghapus data penghasilan ini? Tindakan ini tidak dapat dibatalkan.</p>
+                        </div>
+                        <div class="button-container">
+                            <button class="k-button k-button-solid-base" id="cancelDeletePenghasilan">
+                                <i class="fas fa-times"></i> Batal
+                            </button>
+                            <button class="k-button k-button-solid-error" id="confirmDeletePenghasilan">
+                                <i class="fas fa-trash"></i> Hapus Data Penghasilan
+                            </button>
+                        </div>
+                    </div>
+                `
+            }
+        }).data("kendoWindow");
+
+        // Event handlers
+        windowElement.on("click", "#cancelDeletePenghasilan", function() {
+            window.close();
+        });
+
+        windowElement.on("click", "#confirmDeletePenghasilan", function() {
+            window.close();
+            
+            // Lakukan AJAX call langsung ke backend untuk menghapus
+            $.ajax({
+                url: `${API_URL}/penghasilan/${data.id}`,
+                type: "DELETE",
+                beforeSend: function(xhr) {
+                    const token = getToken();
+                    if (token) {
+                        xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                    }
+                },
+                success: function() {
+                    showSuccessNotification("Data penghasilan berhasil dihapus", "Sukses");
+                    // Refresh grid setelah berhasil menghapus
+                    const grid = $("#penghasilan-grid").data("kendoGrid");
+                    if (grid) {
+                        grid.dataSource.read();
+                    }
+                },
+                error: function(xhr) {
+                    const errorMsg = xhr.responseJSON?.detail || "Gagal menghapus data penghasilan";
+                    showErrorNotification(errorMsg, "Error");
+                }
+            });
+        });
+
+        window.center().open();
+    }
+
+    // Fungsi untuk menampilkan konfirmasi penghapusan data presensi
+    function showDeleteConfirmationPresensi(data) {
+        // Hapus window yang mungkin masih ada
+        $(".k-window").remove();
+        
+        // Buat window baru
+        const windowElement = $("<div></div>").appendTo("body");
+        const window = windowElement.kendoWindow({
+            title: "Konfirmasi Hapus Data Presensi",
+            width: "500px",
+            modal: true,
+            visible: false,
+            actions: ["close"],
+            content: {
+                template: `
+                    <div class="delete-confirmation">
+                        <div class="icon-container">
+                            <i class="fas fa-exclamation-triangle text-warning"></i>
+                        </div>
+                        <div class="message">
+                            <h4>Konfirmasi Hapus Data Presensi</h4>
+                            <p><strong>Nama Siswa:</strong> ${data.nama_siswa || '-'}</p>
+                            <p><strong>Semester:</strong> ${data.semester || '-'}</p>
+                            <p><strong>Tahun Ajaran:</strong> ${data.tahun_ajaran || '-'}</p>
+                            <p><strong>Jumlah Hadir:</strong> ${data.jumlah_hadir || 0} hari</p>
+                            <p><strong>Jumlah Sakit:</strong> ${data.jumlah_sakit || 0} hari</p>
+                            <p><strong>Jumlah Izin:</strong> ${data.jumlah_izin || 0} hari</p>
+                            <p><strong>Jumlah Alpa:</strong> ${data.jumlah_alpa || 0} hari</p>
+                            <p><strong>Persentase Kehadiran:</strong> ${(data.persentase_kehadiran || 0).toFixed(1)}%</p>
+                            <p><strong>Kategori:</strong> ${data.kategori_kehadiran || '-'}</p>
+                            <hr>
+                            <p class="text-danger">Apakah Anda yakin ingin menghapus data presensi ini? Tindakan ini tidak dapat dibatalkan.</p>
+                        </div>
+                        <div class="button-container">
+                            <button class="k-button k-button-solid-base" id="cancelDeletePresensi">
+                                <i class="fas fa-times"></i> Batal
+                            </button>
+                            <button class="k-button k-button-solid-error" id="confirmDeletePresensi">
+                                <i class="fas fa-trash"></i> Hapus Data Presensi
+                            </button>
+                        </div>
+                    </div>
+                `
+            }
+        }).data("kendoWindow");
+
+        // Event handlers
+        windowElement.on("click", "#cancelDeletePresensi", function() {
+            window.close();
+        });
+
+        windowElement.on("click", "#confirmDeletePresensi", function() {
+            window.close();
+            
+            // Lakukan AJAX call langsung ke backend untuk menghapus
+            $.ajax({
+                url: `${API_URL}/presensi/${data.id}`,
+                type: "DELETE",
+                beforeSend: function(xhr) {
+                    const token = getToken();
+                    if (token) {
+                        xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                    }
+                },
+                success: function() {
+                    showSuccessNotification("Data presensi berhasil dihapus", "Sukses");
+                    // Refresh grid setelah berhasil menghapus
+                    const grid = $("#presensi-grid").data("kendoGrid");
+                    if (grid) {
+                        grid.dataSource.read();
+                    }
+                },
+                error: function(xhr) {
+                    const errorMsg = xhr.responseJSON?.detail || "Gagal menghapus data presensi";
+                    showErrorNotification(errorMsg, "Error");
+                }
+            });
+        });
+
+        window.center().open();
+    }
+
+    // Fungsi untuk menampilkan konfirmasi penghapusan data users
+    function showDeleteConfirmationUsers(data) {
+        // Hapus window yang mungkin masih ada
+        $(".k-window").remove();
+        
+        // Buat window baru
+        const windowElement = $("<div></div>").appendTo("body");
+        const window = windowElement.kendoWindow({
+            title: "Konfirmasi Hapus Data User",
+            width: "500px",
+            modal: true,
+            visible: false,
+            actions: ["close"],
+            content: {
+                template: `
+                    <div class="delete-confirmation">
+                        <div class="icon-container">
+                            <i class="fas fa-exclamation-triangle text-warning"></i>
+                        </div>
+                        <div class="message">
+                            <h4>Konfirmasi Hapus Data User</h4>
+                            <p><strong>Username:</strong> ${data.username || '-'}</p>
+                            <p><strong>Email:</strong> ${data.email || '-'}</p>
+                            <p><strong>Role:</strong> ${data.role || '-'}</p>
+                            <p><strong>Nama Lengkap:</strong> ${data.nama_lengkap || '-'}</p>
+                            <p><strong>NIP:</strong> ${data.nip || '-'}</p>
+                            <p><strong>Jabatan:</strong> ${data.jabatan || '-'}</p>
+                            <p><strong>Status:</strong> ${data.is_active ? 'Aktif' : 'Nonaktif'}</p>
+                            <hr>
+                            <p class="text-danger">Apakah Anda yakin ingin menghapus data user ini? Tindakan ini tidak dapat dibatalkan.</p>
+                        </div>
+                        <div class="button-container">
+                            <button class="k-button k-button-solid-base" id="cancelDeleteUsers">
+                                <i class="fas fa-times"></i> Batal
+                            </button>
+                            <button class="k-button k-button-solid-error" id="confirmDeleteUsers">
+                                <i class="fas fa-trash"></i> Hapus Data User
+                            </button>
+                        </div>
+                    </div>
+                `
+            }
+        }).data("kendoWindow");
+
+        // Event handlers
+        windowElement.on("click", "#cancelDeleteUsers", function() {
+            window.close();
+        });
+
+        windowElement.on("click", "#confirmDeleteUsers", function() {
+            window.close();
+            
+            // Lakukan AJAX call langsung ke backend untuk menghapus
+            $.ajax({
+                url: `${API_URL}/auth/users/${data.id}`,
+                type: "DELETE",
+                beforeSend: function(xhr) {
+                    const token = getToken();
+                    if (token) {
+                        xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                    }
+                },
+                success: function() {
+                    showSuccessNotification("Data user berhasil dihapus", "Sukses");
+                    // Refresh grid setelah berhasil menghapus
+                    const grid = $("#users-grid").data("kendoGrid");
+                    if (grid) {
+                        grid.dataSource.read();
+                    }
+                },
+                error: function(xhr) {
+                    const errorMsg = xhr.responseJSON?.detail || "Gagal menghapus data user";
+                    showErrorNotification(errorMsg, "Error");
+                }
+            });
+        });
+
+        window.center().open();
+    }
+
+    // Fungsi untuk refresh token
+    function refreshToken() {
+        return new Promise((resolve, reject) => {
+            const currentToken = getToken();
+            if (!currentToken) {
+                reject(new Error('No token available to refresh'));
+                return;
+            }
+            
+            $.ajax({
+                url: `${API_URL}/auth/refresh`,
+                method: "POST",
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', `Bearer ${currentToken}`);
+                },
+                success: function(data) {
+                    // Update token in localStorage
+                    localStorage.setItem('access_token', data.access_token);
+                    
+                    // Reset notification flags untuk token baru
+                    notificationShown = {
+                        '15min': false,
+                        '10min': false,
+                        '5min': false,
+                        '2min': false,
+                        '1min': false
+                    };
+                    
+                    // Reset last auto refresh time
+                    lastAutoRefreshTime = Date.now();
+                    
+                    // Refresh countdown timer dengan token baru
+                    refreshTokenCountdown();
+                    
+                    console.log('Token berhasil di-refresh');
+                    showSuccessNotification('Token berhasil diperbaharui', 'Token Refresh');
+                    
+                    resolve(data);
+                },
+                error: function(xhr) {
+                    console.error('Error refreshing token:', xhr);
+                    
+                    let errorMsg = "Gagal refresh token";
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        errorMsg = response.detail || errorMsg;
+                    } catch (e) {}
+                    
+                    if (xhr.status === 401) {
+                        // Token sudah tidak valid, logout
+                        showErrorNotification("Session telah berakhir. Anda akan dialihkan ke halaman login.", "Session Expired");
+                        setTimeout(() => {
+                            logout();
+                        }, 3000);
+                    } else {
+                        showErrorNotification(errorMsg, "Error Refresh Token");
+                    }
+                    
+                    reject(new Error(errorMsg));
+                }
+            });
+        });
+    }
+    
+    // Fungsi untuk auto refresh token (dipanggil otomatis saat token mendekati expired)
+    function autoRefreshToken() {
+        const now = Date.now();
+        
+        // Prevent multiple auto-refresh in short time (minimum 60 seconds between auto-refresh)
+        if (now - lastAutoRefreshTime < 60000) {
+            return Promise.resolve();
+        }
+        
+        console.log('Auto-refreshing token...');
+        return refreshToken().catch(error => {
+            console.error('Auto-refresh failed:', error);
+            // Don't show error notification for auto-refresh failures
+            // User will be notified through normal expiry notifications
+        });
+    }
+    
+    // Fungsi untuk manual refresh token (dipanggil dari UI)
+    function manualRefreshToken() {
+        const tokenStatus = checkTokenExpiry();
+        
+        if (!tokenStatus.isValid) {
+            showErrorNotification("Token tidak valid atau sudah expired", "Error Refresh Token");
+            return Promise.reject(new Error('Invalid token'));
+        }
+        
+        // Show loading state
+        const $refreshBtn = $("#btn-refresh-token");
+        if ($refreshBtn.length > 0) {
+            $refreshBtn.prop("disabled", true).html('<i class="fas fa-spinner fa-spin mr-2"></i> Refreshing...');
+        }
+        
+        return refreshToken().finally(() => {
+            // Reset button state
+            if ($refreshBtn.length > 0) {
+                $refreshBtn.prop("disabled", false).html('<i class="fas fa-sync-alt mr-2"></i> Refresh Token');
+            }
+        });
+    }
+
+    // Make functions globally accessible
+    window.openImageModal = openImageModal;
+    window.closeImageModal = closeImageModal;
+
+    // Global function for updating bar chart when dropdown changes
+    function updateBarChart() {
+        if (typeof currentBarChartData !== 'undefined' && currentBarChartData) {
+            generateBarChart();
+        }
+    }
+
+    // Make bar chart function globally accessible
+    window.updateBarChart = updateBarChart;
+
+    // Global function for opening image modal
+    function openImageModal(imageSrc) {
+        // Remove any existing modal
+        $(".image-modal").remove();
+        
+        // Create modal HTML
+        const modalHtml = `
+            <div class="image-modal" style="
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.8);
+                z-index: 9999;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
             ">
-                <button onclick="closeImageModal()" style="
-                    position: absolute;
-                    top: 10px;
-                    right: 10px;
-                    background: #dc3545;
-                    color: white;
-                    border: none;
-                    border-radius: 50%;
-                    width: 30px;
-                    height: 30px;
-                    cursor: pointer;
-                    font-size: 16px;
-                    line-height: 1;
-                    z-index: 10001;
-                ">&times;</button>
-                <img src="${imageSrc}" alt="Pohon Keputusan C4.5" style="
-                    max-width: 100%;
-                    max-height: 100%;
-                    height: auto;
-                    display: block;
-                    margin: 0 auto;
-                ">
                 <div style="
-                    text-align: center;
-                    margin-top: 15px;
-                    color: #6c757d;
-                    font-size: 14px;
+                    position: relative;
+                    max-width: 90%;
+                    max-height: 90%;
+                    background: white;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+                    padding: 10px;
                 ">
-                    <p>Pohon Keputusan C4.5 - Klik di luar gambar atau tombol X untuk menutup</p>
+                    <button onclick="closeImageModal()" style="
+                        position: absolute;
+                        top: -10px;
+                        right: -10px;
+                        background: #dc3545;
+                        color: white;
+                        border: none;
+                        border-radius: 50%;
+                        width: 30px;
+                        height: 30px;
+                        cursor: pointer;
+                        font-size: 16px;
+                        z-index: 10000;
+                    ">×</button>
+                    <img src="${imageSrc}" alt="Pohon Keputusan C4.5" style="
+                        max-width: 100%;
+                        max-height: 100%;
+                        display: block;
+                        border-radius: 4px;
+                    " />
+                    <div style="
+                        text-align: center;
+                        margin-top: 10px;
+                        font-size: 14px;
+                        color: #666;
+                    ">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        Klik di luar gambar atau tombol × untuk menutup
+                    </div>
                 </div>
             </div>
-        </div>
-    `;
-    
-    // Add modal to body
-    $("body").append(modalHtml);
-    
-    // Close modal when clicking outside the image
-    $(".image-modal").on("click", function(e) {
-        if (e.target === this) {
-            closeImageModal();
-        }
-    });
-    
-    // Close modal with Escape key
-    $(document).on("keydown.imageModal", function(e) {
-        if (e.key === "Escape") {
-            closeImageModal();
-        }
-    });
-}
+        `;
+        
+        // Add modal to body
+        $("body").append(modalHtml);
+        
+        // Close modal when clicking outside the image
+        $(".image-modal").on("click", function(e) {
+            if (e.target === this) {
+                closeImageModal();
+            }
+        });
+        
+        // Close modal on ESC key
+        $(document).on("keydown.imageModal", function(e) {
+            if (e.keyCode === 27) { // ESC key
+                closeImageModal();
+            }
+        });
+    }
 
-// Global function for closing image modal
-function closeImageModal() {
-    $(".image-modal").remove();
-    $(document).off("keydown.imageModal");
-}
-
-// Make functions globally accessible
-window.openImageModal = openImageModal;
-window.closeImageModal = closeImageModal;
+    // Global function for closing image modal
+    function closeImageModal() {
+        $(".image-modal").remove();
+        $(document).off("keydown.imageModal");
+    }
+});

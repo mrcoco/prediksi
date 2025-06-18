@@ -13,9 +13,29 @@ from sqlalchemy.exc import IntegrityError
 
 router = APIRouter()
 
-@router.post("/upload/excel")
+@router.post(
+    "/upload/excel",
+    summary="📤 Upload Data Siswa dari Excel",
+    description="""
+    Upload data siswa dalam format Excel (.xlsx atau .xls).
+    
+    **Format File Excel yang diperlukan:**
+    - Nama
+    - NIS (Nomor Induk Siswa)
+    - Jenis Kelamin
+    - Kelas
+    - Tanggal Lahir
+    - Alamat
+    
+    **Catatan:**
+    - NIS yang sudah ada akan dilewati
+    - File harus berformat .xlsx atau .xls
+    - Tanggal lahir harus dalam format yang valid
+    """,
+    response_description="Status upload dan jumlah data yang berhasil/gagal diproses"
+)
 async def upload_siswa_excel(
-    file: UploadFile = File(...),
+    file: UploadFile = File(..., description="File Excel berisi data siswa"),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
@@ -81,7 +101,19 @@ async def upload_siswa_excel(
             detail=str(e)
         )
 
-@router.get("/export/excel")
+@router.get(
+    "/export/excel",
+    summary="📥 Export Data Siswa ke Excel",
+    description="""
+    Export semua data siswa ke file Excel.
+    
+    **File yang dihasilkan:**
+    - Format: .xlsx
+    - Sheet: Data Siswa
+    - Berisi semua field siswa dengan timestamp
+    """,
+    response_description="File Excel berisi data siswa"
+)
 def export_siswa_excel(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
@@ -121,7 +153,24 @@ def export_siswa_excel(
         headers=headers
     )
 
-@router.post("/", response_model=SiswaResponse, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/", 
+    response_model=SiswaResponse, 
+    status_code=status.HTTP_201_CREATED,
+    summary="➕ Tambah Data Siswa Baru",
+    description="""
+    Menambahkan data siswa baru ke sistem.
+    
+    **Field yang diperlukan:**
+    - Nama: Nama lengkap siswa
+    - NIS: Nomor Induk Siswa (harus unik)
+    - Jenis Kelamin: L (Laki-laki) atau P (Perempuan)
+    - Kelas: Kelas siswa (contoh: X RPL 1)
+    - Tanggal Lahir: Format YYYY-MM-DD
+    - Alamat: Alamat lengkap siswa (opsional)
+    """,
+    response_description="Data siswa yang berhasil ditambahkan"
+)
 def create_siswa(
     siswa: SiswaCreate,
     db: Session = Depends(get_db),
@@ -152,7 +201,25 @@ def create_siswa(
     
     return new_siswa
 
-@router.get("/", response_model=List[SiswaResponse])
+@router.get(
+    "/", 
+    response_model=List[SiswaResponse],
+    summary="📋 Daftar Semua Siswa",
+    description="""
+    Mengambil daftar semua siswa dengan fitur pagination dan pencarian.
+    
+    **Parameter:**
+    - skip: Jumlah data yang dilewati (untuk pagination)
+    - limit: Jumlah maksimal data yang dikembalikan
+    - search: Kata kunci pencarian (nama, NIS, atau kelas)
+    
+    **Fitur:**
+    - Pagination dengan skip dan limit
+    - Pencarian berdasarkan nama, NIS, atau kelas
+    - Data terurut berdasarkan nama
+    """,
+    response_description="Daftar data siswa"
+)
 def get_all_siswa(
     skip: int = 0,
     limit: int = 100,
@@ -174,7 +241,13 @@ def get_all_siswa(
     siswa = query.offset(skip).limit(limit).all()
     return siswa
 
-@router.get("/count", response_model=Dict)
+@router.get(
+    "/count", 
+    response_model=Dict,
+    summary="🔢 Jumlah Total Siswa",
+    description="Mendapatkan jumlah total siswa yang terdaftar dalam database",
+    response_description="Total count siswa"
+)
 def get_siswa_count(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
@@ -183,7 +256,22 @@ def get_siswa_count(
     total_count = db.query(Siswa).count()
     return {"total_count": total_count}
 
-@router.get("/dropdown", response_model=List[Dict])
+@router.get(
+    "/dropdown", 
+    response_model=List[Dict],
+    summary="📝 Dropdown Siswa",
+    description="""
+    Mendapatkan daftar siswa untuk dropdown/select option.
+    
+    **Format response:**
+    - id: ID siswa
+    - text: Nama siswa (Kelas)
+    
+    **Penggunaan:**
+    Untuk form yang memerlukan pilihan siswa seperti input nilai atau presensi
+    """,
+    response_description="List siswa untuk dropdown"
+)
 def get_siswa_dropdown(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
@@ -201,7 +289,21 @@ def get_siswa_dropdown(
     
     return result
 
-@router.get("/{siswa_id}", response_model=SiswaResponse)
+@router.get(
+    "/{siswa_id}", 
+    response_model=SiswaResponse,
+    summary="👤 Detail Siswa",
+    description="""
+    Mengambil detail data siswa berdasarkan ID.
+    
+    **Parameter:**
+    - siswa_id: ID unik siswa yang ingin diambil datanya
+    
+    **Response:**
+    Data lengkap siswa termasuk semua field dan timestamp
+    """,
+    response_description="Detail data siswa"
+)
 def get_siswa(
     siswa_id: int,
     db: Session = Depends(get_db),
@@ -215,7 +317,31 @@ def get_siswa(
         )
     return siswa
 
-@router.put("/{siswa_id}", response_model=SiswaResponse)
+@router.put(
+    "/{siswa_id}", 
+    response_model=SiswaResponse,
+    summary="✏️ Update Data Siswa",
+    description="""
+    Mengupdate data siswa yang sudah ada.
+    
+    **Parameter:**
+    - siswa_id: ID siswa yang akan diupdate
+    
+    **Field yang dapat diupdate:**
+    - Nama: Nama lengkap siswa
+    - NIS: Nomor Induk Siswa (harus tetap unik)
+    - Jenis Kelamin: L (Laki-laki) atau P (Perempuan)
+    - Kelas: Kelas siswa
+    - Tanggal Lahir: Format YYYY-MM-DD
+    - Alamat: Alamat lengkap siswa
+    
+    **Catatan:**
+    - Hanya field yang dikirim yang akan diupdate
+    - NIS tidak boleh sama dengan siswa lain
+    - Timestamp updated_at akan otomatis diperbarui
+    """,
+    response_description="Data siswa yang berhasil diupdate"
+)
 def update_siswa(
     siswa_id: int,
     siswa_update: SiswaUpdate,
@@ -253,7 +379,26 @@ def update_siswa(
     
     return db_siswa
 
-@router.delete("/{siswa_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete(
+    "/{siswa_id}", 
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="🗑️ Hapus Data Siswa",
+    description="""
+    Menghapus data siswa dari sistem.
+    
+    **Parameter:**
+    - siswa_id: ID siswa yang akan dihapus
+    
+    **Peringatan:**
+    - Data yang dihapus tidak dapat dikembalikan
+    - Pastikan siswa tidak memiliki data terkait (nilai, presensi, dll)
+    - Operasi ini akan menghapus semua data terkait siswa
+    
+    **Response:**
+    HTTP 204 No Content jika berhasil dihapus
+    """,
+    response_description="Tidak ada content (data berhasil dihapus)"
+)
 def delete_siswa(
     siswa_id: int,
     db: Session = Depends(get_db),

@@ -100,6 +100,35 @@ Sistem prediksi prestasi siswa menggunakan algoritma C4.5 Decision Tree untuk me
 - Machine Learning dengan scikit-learn
 - Database PostgreSQL/MySQL
 
+## 📚 **API Documentation & Testing**
+
+### **🔗 Swagger UI & ReDoc**
+Dokumentasi API interaktif tersedia dengan fitur authentication terintegrasi:
+
+- **Swagger UI**: [http://localhost:8000/docs](http://localhost:8000/docs) - Interactive API documentation
+- **ReDoc**: [http://localhost:8000/redoc](http://localhost:8000/redoc) - Alternative documentation interface  
+- **OpenAPI JSON**: [http://localhost:8000/openapi.json](http://localhost:8000/openapi.json) - API specification
+
+### **🔐 Authentication**
+Untuk menggunakan API:
+1. Login melalui `/api/auth/login` dengan credentials `admin/admin123`
+2. Copy JWT token dari response
+3. Klik tombol **"Authorize" 🔓** di Swagger UI
+4. Masukkan token dengan format: `Bearer <your-jwt-token>`
+5. Test API endpoints langsung dari browser
+
+### **📋 API Categories**
+- 🏠 **Root**: Basic application info dan health checks
+- 🔐 **Authentication**: Login, logout, user management
+- 👥 **Siswa**: CRUD operations, upload Excel, export data
+- 📊 **Nilai Raport**: Manajemen nilai akademik dengan auto-calculation
+- 📅 **Presensi**: Tracking kehadiran dengan perhitungan otomatis
+- 💰 **Penghasilan Ortu**: Data ekonomi keluarga dengan kategorisasi
+- 🔮 **Prediksi Prestasi**: Machine learning C4.5, batch processing
+- 📈 **Visualisasi**: Decision tree visualization
+- 🏥 **Health**: System monitoring dan health checks
+
+## 📚 **API Documentation & Testing**
 ## 📚 Dokumentasi
 
 Dokumentasi lengkap tersedia di directory [`docs/`](docs/) dengan struktur yang terorganisir:

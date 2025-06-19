@@ -1,0 +1,19 @@
+<svg width="400" height="150" viewBox="0 0 400 150" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#ffffff"/>
+
+  <!-- Icon: Brain Bulb -->
+  <g transform="translate(20, 30) scale(0.8)">
+    <path d="M60,10 C60,5 56,-2 50,2 C44,6 40,15 40,20 C40,25 44,34 50,38 C56,42 60,39 60,34 C60,30 56,25 50,23 C44,21 40,20 40,20 M50,40 L50,50 M50,50 L40,55 M50,50 L60,55" 
+          fill="#FFA726" stroke="#003366" stroke-width="1"/>
+    <circle cx="50" cy="25" r="15" fill="none" stroke="#003366" stroke-width="2"/>
+  </g>
+
+  <!-- Text -->
+  <text x="90" y="60" font-family="Montserrat, sans-serif" font-size="32" font-weight="bold" fill="#003366">S P P A S</text>
+  
+  <!-- Tagline -->
+  <text x="90" y="90" font-family="Open Sans, sans-serif" font-size="14" fill="#4CAF50">
+    Sistem Prediksi Prestasi Akademik Siswa
+  </text>
+</svg>

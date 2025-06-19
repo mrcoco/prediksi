@@ -3530,7 +3530,15 @@ header {
 }
 
 /* Kolom presensi (H, S, I, A) */
-#presensi-grid .k-grid-header th[data-field="jumlah_hadir"],
+#presensi-grid .k-grid-header th[data-field="jumlah_hadir"]{
+    width: 100px !important;
+    min-width: 100px !important;
+    max-width: 100px !important;
+    text-align: center;
+    font-family: 'Courier New', monospace;
+    font-weight: 500;
+    color: #495057;
+}
 #presensi-grid .k-grid-header th[data-field="jumlah_sakit"],
 #presensi-grid .k-grid-header th[data-field="jumlah_izin"],
 #presensi-grid .k-grid-header th[data-field="jumlah_alpa"],
@@ -3550,9 +3558,9 @@ header {
 /* Kolom persentase kehadiran */
 #presensi-grid .k-grid-header th[data-field="persentase_kehadiran"],
 #presensi-grid .k-grid-content td:nth-child(9) {
-    width: 100px !important;
-    min-width: 100px !important;
-    max-width: 100px !important;
+    width: 75px !important;
+    min-width: 75px !important;
+    max-width: 75px !important;
     text-align: center;
     font-family: 'Courier New', monospace;
     font-weight: bold;

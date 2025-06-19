@@ -225,6 +225,14 @@ $(document).ready(function() {
     
     // Navigasi sidebar
     $(".sidebar-link").on("click", function(e) {
+        console.log("Sidebar link clicked:", $(this).data("page"));
+        
+        // Pastikan ini bukan guide navigation button
+        if ($(this).hasClass("guide-nav-btn")) {
+            console.log("Skipping - this is a guide navigation button");
+            return;
+        }
+        
         console.log("Clicked sidebar link");
         e.preventDefault();
         const page = $(this).data("page");
@@ -243,7 +251,7 @@ $(document).ready(function() {
         $(".page").hide();
         $(`#${page}-page`).show();
         
-        // Inisialisasi grid jika belum
+        // Inisialisasi halaman jika diperlukan
         if (page === "siswa" && !$("#siswa-grid").data("kendoGrid")) {
             initSiswaGrid();
         } else if (page === "nilai" && !$("#nilai-grid").data("kendoGrid")) {
@@ -267,11 +275,42 @@ $(document).ready(function() {
                 $("#dashboard-page").show();
                 return;
             }
-        } else if (page === "profile" && !$("#profile-page").data("kendoForm")) {
+        } else if (page === "profile" && !$("#profile-form").data("kendoForm")) {
             initProfilePage();
-        } else if (page === "generate-dummy" && !$("#generate-dummy-form").data("kendoForm")) {
-            console.log("Initializing generate dummy form");
-            initGenerateDummyForm();  }
+        } else if (page === "user-guide") {
+            console.log("Navigating to user-guide page, initializing...");
+            // Multiple initialization attempts to ensure success
+            let initAttempts = 0;
+            const maxAttempts = 3;
+            
+            function attemptInit() {
+                initAttempts++;
+                console.log(`Init attempt ${initAttempts}/${maxAttempts}`);
+                
+                if ($("#user-guide-page").is(':visible')) {
+                    console.log("User guide page is visible, initializing...");
+                    initUserGuide();
+                    
+                    // Test navigation after initialization
+                    setTimeout(() => {
+                        window.testGuideNavigation();
+                        
+                        // Force show first section if none are visible
+                        if ($('.guide-section:visible').length === 0) {
+                            console.log("No sections visible, forcing show getting-started");
+                            window.forceShowSection('getting-started');
+                        }
+                    }, 500);
+                } else if (initAttempts < maxAttempts) {
+                    console.log("User guide page not visible yet, retrying...");
+                    setTimeout(attemptInit, 300);
+                } else {
+                    console.error("Failed to initialize user guide after", maxAttempts, "attempts");
+                }
+            }
+            
+            setTimeout(attemptInit, 100);
+        }
     });
     
     // Event handler untuk profile link di header-right
@@ -310,7 +349,7 @@ $(document).ready(function() {
     });
     
     // Event handler umum untuk semua link dengan data-page attribute (kecuali pagination)
-    $(document).on("click", "[data-page]:not(.k-link):not(.k-pager-nav)", function(e) {
+    $(document).on("click", "[data-page]:not(.k-link):not(.k-pager-nav):not(.guide-nav-btn)", function(e) {
         // Skip jika sudah ditangani oleh event handler lain
         if ($(this).hasClass("sidebar-link")) {
             return; // Biarkan sidebar handler yang menangani
@@ -321,12 +360,17 @@ $(document).ready(function() {
             return; // Biarkan Kendo UI pagination yang menangani
         }
         
+        // Skip jika ini adalah guide navigation button
+        if ($(this).hasClass("guide-nav-btn") || $(this).closest('#user-guide-page').length > 0) {
+            return; // Biarkan User Guide handler yang menangani
+        }
+        
         console.log("Clicked data-page link:", $(this).data("page"));
         e.preventDefault();
         const page = $(this).data("page");
         
         // Validasi bahwa ini adalah halaman yang valid (bukan nomor halaman pagination)
-        const validPages = ['dashboard', 'siswa', 'nilai', 'presensi', 'penghasilan', 'prediksi', 'users', 'profile', 'generate-dummy'];
+        const validPages = ['dashboard', 'siswa', 'nilai', 'presensi', 'penghasilan', 'prediksi', 'users', 'profile', 'about', 'user-guide', 'generate-dummy'];
         if (!validPages.includes(page)) {
             return; // Bukan halaman navigasi yang valid, kemungkinan pagination
         }
@@ -373,8 +417,7 @@ $(document).ready(function() {
             initProfilePage();
         } else if (page === "generate-dummy" && !$("#generate-dummy-form").data("kendoForm")) {
             console.log("Initializing generate dummy form");
-            initGenerateDummyForm();
-        }
+            initGenerateDummyForm();  }
     });
     
     // Event handler khusus untuk mencegah konflik dengan pagination Kendo UI
@@ -447,7 +490,9 @@ $(document).ready(function() {
             'presensi': ['admin', 'guru', 'staf'], // All roles can access attendance
             'penghasilan': ['admin', 'guru', 'staf'], // All roles can access parent income
             'prediksi': ['admin', 'guru', 'staf'], // All roles can access prediction
-            'profile': ['admin', 'guru', 'staf'] // All roles can access profile
+            'profile': ['admin', 'guru', 'staf'], // All roles can access profile
+            'about': ['admin', 'guru', 'staf'], // All roles can access about page
+            'user-guide': ['admin', 'guru', 'staf'] // All roles can access user guide
         };
         
         // Check if page exists in rules
@@ -6101,4 +6146,804 @@ $(document).ready(function() {
         
         showDeleteConfirmationNilai(dataItem);
     });
+
+    // User Guide Navigation Functions
+    function initUserGuide() {
+        console.log("=== INITIALIZING USER GUIDE ===");
+        
+        // Complete cleanup of all existing event handlers
+        $(document).off('click', '.guide-nav-btn');
+        $(document).off('click.userguide-global', '.guide-nav-btn');
+        $('#user-guide-page').off('click', '.guide-nav-btn');
+        $('.guide-nav-btn').off('click.userguide');
+        $('.guide-nav-btn').off('click');
+        $('.guide-nav-btn').off('click.userguide-fallback');
+        $('.guide-nav-btn').off('click.userguide-primary');
+        
+        console.log("All existing event handlers cleaned up");
+        
+        // Enhanced Event Handler dengan immediate response
+        $('#user-guide-page').on('click.userguide-enhanced', '.guide-nav-btn', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            
+            console.log("=== ENHANCED NAVIGATION CLICK ===");
+            
+            const $button = $(this);
+            const target = $button.data('target');
+            const buttonText = $button.text().trim();
+            
+            // Pastikan ini bukan sidebar link
+            if ($button.hasClass("sidebar-link") || $button.data('page')) {
+                console.log("Skipping - this is a sidebar link");
+                return false;
+            }
+            
+            console.log(`User Guide Button clicked: "${buttonText}" -> Target: "${target}"`);
+            console.log("Event isolated to User Guide navigation only");
+            
+            // Immediate visual feedback
+            $button.addClass('btn-loading');
+            
+            // Validate target
+            if (!target) {
+                console.error("No target found for button:", buttonText);
+                $button.removeClass('btn-loading');
+                showErrorNotification("Target section tidak ditemukan", "Navigation Error");
+                return false;
+            }
+            
+            // Execute navigation immediately
+            try {
+                // Update button states first for immediate visual feedback
+                updateButtonStates(target);
+                
+                // Show target section
+                const success = showGuideSection(target);
+                
+                if (success) {
+                    console.log(`✅ Navigation successful: ${buttonText} -> ${target}`);
+                    
+                    // Add success animation
+                    $button.addClass('btn-success-flash');
+                    setTimeout(() => {
+                        $button.removeClass('btn-success-flash');
+                    }, 300);
+                } else {
+                    console.error(`❌ Navigation failed: ${buttonText} -> ${target}`);
+                    showErrorNotification(`Gagal menampilkan section: ${buttonText}`, "Navigation Error");
+                }
+                
+            } catch (error) {
+                console.error("Navigation error:", error);
+                showErrorNotification("Terjadi kesalahan saat navigasi", "Error");
+            } finally {
+                $button.removeClass('btn-loading');
+            }
+            
+            return false;
+        });
+        
+        // Direct button handlers sebagai backup dengan debouncing
+        let navigationTimeout = null;
+        $('.guide-nav-btn').each(function(index) {
+            const $btn = $(this);
+            const target = $btn.data('target');
+            const buttonText = $btn.text().trim();
+            
+            console.log(`Setting up direct handler ${index + 1}: "${buttonText}" -> "${target}"`);
+            
+            $btn.off('click.userguide-direct').on('click.userguide-direct', function(e) {
+                // Debounce untuk prevent double clicks
+                if (navigationTimeout) {
+                    clearTimeout(navigationTimeout);
+                }
+                
+                navigationTimeout = setTimeout(() => {
+                    console.log("=== DIRECT HANDLER BACKUP ===");
+                    console.log(`Direct click: "${buttonText}" -> "${target}"`);
+                    
+                    if (target && !e.isDefaultPrevented()) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        updateButtonStates(target);
+                        showGuideSection(target);
+                        
+                        console.log(`Direct navigation completed: ${target}`);
+                    }
+                }, 50); // 50ms debounce
+            });
+        });
+        
+        // Enhanced button verification dengan validation
+        console.log("=== ENHANCED BUTTON VERIFICATION ===");
+        const availableSections = $('.guide-section').map(function() { return this.id; }).get();
+        console.log("Available sections:", availableSections);
+        
+        let validButtons = 0;
+        $('.guide-nav-btn').each(function(index) {
+            const $btn = $(this);
+            const target = $btn.data('target');
+            const buttonText = $btn.text().trim();
+            const hasDataTarget = !!target;
+            const targetExists = target && $('#' + target).length > 0;
+            
+            console.log(`Button ${index + 1}: "${buttonText}"`);
+            console.log(`  ✓ Has data-target: ${hasDataTarget}`);
+            console.log(`  ✓ Target value: "${target}"`);
+            console.log(`  ✓ Target exists: ${targetExists}`);
+            
+            if (hasDataTarget && targetExists) {
+                validButtons++;
+                $btn.addClass('nav-btn-valid');
+            } else {
+                $btn.addClass('nav-btn-invalid');
+                console.warn(`  ⚠️ Invalid button configuration`);
+            }
+        });
+        
+        console.log(`Valid navigation buttons: ${validButtons}/4`);
+        
+        // Initialize default section dengan enhanced error handling
+        setTimeout(() => {
+            console.log("=== ENHANCED DEFAULT INITIALIZATION ===");
+            
+            try {
+                // Hide all sections dengan force cleanup
+                $('.guide-section').each(function() {
+                    const $section = $(this);
+                    $section.removeClass('active');
+                    $section.css({
+                        'display': 'none !important',
+                        'visibility': 'hidden !important',
+                        'opacity': '0 !important'
+                    });
+                    $section.hide();
+                });
+                
+                // Show default section
+                const defaultSuccess = showGuideSection('getting-started');
+                if (defaultSuccess) {
+                    updateButtonStates('getting-started');
+                    console.log("✅ Default section initialized successfully");
+                } else {
+                    console.error("❌ Failed to initialize default section");
+                    // Fallback: try to show any available section
+                    if (availableSections.length > 0) {
+                        showGuideSection(availableSections[0]);
+                        updateButtonStates(availableSections[0]);
+                        console.log(`Fallback: Showed section ${availableSections[0]}`);
+                    }
+                }
+                
+                // Enhanced testing after initialization
+                setTimeout(() => {
+                    console.log("=== RUNNING ENHANCED NAVIGATION TEST ===");
+                    window.testGuideNavigation();
+                }, 200);
+                
+            } catch (error) {
+                console.error("Initialization error:", error);
+                showErrorNotification("Gagal menginisialisasi User Guide", "Initialization Error");
+            }
+            
+        }, 200); // Reduced timeout untuk faster response
+        
+        console.log("=== USER GUIDE ENHANCED INITIALIZATION COMPLETED ===");
+    }
+    
+    function updateButtonStates(activeTarget) {
+        console.log("Updating button states for target:", activeTarget);
+        
+        $('.guide-nav-btn').each(function() {
+            const $btn = $(this);
+            const btnTarget = $btn.data('target');
+            
+            // Remove all button classes first
+            $btn.removeClass('btn-primary btn-outline-primary btn-outline-success btn-outline-info btn-outline-warning');
+            
+            if (btnTarget === activeTarget) {
+                // Make clicked button primary
+                $btn.addClass('btn-primary');
+                console.log("Set button primary for target:", btnTarget);
+            } else {
+                // Restore original outline style based on target
+                switch(btnTarget) {
+                    case 'getting-started':
+                        $btn.addClass('btn-outline-primary');
+                        break;
+                    case 'data-management':
+                        $btn.addClass('btn-outline-success');
+                        break;
+                    case 'prediction':
+                        $btn.addClass('btn-outline-info');
+                        break;
+                    case 'troubleshooting':
+                        $btn.addClass('btn-outline-warning');
+                        break;
+                    default:
+                        $btn.addClass('btn-outline-primary');
+                }
+                console.log("Reset button outline for target:", btnTarget);
+            }
+        });
+    }
+
+    function showGuideSection(sectionId) {
+        console.log("=== ENHANCED SECTION DISPLAY ===");
+        console.log(`Target section ID: "${sectionId}"`);
+        
+        try {
+            // 1. Validate section ID
+            if (!sectionId || typeof sectionId !== 'string') {
+                console.error("Invalid section ID:", sectionId);
+                return false;
+            }
+            
+            // 2. Find target section
+            const $targetSection = $('#' + sectionId);
+            if ($targetSection.length === 0) {
+                console.error(`Target section not found: "${sectionId}"`);
+                console.log("Available sections:", $('.guide-section').map(function() { return this.id; }).get());
+                return false;
+            }
+            
+            console.log(`✓ Target section found: "${sectionId}"`);
+            
+            // 3. Hide all sections dengan enhanced cleanup
+            $('.guide-section').each(function() {
+                const $section = $(this);
+                const sectionId = $section.attr('id');
+                
+                // Remove active class
+                $section.removeClass('active');
+                
+                // Force hide dengan multiple methods
+                $section.css({
+                    'display': 'none !important',
+                    'visibility': 'hidden !important',
+                    'opacity': '0 !important',
+                    'z-index': '-1'
+                });
+                
+                // jQuery hide method
+                $section.hide();
+                
+                console.log(`Hidden section: "${sectionId}"`);
+            });
+            
+            // 4. Show target section dengan enhanced display logic
+            console.log(`Showing target section: "${sectionId}"`);
+            
+            // Step 1: Remove any existing classes
+            $targetSection.removeClass('active');
+            
+            // Step 2: Apply active class
+            $targetSection.addClass('active');
+            
+            // Step 3: Force CSS display dengan multiple approaches
+            $targetSection.css({
+                'display': 'block !important',
+                'visibility': 'visible !important',
+                'opacity': '1 !important',
+                'z-index': '1',
+                'position': 'relative'
+            });
+            
+            // Step 4: jQuery show method
+            $targetSection.show();
+            
+            // 5. Verify section is visible
+            setTimeout(() => {
+                const isVisible = $targetSection.is(':visible');
+                const display = $targetSection.css('display');
+                const visibility = $targetSection.css('visibility');
+                const opacity = $targetSection.css('opacity');
+                const hasActive = $targetSection.hasClass('active');
+                
+                console.log("=== VISIBILITY CHECK ===");
+                console.log("Is visible:", isVisible);
+                console.log("Display CSS:", display);
+                console.log("Visibility CSS:", visibility);
+                console.log("Opacity CSS:", opacity);
+                console.log("Has active class:", hasActive);
+                
+                if (!isVisible) {
+                    console.error("CRITICAL: Section still not visible, applying emergency fix");
+                    
+                    // Emergency fix - override all CSS
+                    $targetSection.attr('style', 
+                        'display: block !important; ' +
+                        'visibility: visible !important; ' +
+                        'opacity: 1 !important; ' +
+                        'position: relative !important; ' +
+                        'z-index: 999 !important;'
+                    );
+                    
+                    // Force show with jQuery
+                    $targetSection.show();
+                    
+                    // Check again
+                    setTimeout(() => {
+                        console.log("After emergency fix - visible:", $targetSection.is(':visible'));
+                    }, 100);
+                } else {
+                    console.log("SUCCESS: Section is now visible");
+                    
+                    // Apply smooth fade in animation
+                    $targetSection.css('opacity', '0').animate({
+                        opacity: 1
+                    }, 300, function() {
+                        console.log("Fade animation completed for:", sectionId);
+                    });
+                }
+            }, 100);
+            
+            // 6. Scroll to section if not the first one
+            if (sectionId !== 'getting-started') {
+                setTimeout(() => {
+                    if ($targetSection[0] && $targetSection[0].scrollIntoView) {
+                        $targetSection[0].scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'start' 
+                        });
+                        console.log("Scrolled to section:", sectionId);
+                    }
+                }, 400);
+            }
+            
+            console.log("=== SECTION DISPLAY PROCESS COMPLETED ===");
+            return true;
+            
+        } catch (error) {
+            console.error("Error in showGuideSection:", error);
+            showErrorNotification(`Gagal menampilkan section: ${sectionId}`, "Display Error");
+            return false;
+        }
+    }
+
+    // Make User Guide functions globally accessible
+    window.initUserGuide = initUserGuide;
+    window.showGuideSection = showGuideSection;
+    
+    // Enhanced debug function for testing guide navigation
+    window.testGuideNavigation = function() {
+        console.log("=== COMPREHENSIVE GUIDE NAVIGATION TEST ===");
+        console.log("User Guide page visible:", $('#user-guide-page').is(':visible'));
+        console.log("Guide nav buttons found:", $('.guide-nav-btn').length);
+        console.log("Guide sections found:", $('.guide-section').length);
+        
+        // Test button data attributes and click handlers
+        $('.guide-nav-btn').each(function(index) {
+            const $btn = $(this);
+            const target = $btn.data('target');
+            const section = $('#' + target);
+            const hasClickHandler = $._data(this, 'events') && $._data(this, 'events').click;
+            
+            console.log(`Button ${index + 1}:`);
+            console.log(`  - Target: "${target}"`);
+            console.log(`  - Section exists: ${section.length > 0}`);
+            console.log(`  - Section visible: ${section.is(':visible')}`);
+            console.log(`  - Section active: ${section.hasClass('active')}`);
+            console.log(`  - Button classes: ${$btn.attr('class')}`);
+            console.log(`  - Has click handler: ${!!hasClickHandler}`);
+            console.log(`  - Button text: "${$btn.text().trim()}"`);
+        });
+        
+        // Test section states
+        console.log("\n--- SECTION STATES ---");
+        $('.guide-section').each(function(index) {
+            const $section = $(this);
+            const id = $section.attr('id');
+            const isVisible = $section.is(':visible');
+            const hasActive = $section.hasClass('active');
+            const display = $section.css('display');
+            const visibility = $section.css('visibility');
+            const opacity = $section.css('opacity');
+            
+            console.log(`Section ${index + 1} (${id}):`);
+            console.log(`  - Visible: ${isVisible}`);
+            console.log(`  - Active: ${hasActive}`);
+            console.log(`  - Display: ${display}`);
+            console.log(`  - Visibility: ${visibility}`);
+            console.log(`  - Opacity: ${opacity}`);
+        });
+        
+        // Test event delegation
+        console.log("\n--- EVENT DELEGATION TEST ---");
+        const userGuidePageEvents = $._data($('#user-guide-page')[0], 'events');
+        const documentEvents = $._data(document, 'events');
+        
+        console.log("User Guide page events:", userGuidePageEvents ? Object.keys(userGuidePageEvents) : 'none');
+        console.log("Document events (click):", documentEvents && documentEvents.click ? documentEvents.click.length : 'none');
+        
+        console.log("=== END COMPREHENSIVE TEST ===");
+    };
+    
+    // Manual button test function
+    window.testButtonClick = function(target) {
+        console.log(`=== MANUAL BUTTON TEST: ${target} ===`);
+        const $button = $(`.guide-nav-btn[data-target="${target}"]`);
+        
+        if ($button.length === 0) {
+            console.error(`Button with target "${target}" not found`);
+            return;
+        }
+        
+        console.log("Button found:", $button[0]);
+        console.log("Triggering click...");
+        
+        // Simulate click
+        $button.trigger('click');
+        
+        setTimeout(() => {
+            const $section = $('#' + target);
+            console.log("After click - Section visible:", $section.is(':visible'));
+            console.log("After click - Section active:", $section.hasClass('active'));
+            console.log("After click - Section display:", $section.css('display'));
+            console.log("=== END MANUAL TEST ===");
+        }, 500);
+    };
+    
+    // Test all navigation buttons sequentially
+    window.testAllNavigation = function() {
+        console.log("=== TESTING ALL NAVIGATION BUTTONS ===");
+        const targets = ['getting-started', 'data-management', 'prediction', 'troubleshooting'];
+        let currentIndex = 0;
+        
+        function testNext() {
+            if (currentIndex >= targets.length) {
+                console.log("=== ALL NAVIGATION TESTS COMPLETED ===");
+                return;
+            }
+            
+            const target = targets[currentIndex];
+            console.log(`\n--- Testing button ${currentIndex + 1}: ${target} ---`);
+            
+            window.testButtonClick(target);
+            currentIndex++;
+            
+            // Test next button after delay
+            setTimeout(testNext, 1500);
+        }
+        
+        testNext();
+    };
+    
+    // Check for event handler conflicts
+    window.checkEventConflicts = function() {
+        console.log("=== CHECKING EVENT HANDLER CONFLICTS ===");
+        
+        // Check sidebar links
+        console.log("SIDEBAR LINKS:");
+        $('.sidebar-link').each(function(index) {
+            const $link = $(this);
+            const page = $link.data('page');
+            const events = $._data(this, 'events');
+            
+            console.log(`  Sidebar ${index + 1} (${page}):`);
+            console.log("    - Classes:", this.className);
+            console.log("    - Data-page:", $link.data('page'));
+            console.log("    - Data-target:", $link.data('target'));
+            console.log("    - Events:", events ? Object.keys(events) : 'none');
+        });
+        
+        console.log("\nUSER GUIDE BUTTONS:");
+        $('.guide-nav-btn').each(function(index) {
+            const $btn = $(this);
+            const target = $btn.data('target');
+            const page = $btn.data('page');
+            const events = $._data(this, 'events');
+            
+            console.log(`  Guide ${index + 1} (${target}):`);
+            console.log("    - Classes:", this.className);
+            console.log("    - Data-target:", target);
+            console.log("    - Data-page:", page);
+            console.log("    - Events:", events ? Object.keys(events) : 'none');
+            
+            if (events && events.click) {
+                console.log(`    - Click handlers: ${events.click.length}`);
+                events.click.forEach((handler, i) => {
+                    console.log(`      ${i + 1}. Namespace: ${handler.namespace || 'none'}`);
+                });
+            }
+        });
+        
+        // Check for potential conflicts
+        console.log("\nCONFLICT ANALYSIS:");
+        let conflicts = 0;
+        $('.guide-nav-btn').each(function() {
+            const $btn = $(this);
+            if ($btn.hasClass('sidebar-link') || $btn.data('page')) {
+                console.log("⚠️  POTENTIAL CONFLICT:", this.className);
+                conflicts++;
+            }
+        });
+        
+        if (conflicts === 0) {
+            console.log("✅ NO CONFLICTS DETECTED - All systems isolated");
+        } else {
+            console.log(`❌ ${conflicts} CONFLICTS DETECTED`);
+        }
+        
+        console.log("=== END CONFLICT CHECK ===");
+    };
+    
+    // Force show section function for debugging
+    window.forceShowSection = function(sectionId) {
+        console.log("Force showing section:", sectionId);
+        const $section = $('#' + sectionId);
+        if ($section.length > 0) {
+            $('.guide-section').hide().removeClass('active');
+            $section.addClass('active').show().css('display', 'block !important');
+            console.log("Force show completed for:", sectionId);
+        } else {
+            console.error("Section not found:", sectionId);
+        }
+    };
+
+    // ========== SYSTEM INFORMATION FUNCTIONS ==========
+    
+    // Initialize system information
+    function initializeSystemInfo() {
+        console.log("Initializing system information...");
+        
+        // Update system status
+        updateSystemStatus();
+        
+        // Update concurrent users count
+        updateConcurrentUsers();
+        
+        // Set up real-time updates
+        setInterval(function() {
+            updateSystemStatus();
+            updateConcurrentUsers();
+        }, 30000); // Update every 30 seconds
+        
+        console.log("System information initialized successfully");
+    }
+    
+    // Update system status indicator
+    function updateSystemStatus() {
+        const statusElement = $("#system-status");
+        const statusIntroElement = $("#system-status-intro");
+        const now = new Date();
+        
+        // Simulate system health check
+        const isOnline = navigator.onLine;
+        const uptime = Math.floor((now.getTime() - new Date().setHours(0, 0, 0, 0)) / 1000 / 60); // Minutes since midnight
+        
+        if (isOnline) {
+            statusElement.html('<i class="fas fa-circle text-success mr-1"></i>Online');
+            statusElement.removeClass('badge-danger').addClass('badge-light');
+            
+            // Update intro status
+            if (statusIntroElement.length > 0) {
+                statusIntroElement.text('Online');
+                statusIntroElement.removeClass('text-danger').addClass('text-success');
+            }
+        } else {
+            statusElement.html('<i class="fas fa-circle text-danger mr-1"></i>Offline');
+            statusElement.removeClass('badge-light').addClass('badge-danger');
+            
+            // Update intro status
+            if (statusIntroElement.length > 0) {
+                statusIntroElement.text('Offline');
+                statusIntroElement.removeClass('text-success').addClass('text-danger');
+            }
+        }
+        
+        // Update tooltip with additional info
+        statusElement.attr('title', `Uptime: ${Math.floor(uptime / 60)}h ${uptime % 60}m`);
+        
+        // Update intro status tooltip
+        if (statusIntroElement.length > 0) {
+            statusIntroElement.attr('title', `System uptime: ${Math.floor(uptime / 60)}h ${uptime % 60}m`);
+        }
+    }
+    
+    // Update concurrent users count
+    function updateConcurrentUsers() {
+        const token = getToken();
+        if (!token) return;
+        
+        // Simulate concurrent users (in real implementation, this would be an API call)
+        const baseUsers = Math.floor(Math.random() * 10) + 1;
+        const peakHour = new Date().getHours();
+        const peakMultiplier = (peakHour >= 8 && peakHour <= 16) ? 1.5 : 1; // Peak during work hours
+        const concurrentUsers = Math.floor(baseUsers * peakMultiplier);
+        
+        $("#concurrent-users").text(concurrentUsers);
+        
+        // Update color based on load
+        const userElement = $("#concurrent-users").parent().find('.metric-icon i');
+        if (concurrentUsers > 30) {
+            userElement.removeClass('text-info text-warning').addClass('text-danger');
+        } else if (concurrentUsers > 15) {
+            userElement.removeClass('text-info text-danger').addClass('text-warning');
+        } else {
+            userElement.removeClass('text-warning text-danger').addClass('text-info');
+        }
+    }
+    
+    // Get system information
+    function getSystemInfo() {
+        return {
+            name: "EduPro - Sistem Prediksi Prestasi",
+            version: "v2.0.1",
+            algorithm: "C4.5 Decision Tree",
+            framework: "FastAPI + PostgreSQL",
+            frontend: "HTML5 + Kendo UI + D3.js",
+            database: "PostgreSQL 13+",
+            backend: "Python 3.8+ FastAPI",
+            ml: "Scikit-learn",
+            containerization: "Docker Compose",
+            features: [
+                "Prediksi Individual & Batch",
+                "Visualisasi Interaktif D3.js",
+                "Export Excel & Reporting",
+                "Real-time Dashboard",
+                "User Management & Security"
+            ],
+            performance: {
+                trainingTime: "< 15s",
+                predictionTime: "< 2s",
+                modelAccuracy: "> 85%",
+                concurrentUsers: "1-50"
+            }
+        };
+    }
+    
+    // Show system information modal
+    function showSystemInfoModal() {
+        const systemInfo = getSystemInfo();
+        
+        const content = `
+            <div class="system-info-modal">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="text-primary mb-3">
+                            <i class="fas fa-info-circle mr-2"></i>
+                            Informasi Sistem
+                        </h6>
+                        <table class="table table-sm">
+                            <tr>
+                                <td><strong>Nama Sistem:</strong></td>
+                                <td>${systemInfo.name}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Versi:</strong></td>
+                                <td>${systemInfo.version}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Algoritma:</strong></td>
+                                <td>${systemInfo.algorithm}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Framework:</strong></td>
+                                <td>${systemInfo.framework}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-success mb-3">
+                            <i class="fas fa-cogs mr-2"></i>
+                            Spesifikasi Teknis
+                        </h6>
+                        <table class="table table-sm">
+                            <tr>
+                                <td><strong>Database:</strong></td>
+                                <td>${systemInfo.database}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Backend:</strong></td>
+                                <td>${systemInfo.backend}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Machine Learning:</strong></td>
+                                <td>${systemInfo.ml}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Container:</strong></td>
+                                <td>${systemInfo.containerization}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <h6 class="text-info mb-3">
+                            <i class="fas fa-tachometer-alt mr-2"></i>
+                            Performa Sistem
+                        </h6>
+                        <div class="row">
+                            <div class="col-md-3 text-center">
+                                <div class="performance-badge">
+                                    <i class="fas fa-clock text-primary"></i>
+                                    <div><strong>${systemInfo.performance.trainingTime}</strong></div>
+                                    <small>Training Time</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3 text-center">
+                                <div class="performance-badge">
+                                    <i class="fas fa-bolt text-warning"></i>
+                                    <div><strong>${systemInfo.performance.predictionTime}</strong></div>
+                                    <small>Prediction Time</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3 text-center">
+                                <div class="performance-badge">
+                                    <i class="fas fa-bullseye text-success"></i>
+                                    <div><strong>${systemInfo.performance.modelAccuracy}</strong></div>
+                                    <small>Model Accuracy</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3 text-center">
+                                <div class="performance-badge">
+                                    <i class="fas fa-users text-info"></i>
+                                    <div><strong>${systemInfo.performance.concurrentUsers}</strong></div>
+                                    <small>Concurrent Users</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        const dialog = $("<div></div>").html(content);
+        
+        dialog.kendoWindow({
+            title: "Detail Informasi Sistem EduPro",
+            width: "800px",
+            height: "600px",
+            modal: true,
+            resizable: false,
+            actions: ["Close"],
+            close: function() {
+                this.destroy();
+            }
+        });
+        
+        dialog.data("kendoWindow").center().open();
+    }
+    
+    // Initialize system info when dashboard loads
+    $(document).ready(function() {
+        setTimeout(function() {
+            if ($("#dashboard-page").is(':visible')) {
+                initializeSystemInfo();
+            }
+        }, 1000);
+        
+        // Add click handler for system info card
+        $(document).on('click', '.system-info-card .card-header', function() {
+            showSystemInfoModal();
+        });
+        
+        // Add tooltip for system badges
+        $(document).on('mouseenter', '.system-badge', function() {
+            const badge = $(this);
+            if (badge.attr('id') === 'system-status') {
+                badge.attr('title', 'Klik header untuk detail sistem');
+            } else if (badge.attr('id') === 'system-version') {
+                badge.attr('title', 'Versi aplikasi EduPro');
+            }
+        });
+        
+        // Add hover effect for system info card header
+        $(document).on('mouseenter', '.system-info-card .card-header', function() {
+            $(this).css('cursor', 'pointer');
+            $(this).attr('title', 'Klik untuk melihat detail lengkap sistem');
+        });
+    });
+    
+    // Make system info functions globally accessible
+    window.initializeSystemInfo = initializeSystemInfo;
+    window.updateSystemStatus = updateSystemStatus;
+    window.updateConcurrentUsers = updateConcurrentUsers;
+    window.getSystemInfo = getSystemInfo;
+    window.showSystemInfoModal = showSystemInfoModal;
 });

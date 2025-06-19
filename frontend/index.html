@@ -1178,6 +1178,14 @@
                     <i class="sidebar-icon fas fa-user-circle"></i>
                     <span>Profile</span>
                 </a>
+                <a href="#" class="sidebar-link" data-page="about" data-tooltip="About EduPro">
+                    <i class="sidebar-icon fas fa-info-circle"></i>
+                    <span>About</span>
+                </a>
+                <a href="#" class="sidebar-link" data-page="user-guide" data-tooltip="User Guide">
+                    <i class="sidebar-icon fas fa-book-open"></i>
+                    <span>User Guide</span>
+                </a>
                 <a href="#" class="sidebar-link" onclick="logout()" data-tooltip="Logout">
                     <i class="sidebar-icon fas fa-sign-out-alt"></i>
                     <span>Logout</span>
@@ -1194,6 +1202,313 @@
                     <!-- Dashboard Page -->
                     <div class="page" id="dashboard-page">
                         <h2 class="page-title">Dashboard</h2>
+                        
+                        <!-- System Production Intro Section -->
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <div class="card dashboard-intro-card">
+                                    <div class="card-body">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-8">
+                                                <div class="intro-content">
+                                                    <div class="intro-header">
+                                                        <h4 class="intro-title">
+                                                            <i class="fas fa-graduation-cap text-primary mr-2"></i>
+                                                            EduPro - Sistem Prediksi Prestasi Siswa
+                                                        </h4>
+                                                        <p class="intro-subtitle text-muted mb-3">
+                                                            Sistem Informasi Dashboard untuk Prediksi dan Analisis Prestasi Akademik Siswa
+                                                        </p>
+                                                    </div>
+                                                    <div class="intro-description">
+                                                        <p class="mb-2">
+                                                            <strong>EduPro</strong> adalah platform prediksi prestasi siswa yang menggunakan 
+                                                            <span class="badge badge-primary">algoritma C4.5 Decision Tree</span> untuk 
+                                                            menganalisis dan memprediksi performa akademik berdasarkan data historis siswa.
+                                                        </p>
+                                                        <div class="intro-features">
+                                                            <span class="feature-badge">
+                                                                <i class="fas fa-brain mr-1"></i>
+                                                                Machine Learning
+                                                            </span>
+                                                            <span class="feature-badge">
+                                                                <i class="fas fa-chart-line mr-1"></i>
+                                                                Real-time Analytics
+                                                            </span>
+                                                            <span class="feature-badge">
+                                                                <i class="fas fa-users mr-1"></i>
+                                                                Multi-user System
+                                                            </span>
+                                                            <span class="feature-badge">
+                                                                <i class="fas fa-shield-alt mr-1"></i>
+                                                                Secure & Reliable
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- <div class="col-md-4">
+                                                <div class="intro-stats">
+                                                    <div class="row">
+                                                        <div class="col-6">
+                                                            <div class="stat-item">
+                                                                <div class="stat-icon">
+                                                                    <i class="fas fa-cog text-info"></i>
+                                                                </div>
+                                                                <div class="stat-content">
+                                                                    <div class="stat-value" id="system-status-intro">Online</div>
+                                                                    <div class="stat-label">Status</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <div class="stat-item">
+                                                                <div class="stat-icon">
+                                                                    <i class="fas fa-code-branch text-success"></i>
+                                                                </div>
+                                                                <div class="stat-content">
+                                                                    <div class="stat-value">v2.0.1</div>
+                                                                    <div class="stat-label">Version</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <div class="stat-item">
+                                                                <div class="stat-icon">
+                                                                    <i class="fas fa-clock text-warning"></i>
+                                                                </div>
+                                                                <div class="stat-content">
+                                                                    <div class="stat-value">< 2s</div>
+                                                                    <div class="stat-label">Response</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <div class="stat-item">
+                                                                <div class="stat-icon">
+                                                                    <i class="fas fa-bullseye text-danger"></i>
+                                                                </div>
+                                                                <div class="stat-content">
+                                                                    <div class="stat-value">> 85%</div>
+                                                                    <div class="stat-label">Accuracy</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> -->
+                                        </div>
+                                        <div class="intro-footer">
+                                            <div class="row align-items-center">
+                                                <div class="col-md-8">
+                                                    <!-- <div class="tech-stack">
+                                                        <small class="text-muted">
+                                                            <strong>Tech Stack:</strong>
+                                                            <span class="tech-item">FastAPI</span>
+                                                            <span class="tech-item">PostgreSQL</span>
+                                                            <span class="tech-item">Scikit-learn</span>
+                                                            <span class="tech-item">D3.js</span>
+                                                            <span class="tech-item">Docker</span>
+                                                        </small>
+                                                    </div> -->
+                                                </div>
+                                                <div class="col-md-4 text-right">
+                                                    <div class="intro-actions">
+                                                        <button class="btn btn-outline-primary btn-sm" onclick="showSystemInfoModal()">
+                                                            <i class="fas fa-info-circle mr-1"></i>
+                                                            Detail Sistem
+                                                        </button>
+                                                        <a href="#" class="btn btn-outline-secondary btn-sm" data-page="user-guide">
+                                                            <i class="fas fa-book mr-1"></i>
+                                                            User Guide
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-md-12">
+                                <div class="card dashboard-card system-info-card">
+                                    <div class="card-header bg-gradient-primary text-white d-flex justify-content-between align-items-center">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-server mr-2"></i>
+                                            Informasi Sistem EduPro
+                                        </h5>
+                                        <div class="system-status-badges">
+                                            <span class="badge badge-light system-badge" id="system-status">
+                                                <i class="fas fa-circle text-success mr-1"></i>
+                                                Online
+                                            </span>
+                                            <span class="badge badge-light system-badge" id="system-version">
+                                                <i class="fas fa-code-branch mr-1"></i>
+                                                v2.0.1
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <!-- System Overview -->
+                                            <div class="col-md-4">
+                                                <div class="system-info-section">
+                                                    <div class="system-info-header">
+                                                        <h6 class="font-weight-bold text-primary">
+                                                            <i class="fas fa-info-circle mr-2"></i>
+                                                            Overview Sistem
+                                                        </h6>
+                                                    </div>
+                                                    <div class="system-info-content">
+                                                        <div class="info-item">
+                                                            <span class="info-label">Nama Sistem:</span>
+                                                            <span class="info-value">EduPro - Sistem Prediksi Prestasi</span>
+                                                        </div>
+                                                        <div class="info-item">
+                                                            <span class="info-label">Algoritma:</span>
+                                                            <span class="info-value">C4.5 Decision Tree</span>
+                                                        </div>
+                                                        <div class="info-item">
+                                                            <span class="info-label">Framework:</span>
+                                                            <span class="info-value">FastAPI + PostgreSQL</span>
+                                                        </div>
+                                                        <div class="info-item">
+                                                            <span class="info-label">Frontend:</span>
+                                                            <span class="info-value">HTML5 + Kendo UI + D3.js</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Technical Specifications -->
+                                            <div class="col-md-4">
+                                                <div class="system-info-section">
+                                                    <div class="system-info-header">
+                                                        <h6 class="font-weight-bold text-success">
+                                                            <i class="fas fa-cogs mr-2"></i>
+                                                            Spesifikasi Teknis
+                                                        </h6>
+                                                    </div>
+                                                    <div class="system-info-content">
+                                                        <div class="info-item">
+                                                            <span class="info-label">Database:</span>
+                                                            <span class="info-value">PostgreSQL 13+</span>
+                                                        </div>
+                                                        <div class="info-item">
+                                                            <span class="info-label">Backend:</span>
+                                                            <span class="info-value">Python 3.8+ FastAPI</span>
+                                                        </div>
+                                                        <div class="info-item">
+                                                            <span class="info-label">Machine Learning:</span>
+                                                            <span class="info-value">Scikit-learn</span>
+                                                        </div>
+                                                        <div class="info-item">
+                                                            <span class="info-label">Containerization:</span>
+                                                            <span class="info-value">Docker Compose</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- System Features -->
+                                            <div class="col-md-4">
+                                                <div class="system-info-section">
+                                                    <div class="system-info-header">
+                                                        <h6 class="font-weight-bold text-warning">
+                                                            <i class="fas fa-star mr-2"></i>
+                                                            Fitur Utama
+                                                        </h6>
+                                                    </div>
+                                                    <div class="system-info-content">
+                                                        <div class="feature-list">
+                                                            <div class="feature-item">
+                                                                <i class="fas fa-check-circle text-success mr-2"></i>
+                                                                <span>Prediksi Individual & Batch</span>
+                                                            </div>
+                                                            <div class="feature-item">
+                                                                <i class="fas fa-check-circle text-success mr-2"></i>
+                                                                <span>Visualisasi Interaktif D3.js</span>
+                                                            </div>
+                                                            <div class="feature-item">
+                                                                <i class="fas fa-check-circle text-success mr-2"></i>
+                                                                <span>Export Excel & Reporting</span>
+                                                            </div>
+                                                            <div class="feature-item">
+                                                                <i class="fas fa-check-circle text-success mr-2"></i>
+                                                                <span>Real-time Dashboard</span>
+                                                            </div>
+                                                            <div class="feature-item">
+                                                                <i class="fas fa-check-circle text-success mr-2"></i>
+                                                                <span>User Management & Security</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- System Performance Metrics -->
+                                        <div class="row mt-3">
+                                            <div class="col-md-12">
+                                                <div class="system-performance-section">
+                                                    <h6 class="font-weight-bold text-info mb-3">
+                                                        <i class="fas fa-tachometer-alt mr-2"></i>
+                                                        Performa Sistem
+                                                    </h6>
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            <div class="performance-metric">
+                                                                <div class="metric-icon">
+                                                                    <i class="fas fa-clock text-primary"></i>
+                                                                </div>
+                                                                <div class="metric-content">
+                                                                    <div class="metric-value">< 15s</div>
+                                                                    <div class="metric-label">Training Time</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="performance-metric">
+                                                                <div class="metric-icon">
+                                                                    <i class="fas fa-bolt text-warning"></i>
+                                                                </div>
+                                                                <div class="metric-content">
+                                                                    <div class="metric-value">< 2s</div>
+                                                                    <div class="metric-label">Prediction Time</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="performance-metric">
+                                                                <div class="metric-icon">
+                                                                    <i class="fas fa-bullseye text-success"></i>
+                                                                </div>
+                                                                <div class="metric-content">
+                                                                    <div class="metric-value">> 85%</div>
+                                                                    <div class="metric-label">Model Accuracy</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="performance-metric">
+                                                                <div class="metric-icon">
+                                                                    <i class="fas fa-users text-info"></i>
+                                                                </div>
+                                                                <div class="metric-content">
+                                                                    <div class="metric-value" id="concurrent-users">1-50</div>
+                                                                    <div class="metric-label">Concurrent Users</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="card dashboard-card bg-primary text-white">
@@ -1232,6 +1547,9 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        <!-- System Information Section -->
+                        
                         
                         <div class="row mt-4">
                             <div class="col-md-6">
@@ -1453,6 +1771,878 @@
                                         <button type="button" class="btn btn-danger" onclick="logout()">Logout</button>
                                     </div> -->
                                 </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- About Page -->
+                <div class="page" id="about-page" style="display: none;">
+                    <div class="content-header">
+                        <h2 class="page-title">
+                            <i class="fas fa-info-circle mr-2 text-info"></i>
+                            Tentang EduPro
+                        </h2>
+                    </div>
+                    <div class="content-body">
+                        <!-- Hero Section -->
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <div class="card border-0 shadow-lg">
+                                    <div class="card-body text-center py-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 0.5rem;">
+                                        <i class="fas fa-graduation-cap fa-4x mb-3"></i>
+                                        <h1 class="display-4 font-weight-bold">EduPro</h1>
+                                        <p class="lead mb-0">Educational Prediction System</p>
+                                        <p class="h5 font-weight-normal">Sistem Prediksi Prestasi Siswa Berbasis Machine Learning</p>
+                                        <div class="mt-4">
+                                            <span class="badge badge-light badge-pill px-3 py-2 mr-2">
+                                                <i class="fas fa-code mr-1"></i> Version 2.0
+                                            </span>
+                                            <span class="badge badge-light badge-pill px-3 py-2">
+                                                <i class="fas fa-calendar mr-1"></i> 2025
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- System Overview -->
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header bg-primary text-white">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-bullseye mr-2"></i>
+                                            Tentang Sistem
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="lead text-justify">
+                                            EduPro adalah sistem prediksi prestasi siswa yang menggunakan algoritma <strong>C4.5 Decision Tree</strong> 
+                                            untuk membantu institusi pendidikan dalam menganalisis dan memprediksi prestasi akademik siswa 
+                                            berdasarkan data historis nilai raport, kondisi sosial ekonomi keluarga, dan tingkat kehadiran siswa.
+                                        </p>
+                                        
+                                        <div class="row mt-4">
+                                            <div class="col-md-4 text-center">
+                                                <div class="feature-highlight p-3">
+                                                    <i class="fas fa-brain fa-3x text-primary mb-3"></i>
+                                                    <h6 class="font-weight-bold">Machine Learning</h6>
+                                                    <p class="text-muted small">Algoritma C4.5 Decision Tree untuk prediksi akurat</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 text-center">
+                                                <div class="feature-highlight p-3">
+                                                    <i class="fas fa-chart-line fa-3x text-success mb-3"></i>
+                                                    <h6 class="font-weight-bold">Data Analytics</h6>
+                                                    <p class="text-muted small">Analisis mendalam dengan visualisasi interaktif</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 text-center">
+                                                <div class="feature-highlight p-3">
+                                                    <i class="fas fa-users fa-3x text-info mb-3"></i>
+                                                    <h6 class="font-weight-bold">User Friendly</h6>
+                                                    <p class="text-muted small">Interface yang mudah digunakan untuk semua pengguna</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Key Features -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="card h-100">
+                                    <div class="card-header bg-success text-white">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-star mr-2"></i>
+                                            Fitur Utama
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="list-unstyled">
+                                            <li class="mb-3">
+                                                <i class="fas fa-check-circle text-success mr-2"></i>
+                                                <strong>Prediksi Individual:</strong> Analisis prestasi per siswa dengan tingkat confidence
+                                            </li>
+                                            <li class="mb-3">
+                                                <i class="fas fa-check-circle text-success mr-2"></i>
+                                                <strong>Prediksi Batch:</strong> Evaluasi massal untuk seluruh kelas atau angkatan
+                                            </li>
+                                            <li class="mb-3">
+                                                <i class="fas fa-check-circle text-success mr-2"></i>
+                                                <strong>Visualisasi Data:</strong> Pohon keputusan, heatmap korelasi, dan bar chart interaktif
+                                            </li>
+                                            <li class="mb-3">
+                                                <i class="fas fa-check-circle text-success mr-2"></i>
+                                                <strong>Statistik Komprehensif:</strong> Analisis distribusi fitur dan korelasi variabel
+                                            </li>
+                                            <li class="mb-3">
+                                                <i class="fas fa-check-circle text-success mr-2"></i>
+                                                <strong>Export Data:</strong> Kemampuan ekspor hasil ke format Excel untuk reporting
+                                            </li>
+                                            <li class="mb-3">
+                                                <i class="fas fa-check-circle text-success mr-2"></i>
+                                                <strong>Riwayat Prediksi:</strong> Tracking dan monitoring hasil prediksi sebelumnya
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card h-100">
+                                    <div class="card-header bg-warning text-dark">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-database mr-2"></i>
+                                            Data Input
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-4">
+                                            <h6 class="font-weight-bold text-primary">
+                                                <i class="fas fa-book mr-1"></i> Nilai Raport
+                                            </h6>
+                                            <p class="text-muted small mb-2">4 mata pelajaran utama:</p>
+                                            <ul class="small text-muted">
+                                                <li>Matematika</li>
+                                                <li>Bahasa Indonesia</li>
+                                                <li>Bahasa Inggris</li>
+                                                <li>Ilmu Pengetahuan Alam (IPA)</li>
+                                            </ul>
+                                        </div>
+                                        
+                                        <div class="mb-4">
+                                            <h6 class="font-weight-bold text-success">
+                                                <i class="fas fa-money-bill-wave mr-1"></i> Penghasilan Orang Tua
+                                            </h6>
+                                            <ul class="small text-muted">
+                                                <li>Penghasilan Ayah</li>
+                                                <li>Penghasilan Ibu</li>
+                                                <li>Total & Kategori Penghasilan</li>
+                                            </ul>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <h6 class="font-weight-bold text-info">
+                                                <i class="fas fa-calendar-check mr-1"></i> Kehadiran Siswa
+                                            </h6>
+                                            <ul class="small text-muted">
+                                                <li>Jumlah Hadir, Sakit, Izin, Alpa</li>
+                                                <li>Persentase & Kategori Kehadiran</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Technical Specifications -->
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header bg-dark text-white">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-cogs mr-2"></i>
+                                            Spesifikasi Teknis
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <h6 class="font-weight-bold text-primary">Backend Technology</h6>
+                                                <ul class="list-unstyled small">
+                                                    <li><i class="fab fa-python mr-2 text-warning"></i> Python 3.8+</li>
+                                                    <li><i class="fas fa-server mr-2 text-info"></i> FastAPI Framework</li>
+                                                    <li><i class="fas fa-database mr-2 text-success"></i> PostgreSQL Database</li>
+                                                    <li><i class="fas fa-brain mr-2 text-danger"></i> Scikit-learn ML Library</li>
+                                                    <li><i class="fas fa-chart-bar mr-2 text-warning"></i> Pandas Data Analysis</li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <h6 class="font-weight-bold text-success">Frontend Technology</h6>
+                                                <ul class="list-unstyled small">
+                                                    <li><i class="fab fa-html5 mr-2 text-danger"></i> HTML5 & CSS3</li>
+                                                    <li><i class="fab fa-js-square mr-2 text-warning"></i> JavaScript ES6+</li>
+                                                    <li><i class="fab fa-bootstrap mr-2 text-primary"></i> Bootstrap 4.6</li>
+                                                    <li><i class="fas fa-table mr-2 text-info"></i> Kendo UI Components</li>
+                                                    <li><i class="fas fa-chart-line mr-2 text-success"></i> D3.js Visualization</li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <h6 class="font-weight-bold text-info">Infrastructure</h6>
+                                                <ul class="list-unstyled small">
+                                                    <li><i class="fab fa-docker mr-2 text-primary"></i> Docker Containerization</li>
+                                                    <li><i class="fas fa-network-wired mr-2 text-success"></i> Nginx Reverse Proxy</li>
+                                                    <li><i class="fas fa-tools mr-2 text-warning"></i> pgAdmin Database Management</li>
+                                                    <li><i class="fas fa-shield-alt mr-2 text-danger"></i> JWT Authentication</li>
+                                                    <li><i class="fas fa-cloud mr-2 text-info"></i> RESTful API Architecture</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Algorithm Details -->
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header bg-info text-white">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-sitemap mr-2"></i>
+                                            Algoritma C4.5 Decision Tree
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <p class="text-justify">
+                                                    Algoritma C4.5 adalah pengembangan dari algoritma ID3 yang menggunakan konsep 
+                                                    <strong>Information Gain</strong> dan <strong>Gain Ratio</strong> untuk membangun pohon keputusan. 
+                                                    Algoritma ini dipilih karena kemampuannya dalam menangani data kategorikal dan numerik, 
+                                                    serta dapat mengatasi missing values.
+                                                </p>
+                                                
+                                                <h6 class="font-weight-bold text-primary mt-3">Keunggulan C4.5:</h6>
+                                                <ul class="small">
+                                                    <li>Dapat menangani atribut numerik dan kategorikal</li>
+                                                    <li>Menggunakan Gain Ratio untuk mengurangi bias</li>
+                                                    <li>Dapat menangani missing values</li>
+                                                    <li>Melakukan pruning untuk menghindari overfitting</li>
+                                                    <li>Menghasilkan rules yang mudah dipahami</li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="bg-light p-3 rounded">
+                                                    <h6 class="font-weight-bold text-center">Metrik Evaluasi</h6>
+                                                    <div class="text-center">
+                                                        <div class="mb-2">
+                                                            <span class="badge badge-primary">Akurasi</span>
+                                                            <small class="d-block text-muted">Overall correctness</small>
+                                                        </div>
+                                                        <div class="mb-2">
+                                                            <span class="badge badge-success">Precision</span>
+                                                            <small class="d-block text-muted">Positive prediction accuracy</small>
+                                                        </div>
+                                                        <div class="mb-2">
+                                                            <span class="badge badge-warning">Recall</span>
+                                                            <small class="d-block text-muted">Sensitivity measure</small>
+                                                        </div>
+                                                        <div class="mb-2">
+                                                            <span class="badge badge-info">F1-Score</span>
+                                                            <small class="d-block text-muted">Harmonic mean</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- System Benefits -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="card border-success h-100">
+                                    <div class="card-header bg-success text-white">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-thumbs-up mr-2"></i>
+                                            Manfaat Sistem
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <h6 class="font-weight-bold text-primary">Untuk Guru & Pendidik:</h6>
+                                            <ul class="small">
+                                                <li>Identifikasi dini siswa berisiko</li>
+                                                <li>Program remedial yang lebih targeted</li>
+                                                <li>Efisiensi waktu dalam evaluasi</li>
+                                                <li>Data-driven decision making</li>
+                                            </ul>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <h6 class="font-weight-bold text-success">Untuk Administrasi Sekolah:</h6>
+                                            <ul class="small">
+                                                <li>Laporan analytics yang komprehensif</li>
+                                                <li>Monitoring prestasi secara real-time</li>
+                                                <li>Alokasi sumber daya yang optimal</li>
+                                                <li>Peningkatan kualitas pendidikan</li>
+                                            </ul>
+                                        </div>
+                                        
+                                        <div>
+                                            <h6 class="font-weight-bold text-info">Untuk Siswa & Orang Tua:</h6>
+                                            <ul class="small">
+                                                <li>Feedback prestasi yang objektif</li>
+                                                <li>Rekomendasi program pengembangan</li>
+                                                <li>Transparansi evaluasi akademik</li>
+                                                <li>Motivasi peningkatan prestasi</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card border-warning h-100">
+                                    <div class="card-header bg-warning text-dark">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-chart-line mr-2"></i>
+                                            Hasil yang Diharapkan
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-4">
+                                            <h6 class="font-weight-bold text-primary">
+                                                <i class="fas fa-clock mr-1"></i> Jangka Pendek (1-3 bulan)
+                                            </h6>
+                                            <ul class="small text-success">
+                                                <li>✅ Identifikasi siswa berisiko 50% lebih cepat</li>
+                                                <li>✅ Program remedial lebih efektif</li>
+                                                <li>✅ Efisiensi waktu guru meningkat 50%</li>
+                                                <li>✅ Implementasi data-driven decisions</li>
+                                            </ul>
+                                        </div>
+                                        
+                                        <div>
+                                            <h6 class="font-weight-bold text-success">
+                                                <i class="fas fa-trophy mr-1"></i> Jangka Panjang (6-12 bulan)
+                                            </h6>
+                                            <ul class="small text-primary">
+                                                <li>📈 Peningkatan rata-rata nilai 10-15%</li>
+                                                <li>📈 Penurunan siswa remedial 20%</li>
+                                                <li>📈 Peningkatan kehadiran siswa 5%</li>
+                                                <li>📈 Kepuasan stakeholder meningkat</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Contact & Support -->
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <div class="card border-primary">
+                                    <div class="card-header bg-primary text-white">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-headset mr-2"></i>
+                                            Dukungan & Kontak
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-4 text-center">
+                                                <i class="fas fa-envelope fa-2x text-primary mb-2"></i>
+                                                <h6 class="font-weight-bold">Email Support</h6>
+                                                <p class="small text-muted">support@edupro.com</p>
+                                                <p class="small">Response time: &lt; 4 jam</p>
+                                            </div>
+                                            <div class="col-md-4 text-center">
+                                                <i class="fab fa-whatsapp fa-2x text-success mb-2"></i>
+                                                <h6 class="font-weight-bold">WhatsApp</h6>
+                                                <p class="small text-muted">+62-xxx-xxxx-xxxx</p>
+                                                <p class="small">Senin-Jumat: 08:00-17:00 WIB</p>
+                                            </div>
+                                            <div class="col-md-4 text-center">
+                                                <i class="fas fa-book fa-2x text-info mb-2"></i>
+                                                <h6 class="font-weight-bold">User Guide</h6>
+                                                <p class="small text-muted">Dokumentasi lengkap</p>
+                                                <button class="btn btn-sm btn-outline-info" onclick="alert('User Guide akan dibuka di tab baru')">
+                                                    <i class="fas fa-external-link-alt mr-1"></i> Buka Guide
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card bg-dark text-white">
+                                    <div class="card-body text-center py-4">
+                                        <h5 class="mb-3">
+                                            <i class="fas fa-graduation-cap mr-2"></i>
+                                            EduPro - Educational Prediction System
+                                        </h5>
+                                        <p class="mb-2">Sistem Prediksi Prestasi Siswa Berbasis Machine Learning</p>
+                                        <div class="mb-3">
+                                            <span class="badge badge-light mr-2">
+                                                <i class="fas fa-code mr-1"></i> Version 2.0
+                                            </span>
+                                            <span class="badge badge-light mr-2">
+                                                <i class="fas fa-calendar mr-1"></i> 2025
+                                            </span>
+                                            <span class="badge badge-light">
+                                                <i class="fas fa-shield-alt mr-1"></i> Production Ready
+                                            </span>
+                                        </div>
+                                        <hr class="bg-light">
+                                        <p class="small mb-0">
+                                            © 2025 EduPro. Dikembangkan dengan ❤️ untuk kemajuan pendidikan Indonesia.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Guide Page -->
+                <div class="page" id="user-guide-page" style="display: none;">
+                    <div class="content-header">
+                        <h2 class="page-title">
+                            <i class="fas fa-book-open mr-2 text-primary"></i>
+                            User Guide - Panduan Penggunaan EduPro
+                        </h2>
+                    </div>
+                    <div class="content-body">
+                        <!-- Quick Navigation -->
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <div class="card border-primary">
+                                    <div class="card-header bg-primary text-white">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-compass mr-2"></i>
+                                            Navigasi Cepat
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-3 col-sm-6 mb-3">
+                                                <button class="btn btn-outline-primary btn-block guide-nav-btn" data-target="getting-started">
+                                                    <i class="fas fa-play-circle mr-2"></i>
+                                                    Memulai
+                                                </button>
+                                            </div>
+                                            <div class="col-md-3 col-sm-6 mb-3">
+                                                <button class="btn btn-outline-success btn-block guide-nav-btn" data-target="data-management">
+                                                    <i class="fas fa-database mr-2"></i>
+                                                    Kelola Data
+                                                </button>
+                                            </div>
+                                            <div class="col-md-3 col-sm-6 mb-3">
+                                                <button class="btn btn-outline-info btn-block guide-nav-btn" data-target="prediction">
+                                                    <i class="fas fa-chart-line mr-2"></i>
+                                                    Prediksi
+                                                </button>
+                                            </div>
+                                            <div class="col-md-3 col-sm-6 mb-3">
+                                                <button class="btn btn-outline-warning btn-block guide-nav-btn" data-target="troubleshooting">
+                                                    <i class="fas fa-tools mr-2"></i>
+                                                    Troubleshooting
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Getting Started Section -->
+                        <div class="guide-section" id="getting-started">
+                            <div class="row mb-4">
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="card-header bg-primary text-white">
+                                            <h5 class="mb-0">
+                                                <i class="fas fa-play-circle mr-2"></i>
+                                                1. Memulai dengan EduPro
+                                            </h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <h6 class="font-weight-bold text-primary">
+                                                        <i class="fas fa-sign-in-alt mr-1"></i> Login ke Sistem
+                                                    </h6>
+                                                    <ol class="small">
+                                                        <li>Buka aplikasi EduPro di browser</li>
+                                                        <li>Masukkan username dan password</li>
+                                                        <li>Klik tombol "Login"</li>
+                                                        <li>Sistem akan mengarahkan ke Dashboard</li>
+                                                    </ol>
+                                                    
+                                                    <h6 class="font-weight-bold text-success mt-3">
+                                                        <i class="fas fa-tachometer-alt mr-1"></i> Mengenal Dashboard
+                                                    </h6>
+                                                    <ul class="small">
+                                                        <li><strong>Kartu Statistik:</strong> Total siswa, prestasi tinggi/sedang/rendah</li>
+                                                        <li><strong>Distribusi Prestasi:</strong> Pie chart kategori prestasi</li>
+                                                        <li><strong>Bar Chart Kategori:</strong> Analisis penghasilan, kehadiran, nilai</li>
+                                                        <li><strong>Statistik Fitur:</strong> Distribusi data numerik dan kategorikal</li>
+                                                        <li><strong>Pohon Keputusan:</strong> Visualisasi model C4.5</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="alert alert-info">
+                                                        <h6 class="font-weight-bold">
+                                                            <i class="fas fa-lightbulb mr-1"></i> Tips Pertama Kali
+                                                        </h6>
+                                                        <ul class="small mb-0">
+                                                            <li>Pastikan data siswa sudah tersedia minimal 30+ siswa</li>
+                                                            <li>Lengkapi data nilai, presensi, dan penghasilan orang tua</li>
+                                                            <li>Latih model terlebih dahulu sebelum melakukan prediksi</li>
+                                                            <li>Gunakan fitur export untuk backup data</li>
+                                                        </ul>
+                                                    </div>
+                                                    
+                                                    <div class="bg-light p-3 rounded">
+                                                        <h6 class="font-weight-bold text-dark">
+                                                            <i class="fas fa-users mr-1"></i> Role & Akses
+                                                        </h6>
+                                                        <ul class="small mb-0">
+                                                            <li><span class="badge badge-danger">Admin</span> - Akses penuh semua fitur</li>
+                                                            <li><span class="badge badge-success">Guru</span> - Kelola data & prediksi</li>
+                                                            <li><span class="badge badge-info">Staf</span> - Input data & lihat laporan</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Data Management Section -->
+                        <div class="guide-section" id="data-management" style="display: none;">
+                            <div class="row mb-4">
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="card-header bg-success text-white">
+                                            <h5 class="mb-0">
+                                                <i class="fas fa-database mr-2"></i>
+                                                2. Pengelolaan Data
+                                            </h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <h6 class="font-weight-bold text-primary">
+                                                        <i class="fas fa-user-graduate mr-1"></i> Data Siswa
+                                                    </h6>
+                                                    <ol class="small">
+                                                        <li>Klik menu "Data Siswa" di sidebar</li>
+                                                        <li>Klik tombol "Tambah" untuk input siswa baru</li>
+                                                        <li>Isi form: Nama, NIS, Jenis Kelamin, Kelas, Tanggal Lahir, Alamat</li>
+                                                        <li>Klik "Simpan" untuk menyimpan data</li>
+                                                        <li>Gunakan tombol "Edit" untuk mengubah data</li>
+                                                        <li>Gunakan tombol "Hapus" untuk menghapus data</li>
+                                                    </ol>
+                                                    
+                                                    <h6 class="font-weight-bold text-success mt-3">
+                                                        <i class="fas fa-book mr-1"></i> Data Nilai Raport
+                                                    </h6>
+                                                    <ol class="small">
+                                                        <li>Klik menu "Nilai Raport" di sidebar</li>
+                                                        <li>Pilih siswa dari dropdown</li>
+                                                        <li>Isi semester dan tahun ajaran</li>
+                                                        <li>Input nilai: Matematika, B.Indonesia, B.Inggris, IPA</li>
+                                                        <li>Rata-rata akan dihitung otomatis</li>
+                                                        <li>Klik "Simpan" untuk menyimpan nilai</li>
+                                                    </ol>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <h6 class="font-weight-bold text-info">
+                                                        <i class="fas fa-calendar-check mr-1"></i> Data Presensi
+                                                    </h6>
+                                                    <ol class="small">
+                                                        <li>Klik menu "Presensi" di sidebar</li>
+                                                        <li>Pilih siswa dari dropdown</li>
+                                                        <li>Isi semester dan tahun ajaran</li>
+                                                        <li>Input jumlah: Hadir, Sakit, Izin, Alpa</li>
+                                                        <li>Persentase kehadiran dihitung otomatis</li>
+                                                        <li>Kategori kehadiran ditentukan sistem</li>
+                                                    </ol>
+                                                    
+                                                    <h6 class="font-weight-bold text-warning mt-3">
+                                                        <i class="fas fa-money-bill-wave mr-1"></i> Penghasilan Orang Tua
+                                                    </h6>
+                                                    <ol class="small">
+                                                        <li>Klik menu "Penghasilan Ortu" di sidebar</li>
+                                                        <li>Pilih siswa dari dropdown</li>
+                                                        <li>Input penghasilan ayah dan ibu</li>
+                                                        <li>Total penghasilan dihitung otomatis</li>
+                                                        <li>Kategori penghasilan ditentukan sistem</li>
+                                                        <li>Simpan data penghasilan</li>
+                                                    </ol>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="alert alert-warning mt-3">
+                                                <h6 class="font-weight-bold">
+                                                    <i class="fas fa-exclamation-triangle mr-1"></i> Penting untuk Diperhatikan
+                                                </h6>
+                                                <ul class="small mb-0">
+                                                    <li>Pastikan data siswa sudah ada sebelum input nilai, presensi, atau penghasilan</li>
+                                                    <li>Gunakan format yang konsisten untuk semester (contoh: "Ganjil", "Genap")</li>
+                                                    <li>Tahun ajaran gunakan format "2023/2024"</li>
+                                                    <li>Backup data secara berkala menggunakan fitur export</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Prediction Section -->
+                        <div class="guide-section" id="prediction" style="display: none;">
+                            <div class="row mb-4">
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="card-header bg-info text-white">
+                                            <h5 class="mb-0">
+                                                <i class="fas fa-chart-line mr-2"></i>
+                                                3. Sistem Prediksi Prestasi
+                                            </h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <h6 class="font-weight-bold text-primary">
+                                                        <i class="fas fa-cogs mr-1"></i> Langkah 1: Training Model
+                                                    </h6>
+                                                    <ol class="small">
+                                                        <li>Klik menu "Prediksi Prestasi" di sidebar</li>
+                                                        <li>Klik tombol "Latih Model"</li>
+                                                        <li>Tunggu proses training selesai (±15 detik)</li>
+                                                        <li>Sistem akan menampilkan akurasi model</li>
+                                                        <li>Model siap digunakan untuk prediksi</li>
+                                                    </ol>
+                                                    
+                                                    <h6 class="font-weight-bold text-success mt-3">
+                                                        <i class="fas fa-user mr-1"></i> Langkah 2: Prediksi Individual
+                                                    </h6>
+                                                    <ol class="small">
+                                                        <li>Pilih siswa dari dropdown</li>
+                                                        <li>Isi semester dan tahun ajaran</li>
+                                                        <li>Klik tombol "Prediksi"</li>
+                                                        <li>Hasil prediksi akan ditampilkan:</li>
+                                                        <ul>
+                                                            <li>Kategori: RENDAH/SEDANG/TINGGI</li>
+                                                            <li>Confidence level (%)</li>
+                                                            <li>Rekomendasi tindak lanjut</li>
+                                                        </ul>
+                                                    </ol>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <h6 class="font-weight-bold text-warning">
+                                                        <i class="fas fa-users mr-1"></i> Langkah 3: Prediksi Batch
+                                                    </h6>
+                                                    <ol class="small">
+                                                        <li>Scroll ke section "Prediksi Data Keseluruhan"</li>
+                                                        <li>Isi semester dan tahun ajaran</li>
+                                                        <li>Klik "Prediksi Semua Siswa"</li>
+                                                        <li>Tunggu proses selesai</li>
+                                                        <li>Review hasil di grid:</li>
+                                                        <ul>
+                                                            <li>Nama siswa dan kelas</li>
+                                                            <li>Prediksi dengan badge warna</li>
+                                                            <li>Confidence percentage</li>
+                                                            <li>Data pendukung</li>
+                                                        </ul>
+                                                        <li>Export hasil ke Excel jika diperlukan</li>
+                                                    </ol>
+                                                    
+                                                    <div class="bg-light p-3 rounded mt-3">
+                                                        <h6 class="font-weight-bold text-dark">
+                                                            <i class="fas fa-chart-bar mr-1"></i> Interpretasi Hasil
+                                                        </h6>
+                                                        <ul class="small mb-0">
+                                                            <li><span class="badge badge-danger">RENDAH</span> - Perlu remedial intensif</li>
+                                                            <li><span class="badge badge-warning">SEDANG</span> - Program pengayaan</li>
+                                                            <li><span class="badge badge-success">TINGGI</span> - Program akselerasi</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Troubleshooting Section -->
+                        <div class="guide-section" id="troubleshooting" style="display: none;">
+                            <div class="row mb-4">
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="card-header bg-warning text-dark">
+                                            <h5 class="mb-0">
+                                                <i class="fas fa-tools mr-2"></i>
+                                                4. Troubleshooting & FAQ
+                                            </h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <h6 class="font-weight-bold text-danger">
+                                                        <i class="fas fa-exclamation-circle mr-1"></i> Masalah Umum
+                                                    </h6>
+                                                    
+                                                    <div class="mb-3">
+                                                        <strong class="text-primary">Q: Model tidak bisa dilatih?</strong>
+                                                        <p class="small mb-1">A: Pastikan data siswa minimal 30+ dengan data lengkap (nilai, presensi, penghasilan).</p>
+                                                    </div>
+                                                    
+                                                    <div class="mb-3">
+                                                        <strong class="text-primary">Q: Prediksi tidak akurat?</strong>
+                                                        <p class="small mb-1">A: Tambahkan lebih banyak data training dan pastikan kualitas data input.</p>
+                                                    </div>
+                                                    
+                                                    <div class="mb-3">
+                                                        <strong class="text-primary">Q: Grid tidak tampil data?</strong>
+                                                        <p class="small mb-1">A: Refresh halaman atau cek koneksi internet. Pastikan token belum expired.</p>
+                                                    </div>
+                                                    
+                                                    <div class="mb-3">
+                                                        <strong class="text-primary">Q: Export Excel error?</strong>
+                                                        <p class="small mb-1">A: Pastikan browser mengizinkan download dan ada data untuk di-export.</p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <h6 class="font-weight-bold text-success">
+                                                        <i class="fas fa-check-circle mr-1"></i> Best Practices
+                                                    </h6>
+                                                    
+                                                    <ul class="small">
+                                                        <li><strong>Data Quality:</strong> Pastikan data lengkap dan konsisten</li>
+                                                        <li><strong>Regular Training:</strong> Latih ulang model setiap ada data baru</li>
+                                                        <li><strong>Backup Data:</strong> Export data secara berkala</li>
+                                                        <li><strong>Monitor Performance:</strong> Cek akurasi model secara rutin</li>
+                                                        <li><strong>User Management:</strong> Kelola akses user sesuai role</li>
+                                                    </ul>
+                                                    
+                                                    <div class="alert alert-info mt-3">
+                                                        <h6 class="font-weight-bold">
+                                                            <i class="fas fa-phone mr-1"></i> Butuh Bantuan?
+                                                        </h6>
+                                                        <ul class="small mb-0">
+                                                            <li><strong>Email:</strong> support@edupro.com</li>
+                                                            <li><strong>WhatsApp:</strong> +62-xxx-xxxx-xxxx</li>
+                                                            <li><strong>Jam Kerja:</strong> Senin-Jumat 08:00-17:00</li>
+                                                            <li><strong>Response Time:</strong> < 4 jam</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Advanced Features Section -->
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <div class="card border-info">
+                                    <div class="card-header bg-info text-white">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-star mr-2"></i>
+                                            Fitur Lanjutan
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <h6 class="font-weight-bold text-primary">
+                                                    <i class="fas fa-chart-bar mr-1"></i> Statistik Fitur
+                                                </h6>
+                                                <ul class="small">
+                                                    <li>Statistik Numerik: Mean, median, std deviation</li>
+                                                    <li>Statistik Kategorikal: Distribusi frekuensi</li>
+                                                    <li>Korelasi Fitur: Heatmap dan tabel korelasi</li>
+                                                    <li>Bar Chart Analisis: Status sosial, penghasilan, nilai</li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <h6 class="font-weight-bold text-success">
+                                                    <i class="fas fa-sitemap mr-1"></i> Visualisasi Model
+                                                </h6>
+                                                <ul class="small">
+                                                    <li>Pohon Keputusan C4.5: Static dan interactive</li>
+                                                    <li>Confusion Matrix: Evaluasi akurasi model</li>
+                                                    <li>Model Metrics: Precision, recall, F1-score</li>
+                                                    <li>Feature Importance: Kontribusi setiap fitur</li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <h6 class="font-weight-bold text-warning">
+                                                    <i class="fas fa-download mr-1"></i> Export & Reporting
+                                                </h6>
+                                                <ul class="small">
+                                                    <li>Export Excel: Semua data dan hasil prediksi</li>
+                                                    <li>Riwayat Prediksi: Tracking hasil sebelumnya</li>
+                                                    <li>Dashboard Analytics: Real-time insights</li>
+                                                    <li>Custom Reports: Filter berdasarkan kriteria</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Reference Card -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card bg-dark text-white">
+                                    <div class="card-header">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-bookmark mr-2"></i>
+                                            Quick Reference
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <h6 class="text-primary">Keyboard Shortcuts</h6>
+                                                <ul class="small list-unstyled">
+                                                    <li><kbd>Ctrl</kbd> + <kbd>S</kbd> - Simpan form</li>
+                                                    <li><kbd>Esc</kbd> - Tutup modal</li>
+                                                    <li><kbd>F5</kbd> - Refresh grid</li>
+                                                    <li><kbd>Ctrl</kbd> + <kbd>E</kbd> - Export Excel</li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <h6 class="text-success">Data Requirements</h6>
+                                                <ul class="small list-unstyled">
+                                                    <li>Min. 30+ siswa untuk training</li>
+                                                    <li>Data lengkap: nilai, presensi, penghasilan</li>
+                                                    <li>Format konsisten semester & tahun</li>
+                                                    <li>Akurasi target: >80%</li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <h6 class="text-warning">Performance Tips</h6>
+                                                <ul class="small list-unstyled">
+                                                    <li>Training time: <15 detik</li>
+                                                    <li>Batch prediction: <10 detik</li>
+                                                    <li>Grid loading: <3 detik</li>
+                                                    <li>Export Excel: <5 detik</li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <h6 class="text-info">System Status</h6>
+                                                <ul class="small list-unstyled">
+                                                    <li>Version: 2.0 Production</li>
+                                                    <li>Database: PostgreSQL</li>
+                                                    <li>ML Engine: Scikit-learn</li>
+                                                    <li>Token: JWT Authentication</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -6852,6 +6852,131 @@ $(document).ready(function() {
                         </table>
                     </div>
                 </div>
+                
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <h6 class="text-warning mb-3">
+                            <i class="fas fa-star mr-2"></i>
+                            Fitur Utama Sistem
+                        </h6>
+                        <div class="modal-feature-list">
+                            <div class="modal-feature-category">
+                                <div class="modal-feature-category-header">
+                                    <i class="fas fa-brain text-primary mr-2"></i>
+                                    <strong>Machine Learning</strong>
+                                </div>
+                                <div class="modal-feature-item">
+                                    <i class="fas fa-check-circle text-success mr-2"></i>
+                                    <span>Prediksi Individual & Batch</span>
+                                </div>
+                                <div class="modal-feature-item">
+                                    <i class="fas fa-check-circle text-success mr-2"></i>
+                                    <span>Algoritma C4.5 Decision Tree</span>
+                                </div>
+                                <div class="modal-feature-item">
+                                    <i class="fas fa-check-circle text-success mr-2"></i>
+                                    <span>Model Training & Evaluation</span>
+                                </div>
+                            </div>
+                            
+                            <div class="modal-feature-category">
+                                <div class="modal-feature-category-header">
+                                    <i class="fas fa-chart-line text-info mr-2"></i>
+                                    <strong>Analytics & Visualization</strong>
+                                </div>
+                                <div class="modal-feature-item">
+                                    <i class="fas fa-check-circle text-success mr-2"></i>
+                                    <span>Visualisasi Interaktif D3.js</span>
+                                </div>
+                                <div class="modal-feature-item">
+                                    <i class="fas fa-check-circle text-success mr-2"></i>
+                                    <span>Real-time Dashboard</span>
+                                </div>
+                                <div class="modal-feature-item">
+                                    <i class="fas fa-check-circle text-success mr-2"></i>
+                                    <span>Statistical Analysis</span>
+                                </div>
+                            </div>
+                            
+                            <div class="modal-feature-category">
+                                <div class="modal-feature-category-header">
+                                    <i class="fas fa-database text-warning mr-2"></i>
+                                    <strong>Data Management</strong>
+                                </div>
+                                <div class="modal-feature-item">
+                                    <i class="fas fa-check-circle text-success mr-2"></i>
+                                    <span>Data Import/Export Excel</span>
+                                </div>
+                                <div class="modal-feature-item">
+                                    <i class="fas fa-check-circle text-success mr-2"></i>
+                                    <span>CRUD Operations</span>
+                                </div>
+                                <div class="modal-feature-item">
+                                    <i class="fas fa-check-circle text-success mr-2"></i>
+                                    <span>Data Validation</span>
+                                </div>
+                            </div>
+                            
+                            <div class="modal-feature-category">
+                                <div class="modal-feature-category-header">
+                                    <i class="fas fa-shield-alt text-danger mr-2"></i>
+                                    <strong>Security & User Management</strong>
+                                </div>
+                                <div class="modal-feature-item">
+                                    <i class="fas fa-check-circle text-success mr-2"></i>
+                                    <span>JWT Authentication</span>
+                                </div>
+                                <div class="modal-feature-item">
+                                    <i class="fas fa-check-circle text-success mr-2"></i>
+                                    <span>Role-based Access Control</span>
+                                </div>
+                                <div class="modal-feature-item">
+                                    <i class="fas fa-check-circle text-success mr-2"></i>
+                                    <span>Session Management</span>
+                                </div>
+                            </div>
+                            
+                            <div class="modal-feature-category">
+                                <div class="modal-feature-category-header">
+                                    <i class="fas fa-file-export text-success mr-2"></i>
+                                    <strong>Reporting & Export</strong>
+                                </div>
+                                <div class="modal-feature-item">
+                                    <i class="fas fa-check-circle text-success mr-2"></i>
+                                    <span>PDF Report Generation</span>
+                                </div>
+                                <div class="modal-feature-item">
+                                    <i class="fas fa-check-circle text-success mr-2"></i>
+                                    <span>Excel Export/Import</span>
+                                </div>
+                                <div class="modal-feature-item">
+                                    <i class="fas fa-check-circle text-success mr-2"></i>
+                                    <span>Batch Processing Results</span>
+                                </div>
+                            </div>
+                            
+                            <div class="modal-feature-category">
+                                <div class="modal-feature-category-header">
+                                    <i class="fas fa-cogs text-secondary mr-2"></i>
+                                    <strong>System Features</strong>
+                                </div>
+                                <div class="modal-feature-item">
+                                    <i class="fas fa-check-circle text-success mr-2"></i>
+                                    <span>Responsive Web Design</span>
+                                </div>
+                                <div class="modal-feature-item">
+                                    <i class="fas fa-check-circle text-success mr-2"></i>
+                                    <span>RESTful API Architecture</span>
+                                </div>
+                                <div class="modal-feature-item">
+                                    <i class="fas fa-check-circle text-success mr-2"></i>
+                                    <span>Docker Containerization</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="row mt-3">
                     <div class="col-md-12">
                         <h6 class="text-info mb-3">
@@ -6897,8 +7022,8 @@ $(document).ready(function() {
         
         dialog.kendoWindow({
             title: "Detail Informasi Sistem EduPro",
-            width: "800px",
-            height: "600px",
+            width: "900px",
+            height: "700px",
             modal: true,
             resizable: false,
             actions: ["Close"],

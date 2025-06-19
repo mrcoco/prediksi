@@ -111,8 +111,8 @@ app = FastAPI(
     openapi_url="/openapi.json",
     contact={
         "name": "EduPro Development Team",
-        "email": "dev@edupro.com",
-        "url": "https://github.com/edupro/prestasi-siswa"
+        "email": "spydersonics@gmail.com",
+        "url": "https://github.com/mrcoco/prediksi"
     },
     license_info={
         "name": "MIT License",

@@ -48,6 +48,10 @@ $(document).ready(function() {
         '1min': false
     };
     
+    // Dashboard Bar Chart Variables
+    let dashboardBarChartData = null;
+    let dashboardBarChartInstance = null;
+    
     // Fungsi untuk mendapatkan waktu expired token dari JWT
     function getTokenExpiryTime() {
         const token = getToken();
@@ -1831,18 +1835,34 @@ $(document).ready(function() {
         e.preventDefault();
         
         const button = $(this);
+        
+        // Enhanced data extraction dengan null safety
         const dataItem = {
-            id: button.data("id"),
-            username: button.data("username"),
-            email: button.data("email"),
-            role: button.data("role"),
-            nama_lengkap: button.data("nama_lengkap"),
-            nip: button.data("nip"),
-            jabatan: button.data("jabatan"),
-            is_active: button.data("is_active")
+            id: button.data("id") || '',
+            username: button.data("username") || '',
+            email: button.data("email") || '',
+            role: button.data("role") || '',
+            nama_lengkap: button.data("nama_lengkap") || button.data("nama-lengkap") || button.attr("data-nama_lengkap") || '',
+            nip: button.data("nip") || '',
+            jabatan: button.data("jabatan") || '',
+            is_active: button.data("is_active") !== undefined ? button.data("is_active") : true
         };
         
         console.log("Delete button clicked:", dataItem);
+        console.log("Button data attributes:", {
+            "data-nama_lengkap": button.data("nama_lengkap"),
+            "data-nama-lengkap": button.data("nama-lengkap"),
+            "attr data-nama_lengkap": button.attr("data-nama_lengkap"),
+            "all data": button.data()
+        });
+        
+        // Validasi data sebelum menampilkan modal
+        if (!dataItem.id) {
+            console.error("Missing user ID for delete operation");
+            showErrorNotification("Data user tidak valid untuk dihapus", "Error");
+            return;
+        }
+        
         showDeleteConfirmationUsers(dataItem);
     });
     
@@ -2110,7 +2130,42 @@ $(document).ready(function() {
                 // { field: "agama", title: "AGM", format: "{0:n1}", width: 70 },
                 // { field: "dasar_kejuruan", title: "D.KEJ", format: "{0:n1}", width: 70 },
                 { field: "rata_rata", title: "Rata²", format: "{0:n1}", width: 85 },
-                { command: ["edit", "destroy"], title: "Aksi", width: 140 }
+                { command: ["edit"], title: "Edit", width: 70 },
+                {
+                    title: "Hapus",
+                    width: 70,
+                    template: function(dataItem) {
+                        console.log("Template dataItem Nilai:", dataItem);
+                        
+                        // Safe extraction dengan null checks
+                        const safeData = {
+                            id: dataItem.id || '',
+                            nama_siswa: dataItem.nama_siswa || dataItem.siswa?.nama || '',
+                            semester: dataItem.semester || '',
+                            tahun_ajaran: dataItem.tahun_ajaran || '',
+                            matematika: dataItem.matematika || 0,
+                            bahasa_indonesia: dataItem.bahasa_indonesia || 0,
+                            bahasa_inggris: dataItem.bahasa_inggris || 0,
+                            ipa: dataItem.ipa || 0,
+                            rata_rata: dataItem.rata_rata || 0
+                        };
+                        
+                        console.log("Safe data for template Nilai:", safeData);
+                        
+                        return `<button class="k-button k-button-solid k-button-solid-error k-button-sm btn-delete-nilai" 
+                                       data-id="${safeData.id}"
+                                       data-nama_siswa="${safeData.nama_siswa}"
+                                       data-semester="${safeData.semester}"
+                                       data-tahun_ajaran="${safeData.tahun_ajaran}"
+                                       data-matematika="${safeData.matematika}"
+                                       data-bahasa_indonesia="${safeData.bahasa_indonesia}"
+                                       data-bahasa_inggris="${safeData.bahasa_inggris}"
+                                       data-ipa="${safeData.ipa}"
+                                       data-rata_rata="${safeData.rata_rata}">
+                                    <i class="k-icon k-i-delete"></i> Hapus
+                                </button>`;
+                    }
+                }
             ],
             edit: function(e) {
                 // Set default values for new records
@@ -2477,13 +2532,13 @@ $(document).ready(function() {
                 { field: "siswa_id", title: "Siswa ID", hidden: true, editor: siswaDropDownEditor },
                 { field: "semester", title: "Semester", width: 100 },
                 { field: "tahun_ajaran", title: "Tahun Ajaran", width: 120 },
-                { field: "jumlah_hadir", title: "Hadir", width: 80 },
-                { field: "jumlah_sakit", title: "Sakit", width: 80 },
-                { field: "jumlah_izin", title: "Izin", width: 80 },
-                { field: "jumlah_alpa", title: "Alpa", width: 80 },
-                { field: "persentase_kehadiran", title: "Persentase", format: "{0:n1}%", width: 100 },
+                { field: "jumlah_hadir", title: "H", width: 75 },
+                { field: "jumlah_sakit", title: "S", width: 75 },
+                { field: "jumlah_izin", title: "I", width: 75 },
+                { field: "jumlah_alpa", title: "A", width: 75 },
+                { field: "persentase_kehadiran", title: "%", format: "{0:n1}%", width: 100 },
                 { field: "kategori_kehadiran", title: "Kategori", width: 100 },
-                { command: ["edit"], title: "Edit", width: 70 },
+                { command: ["edit"], title: "Edit", width: 85 },
                 {
                     title: "Hapus",
                     width: 70,
@@ -2748,10 +2803,10 @@ $(document).ready(function() {
                 { field: "siswa_id", title: "Siswa ID", hidden: true, editor: siswaDropDownEditor },
                 { field: "penghasilan_ayah", title: "Penghasilan Ayah", format: "{0:n0}", width: 120 },
                 { field: "penghasilan_ibu", title: "Penghasilan Ibu", format: "{0:n0}", width: 120 },
-                { field: "pekerjaan_ayah", title: "Pekerjaan Ayah", width: 120 },
-                { field: "pekerjaan_ibu", title: "Pekerjaan Ibu", width: 120 },
-                { field: "pendidikan_ayah", title: "Pendidikan Ayah", width: 120 },
-                { field: "pendidikan_ibu", title: "Pendidikan Ibu", width: 120 },
+                // { field: "pekerjaan_ayah", title: "Pekerjaan Ayah", width: 120 },
+                // { field: "pekerjaan_ibu", title: "Pekerjaan Ibu", width: 120 },
+                // { field: "pendidikan_ayah", title: "Pendidikan Ayah", width: 120 },
+                // { field: "pendidikan_ibu", title: "Pendidikan Ibu", width: 120 },
                 { field: "total_penghasilan", title: "Total", format: "{0:n0}", width: 110 },
                 { field: "kategori_penghasilan", title: "Kategori", width: 100 },
                 { command: ["edit"], title: "Edit", width: 70 },
@@ -3867,197 +3922,199 @@ $(document).ready(function() {
             showErrorNotification("Akses ditolak. Hanya admin yang dapat mengakses manajemen user.", "Akses Ditolak");
             return;
         }
-        
-        $("#users-grid").kendoGrid({
-            dataSource: {
-                transport: {
-                    read: {
-                        url: `${API_URL}/auth/users`,
-                        type: "GET",
-                        beforeSend: function(xhr) {
-                            const token = getToken();
-                            if (token) {
-                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+
+        dataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: `${API_URL}/auth/users`,
+                    type: "GET",
+                    beforeSend: function(xhr) {
+                        const token = getToken();
+                        if (token) {
+                            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                        }
+                    },
+                    complete: function(e) {
+                        try {
+                            const response = JSON.parse(e.xhr.responseText);
+                            if (response.detail) {
+                                showErrorNotification(response.detail);
                             }
-                        },
-                        complete: function(e) {
-                            try {
-                                const response = JSON.parse(e.xhr.responseText);
-                                if (response.detail) {
-                                    showErrorNotification(response.detail);
+                        } catch (error) {
+                            if (e.status === 401) {
+                                showErrorNotification("Terjadi kesalahan saat menampilkan data user. token expired");  
+                                setTimeout(() => {
+                                    window.location.href = "/login.html";
+                                }, 3000);
+                            }
+                        }
+                    },
+                    error: function(xhr) {
+                        const errorMsg = xhr.responseJSON?.detail || "Gagal mengambil data user";
+                        showErrorNotification(errorMsg);
+                    }
+                },
+                create: {
+                    url: `${API_URL}/auth/register`,
+                    type: "POST",
+                    dataType: "json",
+                    contentType: "application/json",
+                    beforeSend: function(xhr) {
+                        const token = getToken();
+                        if (token) {
+                            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                        }
+                    },
+                    complete: function(e) {
+                        try {
+                            const response = JSON.parse(e.responseText);
+                            if (response.message) {
+                                showSuccessNotification(response.message, "Sukses");
+                            }
+                        } catch (error) {
+                            if (e.status === 422) {
+                                let errorTitle = "Error Validasi";
+                                let errorContent = "Gagal membuat user baru";
+                                
+                                if (Array.isArray(e.responseJSON?.detail)) {
+                                    const errors = e.responseJSON.detail.map(err => {
+                                        const field = err.loc[err.loc.length - 1];
+                                        const fieldName = field.charAt(0).toUpperCase() + field.slice(1);
+                                        return `<li><strong>${fieldName}:</strong> ${err.msg}</li>`;
+                                    });
+                                    errorContent = `<div class="validation-error-container">
+                                        <p>Mohon perbaiki kesalahan berikut:</p>
+                                        <ul class="validation-errors">${errors.join('')}</ul>
+                                    </div>`;
+                                } else if (typeof e.responseJSON?.detail === 'string') {
+                                    errorContent = e.responseJSON.detail;
+                                } else if (e.responseJSON?.detail?.msg) {
+                                    errorContent = e.responseJSON.detail.msg;
                                 }
-                            } catch (error) {
-                                if (e.status === 401) {
-                                    showErrorNotification("Terjadi kesalahan saat menampilkan data user. token expired");  
-                                    setTimeout(() => {
-                                        window.location.href = "/login.html";
-                                    }, 3000);
+                            } else if (e.status === 409) {
+                                errorTitle = "Username Sudah Ada";
+                                errorContent = "Username yang Anda masukkan sudah digunakan. Silakan gunakan username lain.";
+                            }
+
+                            showErrorNotification(errorContent, errorTitle);
+                        }
+                    }
+                },
+                update: {
+                    url: function(data) {
+                        return `${API_URL}/auth/users/${data.id}`;
+                    },
+                    type: "PUT",
+                    dataType: "json",
+                    contentType: "application/json",
+                    beforeSend: function(xhr) {
+                        const token = getToken();
+                        if (token) {
+                            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                        }
+                    },
+                    complete: function(e) {
+                        try {
+                            const response = JSON.parse(e.responseText);
+                            if (response.message) {
+                                showSuccessNotification(response.message, "Sukses");
+                            }
+                        } catch (error) {
+                            let errorMsg = "Gagal mengupdate user";
+                            if (e.status === 422) {
+                                if (Array.isArray(e.responseJSON?.detail)) {
+                                    const errors = e.responseJSON.detail.map(err => {
+                                        const field = err.loc[err.loc.length - 1];
+                                        const fieldName = field.charAt(0).toUpperCase() + field.slice(1);
+                                        return `${fieldName}: ${err.msg}`;
+                                    });
+                                    errorMsg = errors.join('\n');
+                                } else if (typeof e.responseJSON?.detail === 'string') {
+                                    errorMsg = e.responseJSON.detail;
                                 }
                             }
-                        },
-                        error: function(xhr) {
-                            const errorMsg = xhr.responseJSON?.detail || "Gagal mengambil data user";
                             showErrorNotification(errorMsg);
                         }
-                    },
-                    create: {
-                        url: `${API_URL}/auth/register`,
-                        type: "POST",
-                        dataType: "json",
-                        contentType: "application/json",
-                        beforeSend: function(xhr) {
-                            const token = getToken();
-                            if (token) {
-                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-                            }
-                        },
-                        complete: function(e) {
-                            try {
-                                const response = JSON.parse(e.responseText);
-                                if (response.message) {
-                                    showSuccessNotification(response.message, "Sukses");
-                                }
-                            } catch (error) {
-                                if (e.status === 422) {
-                                    let errorTitle = "Error Validasi";
-                                    let errorContent = "Gagal membuat user baru";
-                                    
-                                    if (Array.isArray(e.responseJSON?.detail)) {
-                                        const errors = e.responseJSON.detail.map(err => {
-                                            const field = err.loc[err.loc.length - 1];
-                                            const fieldName = field.charAt(0).toUpperCase() + field.slice(1);
-                                            return `<li><strong>${fieldName}:</strong> ${err.msg}</li>`;
-                                        });
-                                        errorContent = `<div class="validation-error-container">
-                                            <p>Mohon perbaiki kesalahan berikut:</p>
-                                            <ul class="validation-errors">${errors.join('')}</ul>
-                                        </div>`;
-                                    } else if (typeof e.responseJSON?.detail === 'string') {
-                                        errorContent = e.responseJSON.detail;
-                                    } else if (e.responseJSON?.detail?.msg) {
-                                        errorContent = e.responseJSON.detail.msg;
-                                    }
-                                } else if (e.status === 409) {
-                                    errorTitle = "Username Sudah Ada";
-                                    errorContent = "Username yang Anda masukkan sudah digunakan. Silakan gunakan username lain.";
-                                }
-
-                                showErrorNotification(errorContent, errorTitle);
-                            }
-                        }
-                    },
-                    update: {
-                        url: function(data) {
-                            return `${API_URL}/auth/users/${data.id}`;
-                        },
-                        type: "PUT",
-                        dataType: "json",
-                        contentType: "application/json",
-                        beforeSend: function(xhr) {
-                            const token = getToken();
-                            if (token) {
-                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-                            }
-                        },
-                        complete: function(e) {
-                            try {
-                                const response = JSON.parse(e.responseText);
-                                if (response.message) {
-                                    showSuccessNotification(response.message, "Sukses");
-                                }
-                            } catch (error) {
-                                let errorMsg = "Gagal mengupdate user";
-                                if (e.status === 422) {
-                                    if (Array.isArray(e.responseJSON?.detail)) {
-                                        const errors = e.responseJSON.detail.map(err => {
-                                            const field = err.loc[err.loc.length - 1];
-                                            const fieldName = field.charAt(0).toUpperCase() + field.slice(1);
-                                            return `${fieldName}: ${err.msg}`;
-                                        });
-                                        errorMsg = errors.join('\n');
-                                    } else if (typeof e.responseJSON?.detail === 'string') {
-                                        errorMsg = e.responseJSON.detail;
-                                    }
-                                }
-                                showErrorNotification(errorMsg);
-                            }
-                        }
-                    },
-                    destroy: {
-                        url: function(data) {
-                            return `${API_URL}/auth/users/${data.id}`;
-                        },
-                        type: "DELETE",
-                        beforeSend: function(xhr) {
-                            const token = getToken();
-                            if (token) {
-                                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-                            }
-                        },
-                        complete: function(e) {
-                            try {
-                                const response = JSON.parse(e.responseText);
-                                if (response.message) {
-                                    showSuccessNotification(response.message, "Sukses");
-                                }
-                            } catch (error) {
-                                const errorMsg = e.responseJSON?.detail || "Gagal menghapus user";
-                                showErrorNotification(errorMsg);
-                            }
-                        }
-                    },
-                    parameterMap: function(data, type) {
-                        if (type === "create" || type === "update") {
-                            return JSON.stringify(data);
-                        }
-                        return data;
                     }
                 },
-                schema: {
-                    model: {
-                        id: "id",
-                        fields: {
-                            id: { type: "number", editable: false },
-                            username: { 
-                                type: "string", 
-                                validation: { 
-                                    required: true,
-                                    minLength: 3,
-                                    maxLength: 20,
-                                    pattern: "^[a-zA-Z0-9]+$",
-                                    patternMessage: "Username harus berupa huruf dan angka",
-                                    minLengthMessage: "Username minimal 3 karakter",
-                                    maxLengthMessage: "Username maksimal 20 karakter"
-                                } 
-                            },
-                            password: { 
-                                type: "string", 
-                                validation: { 
-                                    required: true,
-                                    minLength: 6,
-                                    maxLength: 50,
-                                    minLengthMessage: "Password minimal 6 karakter",
-                                    maxLengthMessage: "Password maksimal 50 karakter"
-                                } 
-                            },
-                            email: { type: "string", validation: { required: true, email: true } },
-                            role: { type: "string", validation: { required: true } },
-                            profile: { 
-                                type: "object",
-                                defaultValue: {
-                                    nip: "",
-                                    nama_lengkap: "",
-                                    jabatan: "",
-                                    no_hp: "",
-                                    alamat: ""
-                                }
-                            },
-                            is_active: { type: "boolean", defaultValue: true }
+                destroy: {
+                    url: function(data) {
+                        return `${API_URL}/auth/users/${data.id}`;
+                    },
+                    type: "DELETE",
+                    beforeSend: function(xhr) {
+                        const token = getToken();
+                        if (token) {
+                            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                        }
+                    },
+                    complete: function(e) {
+                        try {
+                            const response = JSON.parse(e.responseText);
+                            if (response.message) {
+                                showSuccessNotification(response.message, "Sukses");
+                            }
+                        } catch (error) {
+                            const errorMsg = e.responseJSON?.detail || "Gagal menghapus user";
+                            showErrorNotification(errorMsg);
                         }
                     }
                 },
-                pageSize: 10
+                parameterMap: function(data, type) {
+                    if (type === "create" || type === "update") {
+                        return JSON.stringify(data);
+                    }
+                    return data;
+                }
             },
+            schema: {
+                model: {
+                    id: "id",
+                    fields: {
+                        id: { type: "number", editable: false },
+                        username: { 
+                            type: "string", 
+                            validation: { 
+                                required: true,
+                                minLength: 3,
+                                maxLength: 20,
+                                pattern: "^[a-zA-Z0-9]+$",
+                                patternMessage: "Username harus berupa huruf dan angka",
+                                minLengthMessage: "Username minimal 3 karakter",
+                                maxLengthMessage: "Username maksimal 20 karakter"
+                            } 
+                        },
+                        password: { 
+                            type: "string", 
+                            validation: { 
+                                required: true,
+                                minLength: 6,
+                                maxLength: 50,
+                                minLengthMessage: "Password minimal 6 karakter",
+                                maxLengthMessage: "Password maksimal 50 karakter"
+                            } 
+                        },
+                        email: { type: "string", validation: { required: true, email: true } },
+                        role: { type: "string", validation: { required: true } },
+                        profile: { 
+                            type: "object",
+                            defaultValue: {
+                                nip: "",
+                                nama_lengkap: "",
+                                jabatan: "",
+                                no_hp: "",
+                                alamat: ""
+                            }
+                        },
+                        is_active: { type: "boolean", defaultValue: true }
+                    }
+                }
+            },
+            pageSize: 10
+        });
+        
+        $("#users-grid").kendoGrid({
+            dataSource: dataSource,
             toolbar: ["create"],
             pageable: true,
             sortable: true,
@@ -4106,28 +4163,44 @@ $(document).ready(function() {
                             name: "edit",
                             text: { edit: "Edit", update: "Simpan", cancel: "Batal" }
                         },
-                        {
-                            field: "id",
-                            title: "Hapus",
-                            width: 90,
-                            template: function(dataItem) {
-                                console.log(dataItem);
-                                return `<button class="k-button k-button-solid k-button-solid-error k-button-sm btn-delete-user" 
-                                               data-id="${dataItem.id}"
-                                               data-username="${dataItem.username || ''}"
-                                               data-email="${dataItem.email || ''}"
-                                               data-role="${dataItem.role || ''}"
-                                               data-nama_lengkap="${dataItem.profile?.nama_lengkap || ''}"
-                                               data-nip="${dataItem.profile?.nip || ''}"
-                                               data-jabatan="${dataItem.profile?.jabatan || ''}"
-                                               data-is_active="${dataItem.is_active}">
-                                            <i class="k-icon k-i-delete"></i> Hapus
-                                        </button>`;
-                            }
-                        }
                     ],
                     title: "Aksi",
                     width: 140
+                },
+                {
+                    field: "id",
+                    title: "Hapus",
+                    width: 90,
+                    template: function(dataItem) {
+                        console.log("Template dataItem:", dataItem);
+                        
+                        // Safe extraction dengan null checks
+                        const profile = dataItem.profile || {};
+                        const safeData = {
+                            id: dataItem.id || '',
+                            username: dataItem.username || '',
+                            email: dataItem.email || '',
+                            role: dataItem.role || '',
+                            nama_lengkap: profile.nama_lengkap || '',
+                            nip: profile.nip || '',
+                            jabatan: profile.jabatan || '',
+                            is_active: dataItem.is_active !== undefined ? dataItem.is_active : true
+                        };
+                        
+                        console.log("Safe data for template:", safeData);
+                        
+                        return `<button class="k-button k-button-solid k-button-solid-error k-button-sm btn-delete-user" 
+                                       data-id="${safeData.id}"
+                                       data-username="${safeData.username}"
+                                       data-email="${safeData.email}"
+                                       data-role="${safeData.role}"
+                                       data-nama_lengkap="${safeData.nama_lengkap}"
+                                       data-nip="${safeData.nip}"
+                                       data-jabatan="${safeData.jabatan}"
+                                       data-is_active="${safeData.is_active}">
+                                    <i class="k-icon k-i-delete"></i> Hapus
+                                </button>`;
+                    }
                 }
             ],
             error: function(e) {
@@ -4719,786 +4792,22 @@ $(document).ready(function() {
         `);
     }
     
-    // Make dashboard bar chart functions globally accessible
-    window.initializeDashboardBarChart = initializeDashboardBarChart;
-    window.updateDashboardBarChart = updateDashboardBarChart;
-
-    // ========== TOKEN EXPIRY CHECKER SYSTEM ==========
-    
-    // Fungsi untuk mengecek status token expiry
-    function checkTokenExpiry() {
-        const token = getToken();
-        if (!token) {
-            return {
-                isValid: false,
-                timeLeft: 0,
-                status: 'no_token',
-                message: 'Token tidak ditemukan'
-            };
-        }
-        
-        const expiryTime = getTokenExpiryTime();
-        if (!expiryTime) {
-            return {
-                isValid: false,
-                timeLeft: 0,
-                status: 'invalid_token',
-                message: 'Token tidak valid'
-            };
-        }
-        
-        const now = Date.now();
-        const timeLeft = expiryTime - now;
-        
-        if (timeLeft <= 0) {
-            return {
-                isValid: false,
-                timeLeft: 0,
-                status: 'expired',
-                message: 'Token telah expired'
-            };
-        }
-        
-        // Determine status based on time left
-        let status = 'valid';
-        let urgency = 'low';
-        
-        if (timeLeft <= 1 * 60 * 1000) { // 1 minute
-            status = 'critical';
-            urgency = 'critical';
-        } else if (timeLeft <= 2 * 60 * 1000) { // 2 minutes
-            status = 'very_urgent';
-            urgency = 'high';
-        } else if (timeLeft <= 5 * 60 * 1000) { // 5 minutes
-            status = 'urgent';
-            urgency = 'high';
-        } else if (timeLeft <= 10 * 60 * 1000) { // 10 minutes
-            status = 'warning';
-            urgency = 'medium';
-        } else if (timeLeft <= 15 * 60 * 1000) { // 15 minutes
-            status = 'notice';
-            urgency = 'low';
-        }
-        
-        return {
-            isValid: true,
-            timeLeft: timeLeft,
-            timeLeftFormatted: formatCountdownTime(timeLeft),
-            status: status,
-            urgency: urgency,
-            minutesLeft: Math.floor(timeLeft / (60 * 1000)),
-            secondsLeft: Math.floor((timeLeft % (60 * 1000)) / 1000),
-            message: getExpiryMessage(status, Math.floor(timeLeft / (60 * 1000)))
-        };
-    }
-    
-    // Fungsi untuk mendapatkan pesan expiry berdasarkan status
-    function getExpiryMessage(status, minutesLeft) {
-        const messages = {
-            'valid': 'Token masih valid',
-            'notice': `Token akan expired dalam ${minutesLeft} menit`,
-            'warning': `⚠️ Token akan expired dalam ${minutesLeft} menit`,
-            'urgent': `🚨 Token akan expired dalam ${minutesLeft} menit!`,
-            'very_urgent': `🔥 Token akan expired dalam ${minutesLeft} menit! Segera simpan pekerjaan Anda!`,
-            'critical': `❌ Token akan expired dalam kurang dari 1 menit! Sistem akan logout otomatis!`,
-            'expired': '❌ Token telah expired'
-        };
-        
-        return messages[status] || 'Status token tidak diketahui';
-    }
-    
-    // Fungsi untuk menampilkan notifikasi berdasarkan status token
-    function showTokenExpiryNotification(tokenStatus) {
-        const now = Date.now();
-        const minutesLeft = tokenStatus.minutesLeft;
-        
-        // Prevent spam notifications (minimum 30 seconds between notifications)
-        if (now - lastNotificationTime < 30000) {
-            return;
-        }
-        
-        let shouldShow = false;
-        let notificationType = 'info';
-        let title = 'Peringatan Token';
-        
-        // Check if we should show notification based on time thresholds
-        if (minutesLeft <= 1 && !notificationShown['1min']) {
-            shouldShow = true;
-            notificationType = 'error';
-            title = 'Token Akan Expired!';
-            notificationShown['1min'] = true;
-        } else if (minutesLeft <= 2 && !notificationShown['2min']) {
-            shouldShow = true;
-            notificationType = 'error';
-            title = 'Token Akan Expired!';
-            notificationShown['2min'] = true;
-        } else if (minutesLeft <= 5 && !notificationShown['5min']) {
-            shouldShow = true;
-            notificationType = 'error';
-            title = 'Peringatan Token';
-            notificationShown['5min'] = true;
-        } else if (minutesLeft <= 10 && !notificationShown['10min']) {
-            shouldShow = true;
-            notificationType = 'info';
-            title = 'Pemberitahuan Token';
-            notificationShown['10min'] = true;
-        } else if (minutesLeft <= 15 && !notificationShown['15min']) {
-            shouldShow = true;
-            notificationType = 'info';
-            title = 'Pemberitahuan Token';
-            notificationShown['15min'] = true;
-        }
-        
-        if (shouldShow) {
-            const message = `${tokenStatus.message}<br/><small>Waktu tersisa: ${tokenStatus.timeLeftFormatted}</small>`;
-            
-            if (notificationType === 'error') {
-                showErrorNotification(message, title);
-            } else {
-                showInfoNotification(message, title);
-            }
-            
-            lastNotificationTime = now;
-            
-            // Log untuk debugging
-            console.log(`Token Expiry Notification: ${title} - ${tokenStatus.message}`);
-        }
-    }
-    
-    // Fungsi untuk memulai token expiry checker
-    function startTokenExpiryChecker() {
-        // Clear existing checker
-        if (tokenExpiryChecker) {
-            clearInterval(tokenExpiryChecker);
-        }
-        
-        // Reset notification flags
-        notificationShown = {
-            '15min': false,
-            '10min': false,
-            '5min': false,
-            '2min': false,
-            '1min': false
-        };
-        
-        tokenExpiryChecker = setInterval(function() {
-            const tokenStatus = checkTokenExpiry();
-            
-            if (!tokenStatus.isValid) {
-                // Token is invalid or expired
-                clearInterval(tokenExpiryChecker);
-                
-                if (tokenStatus.status === 'expired') {
-                    showErrorNotification("Token telah expired. Anda akan dialihkan ke halaman login.", "Session Expired");
-                    setTimeout(() => {
-                        logout();
-                    }, 3000);
-                }
-                return;
-            }
-            
-            // Auto refresh token when it's about to expire (5 minutes left)
-            if (tokenStatus.minutesLeft <= 5 && tokenStatus.minutesLeft > 2) {
-                autoRefreshToken();
-            }
-            
-            // Show notifications based on token status
-            showTokenExpiryNotification(tokenStatus);
-            
-            // Update token status indicator if exists
-            updateTokenStatusIndicator(tokenStatus);
-            
-        }, 5000); // Check every 5 seconds
-    }
-    
-    // Fungsi untuk stop token expiry checker
-    function stopTokenExpiryChecker() {
-        if (tokenExpiryChecker) {
-            clearInterval(tokenExpiryChecker);
-            tokenExpiryChecker = null;
-        }
-    }
-    
-    // Fungsi untuk update token status indicator
-    function updateTokenStatusIndicator(tokenStatus) {
-        const $indicator = $("#token-status-indicator");
-        if ($indicator.length === 0) return;
-        
-        // Remove all status classes
-        $indicator.removeClass("token-valid token-notice token-warning token-urgent token-critical");
-        
-        // Add appropriate class based on status
-        $indicator.addClass(`token-${tokenStatus.status}`);
-        
-        // Update tooltip or title
-        $indicator.attr("title", tokenStatus.message);
-    }
-    
-    // Fungsi untuk mendapatkan informasi lengkap token
-    function getTokenInfo() {
-        const tokenStatus = checkTokenExpiry();
-        const token = getToken();
-        
-        let tokenInfo = {
-            ...tokenStatus,
-            hasToken: !!token
-        };
-        
-        if (token) {
-            try {
-                const payload = JSON.parse(atob(token.split('.')[1]));
-                tokenInfo.issuedAt = new Date(payload.iat * 1000);
-                tokenInfo.expiresAt = new Date(payload.exp * 1000);
-                tokenInfo.username = payload.sub || payload.username;
-                tokenInfo.role = payload.role;
-                
-                // Ambil data profile dari localStorage
-                const userData = localStorage.getItem('user_data');
-                if (userData) {
-                    try {
-                        const userProfile = JSON.parse(userData);
-                        tokenInfo.email = userProfile.email;
-                        tokenInfo.profile = {
-                            nama_lengkap: userProfile.profile?.nama_lengkap || '',
-                            nip: userProfile.profile?.nip || '',
-                            jabatan: userProfile.profile?.jabatan || '',
-                            no_hp: userProfile.profile?.no_hp || '',
-                            alamat: userProfile.profile?.alamat || ''
-                        };
-                    } catch (e) {
-                        console.error('Error parsing user profile data:', e);
-                    }
-                }
-            } catch (e) {
-                console.error('Error parsing token:', e);
-            }
-        }
-        
-        return tokenInfo;
-    }
-    
-    // Fungsi untuk menampilkan dialog informasi token
-    function showTokenInfoDialog() {
-        const tokenInfo = getTokenInfo();
-        
-        // Debug: Log token info untuk troubleshooting
-        console.log('Token Info:', tokenInfo);
-        
-        let content = '';
-        if (!tokenInfo.hasToken) {
-            content = `
-                <div class="token-info-dialog">
-                    <div class="alert alert-danger">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <strong>Tidak ada token</strong><br/>
-                        Anda belum login atau session telah berakhir.
-                    </div>
-                </div>
-            `;
-        } else {
-            const statusClass = tokenInfo.urgency === 'critical' ? 'danger' : 
-                              tokenInfo.urgency === 'high' ? 'warning' : 
-                              tokenInfo.urgency === 'medium' ? 'info' : 'success';
-            
-            // Format role dengan badge styling
-            const roleBadgeClass = tokenInfo.role === 'Admin' ? 'primary' : 
-                                 tokenInfo.role === 'Guru' ? 'success' : 'info';
-            
-            content = `
-                <div class="token-info-dialog">
-                    <div class="alert alert-${statusClass}">
-                        <h6><i class="fas fa-info-circle"></i> Status Token Session</h6>
-                        <p><strong>Status:</strong> ${tokenInfo.message || 'N/A'}</p>
-                        <p><strong>Waktu Tersisa:</strong> ${tokenInfo.timeLeftFormatted || 'N/A'}</p>
-                    </div>
-                    
-                    <!-- Informasi Pengguna -->
-                    <div class="user-profile-info mt-3">
-                        <h6><i class="fas fa-user"></i> Informasi Pengguna</h6>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <table class="table table-sm table-borderless">
-                                    <tr>
-                                        <td width="35%"><strong>Username:</strong></td>
-                                        <td>${tokenInfo.username || '-'}</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Email:</strong></td>
-                                        <td>${tokenInfo.email || '-'}</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Role:</strong></td>
-                                        <td><span class="badge badge-${roleBadgeClass}">${tokenInfo.role || '-'}</span></td>
-                                    </tr>
-                                    ${tokenInfo.profile?.nama_lengkap ? `
-                                    <tr>
-                                        <td><strong>Nama Lengkap:</strong></td>
-                                        <td>${tokenInfo.profile.nama_lengkap}</td>
-                                    </tr>
-                                    ` : ''}
-                                    ${tokenInfo.profile?.nip ? `
-                                    <tr>
-                                        <td><strong>NIP:</strong></td>
-                                        <td>${tokenInfo.profile.nip}</td>
-                                    </tr>
-                                    ` : ''}
-                                    ${tokenInfo.profile?.jabatan ? `
-                                    <tr>
-                                        <td><strong>Jabatan:</strong></td>
-                                        <td>${tokenInfo.profile.jabatan}</td>
-                                    </tr>
-                                    ` : ''}
-                                    ${tokenInfo.profile?.no_hp ? `
-                                    <tr>
-                                        <td><strong>No. HP:</strong></td>
-                                        <td>${tokenInfo.profile.no_hp}</td>
-                                    </tr>
-                                    ` : ''}
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Detail Token -->
-                    <div class="token-details mt-3">
-                        <h6><i class="fas fa-key"></i> Detail Token</h6>
-                        <table class="table table-sm table-borderless">
-                            <tr>
-                                <td width="35%"><strong>Dibuat:</strong></td>
-                                <td>${tokenInfo.issuedAt ? tokenInfo.issuedAt.toLocaleString('id-ID') : '-'}</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Expired:</strong></td>
-                                <td>${tokenInfo.expiresAt ? tokenInfo.expiresAt.toLocaleString('id-ID') : '-'}</td>
-                            </tr>
-                        </table>
-                    </div>
-                    
-                    <!-- Tombol Aksi -->
-                    <div class="token-actions mt-3">
-                        <button class="btn btn-primary btn-sm" onclick="refreshTokenCountdown(); closeTokenInfoDialog();">
-                            <i class="fas fa-sync"></i> Refresh Display
-                        </button>
-                        <button class="btn btn-success btn-sm ml-2" onclick="manualRefreshToken().then(() => closeTokenInfoDialog());">
-                            <i class="fas fa-sync-alt"></i> Refresh Token
-                        </button>
-                        <button class="btn btn-danger btn-sm ml-2" onclick="logout();">
-                            <i class="fas fa-sign-out-alt"></i> Logout Sekarang
-                        </button>
-                    </div>
-                </div>
-            `;
-        }
-        
-        // Debug: Log generated content
-        console.log('Generated content:', content);
-        
-        // Remove existing dialog
-        $(".token-info-window").remove();
-        
-        // Create new dialog with content
-        const windowElement = $("<div></div>").appendTo("body");
-        
-        // Set content before creating the window
-        windowElement.html(content);
-        
-        // Create Kendo Window
-        const kendoWindow = windowElement.kendoWindow({
-            title: "Informasi Token Session & Profile",
-            width: "550px",
-            height: "auto",
-            modal: true,
-            visible: false,
-            actions: ["close"],
-            resizable: false
-        }).data("kendoWindow");
-        
-        // Add class for styling
-        windowElement.addClass("token-info-window");
-        
-        // Center and open the window
-        kendoWindow.center().open();
-        
-        // Debug: Log that window is opened
-        console.log('Token info window opened');
-    }
-    
-    // Fungsi untuk menutup dialog token info
-    function closeTokenInfoDialog() {
-        $(".token-info-window").each(function() {
-            const window = $(this).data("kendoWindow");
-            if (window) {
-                window.close();
-            }
-        });
-    }
-    
-    // Make token functions globally accessible
-    window.checkTokenExpiry = checkTokenExpiry;
-    window.getTokenInfo = getTokenInfo;
-    window.showTokenInfoDialog = showTokenInfoDialog;
-    window.closeTokenInfoDialog = closeTokenInfoDialog;
-    window.startTokenExpiryChecker = startTokenExpiryChecker;
-    window.stopTokenExpiryChecker = stopTokenExpiryChecker;
-    window.refreshToken = refreshToken;
-    window.manualRefreshToken = manualRefreshToken;
-
-    // Fungsi untuk menampilkan konfirmasi penghapusan data penghasilan
-    function showDeleteConfirmationPenghasilan(data) {
-        // Hapus window yang mungkin masih ada
-        $(".k-window").remove();
-        
-        // Buat window baru
-        const windowElement = $("<div></div>").appendTo("body");
-        const window = windowElement.kendoWindow({
-            title: "Konfirmasi Hapus Data Penghasilan",
-            width: "500px",
-            modal: true,
-            visible: false,
-            actions: ["close"],
-            content: {
-                template: `
-                    <div class="delete-confirmation">
-                        <div class="icon-container">
-                            <i class="fas fa-exclamation-triangle text-warning"></i>
-                        </div>
-                        <div class="message">
-                            <h4>Konfirmasi Hapus Data Penghasilan</h4>
-                            <p><strong>Nama Siswa:</strong> ${data.nama_siswa || '-'}</p>
-                            <p><strong>Penghasilan Ayah:</strong> Rp ${(data.penghasilan_ayah || 0).toLocaleString('id-ID')}</p>
-                            <p><strong>Penghasilan Ibu:</strong> Rp ${(data.penghasilan_ibu || 0).toLocaleString('id-ID')}</p>
-                            <p><strong>Total Penghasilan:</strong> Rp ${(data.total_penghasilan || 0).toLocaleString('id-ID')}</p>
-                            <p><strong>Kategori:</strong> ${data.kategori_penghasilan || '-'}</p>
-                            <hr>
-                            <p class="text-danger">Apakah Anda yakin ingin menghapus data penghasilan ini? Tindakan ini tidak dapat dibatalkan.</p>
-                        </div>
-                        <div class="button-container">
-                            <button class="k-button k-button-solid-base" id="cancelDeletePenghasilan">
-                                <i class="fas fa-times"></i> Batal
-                            </button>
-                            <button class="k-button k-button-solid-error" id="confirmDeletePenghasilan">
-                                <i class="fas fa-trash"></i> Hapus Data Penghasilan
-                            </button>
-                        </div>
-                    </div>
-                `
-            }
-        }).data("kendoWindow");
-
-        // Event handlers
-        windowElement.on("click", "#cancelDeletePenghasilan", function() {
-            window.close();
-        });
-
-        windowElement.on("click", "#confirmDeletePenghasilan", function() {
-            window.close();
-            
-            // Lakukan AJAX call langsung ke backend untuk menghapus
-            $.ajax({
-                url: `${API_URL}/penghasilan/${data.id}`,
-                type: "DELETE",
-                beforeSend: function(xhr) {
-                    const token = getToken();
-                    if (token) {
-                        xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-                    }
-                },
-                success: function() {
-                    showSuccessNotification("Data penghasilan berhasil dihapus", "Sukses");
-                    // Refresh grid setelah berhasil menghapus
-                    const grid = $("#penghasilan-grid").data("kendoGrid");
-                    if (grid) {
-                        grid.dataSource.read();
-                    }
-                },
-                error: function(xhr) {
-                    const errorMsg = xhr.responseJSON?.detail || "Gagal menghapus data penghasilan";
-                    showErrorNotification(errorMsg, "Error");
-                }
-            });
-        });
-
-        window.center().open();
-    }
-
-    // Fungsi untuk menampilkan konfirmasi penghapusan data presensi
-    function showDeleteConfirmationPresensi(data) {
-        // Hapus window yang mungkin masih ada
-        $(".k-window").remove();
-        
-        // Buat window baru
-        const windowElement = $("<div></div>").appendTo("body");
-        const window = windowElement.kendoWindow({
-            title: "Konfirmasi Hapus Data Presensi",
-            width: "500px",
-            modal: true,
-            visible: false,
-            actions: ["close"],
-            content: {
-                template: `
-                    <div class="delete-confirmation">
-                        <div class="icon-container">
-                            <i class="fas fa-exclamation-triangle text-warning"></i>
-                        </div>
-                        <div class="message">
-                            <h4>Konfirmasi Hapus Data Presensi</h4>
-                            <p><strong>Nama Siswa:</strong> ${data.nama_siswa || '-'}</p>
-                            <p><strong>Semester:</strong> ${data.semester || '-'}</p>
-                            <p><strong>Tahun Ajaran:</strong> ${data.tahun_ajaran || '-'}</p>
-                            <p><strong>Jumlah Hadir:</strong> ${data.jumlah_hadir || 0} hari</p>
-                            <p><strong>Jumlah Sakit:</strong> ${data.jumlah_sakit || 0} hari</p>
-                            <p><strong>Jumlah Izin:</strong> ${data.jumlah_izin || 0} hari</p>
-                            <p><strong>Jumlah Alpa:</strong> ${data.jumlah_alpa || 0} hari</p>
-                            <p><strong>Persentase Kehadiran:</strong> ${(data.persentase_kehadiran || 0).toFixed(1)}%</p>
-                            <p><strong>Kategori:</strong> ${data.kategori_kehadiran || '-'}</p>
-                            <hr>
-                            <p class="text-danger">Apakah Anda yakin ingin menghapus data presensi ini? Tindakan ini tidak dapat dibatalkan.</p>
-                        </div>
-                        <div class="button-container">
-                            <button class="k-button k-button-solid-base" id="cancelDeletePresensi">
-                                <i class="fas fa-times"></i> Batal
-                            </button>
-                            <button class="k-button k-button-solid-error" id="confirmDeletePresensi">
-                                <i class="fas fa-trash"></i> Hapus Data Presensi
-                            </button>
-                        </div>
-                    </div>
-                `
-            }
-        }).data("kendoWindow");
-
-        // Event handlers
-        windowElement.on("click", "#cancelDeletePresensi", function() {
-            window.close();
-        });
-
-        windowElement.on("click", "#confirmDeletePresensi", function() {
-            window.close();
-            
-            // Lakukan AJAX call langsung ke backend untuk menghapus
-            $.ajax({
-                url: `${API_URL}/presensi/${data.id}`,
-                type: "DELETE",
-                beforeSend: function(xhr) {
-                    const token = getToken();
-                    if (token) {
-                        xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-                    }
-                },
-                success: function() {
-                    showSuccessNotification("Data presensi berhasil dihapus", "Sukses");
-                    // Refresh grid setelah berhasil menghapus
-                    const grid = $("#presensi-grid").data("kendoGrid");
-                    if (grid) {
-                        grid.dataSource.read();
-                    }
-                },
-                error: function(xhr) {
-                    const errorMsg = xhr.responseJSON?.detail || "Gagal menghapus data presensi";
-                    showErrorNotification(errorMsg, "Error");
-                }
-            });
-        });
-
-        window.center().open();
-    }
-
-    // Fungsi untuk menampilkan konfirmasi penghapusan data users
-    function showDeleteConfirmationUsers(data) {
-        // Hapus window yang mungkin masih ada
-        $(".k-window").remove();
-        
-        // Buat window baru
-        const windowElement = $("<div></div>").appendTo("body");
-        const window = windowElement.kendoWindow({
-            title: "Konfirmasi Hapus Data User",
-            width: "500px",
-            modal: true,
-            visible: false,
-            actions: ["close"],
-            content: {
-                template: `
-                    <div class="delete-confirmation">
-                        <div class="icon-container">
-                            <i class="fas fa-exclamation-triangle text-warning"></i>
-                        </div>
-                        <div class="message">
-                            <h4>Konfirmasi Hapus Data User</h4>
-                            <p><strong>Username:</strong> ${data.username || '-'}</p>
-                            <p><strong>Email:</strong> ${data.email || '-'}</p>
-                            <p><strong>Role:</strong> ${data.role || '-'}</p>
-                            <p><strong>Nama Lengkap:</strong> ${data.nama_lengkap || '-'}</p>
-                            <p><strong>NIP:</strong> ${data.nip || '-'}</p>
-                            <p><strong>Jabatan:</strong> ${data.jabatan || '-'}</p>
-                            <p><strong>Status:</strong> ${data.is_active ? 'Aktif' : 'Nonaktif'}</p>
-                            <hr>
-                            <p class="text-danger">Apakah Anda yakin ingin menghapus data user ini? Tindakan ini tidak dapat dibatalkan.</p>
-                        </div>
-                        <div class="button-container">
-                            <button class="k-button k-button-solid-base" id="cancelDeleteUsers">
-                                <i class="fas fa-times"></i> Batal
-                            </button>
-                            <button class="k-button k-button-solid-error" id="confirmDeleteUsers">
-                                <i class="fas fa-trash"></i> Hapus Data User
-                            </button>
-                        </div>
-                    </div>
-                `
-            }
-        }).data("kendoWindow");
-
-        // Event handlers
-        windowElement.on("click", "#cancelDeleteUsers", function() {
-            window.close();
-        });
-
-        windowElement.on("click", "#confirmDeleteUsers", function() {
-            window.close();
-            
-            // Lakukan AJAX call langsung ke backend untuk menghapus
-            $.ajax({
-                url: `${API_URL}/auth/users/${data.id}`,
-                type: "DELETE",
-                beforeSend: function(xhr) {
-                    const token = getToken();
-                    if (token) {
-                        xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-                    }
-                },
-                success: function() {
-                    showSuccessNotification("Data user berhasil dihapus", "Sukses");
-                    // Refresh grid setelah berhasil menghapus
-                    const grid = $("#users-grid").data("kendoGrid");
-                    if (grid) {
-                        grid.dataSource.read();
-                    }
-                },
-                error: function(xhr) {
-                    const errorMsg = xhr.responseJSON?.detail || "Gagal menghapus data user";
-                    showErrorNotification(errorMsg, "Error");
-                }
-            });
-        });
-
-        window.center().open();
-    }
-
-    // Fungsi untuk refresh token
-    function refreshToken() {
-        return new Promise((resolve, reject) => {
-            const currentToken = getToken();
-            if (!currentToken) {
-                reject(new Error('No token available to refresh'));
-                return;
-            }
-            
-            $.ajax({
-                url: `${API_URL}/auth/refresh`,
-                method: "POST",
-                beforeSend: function(xhr) {
-                    xhr.setRequestHeader('Authorization', `Bearer ${currentToken}`);
-                },
-                success: function(data) {
-                    // Update token in localStorage
-                    localStorage.setItem('access_token', data.access_token);
-                    
-                    // Reset notification flags untuk token baru
-                    notificationShown = {
-                        '15min': false,
-                        '10min': false,
-                        '5min': false,
-                        '2min': false,
-                        '1min': false
-                    };
-                    
-                    // Reset last auto refresh time
-                    lastAutoRefreshTime = Date.now();
-                    
-                    // Refresh countdown timer dengan token baru
-                    refreshTokenCountdown();
-                    
-                    console.log('Token berhasil di-refresh');
-                    showSuccessNotification('Token berhasil diperbaharui', 'Token Refresh');
-                    
-                    resolve(data);
-                },
-                error: function(xhr) {
-                    console.error('Error refreshing token:', xhr);
-                    
-                    let errorMsg = "Gagal refresh token";
-                    try {
-                        const response = JSON.parse(xhr.responseText);
-                        errorMsg = response.detail || errorMsg;
-                    } catch (e) {}
-                    
-                    if (xhr.status === 401) {
-                        // Token sudah tidak valid, logout
-                        showErrorNotification("Session telah berakhir. Anda akan dialihkan ke halaman login.", "Session Expired");
-                        setTimeout(() => {
-                            logout();
-                        }, 3000);
-                    } else {
-                        showErrorNotification(errorMsg, "Error Refresh Token");
-                    }
-                    
-                    reject(new Error(errorMsg));
-                }
-            });
-        });
-    }
-    
-    // Fungsi untuk auto refresh token (dipanggil otomatis saat token mendekati expired)
-    function autoRefreshToken() {
-        const now = Date.now();
-        
-        // Prevent multiple auto-refresh in short time (minimum 60 seconds between auto-refresh)
-        if (now - lastAutoRefreshTime < 60000) {
-            return Promise.resolve();
-        }
-        
-        console.log('Auto-refreshing token...');
-        return refreshToken().catch(error => {
-            console.error('Auto-refresh failed:', error);
-            // Don't show error notification for auto-refresh failures
-            // User will be notified through normal expiry notifications
-        });
-    }
-    
-    // Fungsi untuk manual refresh token (dipanggil dari UI)
-    function manualRefreshToken() {
-        const tokenStatus = checkTokenExpiry();
-        
-        if (!tokenStatus.isValid) {
-            showErrorNotification("Token tidak valid atau sudah expired", "Error Refresh Token");
-            return Promise.reject(new Error('Invalid token'));
-        }
-        
-        // Show loading state
-        const $refreshBtn = $("#btn-refresh-token");
-        if ($refreshBtn.length > 0) {
-            $refreshBtn.prop("disabled", true).html('<i class="fas fa-spinner fa-spin mr-2"></i> Refreshing...');
-        }
-        
-        return refreshToken().finally(() => {
-            // Reset button state
-            if ($refreshBtn.length > 0) {
-                $refreshBtn.prop("disabled", false).html('<i class="fas fa-sync-alt mr-2"></i> Refresh Token');
-            }
-        });
-    }
-
     // ========== DASHBOARD BAR CHART FUNCTIONS ==========
-    let dashboardBarChartData = null;
-    let dashboardBarChartInstance = null;
     
     function initializeDashboardBarChart() {
         // Load data untuk dashboard bar chart
-        setTimeout(() => {
-            loadDashboardBarChartData();
-        }, 2000); // Delay untuk memastikan feature statistics sudah loaded
+        if (dashboardBarChartData) {
+            generateDashboardBarChart();
+        } else {
+            // Load data from existing feature statistics dengan delay
+            setTimeout(() => {
+                loadDashboardBarChartData();
+            }, 2000); // Delay 2 detik setelah feature statistics dimuat
+        }
     }
     
     function loadDashboardBarChartData() {
+        // Gunakan data yang sudah ada dari feature statistics
         $.ajax({
             url: `${API_URL}/prediksi/feature-statistics`,
             method: "GET",
@@ -5513,12 +4822,12 @@ $(document).ready(function() {
                     dashboardBarChartData = data.data;
                     generateDashboardBarChart();
                 } else {
-                    showDashboardBarChartError("Data tidak tersedia");
+                    showDashboardBarChartError("Data tidak tersedia untuk dashboard bar chart");
                 }
             },
             error: function(xhr) {
                 console.error("Error loading dashboard bar chart data:", xhr.responseText);
-                showDashboardBarChartError("Gagal memuat data");
+                showDashboardBarChartError("Gagal memuat data untuk dashboard bar chart");
             }
         });
     }
@@ -5543,8 +4852,8 @@ $(document).ready(function() {
             return;
         }
         
-        // Set dimensions and margins for dashboard
-        const margin = { top: 20, right: 20, bottom: 60, left: 50 };
+        // Set dimensions and margins for dashboard (smaller than full chart)
+        const margin = { top: 30, right: 20, bottom: 60, left: 50 };
         const width = 400 - margin.left - margin.right;
         const height = 220 - margin.top - margin.bottom;
         
@@ -5566,11 +4875,12 @@ $(document).ready(function() {
         
         const maxValue = d3.max(chartData, d => displayMode === 'percentage' ? d.percentage : d.value);
         const yScale = d3.scaleLinear()
-            .domain([0, maxValue * 1.1])
+            .domain([0, maxValue * 1.1]) // Add 10% padding
             .range([height, 0]);
         
-        // Create color scale - use green theme for dashboard
-        const colorScale = d3.scaleOrdinal(d3.schemeGreens[Math.max(3, Math.min(9, chartData.length + 2))]);
+        // Create color scale (green theme for dashboard)
+        const colorScale = d3.scaleOrdinal()
+            .range(['#28a745', '#20c997', '#17a2b8', '#6f42c1', '#e83e8c', '#fd7e14']);
         
         // Create tooltip
         const tooltip = d3.select("body").append("div")
@@ -5585,18 +4895,22 @@ $(document).ready(function() {
             .attr("class", "dashboard-bar")
             .attr("x", d => xScale(d.label))
             .attr("width", xScale.bandwidth())
-            .attr("y", height)
-            .attr("height", 0)
+            .attr("y", height) // Start from bottom for animation
+            .attr("height", 0) // Start with height 0 for animation
             .attr("fill", (d, i) => colorScale(i))
             .on("mouseover", function(event, d) {
+                // Highlight bar
                 d3.select(this)
                     .attr("stroke", "#333")
                     .attr("stroke-width", 2)
                     .style("filter", "brightness(1.1)");
                 
+                // Show tooltip
                 tooltip.transition()
                     .duration(200)
                     .style("opacity", .9);
+                
+                const value = displayMode === 'percentage' ? d.percentage : d.value;
                 
                 tooltip.html(`
                     <strong>${d.label}</strong><br/>
@@ -5606,11 +4920,13 @@ $(document).ready(function() {
                     .style("left", (event.pageX + 10) + "px")
                     .style("top", (event.pageY - 10) + "px");
             })
-            .on("mouseout", function(d) {
+            .on("mouseout", function(event, d) {
+                // Remove highlight
                 d3.select(this)
                     .attr("stroke", "none")
                     .style("filter", "brightness(1)");
                 
+                // Hide tooltip
                 tooltip.transition()
                     .duration(500)
                     .style("opacity", 0);
@@ -5623,14 +4939,14 @@ $(document).ready(function() {
             .attr("y", d => yScale(displayMode === 'percentage' ? d.percentage : d.value))
             .attr("height", d => height - yScale(displayMode === 'percentage' ? d.percentage : d.value));
         
-        // Add value labels on bars
+        // Add value labels on bars (smaller font for dashboard)
         g.selectAll(".dashboard-bar-label")
             .data(chartData)
             .enter()
             .append("text")
             .attr("class", "dashboard-bar-label")
             .attr("x", d => xScale(d.label) + xScale.bandwidth() / 2)
-            .attr("y", d => yScale(displayMode === 'percentage' ? d.percentage : d.value) - 5)
+            .attr("y", d => yScale(displayMode === 'percentage' ? d.percentage : d.value) - 3)
             .attr("text-anchor", "middle")
             .style("font-size", "10px")
             .style("font-weight", "bold")
@@ -5651,27 +4967,24 @@ $(document).ready(function() {
             .call(d3.axisBottom(xScale))
             .selectAll("text")
             .style("text-anchor", "end")
+            .style("font-size", "10px")
             .attr("dx", "-.8em")
             .attr("dy", ".15em")
-            .attr("transform", "rotate(-45)")
-            .style("font-size", "10px");
+            .attr("transform", "rotate(-45)");
         
         // Add Y axis
         g.append("g")
-            .call(d3.axisLeft(yScale).tickFormat(d => {
-                return displayMode === 'percentage' ? `${d}%` : d;
-            }))
+            .call(d3.axisLeft(yScale).ticks(5))
+            .selectAll("text")
             .style("font-size", "10px");
         
-        // Add chart title
-        svg.append("text")
-            .attr("x", (width + margin.left + margin.right) / 2)
-            .attr("y", margin.top / 2)
-            .attr("text-anchor", "middle")
-            .style("font-size", "12px")
-            .style("font-weight", "bold")
-            .style("fill", "#333")
-            .text(getChartTitle(chartType));
+        // Store instance for updates
+        dashboardBarChartInstance = { svg, g, tooltip, chartData, xScale, yScale };
+        
+        // Cleanup tooltip on window resize or navigation
+        window.addEventListener('beforeunload', () => {
+            if (tooltip) tooltip.remove();
+        });
     }
     
     function getDashboardChartData(chartType) {
@@ -5712,16 +5025,19 @@ $(document).ready(function() {
                 break;
                 
             case 'nilai-raport':
+                // Create ranges based on numerical statistics
                 if (dashboardBarChartData.numerical_statistics && dashboardBarChartData.numerical_statistics.nilai_raport) {
                     const nilaiStats = dashboardBarChartData.numerical_statistics.nilai_raport;
                     
+                    // Create value ranges
                     data = [
-                        { label: 'Rendah (<70)', value: 0, total: 0, percentage: 0 },
-                        { label: 'Sedang (70-80)', value: 0, total: 0, percentage: 0 },
-                        { label: 'Tinggi (80-90)', value: 0, total: 0, percentage: 0 },
-                        { label: 'S.Tinggi (>90)', value: 0, total: 0, percentage: 0 }
+                        { label: '<70', value: 0, total: 0, percentage: 0 },
+                        { label: '70-80', value: 0, total: 0, percentage: 0 },
+                        { label: '80-90', value: 0, total: 0, percentage: 0 },
+                        { label: '>90', value: 0, total: 0, percentage: 0 }
                     ];
                     
+                    // Simulate distribution based on mean and std
                     const mean = nilaiStats.mean;
                     const count = nilaiStats.count;
                     
@@ -5757,26 +5073,7 @@ $(document).ready(function() {
         
         return data;
     }
-    
-    function getChartTitle(chartType) {
-        const titles = {
-            'penghasilan': 'Distribusi Penghasilan Orang Tua',
-            'kehadiran': 'Distribusi Kehadiran Siswa',
-            'nilai-raport': 'Distribusi Nilai Raport Siswa'
-        };
-        
-        return titles[chartType] || 'Analisis Bar Chart';
-    }
-    
-    function showDashboardBarChartError(message) {
-        d3.select("#dashboard-barchart").html(`
-            <div class="text-center p-3">
-                <i class="fas fa-exclamation-triangle fa-lg text-warning mb-2"></i>
-                <p class="text-muted small">${message}</p>
-            </div>
-        `);
-    }
-    
+
     // Make dashboard bar chart functions globally accessible
     window.initializeDashboardBarChart = initializeDashboardBarChart;
     window.updateDashboardBarChart = updateDashboardBarChart;
@@ -6307,7 +5604,7 @@ $(document).ready(function() {
                             <p><strong>Jumlah Sakit:</strong> ${data.jumlah_sakit || 0} hari</p>
                             <p><strong>Jumlah Izin:</strong> ${data.jumlah_izin || 0} hari</p>
                             <p><strong>Jumlah Alpa:</strong> ${data.jumlah_alpa || 0} hari</p>
-                            <p><strong>Persentase Kehadiran:</strong> ${(data.persentase_kehadiran || 0).toFixed(1)}%</p>
+                            <p><strong>Persentase Kehadiran:</strong> ${data.persentase_kehadiran || 0}%</p>
                             <p><strong>Kategori:</strong> ${data.kategori_kehadiran || '-'}</p>
                             <hr>
                             <p class="text-danger">Apakah Anda yakin ingin menghapus data presensi ini? Tindakan ini tidak dapat dibatalkan.</p>
@@ -6366,6 +5663,23 @@ $(document).ready(function() {
         // Hapus window yang mungkin masih ada
         $(".k-window").remove();
         
+        // Debug: Log data yang diterima
+        console.log("showDeleteConfirmationUsers data:", data);
+        
+        // Safe data extraction dengan fallback values
+        const safeData = {
+            id: data.id || '',
+            username: data.username || 'N/A',
+            email: data.email || 'N/A',
+            role: data.role || 'N/A',
+            nama_lengkap: data.nama_lengkap || 'N/A',
+            nip: data.nip || 'N/A',
+            jabatan: data.jabatan || 'N/A',
+            is_active: data.is_active !== undefined ? data.is_active : true
+        };
+        
+        console.log("Safe data for modal:", safeData);
+        
         // Buat window baru
         const windowElement = $("<div></div>").appendTo("body");
         const window = windowElement.kendoWindow({
@@ -6382,13 +5696,13 @@ $(document).ready(function() {
                         </div>
                         <div class="message">
                             <h4>Konfirmasi Hapus Data User</h4>
-                            <p><strong>Username:</strong> ${data.username || '-'}</p>
-                            <p><strong>Email:</strong> ${data.email || '-'}</p>
-                            <p><strong>Role:</strong> ${data.role || '-'}</p>
-                            <p><strong>Nama Lengkap:</strong> ${data.nama_lengkap || '-'}</p>
-                            <p><strong>NIP:</strong> ${data.nip || '-'}</p>
-                            <p><strong>Jabatan:</strong> ${data.jabatan || '-'}</p>
-                            <p><strong>Status:</strong> ${data.is_active ? 'Aktif' : 'Nonaktif'}</p>
+                            <p><strong>Username:</strong> ${safeData.username}</p>
+                            <p><strong>Email:</strong> ${safeData.email}</p>
+                            <p><strong>Role:</strong> ${safeData.role}</p>
+                            <p><strong>Nama Lengkap:</strong> ${safeData.nama_lengkap}</p>
+                            <p><strong>NIP:</strong> ${safeData.nip}</p>
+                            <p><strong>Jabatan:</strong> ${safeData.jabatan}</p>
+                            <p><strong>Status:</strong> ${safeData.is_active ? 'Aktif' : 'Nonaktif'}</p>
                             <hr>
                             <p class="text-danger">Apakah Anda yakin ingin menghapus data user ini? Tindakan ini tidak dapat dibatalkan.</p>
                         </div>
@@ -6413,9 +5727,15 @@ $(document).ready(function() {
         windowElement.on("click", "#confirmDeleteUsers", function() {
             window.close();
             
+            // Validasi ID sebelum melakukan delete
+            if (!safeData.id) {
+                showErrorNotification("ID user tidak valid untuk dihapus", "Error");
+                return;
+            }
+            
             // Lakukan AJAX call langsung ke backend untuk menghapus
             $.ajax({
-                url: `${API_URL}/auth/users/${data.id}`,
+                url: `${API_URL}/auth/users/${safeData.id}`,
                 type: "DELETE",
                 beforeSend: function(xhr) {
                     const token = getToken();
@@ -6433,6 +5753,110 @@ $(document).ready(function() {
                 },
                 error: function(xhr) {
                     const errorMsg = xhr.responseJSON?.detail || "Gagal menghapus data user";
+                    showErrorNotification(errorMsg, "Error");
+                }
+            });
+        });
+
+        window.center().open();
+    }
+
+    function showDeleteConfirmationNilai(data) {
+        // Hapus window yang mungkin masih ada
+        $(".k-window").remove();
+        
+        // Debug: Log data yang diterima
+        console.log("showDeleteConfirmationNilai data:", data);
+        
+        // Safe data extraction dengan fallback values
+        const safeData = {
+            id: data.id || '',
+            nama_siswa: data.nama_siswa || 'N/A',
+            semester: data.semester || 'N/A',
+            tahun_ajaran: data.tahun_ajaran || 'N/A',
+            matematika: data.matematika !== undefined ? data.matematika : 'N/A',
+            bahasa_indonesia: data.bahasa_indonesia !== undefined ? data.bahasa_indonesia : 'N/A',
+            bahasa_inggris: data.bahasa_inggris !== undefined ? data.bahasa_inggris : 'N/A',
+            ipa: data.ipa !== undefined ? data.ipa : 'N/A',
+            rata_rata: data.rata_rata !== undefined ? data.rata_rata : 'N/A'
+        };
+        
+        console.log("Safe data for modal Nilai:", safeData);
+        
+        // Buat window baru
+        const windowElement = $("<div></div>").appendTo("body");
+        const window = windowElement.kendoWindow({
+            title: "Konfirmasi Hapus Data Nilai Raport",
+            width: "500px",
+            modal: true,
+            visible: false,
+            actions: ["close"],
+            content: {
+                template: `
+                    <div class="delete-confirmation">
+                        <div class="icon-container">
+                            <i class="fas fa-exclamation-triangle text-warning"></i>
+                        </div>
+                        <div class="message">
+                            <h4>Konfirmasi Hapus Data Nilai Raport</h4>
+                            <p><strong>Nama Siswa:</strong> ${safeData.nama_siswa}</p>
+                            <p><strong>Semester:</strong> ${safeData.semester}</p>
+                            <p><strong>Tahun Ajaran:</strong> ${safeData.tahun_ajaran}</p>
+                            <p><strong>Matematika:</strong> ${safeData.matematika}</p>
+                            <p><strong>Bahasa Indonesia:</strong> ${safeData.bahasa_indonesia}</p>
+                            <p><strong>Bahasa Inggris:</strong> ${safeData.bahasa_inggris}</p>
+                            <p><strong>IPA:</strong> ${safeData.ipa}</p>
+                            <p><strong>Rata-rata:</strong> ${safeData.rata_rata}</p>
+                            <hr>
+                            <p class="text-danger">Apakah Anda yakin ingin menghapus data nilai raport ini? Tindakan ini tidak dapat dibatalkan.</p>
+                        </div>
+                        <div class="button-container">
+                            <button class="k-button k-button-solid-base" id="cancelDeleteNilai">
+                                <i class="fas fa-times"></i> Batal
+                            </button>
+                            <button class="k-button k-button-solid-error" id="confirmDeleteNilai">
+                                <i class="fas fa-trash"></i> Hapus Data Nilai
+                            </button>
+                        </div>
+                    </div>
+                `
+            }
+        }).data("kendoWindow");
+
+        // Event handlers
+        windowElement.on("click", "#cancelDeleteNilai", function() {
+            window.close();
+        });
+
+        windowElement.on("click", "#confirmDeleteNilai", function() {
+            window.close();
+            
+            // Validasi ID sebelum melakukan delete
+            if (!safeData.id) {
+                showErrorNotification("ID nilai tidak valid untuk dihapus", "Error");
+                return;
+            }
+            
+            // Lakukan AJAX call langsung ke backend untuk menghapus
+            $.ajax({
+                url: `${API_URL}/nilai/${safeData.id}`,
+                type: "DELETE",
+                beforeSend: function(xhr) {
+                    const token = getToken();
+                    if (token) {
+                        xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                    }
+                },
+                success: function() {
+                    showSuccessNotification("Data nilai raport berhasil dihapus", "Sukses");
+                    // Refresh grid setelah berhasil menghapus
+                    const grid = $("#nilai-grid").data("kendoGrid");
+                    if (grid) {
+                        grid.dataSource.read();
+                    }
+                },
+                error: function(xhr) {
+                    const errorMsg = xhr.responseJSON?.detail || "Gagal menghapus data nilai raport";
                     showErrorNotification(errorMsg, "Error");
                 }
             });
@@ -6644,4 +6068,37 @@ $(document).ready(function() {
         $(".image-modal").remove();
         $(document).off("keydown.imageModal");
     }
+
+    $(document).on("click", ".btn-delete-nilai", function(e) {
+        e.preventDefault();
+        
+        const button = $(this);
+        
+        // Enhanced data extraction dengan null safety
+        const dataItem = {
+            id: button.data("id") || '',
+            nama_siswa: button.data("nama_siswa") || '',
+            semester: button.data("semester") || '',
+            tahun_ajaran: button.data("tahun_ajaran") || '',
+            matematika: button.data("matematika") || 0,
+            bahasa_indonesia: button.data("bahasa_indonesia") || 0,
+            bahasa_inggris: button.data("bahasa_inggris") || 0,
+            ipa: button.data("ipa") || 0,
+            rata_rata: button.data("rata_rata") || 0
+        };
+        
+        console.log("Delete button clicked Nilai:", dataItem);
+        console.log("Button data attributes Nilai:", {
+            "all data": button.data()
+        });
+        
+        // Validasi data sebelum menampilkan modal
+        if (!dataItem.id) {
+            console.error("Missing nilai ID for delete operation");
+            showErrorNotification("Data nilai tidak valid untuk dihapus", "Error");
+            return;
+        }
+        
+        showDeleteConfirmationNilai(dataItem);
+    });
 });

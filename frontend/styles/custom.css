@@ -1505,7 +1505,7 @@ header {
 }
 
 #siswa-grid .k-button-sm {
-    padding: 4px 8px;
+    padding: 4px;
     font-size: 0.8rem;
 }
 
@@ -2010,9 +2010,9 @@ header {
 #nilai-grid .k-grid-content td:nth-child(13),
 #nilai-grid .k-grid-content td:nth-child(14),
 #nilai-grid .k-grid-content td:nth-child(15) {
-    width: 70px;
-    min-width: 70px;
-    max-width: 70px;
+    width: 85px;
+    min-width: 85px;
+    max-width: 85px;
     text-align: center;
     font-family: 'Courier New', monospace;
     font-weight: 500;
@@ -2054,7 +2054,7 @@ header {
 }
 
 #nilai-grid .k-button-sm {
-    padding: 3px 6px;
+    padding: 4px;
     font-size: 0.75rem;
 }
 
@@ -3358,9 +3358,9 @@ header {
 /* Kolom Aksi */
 #presensi-grid .k-grid-header th.k-header:last-child,
 #presensi-grid .k-grid-content td:last-child {
-    width: 140px !important;
-    min-width: 140px !important;
-    max-width: 140px !important;
+    width: 110px !important;
+    min-width: 110px !important;
+    max-width: 110px !important;
     text-align: center !important;
 }
 
@@ -3407,7 +3407,7 @@ header {
 }
 
 #presensi-grid .k-button-sm {
-    padding: 2px 6px;
+    padding: 4px;
     font-size: 11px;
 }
 
@@ -3676,7 +3676,8 @@ header {
 }
 
 #penghasilan-grid .k-button-sm {
-    padding: 2px 6px;
+    /* padding: 2px 6px; */
+    padding: 4px;
     font-size: 11px;
 }
 
@@ -3987,7 +3988,7 @@ header {
 }
 
 #users-grid .k-button-sm {
-    padding: 2px 6px;
+    padding: 4px;
     font-size: 11px;
 }
 

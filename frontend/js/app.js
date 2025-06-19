@@ -6771,8 +6771,8 @@ $(document).ready(function() {
     // Get system information
     function getSystemInfo() {
         return {
-            name: "EduPro - Sistem Prediksi Prestasi",
-            version: "v2.0.1",
+            name: "SPPAS - Sistem Prediksi Prestasi Akademik Siswa",
+            version: "v1.0",
             algorithm: "C4.5 Decision Tree",
             framework: "FastAPI + PostgreSQL",
             frontend: "HTML5 + Kendo UI + D3.js",
@@ -7054,7 +7054,7 @@ $(document).ready(function() {
             if (badge.attr('id') === 'system-status') {
                 badge.attr('title', 'Klik header untuk detail sistem');
             } else if (badge.attr('id') === 'system-version') {
-                badge.attr('title', 'Versi aplikasi EduPro');
+                badge.attr('title', 'Versi aplikasi SPPAS');
             }
         });
         

@@ -1683,6 +1683,275 @@
         </div>
         
     </script>
+
+    <script id="nilai-template" type="text/x-kendo-template">
+        
+        <div class="form-header text-center mb-4">
+            <h4 class="text-primary mb-2">
+                <i class="fas fa-book mr-2"></i>
+                <span class="form-title">Formulir Nilai Raport</span>
+            </h4>
+            <p class="text-muted">Lengkapi data nilai raport siswa dengan benar</p>
+        </div>
+        
+        <!-- Basic Information - Full Width -->
+        <div class="form-section-full">
+            <h6 class="section-title">
+                <i class="fas fa-info-circle mr-2"></i>Informasi Dasar
+            </h6>
+            
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="k-edit-label">
+                        <label for="siswa_id">
+                            <i class="fas fa-user-graduate mr-1 text-primary"></i>
+                            Siswa <span class="text-danger">*</span>
+                        </label>
+                    </div>
+                    <div class="k-edit-field">
+                        <input name="siswa_id" required validationMessage="Siswa harus dipilih" style="width: 100%;" />
+                        <span class="k-invalid-msg" data-for="siswa_id"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="k-edit-label">
+                        <label for="semester">
+                            <i class="fas fa-calendar-alt mr-1 text-primary"></i>
+                            Semester <span class="text-danger">*</span>
+                        </label>
+                    </div>
+                    <div class="k-edit-field">
+                        <input type="text" class="k-textbox" name="semester" required 
+                                placeholder="Contoh: Ganjil, Genap"
+                                validationMessage="Semester harus diisi" />
+                        <span class="k-invalid-msg" data-for="semester"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="k-edit-label">
+                        <label for="tahun_ajaran">
+                            <i class="fas fa-calendar mr-1 text-primary"></i>
+                            Tahun Ajaran <span class="text-danger">*</span>
+                        </label>
+                    </div>
+                    <div class="k-edit-field">
+                        <input type="text" class="k-textbox" name="tahun_ajaran" required 
+                                placeholder="Contoh: 2023/2024"
+                                validationMessage="Tahun ajaran harus diisi" />
+                        <span class="k-invalid-msg" data-for="tahun_ajaran"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Subject Grades in 2 Columns -->
+        <div class="row form-main-content">
+            <!-- Left Column -->
+            <div class="col-md-6">
+                <div class="form-column-content">
+                    <div class="form-section">
+                        <h6 class="section-title">
+                            <i class="fas fa-calculator mr-2"></i>Mata Pelajaran Utama
+                        </h6>
+                        
+                        <div class="k-edit-label">
+                            <label for="matematika">
+                                <i class="fas fa-square-root-alt mr-1 text-primary"></i>
+                                Matematika <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="number" class="k-textbox" name="matematika" required 
+                                    placeholder="0-100" min="0" max="100"
+                                    validationMessage="Nilai matematika harus diisi (0-100)" />
+                            <span class="k-invalid-msg" data-for="matematika"></span>
+                        </div>
+                        
+                        <div class="k-edit-label">
+                            <label for="bahasa_indonesia">
+                                <i class="fas fa-language mr-1 text-primary"></i>
+                                Bahasa Indonesia <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="number" class="k-textbox" name="bahasa_indonesia" required 
+                                    placeholder="0-100" min="0" max="100"
+                                    validationMessage="Nilai bahasa Indonesia harus diisi (0-100)" />
+                            <span class="k-invalid-msg" data-for="bahasa_indonesia"></span>
+                        </div>
+                        
+                        <div class="k-edit-label">
+                            <label for="bahasa_inggris">
+                                <i class="fas fa-globe mr-1 text-primary"></i>
+                                Bahasa Inggris <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="number" class="k-textbox" name="bahasa_inggris" required 
+                                    placeholder="0-100" min="0" max="100"
+                                    validationMessage="Nilai bahasa Inggris harus diisi (0-100)" />
+                            <span class="k-invalid-msg" data-for="bahasa_inggris"></span>
+                        </div>
+                        
+                        <div class="k-edit-label">
+                            <label for="ipa">
+                                <i class="fas fa-flask mr-1 text-primary"></i>
+                                IPA <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="number" class="k-textbox" name="ipa" required 
+                                    placeholder="0-100" min="0" max="100"
+                                    validationMessage="Nilai IPA harus diisi (0-100)" />
+                            <span class="k-invalid-msg" data-for="ipa"></span>
+                        </div>
+                        
+                        <div class="k-edit-label">
+                            <label for="bahasa_jawa">
+                                <i class="fas fa-map mr-1 text-primary"></i>
+                                Bahasa Jawa <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="number" class="k-textbox" name="bahasa_jawa" required 
+                                    placeholder="0-100" min="0" max="100"
+                                    validationMessage="Nilai bahasa Jawa harus diisi (0-100)" />
+                            <span class="k-invalid-msg" data-for="bahasa_jawa"></span>
+                        </div>
+                        
+                        <div class="k-edit-label">
+                            <label for="pkn">
+                                <i class="fas fa-flag mr-1 text-primary"></i>
+                                PKN <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="number" class="k-textbox" name="pkn" required 
+                                    placeholder="0-100" min="0" max="100"
+                                    validationMessage="Nilai PKN harus diisi (0-100)" />
+                            <span class="k-invalid-msg" data-for="pkn"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Column -->
+            <div class="col-md-6">
+                <div class="form-column-content">
+                    <div class="form-section">
+                        <h6 class="section-title">
+                            <i class="fas fa-palette mr-2"></i>Mata Pelajaran Penunjang
+                        </h6>
+                        
+                        <div class="k-edit-label">
+                            <label for="seni">
+                                <i class="fas fa-paint-brush mr-1 text-secondary"></i>
+                                Seni <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="number" class="k-textbox" name="seni" required 
+                                    placeholder="0-100" min="0" max="100"
+                                    validationMessage="Nilai seni harus diisi (0-100)" />
+                            <span class="k-invalid-msg" data-for="seni"></span>
+                        </div>
+                        
+                        <div class="k-edit-label">
+                            <label for="sejarah">
+                                <i class="fas fa-landmark mr-1 text-secondary"></i>
+                                Sejarah <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="number" class="k-textbox" name="sejarah" required 
+                                    placeholder="0-100" min="0" max="100"
+                                    validationMessage="Nilai sejarah harus diisi (0-100)" />
+                            <span class="k-invalid-msg" data-for="sejarah"></span>
+                        </div>
+                        
+                        <div class="k-edit-label">
+                            <label for="agama">
+                                <i class="fas fa-praying-hands mr-1 text-secondary"></i>
+                                Agama <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="number" class="k-textbox" name="agama" required 
+                                    placeholder="0-100" min="0" max="100"
+                                    validationMessage="Nilai agama harus diisi (0-100)" />
+                            <span class="k-invalid-msg" data-for="agama"></span>
+                        </div>
+                        
+                        <div class="k-edit-label">
+                            <label for="pjok">
+                                <i class="fas fa-running mr-1 text-secondary"></i>
+                                PJOK <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="number" class="k-textbox" name="pjok" required 
+                                    placeholder="0-100" min="0" max="100"
+                                    validationMessage="Nilai PJOK harus diisi (0-100)" />
+                            <span class="k-invalid-msg" data-for="pjok"></span>
+                        </div>
+                        
+                        <div class="k-edit-label">
+                            <label for="dasar_kejuruan">
+                                <i class="fas fa-tools mr-1 text-secondary"></i>
+                                Dasar Kejuruan <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="number" class="k-textbox" name="dasar_kejuruan" required 
+                                    placeholder="0-100" min="0" max="100"
+                                    validationMessage="Nilai dasar kejuruan harus diisi (0-100)" />
+                            <span class="k-invalid-msg" data-for="dasar_kejuruan"></span>
+                        </div>
+                        
+                        <!-- Auto-calculated field -->
+                        <div class="k-edit-label">
+                            <label for="rata_rata">
+                                <i class="fas fa-chart-line mr-1 text-success"></i>
+                                Rata-rata (Otomatis)
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="number" class="k-textbox" name="rata_rata" readonly 
+                                    placeholder="Dihitung otomatis" 
+                                    class="readonly-field" />
+                            <small class="form-text text-muted">
+                                <i class="fas fa-info-circle mr-1"></i>Nilai rata-rata dihitung otomatis dari semua mata pelajaran
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tips Section -->
+        <div class="alert alert-info mt-4">
+            <div class="d-flex align-items-start">
+                <div class="alert-icon mr-3">
+                    <i class="fas fa-lightbulb fa-lg"></i>
+                </div>
+                <div class="alert-content">
+                    <h6 class="alert-heading mb-2">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        Tips Pengisian Nilai
+                    </h6>
+                    <ul class="mb-0 small">
+                        <li>Semua field nilai wajib diisi dengan rentang 0-100</li>
+                        <li>Pastikan nama siswa, semester, dan tahun ajaran sudah benar</li>
+                        <li>Nilai rata-rata akan dihitung otomatis</li>
+                        <li>Gunakan format tahun ajaran: 2023/2024</li>
+                        <li>Semester: Ganjil atau Genap</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </script>
+    
     <script id="users-template" type="text/x-kendo-template">
         
         <div class="form-header text-center mb-4">

@@ -2801,18 +2801,18 @@ $(document).ready(function() {
                     }
                 },
                 { field: "siswa_id", title: "Siswa ID", hidden: true, editor: siswaDropDownEditor },
-                { field: "penghasilan_ayah", title: "Penghasilan Ayah", format: "{0:n0}", width: 120 },
-                { field: "penghasilan_ibu", title: "Penghasilan Ibu", format: "{0:n0}", width: 120 },
+                { field: "penghasilan_ayah", title: "Penghasilan Ayah", format: "{0:n0}", width: 125 },
+                { field: "penghasilan_ibu", title: "Penghasilan Ibu", format: "{0:n0}", width: 100 },
                 // { field: "pekerjaan_ayah", title: "Pekerjaan Ayah", width: 120 },
                 // { field: "pekerjaan_ibu", title: "Pekerjaan Ibu", width: 120 },
                 // { field: "pendidikan_ayah", title: "Pendidikan Ayah", width: 120 },
                 // { field: "pendidikan_ibu", title: "Pendidikan Ibu", width: 120 },
-                { field: "total_penghasilan", title: "Total", format: "{0:n0}", width: 110 },
-                { field: "kategori_penghasilan", title: "Kategori", width: 100 },
-                { command: ["edit"], title: "Edit", width: 70 },
+                { field: "total_penghasilan", title: "Total", format: "{0:n0}", width: 100 },
+                { field: "kategori_penghasilan", title: "Kategori", width: 85 },
+                { command: ["edit"], title: "Edit", width: 85 },
                 {
                     title: "Hapus",
-                    width: 70,
+                    width: 85,
                     template: function(dataItem) {
                         return `<button class="k-button k-button-solid k-button-solid-error k-button-sm btn-delete-penghasilan" 
                                        data-id="${dataItem.id}" 

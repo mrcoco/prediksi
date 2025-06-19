@@ -1918,7 +1918,7 @@ header {
 }
 
 /* ========== GRID NILAI STYLES ========== */
-/* Grid nilai specific styling untuk layout yang rapi dan konsisten */
+/* Grid nilai specific styling untuk perfect alignment header dan rows */
 #nilai-grid {
     width: 100%;
     table-layout: fixed;
@@ -1934,11 +1934,12 @@ header {
     font-weight: 600;
     background-color: #f8f9fa;
     border-bottom: 2px solid #dee2e6;
-    padding: 10px 6px;
+    padding: 8px 6px;
     font-size: 0.875rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    border-radius: 0;
 }
 
 #nilai-grid .k-grid-content {
@@ -1953,66 +1954,52 @@ header {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    border-radius: 0;
 }
 
-/* Specific column widths untuk konsistensi header dan content */
-#nilai-grid .k-grid-header th:nth-child(1), /* Nama Siswa */
+/* Fixed column widths dengan !important untuk alignment yang perfect */
+#nilai-grid .k-grid-header th[data-field="nama_siswa"],
 #nilai-grid .k-grid-content td:nth-child(1) {
-    width: 160px;
-    min-width: 160px;
-    max-width: 160px;
+    width: 180px !important;
+    min-width: 180px !important;
+    max-width: 180px !important;
     font-weight: 500;
     color: #495057;
     text-align: left;
 }
 
-#nilai-grid .k-grid-header th:nth-child(3), /* Semester */
+#nilai-grid .k-grid-header th[data-field="semester"],
 #nilai-grid .k-grid-content td:nth-child(3) {
-    width: 90px;
-    min-width: 90px;
-    max-width: 90px;
+    width: 100px !important;
+    min-width: 100px !important;
+    max-width: 100px !important;
     text-align: center;
     font-weight: 500;
     color: #6c757d;
 }
 
-#nilai-grid .k-grid-header th:nth-child(4), /* Tahun Ajaran */
+#nilai-grid .k-grid-header th[data-field="tahun_ajaran"],
 #nilai-grid .k-grid-content td:nth-child(4) {
-    width: 110px;
-    min-width: 110px;
-    max-width: 110px;
+    width: 120px !important;
+    min-width: 120px !important;
+    max-width: 120px !important;
     text-align: center;
-    font-family: 'Courier New', monospace;
     font-weight: 500;
     color: #6c757d;
 }
 
 /* Kolom nilai mata pelajaran */
-#nilai-grid .k-grid-header th:nth-child(5),  /* MTK */
-#nilai-grid .k-grid-header th:nth-child(6),  /* B.IND */
-#nilai-grid .k-grid-header th:nth-child(7),  /* B.ING */
-#nilai-grid .k-grid-header th:nth-child(8),  /* IPA */
-#nilai-grid .k-grid-header th:nth-child(9),  /* B.JAW */
-#nilai-grid .k-grid-header th:nth-child(10), /* PKN */
-#nilai-grid .k-grid-header th:nth-child(11), /* SENI */
-#nilai-grid .k-grid-header th:nth-child(12), /* PJOK */
-#nilai-grid .k-grid-header th:nth-child(13), /* SEJ */
-#nilai-grid .k-grid-header th:nth-child(14), /* AGM */
-#nilai-grid .k-grid-header th:nth-child(15), /* D.KEJ */
+#nilai-grid .k-grid-header th[data-field="matematika"],
+#nilai-grid .k-grid-header th[data-field="bahasa_indonesia"],
+#nilai-grid .k-grid-header th[data-field="bahasa_inggris"],
+#nilai-grid .k-grid-header th[data-field="ipa"],
 #nilai-grid .k-grid-content td:nth-child(5),
 #nilai-grid .k-grid-content td:nth-child(6),
 #nilai-grid .k-grid-content td:nth-child(7),
-#nilai-grid .k-grid-content td:nth-child(8),
-#nilai-grid .k-grid-content td:nth-child(9),
-#nilai-grid .k-grid-content td:nth-child(10),
-#nilai-grid .k-grid-content td:nth-child(11),
-#nilai-grid .k-grid-content td:nth-child(12),
-#nilai-grid .k-grid-content td:nth-child(13),
-#nilai-grid .k-grid-content td:nth-child(14),
-#nilai-grid .k-grid-content td:nth-child(15) {
-    width: 85px;
-    min-width: 85px;
-    max-width: 85px;
+#nilai-grid .k-grid-content td:nth-child(8) {
+    width: 85px !important;
+    min-width: 85px !important;
+    max-width: 85px !important;
     text-align: center;
     font-family: 'Courier New', monospace;
     font-weight: 500;
@@ -2020,24 +2007,33 @@ header {
 }
 
 /* Kolom rata-rata */
-#nilai-grid .k-grid-header th:nth-child(16), /* Rata² */
-#nilai-grid .k-grid-content td:nth-child(16) {
-    width: 80px;
-    min-width: 80px;
-    max-width: 80px;
+#nilai-grid .k-grid-header th[data-field="rata_rata"],
+#nilai-grid .k-grid-content td:nth-child(9) {
+    width: 85px !important;
+    min-width: 85px !important;
+    max-width: 85px !important;
     text-align: center;
     font-family: 'Courier New', monospace;
     font-weight: bold;
     color: #007bff;
-    background-color: #e3f2fd;
+    background-color: #f8f9fa;
 }
 
-/* Kolom aksi */
-#nilai-grid .k-grid-header th:nth-child(17), /* Aksi */
-#nilai-grid .k-grid-content td:nth-child(17) {
-    width: 160px;
-    min-width: 160px;
-    max-width: 160px;
+/* Kolom edit */
+#nilai-grid .k-grid-header th.k-header:nth-child(10),
+#nilai-grid .k-grid-content td:nth-child(10) {
+    width: 70px !important;
+    min-width: 70px !important;
+    max-width: 70px !important;
+    text-align: center;
+}
+
+/* Kolom hapus */
+#nilai-grid .k-grid-header th.k-header:nth-child(11),
+#nilai-grid .k-grid-content td:nth-child(11) {
+    width: 70px !important;
+    min-width: 70px !important;
+    max-width: 70px !important;
     text-align: center;
     vertical-align: middle;
     padding: 6px 4px;
@@ -2101,118 +2097,140 @@ header {
     background-color: #f8f9fa;
 }
 
-/* Responsive adjustments untuk grid nilai */
+/* Responsive design untuk grid nilai dengan !important */
 @media (max-width: 1400px) {
     #nilai-grid .k-grid-header th,
     #nilai-grid .k-grid-content td {
-        padding: 6px 4px;
+        padding: 6px 4px !important;
         font-size: 0.8rem;
     }
     
-    #nilai-grid .k-grid-header th:nth-child(n+5):nth-child(-n+15),
-    #nilai-grid .k-grid-content td:nth-child(n+5):nth-child(-n+15) {
-        width: 65px;
-        min-width: 65px;
-        max-width: 65px;
+    #nilai-grid .k-grid-header th[data-field="matematika"],
+    #nilai-grid .k-grid-header th[data-field="bahasa_indonesia"],
+    #nilai-grid .k-grid-header th[data-field="bahasa_inggris"],
+    #nilai-grid .k-grid-header th[data-field="ipa"],
+    #nilai-grid .k-grid-header th[data-field="rata_rata"],
+    #nilai-grid .k-grid-content td:nth-child(5),
+    #nilai-grid .k-grid-content td:nth-child(6),
+    #nilai-grid .k-grid-content td:nth-child(7),
+    #nilai-grid .k-grid-content td:nth-child(8),
+    #nilai-grid .k-grid-content td:nth-child(9) {
+        width: 80px !important;
+        min-width: 80px !important;
+        max-width: 80px !important;
     }
     
     #nilai-grid .k-button {
-        padding: 3px 6px;
         font-size: 0.7rem;
+        padding: 3px 6px;
     }
 }
 
 @media (max-width: 1200px) {
     #nilai-grid .k-grid-header th,
     #nilai-grid .k-grid-content td {
-        padding: 5px 3px;
+        padding: 4px 3px !important;
         font-size: 0.75rem;
     }
     
-    #nilai-grid .k-grid-header th:nth-child(1),
+    #nilai-grid .k-grid-header th[data-field="nama_siswa"],
     #nilai-grid .k-grid-content td:nth-child(1) {
-        width: 140px;
-        min-width: 140px;
-        max-width: 140px;
+        width: 160px !important;
+        min-width: 160px !important;
+        max-width: 160px !important;
     }
     
-    #nilai-grid .k-grid-header th:nth-child(n+5):nth-child(-n+15),
-    #nilai-grid .k-grid-content td:nth-child(n+5):nth-child(-n+15) {
-        width: 60px;
-        min-width: 60px;
-        max-width: 60px;
+    #nilai-grid .k-grid-header th[data-field="matematika"],
+    #nilai-grid .k-grid-header th[data-field="bahasa_indonesia"],
+    #nilai-grid .k-grid-header th[data-field="bahasa_inggris"],
+    #nilai-grid .k-grid-header th[data-field="ipa"],
+    #nilai-grid .k-grid-header th[data-field="rata_rata"],
+    #nilai-grid .k-grid-content td:nth-child(5),
+    #nilai-grid .k-grid-content td:nth-child(6),
+    #nilai-grid .k-grid-content td:nth-child(7),
+    #nilai-grid .k-grid-content td:nth-child(8),
+    #nilai-grid .k-grid-content td:nth-child(9) {
+        width: 75px !important;
+        min-width: 75px !important;
+        max-width: 75px !important;
     }
     
-    #nilai-grid .k-grid-header th:nth-child(17),
-    #nilai-grid .k-grid-content td:nth-child(17) {
-        width: 140px;
-        min-width: 140px;
-        max-width: 140px;
+    #nilai-grid .k-grid-header th.k-header:nth-child(10),
+    #nilai-grid .k-grid-header th.k-header:nth-child(11),
+    #nilai-grid .k-grid-content td:nth-child(10),
+    #nilai-grid .k-grid-content td:nth-child(11) {
+        width: 65px !important;
+        min-width: 65px !important;
+        max-width: 65px !important;
     }
     
     #nilai-grid .k-button {
-        padding: 2px 4px;
-        font-size: 0.65rem;
-        min-width: auto;
+        font-size: 0.7rem;
+        padding: 3px 5px;
     }
 }
 
 @media (max-width: 992px) {
-    #nilai-grid .k-grid-header th,
-    #nilai-grid .k-grid-content td {
-        padding: 4px 2px;
+    #nilai-grid {
         font-size: 0.7rem;
     }
     
-    #nilai-grid .k-grid-header th:nth-child(1),
+    #nilai-grid .k-grid-header th,
+    #nilai-grid .k-grid-content td {
+        padding: 3px 2px !important;
+    }
+    
+    #nilai-grid .k-grid-header th[data-field="nama_siswa"],
     #nilai-grid .k-grid-content td:nth-child(1) {
-        width: 120px;
-        min-width: 120px;
-        max-width: 120px;
+        width: 140px !important;
+        min-width: 140px !important;
+        max-width: 140px !important;
     }
     
-    #nilai-grid .k-grid-header th:nth-child(3),
+    #nilai-grid .k-grid-header th[data-field="semester"],
     #nilai-grid .k-grid-content td:nth-child(3) {
-        width: 80px;
-        min-width: 80px;
-        max-width: 80px;
+        width: 80px !important;
+        min-width: 80px !important;
+        max-width: 80px !important;
     }
     
-    #nilai-grid .k-grid-header th:nth-child(4),
+    #nilai-grid .k-grid-header th[data-field="tahun_ajaran"],
     #nilai-grid .k-grid-content td:nth-child(4) {
-        width: 100px;
-        min-width: 100px;
-        max-width: 100px;
+        width: 100px !important;
+        min-width: 100px !important;
+        max-width: 100px !important;
     }
     
-    #nilai-grid .k-grid-header th:nth-child(n+5):nth-child(-n+15),
-    #nilai-grid .k-grid-content td:nth-child(n+5):nth-child(-n+15) {
-        width: 55px;
-        min-width: 55px;
-        max-width: 55px;
+    #nilai-grid .k-grid-header th[data-field="matematika"],
+    #nilai-grid .k-grid-header th[data-field="bahasa_indonesia"],
+    #nilai-grid .k-grid-header th[data-field="bahasa_inggris"],
+    #nilai-grid .k-grid-header th[data-field="ipa"],
+    #nilai-grid .k-grid-header th[data-field="rata_rata"],
+    #nilai-grid .k-grid-content td:nth-child(5),
+    #nilai-grid .k-grid-content td:nth-child(6),
+    #nilai-grid .k-grid-content td:nth-child(7),
+    #nilai-grid .k-grid-content td:nth-child(8),
+    #nilai-grid .k-grid-content td:nth-child(9) {
+        width: 70px !important;
+        min-width: 70px !important;
+        max-width: 70px !important;
     }
     
-    #nilai-grid .k-grid-header th:nth-child(16),
-    #nilai-grid .k-grid-content td:nth-child(16) {
-        width: 70px;
-        min-width: 70px;
-        max-width: 70px;
-    }
-    
-    #nilai-grid .k-grid-header th:nth-child(17),
-    #nilai-grid .k-grid-content td:nth-child(17) {
-        width: 120px;
-        min-width: 120px;
-        max-width: 120px;
+    #nilai-grid .k-grid-header th.k-header:nth-child(10),
+    #nilai-grid .k-grid-header th.k-header:nth-child(11),
+    #nilai-grid .k-grid-content td:nth-child(10),
+    #nilai-grid .k-grid-content td:nth-child(11) {
+        width: 60px !important;
+        min-width: 60px !important;
+        max-width: 60px !important;
     }
     
     #nilai-grid .k-button {
-        padding: 2px 3px;
-        font-size: 0.6rem;
+        font-size: 0.65rem;
+        padding: 2px 4px;
     }
     
     #nilai-grid .k-button i {
-        margin-right: 1px;
         font-size: 0.6rem;
     }
 }
@@ -3295,126 +3313,153 @@ header {
     }
 }
 
-/* ========== GRID PRESENSI LAYOUT FIXES ========== */
-/* Kolom Nama Siswa */
+/* ========== GRID PRESENSI STYLES ========== */
+/* Grid presensi specific styling untuk perfect alignment header dan rows */
+#presensi-grid {
+    width: 100%;
+    table-layout: fixed;
+}
+
+#presensi-grid .k-grid-header {
+    width: 100%;
+}
+
+#presensi-grid .k-grid-header th {
+    text-align: center;
+    vertical-align: middle;
+    font-weight: 600;
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+    padding: 8px 6px;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-radius: 0;
+}
+
+#presensi-grid .k-grid-content {
+    width: 100%;
+}
+
+#presensi-grid .k-grid-content td {
+    vertical-align: middle;
+    padding: 8px 6px;
+    border-bottom: 1px solid #dee2e6;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-radius: 0;
+}
+
+/* Fixed column widths dengan !important untuk alignment yang perfect */
 #presensi-grid .k-grid-header th[data-field="nama_siswa"],
-#presensi-grid .k-grid-content td[data-field="nama_siswa"] {
+#presensi-grid .k-grid-content td:nth-child(1) {
     width: 180px !important;
     min-width: 180px !important;
     max-width: 180px !important;
+    font-weight: 500;
+    color: #495057;
+    text-align: left;
 }
 
-/* Kolom Semester */
 #presensi-grid .k-grid-header th[data-field="semester"],
-#presensi-grid .k-grid-content td[data-field="semester"] {
+#presensi-grid .k-grid-content td:nth-child(3) {
     width: 100px !important;
     min-width: 100px !important;
     max-width: 100px !important;
-    text-align: center !important;
+    text-align: center;
+    font-weight: 500;
+    color: #6c757d;
 }
 
-/* Kolom Tahun Ajaran */
 #presensi-grid .k-grid-header th[data-field="tahun_ajaran"],
-#presensi-grid .k-grid-content td[data-field="tahun_ajaran"] {
+#presensi-grid .k-grid-content td:nth-child(4) {
     width: 120px !important;
     min-width: 120px !important;
     max-width: 120px !important;
-    text-align: center !important;
+    text-align: center;
+    font-weight: 500;
+    color: #6c757d;
 }
 
-/* Kolom Presensi (Hadir, Sakit, Izin, Alpa) */
+/* Kolom presensi (H, S, I, A) */
 #presensi-grid .k-grid-header th[data-field="jumlah_hadir"],
 #presensi-grid .k-grid-header th[data-field="jumlah_sakit"],
 #presensi-grid .k-grid-header th[data-field="jumlah_izin"],
 #presensi-grid .k-grid-header th[data-field="jumlah_alpa"],
-#presensi-grid .k-grid-content td[data-field="jumlah_hadir"],
-#presensi-grid .k-grid-content td[data-field="jumlah_sakit"],
-#presensi-grid .k-grid-content td[data-field="jumlah_izin"],
-#presensi-grid .k-grid-content td[data-field="jumlah_alpa"] {
-    width: 80px !important;
-    min-width: 80px !important;
-    max-width: 80px !important;
-    text-align: center !important;
-}
-
-/* Kolom Persentase Kehadiran */
-#presensi-grid .k-grid-header th[data-field="persentase_kehadiran"],
-#presensi-grid .k-grid-content td[data-field="persentase_kehadiran"] {
-    width: 100px !important;
-    min-width: 100px !important;
-    max-width: 100px !important;
-    text-align: center !important;
-}
-
-/* Kolom Kategori Kehadiran */
-#presensi-grid .k-grid-header th[data-field="kategori_kehadiran"],
-#presensi-grid .k-grid-content td[data-field="kategori_kehadiran"] {
-    width: 100px !important;
-    min-width: 100px !important;
-    max-width: 100px !important;
-    text-align: center !important;
-}
-
-/* Kolom Aksi */
-#presensi-grid .k-grid-header th.k-header:last-child,
-#presensi-grid .k-grid-content td:last-child {
-    width: 110px !important;
-    min-width: 110px !important;
-    max-width: 110px !important;
-    text-align: center !important;
-}
-
-/* Grid presensi general styling */
-#presensi-grid {
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-#presensi-grid .k-grid-header {
-    background: #f8f9fa;
-}
-
-#presensi-grid .k-grid-header th {
-    background: #f8f9fa !important;
-    border-color: #dee2e6 !important;
-    font-weight: 600;
+#presensi-grid .k-grid-content td:nth-child(5),
+#presensi-grid .k-grid-content td:nth-child(6),
+#presensi-grid .k-grid-content td:nth-child(7),
+#presensi-grid .k-grid-content td:nth-child(8) {
+    width: 75px !important;
+    min-width: 75px !important;
+    max-width: 75px !important;
     text-align: center;
-    vertical-align: middle;
-    padding: 12px 8px;
+    font-family: 'Courier New', monospace;
+    font-weight: 500;
+    color: #495057;
 }
 
-#presensi-grid .k-grid-content {
-    background: #fff;
+/* Kolom persentase kehadiran */
+#presensi-grid .k-grid-header th[data-field="persentase_kehadiran"],
+#presensi-grid .k-grid-content td:nth-child(9) {
+    width: 100px !important;
+    min-width: 100px !important;
+    max-width: 100px !important;
+    text-align: center;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    color: #28a745;
+    background-color: #f8f9fa;
 }
 
-#presensi-grid .k-grid-content td {
-    border-color: #dee2e6 !important;
-    padding: 10px 8px;
-    vertical-align: middle;
+/* Kolom kategori kehadiran */
+#presensi-grid .k-grid-header th[data-field="kategori_kehadiran"],
+#presensi-grid .k-grid-content td:nth-child(10) {
+    width: 100px !important;
+    min-width: 100px !important;
+    max-width: 100px !important;
+    text-align: center;
+    font-weight: 500;
+    color: #495057;
 }
 
-/* Hover effects untuk grid presensi */
-#presensi-grid .k-grid-content tr:hover {
-    background-color: #f8f9fa !important;
+/* Kolom edit */
+#presensi-grid .k-grid-header th.k-header:nth-child(11),
+#presensi-grid .k-grid-content td:nth-child(11) {
+    width: 85px !important;
+    min-width: 85px !important;
+    max-width: 85px !important;
+    text-align: center;
+}
+
+/* Kolom hapus */
+#presensi-grid .k-grid-header th.k-header:nth-child(12),
+#presensi-grid .k-grid-content td:nth-child(12) {
+    width: 70px !important;
+    min-width: 70px !important;
+    max-width: 70px !important;
+    text-align: center;
 }
 
 /* Button styling dalam grid presensi */
 #presensi-grid .k-button {
     margin: 2px;
+    font-size: 0.8rem;
     padding: 4px 8px;
-    font-size: 12px;
-    border-radius: 4px;
+    border-radius: 8px;
 }
 
 #presensi-grid .k-button-sm {
-    padding: 4px;
-    font-size: 11px;
+    font-size: 0.75rem;
+    padding: 3px 6px;
 }
 
 #presensi-grid .k-button-solid-primary {
     background-color: #007bff;
     border-color: #007bff;
-    color: #fff;
 }
 
 #presensi-grid .k-button-solid-primary:hover {
@@ -3425,7 +3470,6 @@ header {
 #presensi-grid .btn-delete-presensi {
     background-color: #dc3545;
     border-color: #dc3545;
-    color: #fff;
 }
 
 #presensi-grid .btn-delete-presensi:hover {
@@ -3437,37 +3481,51 @@ header {
     margin-right: 4px;
 }
 
-/* Responsive design untuk grid presensi */
+#presensi-grid .btn-delete-presensi i {
+    color: white;
+}
+
+/* Hover effects untuk rows */
+#presensi-grid .k-grid-content tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Responsive design untuk grid presensi dengan !important */
 @media (max-width: 1400px) {
     #presensi-grid .k-grid-header th,
     #presensi-grid .k-grid-content td {
-        padding: 8px 6px;
-        font-size: 13px;
+        padding: 6px 4px !important;
+        font-size: 0.8rem;
     }
     
     #presensi-grid .k-grid-header th[data-field="jumlah_hadir"],
     #presensi-grid .k-grid-header th[data-field="jumlah_sakit"],
     #presensi-grid .k-grid-header th[data-field="jumlah_izin"],
     #presensi-grid .k-grid-header th[data-field="jumlah_alpa"],
-    #presensi-grid .k-grid-content td[data-field="jumlah_hadir"],
-    #presensi-grid .k-grid-content td[data-field="jumlah_sakit"],
-    #presensi-grid .k-grid-content td[data-field="jumlah_izin"],
-    #presensi-grid .k-grid-content td[data-field="jumlah_alpa"] {
-        width: 75px !important;
-        min-width: 75px !important;
-        max-width: 75px !important;
+    #presensi-grid .k-grid-content td:nth-child(5),
+    #presensi-grid .k-grid-content td:nth-child(6),
+    #presensi-grid .k-grid-content td:nth-child(7),
+    #presensi-grid .k-grid-content td:nth-child(8) {
+        width: 70px !important;
+        min-width: 70px !important;
+        max-width: 70px !important;
+    }
+    
+    #presensi-grid .k-button {
+        font-size: 0.7rem;
+        padding: 3px 6px;
     }
 }
 
 @media (max-width: 1200px) {
     #presensi-grid .k-grid-header th,
     #presensi-grid .k-grid-content td {
-        padding: 6px 4px;
-        font-size: 12px;
+        padding: 4px 3px !important;
+        font-size: 0.75rem;
     }
     
     #presensi-grid .k-grid-header th[data-field="nama_siswa"],
-    #presensi-grid .k-grid-content td[data-field="nama_siswa"] {
+    #presensi-grid .k-grid-content td:nth-child(1) {
         width: 160px !important;
         min-width: 160px !important;
         max-width: 160px !important;
@@ -3477,44 +3535,65 @@ header {
     #presensi-grid .k-grid-header th[data-field="jumlah_sakit"],
     #presensi-grid .k-grid-header th[data-field="jumlah_izin"],
     #presensi-grid .k-grid-header th[data-field="jumlah_alpa"],
-    #presensi-grid .k-grid-content td[data-field="jumlah_hadir"],
-    #presensi-grid .k-grid-content td[data-field="jumlah_sakit"],
-    #presensi-grid .k-grid-content td[data-field="jumlah_izin"],
-    #presensi-grid .k-grid-content td[data-field="jumlah_alpa"] {
-        width: 70px !important;
-        min-width: 70px !important;
-        max-width: 70px !important;
+    #presensi-grid .k-grid-content td:nth-child(5),
+    #presensi-grid .k-grid-content td:nth-child(6),
+    #presensi-grid .k-grid-content td:nth-child(7),
+    #presensi-grid .k-grid-content td:nth-child(8) {
+        width: 65px !important;
+        min-width: 65px !important;
+        max-width: 65px !important;
+    }
+    
+    #presensi-grid .k-grid-header th[data-field="persentase_kehadiran"],
+    #presensi-grid .k-grid-header th[data-field="kategori_kehadiran"],
+    #presensi-grid .k-grid-content td:nth-child(9),
+    #presensi-grid .k-grid-content td:nth-child(10) {
+        width: 90px !important;
+        min-width: 90px !important;
+        max-width: 90px !important;
+    }
+    
+    #presensi-grid .k-grid-header th.k-header:nth-child(11),
+    #presensi-grid .k-grid-header th.k-header:nth-child(12),
+    #presensi-grid .k-grid-content td:nth-child(11),
+    #presensi-grid .k-grid-content td:nth-child(12) {
+        width: 65px !important;
+        min-width: 65px !important;
+        max-width: 65px !important;
     }
     
     #presensi-grid .k-button {
-        padding: 3px 6px;
-        font-size: 11px;
+        font-size: 0.7rem;
+        padding: 3px 5px;
     }
 }
 
 @media (max-width: 992px) {
+    #presensi-grid {
+        font-size: 0.7rem;
+    }
+    
     #presensi-grid .k-grid-header th,
     #presensi-grid .k-grid-content td {
-        padding: 5px 3px;
-        font-size: 11px;
+        padding: 3px 2px !important;
     }
     
     #presensi-grid .k-grid-header th[data-field="nama_siswa"],
-    #presensi-grid .k-grid-content td[data-field="nama_siswa"] {
+    #presensi-grid .k-grid-content td:nth-child(1) {
         width: 140px !important;
         min-width: 140px !important;
         max-width: 140px !important;
     }
     
     #presensi-grid .k-grid-header th[data-field="semester"],
-    #presensi-grid .k-grid-content td[data-field="semester"] {
+    #presensi-grid .k-grid-content td:nth-child(3) {
         width: 80px !important;
         min-width: 80px !important;
         max-width: 80px !important;
     }
     
     #presensi-grid .k-grid-header th[data-field="tahun_ajaran"],
-    #presensi-grid .k-grid-content td[data-field="tahun_ajaran"] {
+    #presensi-grid .k-grid-content td:nth-child(4) {
         width: 100px !important;
         min-width: 100px !important;
         max-width: 100px !important;
@@ -3524,150 +3603,97 @@ header {
     #presensi-grid .k-grid-header th[data-field="jumlah_sakit"],
     #presensi-grid .k-grid-header th[data-field="jumlah_izin"],
     #presensi-grid .k-grid-header th[data-field="jumlah_alpa"],
-    #presensi-grid .k-grid-content td[data-field="jumlah_hadir"],
-    #presensi-grid .k-grid-content td[data-field="jumlah_sakit"],
-    #presensi-grid .k-grid-content td[data-field="jumlah_izin"],
-    #presensi-grid .k-grid-content td[data-field="jumlah_alpa"] {
+    #presensi-grid .k-grid-content td:nth-child(5),
+    #presensi-grid .k-grid-content td:nth-child(6),
+    #presensi-grid .k-grid-content td:nth-child(7),
+    #presensi-grid .k-grid-content td:nth-child(8) {
         width: 60px !important;
         min-width: 60px !important;
         max-width: 60px !important;
     }
     
     #presensi-grid .k-grid-header th[data-field="persentase_kehadiran"],
-    #presensi-grid .k-grid-content td[data-field="persentase_kehadiran"] {
-        width: 85px !important;
-        min-width: 85px !important;
-        max-width: 85px !important;
-    }
-    
     #presensi-grid .k-grid-header th[data-field="kategori_kehadiran"],
-    #presensi-grid .k-grid-content td[data-field="kategori_kehadiran"] {
+    #presensi-grid .k-grid-content td:nth-child(9),
+    #presensi-grid .k-grid-content td:nth-child(10) {
         width: 85px !important;
         min-width: 85px !important;
         max-width: 85px !important;
     }
     
-    #presensi-grid .k-grid-header th.k-header:last-child,
-    #presensi-grid .k-grid-content td:last-child {
-        width: 120px !important;
-        min-width: 120px !important;
-        max-width: 120px !important;
+    #presensi-grid .k-grid-header th.k-header:nth-child(11),
+    #presensi-grid .k-grid-header th.k-header:nth-child(12),
+    #presensi-grid .k-grid-content td:nth-child(11),
+    #presensi-grid .k-grid-content td:nth-child(12) {
+        width: 60px !important;
+        min-width: 60px !important;
+        max-width: 60px !important;
     }
     
     #presensi-grid .k-button {
+        font-size: 0.6rem;
         padding: 2px 4px;
-        font-size: 10px;
     }
     
     #presensi-grid .k-button i {
         margin-right: 2px;
+        font-size: 0.6rem;
     }
 }
 
 /* ========== GRID PENGHASILAN LAYOUT FIXES ========== */
 /* Kolom Nama Siswa */
-#penghasilan-grid .k-grid-header th[data-field="nama_siswa"],
-#penghasilan-grid .k-grid-content td[data-field="nama_siswa"] {
-    width: 180px !important;
-    min-width: 180px !important;
-    max-width: 180px !important;
-}
+/* ========== GRID PENGHASILAN LAYOUT FIXES ========== */
+/* Fixed column widths untuk perfect alignment - menggunakan nth-child untuk konsistensi */
 
-/* Kolom Penghasilan (Ayah & Ibu) */
-#penghasilan-grid .k-grid-header th[data-field="penghasilan_ayah"],
-#penghasilan-grid .k-grid-header th[data-field="penghasilan_ibu"],
-#penghasilan-grid .k-grid-content td[data-field="penghasilan_ayah"],
-#penghasilan-grid .k-grid-content td[data-field="penghasilan_ibu"] {
-    width: 120px !important;
-    min-width: 120px !important;
-    max-width: 120px !important;
-    text-align: right !important;
-}
+/* Kolom Nama Siswa (ke-1) */
+/* ========== GRID PENGHASILAN LAYOUT FIXES - CLEAN RESTART ========== */
+/* Menggunakan pola PERSIS SAMA dengan grid nilai yang sudah berhasil */
 
-/* Kolom Pekerjaan (Ayah & Ibu) */
-#penghasilan-grid .k-grid-header th[data-field="pekerjaan_ayah"],
-#penghasilan-grid .k-grid-header th[data-field="pekerjaan_ibu"],
-#penghasilan-grid .k-grid-content td[data-field="pekerjaan_ayah"],
-#penghasilan-grid .k-grid-content td[data-field="pekerjaan_ibu"] {
-    width: 120px !important;
-    min-width: 120px !important;
-    max-width: 120px !important;
-    text-align: center !important;
-}
-
-/* Kolom Pendidikan (Ayah & Ibu) */
-#penghasilan-grid .k-grid-header th[data-field="pendidikan_ayah"],
-#penghasilan-grid .k-grid-header th[data-field="pendidikan_ibu"],
-#penghasilan-grid .k-grid-content td[data-field="pendidikan_ayah"],
-#penghasilan-grid .k-grid-content td[data-field="pendidikan_ibu"] {
-    width: 120px !important;
-    min-width: 120px !important;
-    max-width: 120px !important;
-    text-align: center !important;
-}
-
-/* Kolom Total Penghasilan */
-#penghasilan-grid .k-grid-header th[data-field="total_penghasilan"],
-#penghasilan-grid .k-grid-content td[data-field="total_penghasilan"] {
-    width: 110px !important;
-    min-width: 110px !important;
-    max-width: 110px !important;
-    text-align: right !important;
-}
-
-/* Kolom Kategori Penghasilan */
-#penghasilan-grid .k-grid-header th[data-field="kategori_penghasilan"],
-#penghasilan-grid .k-grid-content td[data-field="kategori_penghasilan"] {
-    width: 100px !important;
-    min-width: 100px !important;
-    max-width: 100px !important;
-    text-align: center !important;
-}
-
-/* Kolom Aksi */
-#penghasilan-grid .k-grid-header th.k-header:last-child,
-#penghasilan-grid .k-grid-content td:last-child {
-    width: 140px !important;
-    min-width: 140px !important;
-    max-width: 140px !important;
-    text-align: center !important;
-}
-
-/* Grid penghasilan general styling */
+/* Grid penghasilan structure - IDENTIK dengan grid nilai */
 #penghasilan-grid {
-    border-radius: 8px;
-    overflow: hidden;
+    width: 100%;
+    table-layout: fixed;
 }
 
 #penghasilan-grid .k-grid-header {
+    width: 100%;
     background: #f8f9fa;
 }
 
 #penghasilan-grid .k-grid-header th {
     background: #f8f9fa !important;
     border-color: #dee2e6 !important;
-    font-weight: 600;
-    text-align: center;
-    vertical-align: middle;
-    padding: 12px 8px;
+    font-weight: 600 !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    padding: 12px 8px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    border-bottom: 2px solid #dee2e6 !important;
 }
 
 #penghasilan-grid .k-grid-content {
+    width: 100%;
     background: #fff;
 }
 
 #penghasilan-grid .k-grid-content td {
     border-color: #dee2e6 !important;
-    padding: 10px 8px;
-    vertical-align: middle;
+    padding: 10px 8px !important;
+    vertical-align: middle !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    border-bottom: 1px solid #dee2e6 !important;
 }
 
-/* Hover effects untuk grid penghasilan */
+/* Hover effects dan button styling - IDENTIK dengan grid nilai */
 #penghasilan-grid .k-grid-content tr:hover {
     background-color: #f8f9fa !important;
 }
 
-/* Button styling dalam grid penghasilan */
 #penghasilan-grid .k-button {
     margin: 2px;
     padding: 4px 8px;
@@ -3676,7 +3702,6 @@ header {
 }
 
 #penghasilan-grid .k-button-sm {
-    /* padding: 2px 6px; */
     padding: 4px;
     font-size: 11px;
 }
@@ -3707,44 +3732,98 @@ header {
     margin-right: 4px;
 }
 
+/* Table structure dan column alignment - IDENTIK dengan grid nilai */
+#penghasilan-grid .k-grid-header table,
+#penghasilan-grid .k-grid-content table {
+    table-layout: fixed !important;
+    width: 100% !important;
+}
+
+#penghasilan-grid .k-grid-header colgroup col,
+#penghasilan-grid .k-grid-content colgroup col {
+    width: auto !important;
+}
+
+/* Targeting data-field untuk kolom data - IDENTIK dengan grid nilai */
+#penghasilan-grid .k-grid-header th[data-field="nama_siswa"],
+#penghasilan-grid .k-grid-content td[data-field="nama_siswa"] {
+    width: 113px !important;
+    min-width: 113px !important;
+    max-width: 113px !important;
+}
+
+#penghasilan-grid .k-grid-header th[data-field="penghasilan_ayah"],
+#penghasilan-grid .k-grid-content td[data-field="penghasilan_ayah"] {
+    width: 125px !important;
+    min-width: 125px !important;
+    max-width: 125px !important;
+}
+#penghasilan-grid .k-grid-header th[data-field="penghasilan_ibu"],
+#penghasilan-grid .k-grid-content td[data-field="penghasilan_ibu"] {
+    width: 100px !important;
+    min-width: 100px !important;
+    max-width: 100px !important;
+}
+
+#penghasilan-grid .k-grid-header th[data-field="total_penghasilan"],
+#penghasilan-grid .k-grid-content td[data-field="total_penghasilan"] {
+    width: 100px !important;
+    min-width: 100px !important;
+    max-width: 100px !important;
+}
+
+#penghasilan-grid .k-grid-header th[data-field="kategori_penghasilan"],
+#penghasilan-grid .k-grid-content td[data-field="kategori_penghasilan"] {
+    width: 85px !important;
+    min-width: 85px !important;
+    max-width: 85px !important;
+}
+
+/* Targeting nth-child untuk kolom command - IDENTIK dengan grid nilai */
+#penghasilan-grid .k-grid-header th.k-header:nth-child(7),
+#penghasilan-grid .k-grid-content td:nth-child(7) {
+    width: 85px !important;
+    min-width: 85px !important;
+    max-width: 85px !important;
+    text-align: center !important;
+}
+
+#penghasilan-grid .k-grid-header th.k-header:nth-child(8),
+#penghasilan-grid .k-grid-content td:nth-child(8) {
+    width: 85px !important;
+    min-width: 85px !important;
+    max-width: 85px !important;
+    text-align: center !important;
+}
+
 /* Responsive design untuk grid penghasilan */
 @media (max-width: 1400px) {
     #penghasilan-grid .k-grid-header th,
     #penghasilan-grid .k-grid-content td {
-        padding: 8px 6px;
-        font-size: 13px;
+        padding: 6px 4px;
+        font-size: 0.8rem;
     }
     
     #penghasilan-grid .k-grid-header th[data-field="penghasilan_ayah"],
     #penghasilan-grid .k-grid-header th[data-field="penghasilan_ibu"],
-    #penghasilan-grid .k-grid-header th[data-field="pekerjaan_ayah"],
-    #penghasilan-grid .k-grid-header th[data-field="pekerjaan_ibu"],
-    #penghasilan-grid .k-grid-header th[data-field="pendidikan_ayah"],
-    #penghasilan-grid .k-grid-header th[data-field="pendidikan_ibu"],
     #penghasilan-grid .k-grid-content td[data-field="penghasilan_ayah"],
-    #penghasilan-grid .k-grid-content td[data-field="penghasilan_ibu"],
-    #penghasilan-grid .k-grid-content td[data-field="pekerjaan_ayah"],
-    #penghasilan-grid .k-grid-content td[data-field="pekerjaan_ibu"],
-    #penghasilan-grid .k-grid-content td[data-field="pendidikan_ayah"],
-    #penghasilan-grid .k-grid-content td[data-field="pendidikan_ibu"] {
-        width: 110px !important;
-        min-width: 110px !important;
-        max-width: 110px !important;
-    }
-    
-    #penghasilan-grid .k-grid-header th[data-field="total_penghasilan"],
-    #penghasilan-grid .k-grid-content td[data-field="total_penghasilan"] {
+    #penghasilan-grid .k-grid-content td[data-field="penghasilan_ibu"] {
         width: 100px !important;
         min-width: 100px !important;
         max-width: 100px !important;
+    }
+    
+    #penghasilan-grid .k-button {
+        padding: 3px 6px;
+        font-size: 0.7rem;
     }
 }
 
 @media (max-width: 1200px) {
     #penghasilan-grid .k-grid-header th,
     #penghasilan-grid .k-grid-content td {
-        padding: 6px 4px;
-        font-size: 12px;
+        padding: 4px 3px;
+        font-size: 0.75rem;
     }
     
     #penghasilan-grid .k-grid-header th[data-field="nama_siswa"],
@@ -3756,16 +3835,8 @@ header {
     
     #penghasilan-grid .k-grid-header th[data-field="penghasilan_ayah"],
     #penghasilan-grid .k-grid-header th[data-field="penghasilan_ibu"],
-    #penghasilan-grid .k-grid-header th[data-field="pekerjaan_ayah"],
-    #penghasilan-grid .k-grid-header th[data-field="pekerjaan_ibu"],
-    #penghasilan-grid .k-grid-header th[data-field="pendidikan_ayah"],
-    #penghasilan-grid .k-grid-header th[data-field="pendidikan_ibu"],
     #penghasilan-grid .k-grid-content td[data-field="penghasilan_ayah"],
-    #penghasilan-grid .k-grid-content td[data-field="penghasilan_ibu"],
-    #penghasilan-grid .k-grid-content td[data-field="pekerjaan_ayah"],
-    #penghasilan-grid .k-grid-content td[data-field="pekerjaan_ibu"],
-    #penghasilan-grid .k-grid-content td[data-field="pendidikan_ayah"],
-    #penghasilan-grid .k-grid-content td[data-field="pendidikan_ibu"] {
+    #penghasilan-grid .k-grid-content td[data-field="penghasilan_ibu"] {
         width: 100px !important;
         min-width: 100px !important;
         max-width: 100px !important;
@@ -3778,24 +3849,29 @@ header {
         max-width: 95px !important;
     }
     
-    #penghasilan-grid .k-grid-header th[data-field="kategori_penghasilan"],
-    #penghasilan-grid .k-grid-content td[data-field="kategori_penghasilan"] {
-        width: 90px !important;
-        min-width: 90px !important;
-        max-width: 90px !important;
+    #penghasilan-grid .k-grid-header th.k-header:nth-child(7),
+    #penghasilan-grid .k-grid-header th.k-header:nth-child(8),
+    #penghasilan-grid .k-grid-content td:nth-child(7),
+    #penghasilan-grid .k-grid-content td:nth-child(8) {
+        width: 60px !important;
+        min-width: 60px !important;
+        max-width: 60px !important;
     }
     
     #penghasilan-grid .k-button {
+        font-size: 0.7rem;
         padding: 3px 6px;
-        font-size: 11px;
     }
 }
 
 @media (max-width: 992px) {
+    #penghasilan-grid {
+        font-size: 0.7rem;
+    }
+    
     #penghasilan-grid .k-grid-header th,
     #penghasilan-grid .k-grid-content td {
-        padding: 5px 3px;
-        font-size: 11px;
+        padding: 3px 2px;
     }
     
     #penghasilan-grid .k-grid-header th[data-field="nama_siswa"],
@@ -3814,19 +3890,6 @@ header {
         max-width: 90px !important;
     }
     
-    #penghasilan-grid .k-grid-header th[data-field="pekerjaan_ayah"],
-    #penghasilan-grid .k-grid-header th[data-field="pekerjaan_ibu"],
-    #penghasilan-grid .k-grid-header th[data-field="pendidikan_ayah"],
-    #penghasilan-grid .k-grid-header th[data-field="pendidikan_ibu"],
-    #penghasilan-grid .k-grid-content td[data-field="pekerjaan_ayah"],
-    #penghasilan-grid .k-grid-content td[data-field="pekerjaan_ibu"],
-    #penghasilan-grid .k-grid-content td[data-field="pendidikan_ayah"],
-    #penghasilan-grid .k-grid-content td[data-field="pendidikan_ibu"] {
-        width: 85px !important;
-        min-width: 85px !important;
-        max-width: 85px !important;
-    }
-    
     #penghasilan-grid .k-grid-header th[data-field="total_penghasilan"],
     #penghasilan-grid .k-grid-content td[data-field="total_penghasilan"] {
         width: 85px !important;
@@ -3841,20 +3904,13 @@ header {
         max-width: 80px !important;
     }
     
-    #penghasilan-grid .k-grid-header th.k-header:last-child,
-    #penghasilan-grid .k-grid-content td:last-child {
-        width: 120px !important;
-        min-width: 120px !important;
-        max-width: 120px !important;
-    }
-    
-    #penghasilan-grid .k-button {
-        padding: 2px 4px;
-        font-size: 10px;
-    }
-    
-    #penghasilan-grid .k-button i {
-        margin-right: 2px;
+    #penghasilan-grid .k-grid-header th.k-header:nth-child(7),
+    #penghasilan-grid .k-grid-header th.k-header:nth-child(8),
+    #penghasilan-grid .k-grid-content td:nth-child(7),
+    #penghasilan-grid .k-grid-content td:nth-child(8) {
+        width: 50px !important;
+        min-width: 50px !important;
+        max-width: 50px !important;
     }
 }
 

@@ -6149,7 +6149,7 @@ $(document).ready(function() {
 
     // User Guide Navigation Functions
     function initUserGuide() {
-        console.log("=== INITIALIZING USER GUIDE ===");
+        console.log("=== INITIALIZING USER GUIDE - FIXED VERSION ===");
         
         // Complete cleanup of all existing event handlers
         $(document).off('click', '.guide-nav-btn');
@@ -6159,102 +6159,107 @@ $(document).ready(function() {
         $('.guide-nav-btn').off('click');
         $('.guide-nav-btn').off('click.userguide-fallback');
         $('.guide-nav-btn').off('click.userguide-primary');
+        $('.guide-nav-btn').off('click.userguide-enhanced');
+        $('.guide-nav-btn').off('click.userguide-direct');
         
         console.log("All existing event handlers cleaned up");
         
-        // Enhanced Event Handler dengan immediate response
-        $('#user-guide-page').on('click.userguide-enhanced', '.guide-nav-btn', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            e.stopImmediatePropagation();
-            
-            console.log("=== ENHANCED NAVIGATION CLICK ===");
-            
-            const $button = $(this);
-            const target = $button.data('target');
-            const buttonText = $button.text().trim();
-            
-            // Pastikan ini bukan sidebar link
-            if ($button.hasClass("sidebar-link") || $button.data('page')) {
-                console.log("Skipping - this is a sidebar link");
-                return false;
-            }
-            
-            console.log(`User Guide Button clicked: "${buttonText}" -> Target: "${target}"`);
-            console.log("Event isolated to User Guide navigation only");
-            
-            // Immediate visual feedback
-            $button.addClass('btn-loading');
-            
-            // Validate target
-            if (!target) {
-                console.error("No target found for button:", buttonText);
-                $button.removeClass('btn-loading');
-                showErrorNotification("Target section tidak ditemukan", "Navigation Error");
-                return false;
-            }
-            
-            // Execute navigation immediately
-            try {
-                // Update button states first for immediate visual feedback
-                updateButtonStates(target);
-                
-                // Show target section
-                const success = showGuideSection(target);
-                
-                if (success) {
-                    console.log(`✅ Navigation successful: ${buttonText} -> ${target}`);
-                    
-                    // Add success animation
-                    $button.addClass('btn-success-flash');
-                    setTimeout(() => {
-                        $button.removeClass('btn-success-flash');
-                    }, 300);
-                } else {
-                    console.error(`❌ Navigation failed: ${buttonText} -> ${target}`);
-                    showErrorNotification(`Gagal menampilkan section: ${buttonText}`, "Navigation Error");
-                }
-                
-            } catch (error) {
-                console.error("Navigation error:", error);
-                showErrorNotification("Terjadi kesalahan saat navigasi", "Error");
-            } finally {
-                $button.removeClass('btn-loading');
-            }
-            
-            return false;
-        });
-        
-        // Direct button handlers sebagai backup dengan debouncing
-        let navigationTimeout = null;
+        // FIXED: Direct button click handlers dengan isolation yang lebih baik
         $('.guide-nav-btn').each(function(index) {
             const $btn = $(this);
             const target = $btn.data('target');
             const buttonText = $btn.text().trim();
             
-            console.log(`Setting up direct handler ${index + 1}: "${buttonText}" -> "${target}"`);
+            console.log(`Setting up FIXED handler ${index + 1}: "${buttonText}" -> "${target}"`);
             
-            $btn.off('click.userguide-direct').on('click.userguide-direct', function(e) {
-                // Debounce untuk prevent double clicks
-                if (navigationTimeout) {
-                    clearTimeout(navigationTimeout);
+            // Remove all existing handlers first
+            $btn.off('click');
+            
+            // Add new isolated handler
+            $btn.on('click.userguide-fixed', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+                
+                console.log("=== FIXED NAVIGATION CLICK ===");
+                console.log(`Button clicked: "${buttonText}" -> Target: "${target}"`);
+                
+                // Validate this is a guide button, not sidebar
+                if ($(this).hasClass("sidebar-link") || $(this).data('page')) {
+                    console.log("Skipping - this is a sidebar link");
+                    return false;
                 }
                 
-                navigationTimeout = setTimeout(() => {
-                    console.log("=== DIRECT HANDLER BACKUP ===");
-                    console.log(`Direct click: "${buttonText}" -> "${target}"`);
+                // Validate target exists
+                if (!target) {
+                    console.error("No target found for button:", buttonText);
+                    showErrorNotification("Target section tidak ditemukan", "Navigation Error");
+                    return false;
+                }
+                
+                // Immediate visual feedback
+                $btn.addClass('btn-loading');
+                
+                try {
+                    // Execute navigation
+                    console.log(`Executing navigation to: ${target}`);
                     
-                    if (target && !e.isDefaultPrevented()) {
-                        e.preventDefault();
-                        e.stopPropagation();
+                    // Update button states
+                    updateButtonStates(target);
+                    
+                    // Show section dengan timeout untuk memastikan DOM ready
+                    setTimeout(() => {
+                        const success = showGuideSection(target);
                         
-                        updateButtonStates(target);
-                        showGuideSection(target);
-                        
-                        console.log(`Direct navigation completed: ${target}`);
-                    }
-                }, 50); // 50ms debounce
+                        if (success) {
+                            console.log(`✅ Navigation successful: ${buttonText} -> ${target}`);
+                            
+                            // Success animation
+                            $btn.removeClass('btn-loading').addClass('btn-success-flash');
+                            setTimeout(() => {
+                                $btn.removeClass('btn-success-flash');
+                            }, 300);
+                            
+                            // Show success notification
+                            showSuccessNotification(`Berhasil menampilkan: ${buttonText}`, "Navigation");
+                        } else {
+                            console.error(`❌ Navigation failed: ${buttonText} -> ${target}`);
+                            $btn.removeClass('btn-loading');
+                            showErrorNotification(`Gagal menampilkan section: ${buttonText}`, "Navigation Error");
+                        }
+                    }, 100);
+                    
+                } catch (error) {
+                    console.error("Navigation error:", error);
+                    $btn.removeClass('btn-loading');
+                    showErrorNotification("Terjadi kesalahan saat navigasi", "Error");
+                }
+                
+                return false;
             });
+        });
+        
+        // Additional container-level handler sebagai backup
+        $('#user-guide-page').off('click.userguide-container').on('click.userguide-container', '.guide-nav-btn', function(e) {
+            console.log("=== CONTAINER BACKUP HANDLER ===");
+            
+            // Only trigger if direct handler failed
+            if (!e.isDefaultPrevented()) {
+                const $btn = $(this);
+                const target = $btn.data('target');
+                const buttonText = $btn.text().trim();
+                
+                console.log(`Container backup triggered: "${buttonText}" -> "${target}"`);
+                
+                e.preventDefault();
+                e.stopPropagation();
+                
+                if (target) {
+                    updateButtonStates(target);
+                    showGuideSection(target);
+                    console.log(`Container backup navigation completed: ${target}`);
+                }
+            }
         });
         
         // Enhanced button verification dengan validation
@@ -6286,24 +6291,12 @@ $(document).ready(function() {
         
         console.log(`Valid navigation buttons: ${validButtons}/4`);
         
-        // Initialize default section dengan enhanced error handling
+        // FIXED: Initialize default section immediately
         setTimeout(() => {
-            console.log("=== ENHANCED DEFAULT INITIALIZATION ===");
+            console.log("=== FIXED DEFAULT INITIALIZATION ===");
             
             try {
-                // Hide all sections dengan force cleanup
-                $('.guide-section').each(function() {
-                    const $section = $(this);
-                    $section.removeClass('active');
-                    $section.css({
-                        'display': 'none !important',
-                        'visibility': 'hidden !important',
-                        'opacity': '0 !important'
-                    });
-                    $section.hide();
-                });
-                
-                // Show default section
+                // Show default section immediately
                 const defaultSuccess = showGuideSection('getting-started');
                 if (defaultSuccess) {
                     updateButtonStates('getting-started');
@@ -6311,6 +6304,7 @@ $(document).ready(function() {
                 } else {
                     console.error("❌ Failed to initialize default section");
                     // Fallback: try to show any available section
+                    const availableSections = $('.guide-section').map(function() { return this.id; }).get();
                     if (availableSections.length > 0) {
                         showGuideSection(availableSections[0]);
                         updateButtonStates(availableSections[0]);
@@ -6318,21 +6312,54 @@ $(document).ready(function() {
                     }
                 }
                 
-                // Enhanced testing after initialization
+                // Test navigation after initialization
                 setTimeout(() => {
-                    console.log("=== RUNNING ENHANCED NAVIGATION TEST ===");
+                    console.log("=== RUNNING NAVIGATION TEST ===");
                     window.testGuideNavigation();
-                }, 200);
+                }, 100);
                 
             } catch (error) {
                 console.error("Initialization error:", error);
                 showErrorNotification("Gagal menginisialisasi User Guide", "Initialization Error");
             }
             
-        }, 200); // Reduced timeout untuk faster response
+        }, 100); // Faster initialization
         
-        console.log("=== USER GUIDE ENHANCED INITIALIZATION COMPLETED ===");
+        console.log("=== USER GUIDE FIXED INITIALIZATION COMPLETED ===");
     }
+    
+    // Force reinitialize User Guide (untuk debugging)
+    window.forceReinitUserGuide = function() {
+        console.log("=== FORCE REINITIALIZING USER GUIDE ===");
+        
+        // Complete cleanup
+        $('.guide-nav-btn').off();
+        $('#user-guide-page').off();
+        $(document).off('click.userguide-container');
+        
+        // Hide all sections
+        $('.guide-section').removeAttr('style').removeClass('active');
+        
+        // Reinitialize
+        initUserGuide();
+        
+        console.log("Force reinitialization completed");
+    };
+    
+    // Manual navigation function (untuk debugging)
+    window.manualNavigateGuide = function(target) {
+        console.log(`=== MANUAL NAVIGATION TO: ${target} ===`);
+        
+        const success = showGuideSection(target);
+        if (success) {
+            updateButtonStates(target);
+            console.log(`Manual navigation successful: ${target}`);
+        } else {
+            console.error(`Manual navigation failed: ${target}`);
+        }
+        
+        return success;
+    };
     
     function updateButtonStates(activeTarget) {
         console.log("Updating button states for target:", activeTarget);
@@ -6372,7 +6399,7 @@ $(document).ready(function() {
     }
 
     function showGuideSection(sectionId) {
-        console.log("=== ENHANCED SECTION DISPLAY ===");
+        console.log("=== FIXED SECTION DISPLAY ===");
         console.log(`Target section ID: "${sectionId}"`);
         
         try {
@@ -6392,96 +6419,62 @@ $(document).ready(function() {
             
             console.log(`✓ Target section found: "${sectionId}"`);
             
-            // 3. Hide all sections dengan enhanced cleanup
+            // 3. FIXED: Hide all sections with immediate CSS override
             $('.guide-section').each(function() {
                 const $section = $(this);
-                const sectionId = $section.attr('id');
+                const currentId = $section.attr('id');
                 
                 // Remove active class
                 $section.removeClass('active');
                 
-                // Force hide dengan multiple methods
-                $section.css({
-                    'display': 'none !important',
-                    'visibility': 'hidden !important',
-                    'opacity': '0 !important',
-                    'z-index': '-1'
-                });
+                // IMMEDIATE hide with direct style attribute
+                $section.attr('style', 'display: none !important; visibility: hidden !important; opacity: 0 !important;');
                 
-                // jQuery hide method
-                $section.hide();
-                
-                console.log(`Hidden section: "${sectionId}"`);
+                console.log(`Hidden section: "${currentId}"`);
             });
             
-            // 4. Show target section dengan enhanced display logic
+            // 4. FIXED: Show target section with immediate CSS override
             console.log(`Showing target section: "${sectionId}"`);
             
-            // Step 1: Remove any existing classes
-            $targetSection.removeClass('active');
-            
-            // Step 2: Apply active class
+            // Apply active class
             $targetSection.addClass('active');
             
-            // Step 3: Force CSS display dengan multiple approaches
-            $targetSection.css({
-                'display': 'block !important',
-                'visibility': 'visible !important',
-                'opacity': '1 !important',
-                'z-index': '1',
-                'position': 'relative'
-            });
+            // IMMEDIATE show with direct style attribute
+            $targetSection.attr('style', 
+                'display: block !important; ' +
+                'visibility: visible !important; ' +
+                'opacity: 1 !important; ' +
+                'position: relative !important; ' +
+                'z-index: 1 !important;'
+            );
             
-            // Step 4: jQuery show method
-            $targetSection.show();
+            // 5. IMMEDIATE verification (no timeout)
+            const isVisible = $targetSection.is(':visible');
+            const hasActive = $targetSection.hasClass('active');
             
-            // 5. Verify section is visible
-            setTimeout(() => {
-                const isVisible = $targetSection.is(':visible');
-                const display = $targetSection.css('display');
-                const visibility = $targetSection.css('visibility');
-                const opacity = $targetSection.css('opacity');
-                const hasActive = $targetSection.hasClass('active');
+            console.log("=== IMMEDIATE VISIBILITY CHECK ===");
+            console.log("Is visible:", isVisible);
+            console.log("Has active class:", hasActive);
+            console.log("Display style:", $targetSection.attr('style'));
+            
+            if (!isVisible) {
+                console.error("CRITICAL: Section still not visible after immediate fix");
                 
-                console.log("=== VISIBILITY CHECK ===");
-                console.log("Is visible:", isVisible);
-                console.log("Display CSS:", display);
-                console.log("Visibility CSS:", visibility);
-                console.log("Opacity CSS:", opacity);
-                console.log("Has active class:", hasActive);
+                // Last resort: Remove all style attributes and use CSS classes only
+                $('.guide-section').removeAttr('style').removeClass('active');
+                $targetSection.addClass('active').css({
+                    'display': 'block',
+                    'visibility': 'visible',
+                    'opacity': '1'
+                });
                 
-                if (!isVisible) {
-                    console.error("CRITICAL: Section still not visible, applying emergency fix");
-                    
-                    // Emergency fix - override all CSS
-                    $targetSection.attr('style', 
-                        'display: block !important; ' +
-                        'visibility: visible !important; ' +
-                        'opacity: 1 !important; ' +
-                        'position: relative !important; ' +
-                        'z-index: 999 !important;'
-                    );
-                    
-                    // Force show with jQuery
-                    $targetSection.show();
-                    
-                    // Check again
-                    setTimeout(() => {
-                        console.log("After emergency fix - visible:", $targetSection.is(':visible'));
-                    }, 100);
-                } else {
-                    console.log("SUCCESS: Section is now visible");
-                    
-                    // Apply smooth fade in animation
-                    $targetSection.css('opacity', '0').animate({
-                        opacity: 1
-                    }, 300, function() {
-                        console.log("Fade animation completed for:", sectionId);
-                    });
-                }
-            }, 100);
+                console.log("Applied last resort fix");
+                console.log("Final visibility:", $targetSection.is(':visible'));
+            } else {
+                console.log("SUCCESS: Section is immediately visible");
+            }
             
-            // 6. Scroll to section if not the first one
+            // 6. Scroll to section (reduced delay)
             if (sectionId !== 'getting-started') {
                 setTimeout(() => {
                     if ($targetSection[0] && $targetSection[0].scrollIntoView) {
@@ -6491,11 +6484,11 @@ $(document).ready(function() {
                         });
                         console.log("Scrolled to section:", sectionId);
                     }
-                }, 400);
+                }, 200);
             }
             
-            console.log("=== SECTION DISPLAY PROCESS COMPLETED ===");
-            return true;
+            console.log("=== FIXED SECTION DISPLAY COMPLETED ===");
+            return isVisible;
             
         } catch (error) {
             console.error("Error in showGuideSection:", error);

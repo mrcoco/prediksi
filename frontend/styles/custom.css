@@ -5077,37 +5077,17 @@ header {
 /* Guide Sections - Enhanced Force Visibility */
 #user-guide-page .guide-section {
     animation: fadeInUp 0.5s ease-out;
-    display: none !important; /* Initially hidden */
-    visibility: hidden !important;
-    opacity: 0 !important;
-    position: relative !important;
-    z-index: 1 !important;
+    display: none; /* Initially hidden - NO !important to allow JS override */
+    visibility: hidden;
+    opacity: 0;
+    position: relative;
+    z-index: 1;
     transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
 }
 
+/* CRITICAL: Force visibility for active sections with highest specificity */
 #user-guide-page .guide-section.active {
     display: block !important; /* Force show active section */
-    visibility: visible !important;
-    opacity: 1 !important;
-    position: relative !important;
-    z-index: 10 !important;
-}
-
-#user-guide-page .guide-section#getting-started {
-    display: block !important; /* Show first section by default */
-    visibility: visible !important;
-    opacity: 1 !important;
-    position: relative !important;
-    z-index: 10 !important;
-}
-
-/* Force visibility override for all sections when active */
-#user-guide-page .guide-section.active,
-#user-guide-page .guide-section#getting-started.active,
-#user-guide-page .guide-section#data-management.active,
-#user-guide-page .guide-section#prediction.active,
-#user-guide-page .guide-section#troubleshooting.active {
-    display: block !important;
     visibility: visible !important;
     opacity: 1 !important;
     position: relative !important;
@@ -5117,14 +5097,35 @@ header {
     overflow: visible !important;
 }
 
-/* Force visibility for active sections */
-#user-guide-page .guide-section.active,
-#user-guide-page .guide-section#getting-started.active {
+/* Default section should be visible immediately */
+#user-guide-page .guide-section#getting-started {
+    display: block !important; /* Show first section by default */
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 10 !important;
+}
+
+/* Override any conflicting styles with maximum specificity */
+#user-guide-page .guide-section.active[style] {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Specific overrides for each section when active */
+#user-guide-page .guide-section#getting-started.active,
+#user-guide-page .guide-section#data-management.active,
+#user-guide-page .guide-section#prediction.active,
+#user-guide-page .guide-section#troubleshooting.active {
     display: block !important;
     visibility: visible !important;
     opacity: 1 !important;
     position: relative !important;
-    z-index: 1 !important;
+    z-index: 100 !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
 }
 
 #user-guide-page .card {

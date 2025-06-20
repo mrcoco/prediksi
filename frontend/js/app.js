@@ -278,38 +278,13 @@ $(document).ready(function() {
         } else if (page === "profile" && !$("#profile-form").data("kendoForm")) {
             initProfilePage();
         } else if (page === "user-guide") {
-            console.log("Navigating to user-guide page, initializing...");
-            // Multiple initialization attempts to ensure success
-            let initAttempts = 0;
-            const maxAttempts = 3;
+            console.log("Navigating to user-guide page...");
             
-            function attemptInit() {
-                initAttempts++;
-                console.log(`Init attempt ${initAttempts}/${maxAttempts}`);
-                
-                if ($("#user-guide-page").is(':visible')) {
-                    console.log("User guide page is visible, initializing...");
-                    initUserGuide();
-                    
-                    // Test navigation after initialization
-                    setTimeout(() => {
-                        window.testGuideNavigation();
-                        
-                        // Force show first section if none are visible
-                        if ($('.guide-section:visible').length === 0) {
-                            console.log("No sections visible, forcing show getting-started");
-                            window.forceShowSection('getting-started');
-                        }
-                    }, 500);
-                } else if (initAttempts < maxAttempts) {
-                    console.log("User guide page not visible yet, retrying...");
-                    setTimeout(attemptInit, 300);
-                } else {
-                    console.error("Failed to initialize user guide after", maxAttempts, "attempts");
-                }
-            }
-            
-            setTimeout(attemptInit, 100);
+            // FIXED: Force reinit untuk ensure clean state
+            setTimeout(() => {
+                console.log("Force reinitializing User Guide for clean state...");
+                window.forceReinitUserGuide();
+            }, 200);
         }
     });
     
@@ -415,6 +390,14 @@ $(document).ready(function() {
             }
         } else if (page === "profile" && !$("#profile-form").data("kendoForm")) {
             initProfilePage();
+        } else if (page === "user-guide") {
+            console.log("Navigating to user-guide page from dashboard...");
+            
+            // FIXED: Force reinit untuk ensure clean state - SAMA SEPERTI SIDEBAR
+            setTimeout(() => {
+                console.log("Force reinitializing User Guide for clean state (from dashboard)...");
+                window.forceReinitUserGuide();
+            }, 200);
         } else if (page === "generate-dummy" && !$("#generate-dummy-form").data("kendoForm")) {
             console.log("Initializing generate dummy form");
             initGenerateDummyForm();  }
@@ -6148,52 +6131,69 @@ $(document).ready(function() {
     });
 
     // User Guide Navigation Functions
+    let userGuideInitialized = false; // Prevent multiple initialization
+    
     function initUserGuide() {
-        console.log("=== INITIALIZING USER GUIDE - FIXED VERSION ===");
+        console.log("=== INITIALIZING USER GUIDE - ROBUST VERSION ===");
         
-        // Complete cleanup of all existing event handlers
+        // REMOVED: Don't prevent multiple initialization in normal flow
+        // The flag will be managed by forceReinitUserGuide() only
+        console.log("Current initialization status:", userGuideInitialized);
+        
+        // Check if User Guide page exists and is accessible
+        if ($('#user-guide-page').length === 0) {
+            console.error("User Guide page not found in DOM");
+            return;
+        }
+        
+        // Check if buttons exist
+        if ($('.guide-nav-btn').length === 0) {
+            console.error("No guide navigation buttons found");
+            return;
+        }
+        
+        console.log("Starting User Guide initialization...");
+        
+        // COMPLETE cleanup of all existing event handlers
         $(document).off('click', '.guide-nav-btn');
         $(document).off('click.userguide-global', '.guide-nav-btn');
-        $('#user-guide-page').off('click', '.guide-nav-btn');
-        $('.guide-nav-btn').off('click.userguide');
-        $('.guide-nav-btn').off('click');
-        $('.guide-nav-btn').off('click.userguide-fallback');
-        $('.guide-nav-btn').off('click.userguide-primary');
-        $('.guide-nav-btn').off('click.userguide-enhanced');
-        $('.guide-nav-btn').off('click.userguide-direct');
+        $('#user-guide-page').off();
+        $('.guide-nav-btn').off();
         
         console.log("All existing event handlers cleaned up");
         
-        // FIXED: Direct button click handlers dengan isolation yang lebih baik
+        // DIRECT BUTTON EVENT HANDLERS - More reliable approach
         $('.guide-nav-btn').each(function(index) {
             const $btn = $(this);
             const target = $btn.data('target');
             const buttonText = $btn.text().trim();
             
-            console.log(`Setting up FIXED handler ${index + 1}: "${buttonText}" -> "${target}"`);
+            console.log(`Setting up direct handler ${index + 1}: "${buttonText}" -> "${target}"`);
             
-            // Remove all existing handlers first
-            $btn.off('click');
+            // Remove any existing handlers
+            $btn.off('click.userguide');
             
-            // Add new isolated handler
-            $btn.on('click.userguide-fixed', function(e) {
+            // Add direct click handler
+            $btn.on('click.userguide', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 e.stopImmediatePropagation();
                 
-                console.log("=== FIXED NAVIGATION CLICK ===");
-                console.log(`Button clicked: "${buttonText}" -> Target: "${target}"`);
+                console.log("=== DIRECT BUTTON CLICK ===");
+                console.log(`Button: "${buttonText}" -> Target: "${target}"`);
                 
-                // Validate this is a guide button, not sidebar
-                if ($(this).hasClass("sidebar-link") || $(this).data('page')) {
-                    console.log("Skipping - this is a sidebar link");
+                // Validate target
+                if (!target) {
+                    console.error("No target specified");
+                    showErrorNotification("Target section tidak ditemukan", "Error");
                     return false;
                 }
                 
-                // Validate target exists
-                if (!target) {
-                    console.error("No target found for button:", buttonText);
-                    showErrorNotification("Target section tidak ditemukan", "Navigation Error");
+                // Check if target section exists
+                const $targetSection = $('#' + target);
+                if ($targetSection.length === 0) {
+                    console.error(`Target section not found: ${target}`);
+                    showErrorNotification(`Section "${target}" tidak ditemukan`, "Error");
                     return false;
                 }
                 
@@ -6201,149 +6201,155 @@ $(document).ready(function() {
                 $btn.addClass('btn-loading');
                 
                 try {
-                    // Execute navigation
-                    console.log(`Executing navigation to: ${target}`);
+                    console.log(`Navigating to: ${target}`);
                     
-                    // Update button states
-                    updateButtonStates(target);
+                    // Execute navigation immediately
+                    const success = showGuideSection(target);
                     
-                    // Show section dengan timeout untuk memastikan DOM ready
-                    setTimeout(() => {
-                        const success = showGuideSection(target);
+                    if (success) {
+                        updateButtonStates(target);
+                        console.log(`✅ Navigation successful: ${target}`);
                         
-                        if (success) {
-                            console.log(`✅ Navigation successful: ${buttonText} -> ${target}`);
-                            
-                            // Success animation
-                            $btn.removeClass('btn-loading').addClass('btn-success-flash');
-                            setTimeout(() => {
-                                $btn.removeClass('btn-success-flash');
-                            }, 300);
-                            
-                            // Show success notification
-                            showSuccessNotification(`Berhasil menampilkan: ${buttonText}`, "Navigation");
-                        } else {
-                            console.error(`❌ Navigation failed: ${buttonText} -> ${target}`);
-                            $btn.removeClass('btn-loading');
-                            showErrorNotification(`Gagal menampilkan section: ${buttonText}`, "Navigation Error");
-                        }
-                    }, 100);
+                        // Success feedback
+                        $btn.removeClass('btn-loading').addClass('btn-success-flash');
+                        setTimeout(() => {
+                            $btn.removeClass('btn-success-flash');
+                        }, 300);
+                        
+                        showSuccessNotification(`Menampilkan: ${buttonText}`, "Navigation");
+                    } else {
+                        console.error(`❌ Navigation failed: ${target}`);
+                        $btn.removeClass('btn-loading');
+                        showErrorNotification(`Gagal menampilkan: ${buttonText}`, "Error");
+                    }
                     
                 } catch (error) {
                     console.error("Navigation error:", error);
                     $btn.removeClass('btn-loading');
-                    showErrorNotification("Terjadi kesalahan saat navigasi", "Error");
+                    showErrorNotification("Terjadi kesalahan navigasi", "Error");
                 }
                 
                 return false;
             });
         });
         
-        // Additional container-level handler sebagai backup
-        $('#user-guide-page').off('click.userguide-container').on('click.userguide-container', '.guide-nav-btn', function(e) {
-            console.log("=== CONTAINER BACKUP HANDLER ===");
+        // BACKUP: Container-level handler
+        $('#user-guide-page').off('click.userguide-backup').on('click.userguide-backup', '.guide-nav-btn', function(e) {
+            console.log("=== BACKUP CONTAINER HANDLER TRIGGERED ===");
             
-            // Only trigger if direct handler failed
+            // Only trigger if direct handler somehow failed
             if (!e.isDefaultPrevented()) {
+                console.log("Direct handler failed, executing backup...");
+                
                 const $btn = $(this);
                 const target = $btn.data('target');
                 const buttonText = $btn.text().trim();
-                
-                console.log(`Container backup triggered: "${buttonText}" -> "${target}"`);
                 
                 e.preventDefault();
                 e.stopPropagation();
                 
                 if (target) {
-                    updateButtonStates(target);
-                    showGuideSection(target);
-                    console.log(`Container backup navigation completed: ${target}`);
+                    console.log(`Backup navigation: ${buttonText} -> ${target}`);
+                    const success = showGuideSection(target);
+                    if (success) {
+                        updateButtonStates(target);
+                        showSuccessNotification(`Menampilkan: ${buttonText}`, "Navigation");
+                    }
                 }
             }
         });
         
-        // Enhanced button verification dengan validation
-        console.log("=== ENHANCED BUTTON VERIFICATION ===");
+        // Validate buttons and sections
+        console.log("=== BUTTON & SECTION VALIDATION ===");
         const availableSections = $('.guide-section').map(function() { return this.id; }).get();
+        const availableButtons = $('.guide-nav-btn').length;
+        
+        console.log(`Found ${availableButtons} buttons and ${availableSections.length} sections`);
         console.log("Available sections:", availableSections);
         
+        // Validate each button
         let validButtons = 0;
         $('.guide-nav-btn').each(function(index) {
             const $btn = $(this);
             const target = $btn.data('target');
             const buttonText = $btn.text().trim();
-            const hasDataTarget = !!target;
             const targetExists = target && $('#' + target).length > 0;
             
-            console.log(`Button ${index + 1}: "${buttonText}"`);
-            console.log(`  ✓ Has data-target: ${hasDataTarget}`);
-            console.log(`  ✓ Target value: "${target}"`);
-            console.log(`  ✓ Target exists: ${targetExists}`);
+            console.log(`Button ${index + 1}: "${buttonText}" -> "${target}" (exists: ${targetExists})`);
             
-            if (hasDataTarget && targetExists) {
+            if (target && targetExists) {
                 validButtons++;
                 $btn.addClass('nav-btn-valid');
             } else {
                 $btn.addClass('nav-btn-invalid');
-                console.warn(`  ⚠️ Invalid button configuration`);
+                console.warn(`Invalid button: ${buttonText}`);
             }
         });
         
-        console.log(`Valid navigation buttons: ${validButtons}/4`);
+        console.log(`Valid buttons: ${validButtons}/${availableButtons}`);
         
-        // FIXED: Initialize default section immediately
-        setTimeout(() => {
-            console.log("=== FIXED DEFAULT INITIALIZATION ===");
-            
-            try {
-                // Show default section immediately
-                const defaultSuccess = showGuideSection('getting-started');
-                if (defaultSuccess) {
-                    updateButtonStates('getting-started');
-                    console.log("✅ Default section initialized successfully");
-                } else {
-                    console.error("❌ Failed to initialize default section");
-                    // Fallback: try to show any available section
-                    const availableSections = $('.guide-section').map(function() { return this.id; }).get();
-                    if (availableSections.length > 0) {
-                        showGuideSection(availableSections[0]);
-                        updateButtonStates(availableSections[0]);
-                        console.log(`Fallback: Showed section ${availableSections[0]}`);
-                    }
+        // Initialize default section immediately
+        console.log("=== INITIALIZING DEFAULT SECTION ===");
+        try {
+            const defaultSuccess = showGuideSection('getting-started');
+            if (defaultSuccess) {
+                updateButtonStates('getting-started');
+                console.log("✅ Default section initialized");
+            } else {
+                console.error("❌ Failed to initialize default section");
+                // Try first available section
+                if (availableSections.length > 0) {
+                    const firstSection = availableSections[0];
+                    showGuideSection(firstSection);
+                    updateButtonStates(firstSection);
+                    console.log(`Fallback: Showing ${firstSection}`);
                 }
-                
-                // Test navigation after initialization
-                setTimeout(() => {
-                    console.log("=== RUNNING NAVIGATION TEST ===");
-                    window.testGuideNavigation();
-                }, 100);
-                
-            } catch (error) {
-                console.error("Initialization error:", error);
-                showErrorNotification("Gagal menginisialisasi User Guide", "Initialization Error");
             }
-            
-        }, 100); // Faster initialization
+        } catch (error) {
+            console.error("Default section initialization error:", error);
+        }
         
-        console.log("=== USER GUIDE FIXED INITIALIZATION COMPLETED ===");
+        // Mark as initialized
+        userGuideInitialized = true;
+        console.log("=== USER GUIDE INITIALIZATION COMPLETED ===");
+        
+        // Auto-test after initialization
+        setTimeout(() => {
+            if (typeof window.testUserGuideButtons === 'function') {
+                window.testUserGuideButtons();
+            }
+        }, 100);
     }
     
     // Force reinitialize User Guide (untuk debugging)
     window.forceReinitUserGuide = function() {
         console.log("=== FORCE REINITIALIZING USER GUIDE ===");
         
+        // Reset initialization flag
+        userGuideInitialized = false;
+        
         // Complete cleanup
-        $('.guide-nav-btn').off();
-        $('#user-guide-page').off();
-        $(document).off('click.userguide-container');
+        $('.guide-nav-btn').off('click.userguide');
+        $('#user-guide-page').off('click.userguide-backup');
+        $(document).off('click', '.guide-nav-btn');
         
-        // Hide all sections
+        // Reset all sections and buttons
         $('.guide-section').removeAttr('style').removeClass('active');
+        $('.guide-nav-btn').removeClass('nav-btn-valid nav-btn-invalid btn-loading btn-success-flash');
         
-        // Reinitialize
-        initUserGuide();
+        // Wait for page to be visible before reinitializing
+        function waitAndInit() {
+            if ($("#user-guide-page").is(':visible') && $('.guide-nav-btn').length > 0) {
+                console.log("Page ready, initializing...");
+                initUserGuide();
+                console.log("Force reinitialization completed");
+            } else {
+                console.log("Page not ready, waiting...");
+                setTimeout(waitAndInit, 50);
+            }
+        }
         
-        console.log("Force reinitialization completed");
+        setTimeout(waitAndInit, 100);
     };
     
     // Manual navigation function (untuk debugging)
@@ -6359,6 +6365,49 @@ $(document).ready(function() {
         }
         
         return success;
+    };
+    
+    // Simple test function to verify buttons work
+    window.testUserGuideButtons = function() {
+        console.log("=== TESTING USER GUIDE BUTTONS ===");
+        
+        $('.guide-nav-btn').each(function(index) {
+            const $btn = $(this);
+            const target = $btn.data('target');
+            const text = $btn.text().trim();
+            const hasHandler = $._data(this, 'events') && $._data(this, 'events').click;
+            
+            console.log(`Button ${index + 1}: "${text}"`);
+            console.log(`  - Target: ${target}`);
+            console.log(`  - Has click handler: ${!!hasHandler}`);
+            console.log(`  - Element classes: ${$btn.attr('class')}`);
+            
+            // Test if section exists
+            const $section = $('#' + target);
+            console.log(`  - Section exists: ${$section.length > 0}`);
+            console.log(`  - Section visible: ${$section.is(':visible')}`);
+        });
+        
+        console.log("=== TESTING COMPLETE ===");
+    };
+    
+    // Quick button click test
+    window.clickButton = function(target) {
+        console.log(`=== CLICKING BUTTON: ${target} ===`);
+        const $btn = $(`.guide-nav-btn[data-target="${target}"]`);
+        
+        if ($btn.length === 0) {
+            console.error(`Button not found for target: ${target}`);
+            return;
+        }
+        
+        console.log("Button found, triggering click...");
+        $btn.trigger('click');
+        
+        setTimeout(() => {
+            const $section = $('#' + target);
+            console.log(`Section visible after click: ${$section.is(':visible')}`);
+        }, 200);
     };
     
     function updateButtonStates(activeTarget) {
@@ -6448,31 +6497,58 @@ $(document).ready(function() {
                 'z-index: 1 !important;'
             );
             
-            // 5. IMMEDIATE verification (no timeout)
-            const isVisible = $targetSection.is(':visible');
+            // 5. ENHANCED verification with multiple checks
+            let isVisible = $targetSection.is(':visible');
             const hasActive = $targetSection.hasClass('active');
+            const computedDisplay = $targetSection.css('display');
+            const computedVisibility = $targetSection.css('visibility');
+            const computedOpacity = $targetSection.css('opacity');
             
-            console.log("=== IMMEDIATE VISIBILITY CHECK ===");
-            console.log("Is visible:", isVisible);
+            console.log("=== ENHANCED VISIBILITY CHECK ===");
+            console.log("Is visible (jQuery):", isVisible);
             console.log("Has active class:", hasActive);
-            console.log("Display style:", $targetSection.attr('style'));
+            console.log("Computed display:", computedDisplay);
+            console.log("Computed visibility:", computedVisibility);
+            console.log("Computed opacity:", computedOpacity);
+            console.log("Style attribute:", $targetSection.attr('style'));
             
-            if (!isVisible) {
-                console.error("CRITICAL: Section still not visible after immediate fix");
+            // Force visibility check after CSS processing
+            setTimeout(() => {
+                isVisible = $targetSection.is(':visible');
+                console.log("=== POST-CSS VISIBILITY CHECK ===");
+                console.log("Is visible after CSS:", isVisible);
                 
-                // Last resort: Remove all style attributes and use CSS classes only
-                $('.guide-section').removeAttr('style').removeClass('active');
-                $targetSection.addClass('active').css({
-                    'display': 'block',
-                    'visibility': 'visible',
-                    'opacity': '1'
-                });
-                
-                console.log("Applied last resort fix");
-                console.log("Final visibility:", $targetSection.is(':visible'));
-            } else {
-                console.log("SUCCESS: Section is immediately visible");
-            }
+                if (!isVisible) {
+                    console.error("CRITICAL: Section still not visible after CSS processing");
+                    
+                    // ULTIMATE FIX: Force visibility with maximum specificity
+                    $targetSection.removeClass('active').addClass('active');
+                    $targetSection.css({
+                        'display': 'block',
+                        'visibility': 'visible',
+                        'opacity': '1',
+                        'position': 'relative',
+                        'z-index': '999'
+                    });
+                    
+                    // Force DOM reflow
+                    $targetSection[0].offsetHeight;
+                    
+                    // Final check
+                    const finalVisible = $targetSection.is(':visible');
+                    console.log("Final visibility after ultimate fix:", finalVisible);
+                    
+                    if (finalVisible) {
+                        console.log("✅ SUCCESS: Ultimate fix worked");
+                    } else {
+                        console.error("❌ FAILED: Even ultimate fix didn't work");
+                        // Show error to user
+                        showErrorNotification(`Gagal menampilkan section: ${sectionId}`, "Display Error");
+                    }
+                } else {
+                    console.log("✅ SUCCESS: Section visible after CSS processing");
+                }
+            }, 50); // Small delay for CSS processing
             
             // 6. Scroll to section (reduced delay)
             if (sectionId !== 'getting-started') {
@@ -6525,8 +6601,8 @@ $(document).ready(function() {
             console.log(`  - Button text: "${$btn.text().trim()}"`);
         });
         
-        // Test section states
-        console.log("\n--- SECTION STATES ---");
+        // Test section states with enhanced CSS debugging
+        console.log("\n--- ENHANCED SECTION STATES ---");
         $('.guide-section').each(function(index) {
             const $section = $(this);
             const id = $section.attr('id');
@@ -6535,13 +6611,53 @@ $(document).ready(function() {
             const display = $section.css('display');
             const visibility = $section.css('visibility');
             const opacity = $section.css('opacity');
+            const position = $section.css('position');
+            const zIndex = $section.css('z-index');
+            const styleAttr = $section.attr('style');
             
             console.log(`Section ${index + 1} (${id}):`);
-            console.log(`  - Visible: ${isVisible}`);
-            console.log(`  - Active: ${hasActive}`);
-            console.log(`  - Display: ${display}`);
-            console.log(`  - Visibility: ${visibility}`);
-            console.log(`  - Opacity: ${opacity}`);
+            console.log(`  - Visible (jQuery): ${isVisible}`);
+            console.log(`  - Active class: ${hasActive}`);
+            console.log(`  - CSS Display: ${display}`);
+            console.log(`  - CSS Visibility: ${visibility}`);
+            console.log(`  - CSS Opacity: ${opacity}`);
+            console.log(`  - CSS Position: ${position}`);
+            console.log(`  - CSS Z-Index: ${zIndex}`);
+            console.log(`  - Style attribute: ${styleAttr || 'none'}`);
+            
+            // Check computed styles
+            const computedStyle = window.getComputedStyle($section[0]);
+            console.log(`  - Computed Display: ${computedStyle.display}`);
+            console.log(`  - Computed Visibility: ${computedStyle.visibility}`);
+            console.log(`  - Computed Opacity: ${computedStyle.opacity}`);
+        });
+        
+        // Test CSS conflicts
+        console.log("\n--- CSS CONFLICT ANALYSIS ---");
+        $('.guide-section').each(function(index) {
+            const $section = $(this);
+            const id = $section.attr('id');
+            
+            // Get all CSS rules that might affect this section
+            const allRules = [];
+            for (let sheet of document.styleSheets) {
+                try {
+                    for (let rule of sheet.cssRules || sheet.rules) {
+                        if (rule.selectorText && rule.selectorText.includes('.guide-section')) {
+                            allRules.push({
+                                selector: rule.selectorText,
+                                display: rule.style.display,
+                                visibility: rule.style.visibility,
+                                opacity: rule.style.opacity
+                            });
+                        }
+                    }
+                } catch (e) {
+                    // Cross-origin stylesheet, skip
+                }
+            }
+            
+            console.log(`CSS Rules affecting ${id}:`, allRules);
         });
         
         // Test event delegation
@@ -6603,6 +6719,99 @@ $(document).ready(function() {
         }
         
         testNext();
+    };
+    
+    // CRITICAL: Force fix visibility issues
+    window.forceFixVisibility = function(sectionId) {
+        console.log(`=== FORCE FIX VISIBILITY: ${sectionId} ===`);
+        
+        const $section = $('#' + sectionId);
+        if ($section.length === 0) {
+            console.error(`Section ${sectionId} not found`);
+            return false;
+        }
+        
+        // Step 1: Remove all conflicting styles
+        $('.guide-section').each(function() {
+            $(this).removeAttr('style').removeClass('active');
+        });
+        
+        // Step 2: Force show target section with maximum specificity
+        $section.addClass('active');
+        $section.css({
+            'display': 'block !important',
+            'visibility': 'visible !important', 
+            'opacity': '1 !important',
+            'position': 'relative !important',
+            'z-index': '9999 !important',
+            'width': '100% !important',
+            'height': 'auto !important'
+        });
+        
+        // Step 3: Force DOM reflow
+        $section[0].offsetHeight;
+        
+        // Step 4: Verify fix
+        const isVisible = $section.is(':visible');
+        console.log(`Force fix result: ${isVisible}`);
+        
+        if (!isVisible) {
+            // Last resort: Direct DOM manipulation
+            $section[0].style.cssText = 'display: block !important; visibility: visible !important; opacity: 1 !important; position: relative !important; z-index: 9999 !important;';
+            $section[0].offsetHeight; // Force reflow
+            
+            const finalVisible = $section.is(':visible');
+            console.log(`Last resort fix result: ${finalVisible}`);
+            return finalVisible;
+        }
+        
+        return true;
+    };
+    
+    // Debug CSS conflicts specifically
+    window.debugCSSConflicts = function() {
+        console.log("=== CSS CONFLICTS DEBUG ===");
+        
+        $('.guide-section').each(function() {
+            const $section = $(this);
+            const id = $section.attr('id');
+            const element = $section[0];
+            
+            console.log(`\n--- Section: ${id} ---`);
+            
+            // Get computed styles
+            const computed = window.getComputedStyle(element);
+            console.log("Computed styles:");
+            console.log(`  display: ${computed.display}`);
+            console.log(`  visibility: ${computed.visibility}`);
+            console.log(`  opacity: ${computed.opacity}`);
+            console.log(`  position: ${computed.position}`);
+            console.log(`  z-index: ${computed.zIndex}`);
+            
+            // Get inline styles
+            console.log("Inline styles:");
+            console.log(`  style attribute: ${element.style.cssText || 'none'}`);
+            
+            // Check jQuery visibility
+            console.log(`jQuery .is(':visible'): ${$section.is(':visible')}`);
+            console.log(`jQuery .css('display'): ${$section.css('display')}`);
+            
+            // Check classes
+            console.log(`Classes: ${element.className}`);
+            
+            // Check if hidden by parent
+            let parent = element.parentElement;
+            while (parent && parent !== document.body) {
+                const parentComputed = window.getComputedStyle(parent);
+                if (parentComputed.display === 'none' || parentComputed.visibility === 'hidden') {
+                    console.log(`Hidden by parent: ${parent.tagName}.${parent.className}`);
+                    break;
+                }
+                parent = parent.parentElement;
+            }
+        });
+        
+        console.log("=== END CSS CONFLICTS DEBUG ===");
     };
     
     // Check for event handler conflicts
@@ -7035,6 +7244,14 @@ $(document).ready(function() {
                 initializeSystemInfo();
             }
         }, 1000);
+        
+        // Auto-initialize User Guide if page is already visible
+        setTimeout(function() {
+            if ($("#user-guide-page").is(':visible')) {
+                console.log("User Guide page detected on load, auto-initializing...");
+                window.forceReinitUserGuide();
+            }
+        }, 1500);
         
         // Add click handler for system info card
         $(document).on('click', '.system-info-card .card-header', function() {

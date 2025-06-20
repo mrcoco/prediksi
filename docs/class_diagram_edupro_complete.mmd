@@ -1,0 +1,408 @@
+classDiagram
+    %% Core Domain Classes
+    class User {
+        +String id
+        +String username
+        +String email
+        +String password_hash
+        +String role
+        +DateTime created_at
+        +DateTime updated_at
+        +Boolean is_active
+        +login()
+        +logout()
+        +changePassword()
+        +hasRole(role)
+    }
+    
+    class Siswa {
+        +String id
+        +String nama
+        +String jenis_kelamin
+        +String agama
+        +String status_keluarga
+        +String jumlah_saudara
+        +String anak_ke
+        +String alamat_siswa
+        +String no_telp
+        +String sekolah_asal
+        +Boolean diterima_beasiswa
+        +String tahun_masuk
+        +DateTime created_at
+        +DateTime updated_at
+        +calculateAge()
+        +getFullProfile()
+        +isEligibleForPrediction()
+    }
+    
+    class NilaiRaport {
+        +String id
+        +String siswa_id
+        +Float matematika
+        +Float bahasa_indonesia
+        +Float bahasa_inggris
+        +Float ipa
+        +Float ips
+        +String semester
+        +String tahun_ajaran
+        +DateTime created_at
+        +DateTime updated_at
+        +calculateAverage()
+        +getGradeLevel()
+        +validateScores()
+    }
+    
+    class Presensi {
+        +String id
+        +String siswa_id
+        +Integer hadir
+        +Integer sakit
+        +Integer izin
+        +Integer alpha
+        +String semester
+        +String tahun_ajaran
+        +DateTime created_at
+        +DateTime updated_at
+        +calculateAttendanceRate()
+        +getTotalDays()
+        +getAttendanceStatus()
+    }
+    
+    class PenghasilanOrtu {
+        +String id
+        +String siswa_id
+        +Float penghasilan_ayah
+        +Float penghasilan_ibu
+        +String pekerjaan_ayah
+        +String pekerjaan_ibu
+        +String pendidikan_ayah
+        +String pendidikan_ibu
+        +DateTime created_at
+        +DateTime updated_at
+        +getTotalIncome()
+        +getIncomeCategory()
+        +validateIncome()
+    }
+    
+    class Prestasi {
+        +String id
+        +String siswa_id
+        +String jenis_prestasi
+        +String tingkat_prestasi
+        +String nama_prestasi
+        +String penyelenggara
+        +Date tanggal_prestasi
+        +String bukti_prestasi
+        +DateTime created_at
+        +DateTime updated_at
+        +getPrestasiLevel()
+        +calculateScore()
+    }
+    
+    %% Event System Classes
+    class Event {
+        +String id
+        +String event_type
+        +String event_category
+        +String user_id
+        +String session_id
+        +String ip_address
+        +String user_agent
+        +String method
+        +String endpoint
+        +Integer status_code
+        +Integer response_time
+        +JSONB request_data
+        +JSONB response_data
+        +JSONB context_data
+        +String error_message
+        +String trace_id
+        +String parent_id
+        +DateTime timestamp
+        +String severity
+        +String environment
+        +String version
+        +JSONB metadata
+        +save()
+        +filter()
+        +anonymize()
+        +export()
+    }
+    
+    class EventSummaryDaily {
+        +String id
+        +Date date
+        +String event_category
+        +Integer total_events
+        +Integer success_count
+        +Integer error_count
+        +Float avg_response_time
+        +Integer unique_users
+        +Integer unique_sessions
+        +JSONB top_endpoints
+        +JSONB error_breakdown
+        +DateTime created_at
+        +DateTime updated_at
+        +generateSummary()
+        +updateCounters()
+    }
+    
+    %% ML System Classes
+    class MLModel {
+        +String id
+        +String name
+        +String version
+        +String algorithm
+        +String status
+        +JSONB parameters
+        +JSONB metrics
+        +Float accuracy
+        +Float precision
+        +Float recall
+        +Float f1_score
+        +DateTime trained_at
+        +DateTime created_at
+        +DateTime updated_at
+        +String model_path
+        +train(data)
+        +predict(features)
+        +evaluate(testData)
+        +save()
+        +load()
+    }
+    
+    class PredictionResult {
+        +String id
+        +String siswa_id
+        +String model_id
+        +String prediction
+        +Float confidence
+        +JSONB feature_values
+        +JSONB feature_importance
+        +DateTime predicted_at
+        +String status
+        +JSONB metadata
+        +save()
+        +getConfidenceLevel()
+        +explainPrediction()
+    }
+    
+    %% Service Classes
+    class EventLogger {
+        +logEvent(eventData)
+        +logAuth(userId, action, result)
+        +logCRUD(userId, entity, action, data)
+        +logML(userId, action, modelId, result)
+        +logSecurity(eventType, details)
+        +logSystem(action, status, details)
+        +logFile(userId, action, filename, size)
+        +logAnalytics(userId, query, results)
+        +filterSensitiveData(data)
+        +anonymizeData(data)
+        +validateEvent(event)
+        +processEvent(event)
+    }
+    
+    class MLService {
+        +trainModel(data, parameters)
+        +predict(siswaId, features)
+        +batchPredict(siswaIds)
+        +evaluateModel(modelId, testData)
+        +getModelMetrics(modelId)
+        +getFeatureImportance(modelId)
+        +preprocessData(data)
+        +validateFeatures(features)
+        +saveModel(model)
+        +loadModel(modelId)
+    }
+    
+    class AuthService {
+        +authenticate(username, password)
+        +generateToken(user)
+        +validateToken(token)
+        +refreshToken(token)
+        +logout(userId)
+        +changePassword(userId, oldPassword, newPassword)
+        +resetPassword(email)
+        +checkPermission(userId, resource, action)
+        +createSession(userId)
+        +destroySession(sessionId)
+    }
+    
+    class SecurityService {
+        +detectBruteForce(ipAddress, attempts)
+        +blockIP(ipAddress, reason)
+        +unblockIP(ipAddress)
+        +checkSuspiciousActivity(userId, activity)
+        +validateInput(input, type)
+        +sanitizeData(data)
+        +detectSQLInjection(query)
+        +detectXSS(input)
+        +generateSecurityAlert(type, details)
+        +auditSecurityEvent(event)
+    }
+    
+    %% Repository Classes
+    class SiswaRepository {
+        +findById(id)
+        +findAll(filters, pagination)
+        +create(siswaData)
+        +update(id, siswaData)
+        +delete(id)
+        +findByName(name)
+        +findWithPrediction()
+        +findEligibleForPrediction()
+        +getStatistics()
+        +bulkImport(data)
+    }
+    
+    class EventRepository {
+        +save(event)
+        +findById(id)
+        +findByUserId(userId, pagination)
+        +findByCategory(category, dateRange)
+        +findByTimeRange(startDate, endDate)
+        +getAnalytics(filters)
+        +getDashboardData()
+        +getSecurityEvents(severity)
+        +cleanup(retentionDays)
+        +archive(dateThreshold)
+    }
+    
+    class MLModelRepository {
+        +save(model)
+        +findById(id)
+        +findByName(name)
+        +findLatestVersion(name)
+        +findActive()
+        +updateMetrics(id, metrics)
+        +archive(id)
+        +delete(id)
+    }
+    
+    %% Controller Classes
+    class AuthController {
+        +login(request)
+        +logout(request)
+        +refresh(request)
+        +changePassword(request)
+        +resetPassword(request)
+        +profile(request)
+        +validateSession(request)
+    }
+    
+    class SiswaController {
+        +index(request)
+        +show(request)
+        +create(request)
+        +update(request)
+        +delete(request)
+        +import(request)
+        +export(request)
+        +search(request)
+    }
+    
+    class PredictionController {
+        +predict(request)
+        +batchPredict(request)
+        +getResult(request)
+        +getHistory(request)
+        +trainModel(request)
+        +getModelInfo(request)
+        +evaluateModel(request)
+    }
+    
+    class EventController {
+        +index(request)
+        +show(request)
+        +analytics(request)
+        +dashboard(request)
+        +export(request)
+        +security(request)
+        +cleanup(request)
+    }
+    
+    %% Middleware Classes
+    class EventLoggingMiddleware {
+        +handle(request, next)
+        +logRequest(request)
+        +logResponse(response)
+        +extractContext(request)
+        +shouldLog(request)
+        +filterSensitiveData(data)
+    }
+    
+    class SecurityMiddleware {
+        +handle(request, next)
+        +checkRateLimit(request)
+        +validateInput(request)
+        +checkBlacklist(request)
+        +detectThreats(request)
+        +logSecurityEvent(event)
+    }
+    
+    class AuthMiddleware {
+        +handle(request, next)
+        +validateToken(request)
+        +checkPermissions(request)
+        +refreshToken(request)
+        +logAuthEvent(event)
+    }
+    
+    %% Relationships
+    User ||--o{ Event : "creates"
+    Siswa ||--o{ NilaiRaport : "has"
+    Siswa ||--o{ Presensi : "has"
+    Siswa ||--o{ PenghasilanOrtu : "has"
+    Siswa ||--o{ Prestasi : "has"
+    Siswa ||--o{ PredictionResult : "has"
+    
+    MLModel ||--o{ PredictionResult : "generates"
+    Event ||--o{ EventSummaryDaily : "summarized_in"
+    
+    %% Service Dependencies
+    EventLogger ..> Event : "creates"
+    EventLogger ..> EventRepository : "uses"
+    MLService ..> MLModel : "uses"
+    MLService ..> PredictionResult : "creates"
+    MLService ..> MLModelRepository : "uses"
+    AuthService ..> User : "manages"
+    SecurityService ..> EventLogger : "uses"
+    
+    %% Controller Dependencies
+    AuthController ..> AuthService : "uses"
+    AuthController ..> EventLogger : "uses"
+    SiswaController ..> SiswaRepository : "uses"
+    SiswaController ..> EventLogger : "uses"
+    PredictionController ..> MLService : "uses"
+    PredictionController ..> EventLogger : "uses"
+    EventController ..> EventRepository : "uses"
+    
+    %% Middleware Dependencies
+    EventLoggingMiddleware ..> EventLogger : "uses"
+    SecurityMiddleware ..> SecurityService : "uses"
+    SecurityMiddleware ..> EventLogger : "uses"
+    AuthMiddleware ..> AuthService : "uses"
+    AuthMiddleware ..> EventLogger : "uses"
+    
+    %% Repository Dependencies
+    SiswaRepository ..> Siswa : "manages"
+    EventRepository ..> Event : "manages"
+    MLModelRepository ..> MLModel : "manages"
+
+    %% Styling
+    classDef domainClass fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
+    classDef eventClass fill:#fff3e0,stroke:#f57800,stroke-width:2px
+    classDef mlClass fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    classDef serviceClass fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
+    classDef controllerClass fill:#fce4ec,stroke:#c2185b,stroke-width:2px
+    classDef repositoryClass fill:#e0f2f1,stroke:#00695c,stroke-width:2px
+    classDef middlewareClass fill:#ffebee,stroke:#d32f2f,stroke-width:2px
+
+    class User,Siswa,NilaiRaport,Presensi,PenghasilanOrtu,Prestasi domainClass
+    class Event,EventSummaryDaily eventClass
+    class MLModel,PredictionResult mlClass
+    class EventLogger,MLService,AuthService,SecurityService serviceClass
+    class AuthController,SiswaController,PredictionController,EventController controllerClass
+    class SiswaRepository,EventRepository,MLModelRepository repositoryClass
+    class EventLoggingMiddleware,SecurityMiddleware,AuthMiddleware middlewareClass 

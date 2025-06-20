@@ -1,0 +1,130 @@
+sequenceDiagram
+    participant User as 👤 User
+    participant Frontend as 🖥️ Frontend
+    participant EventMiddleware as 🔄 Event Middleware
+    participant AuthController as 🔐 Auth Controller
+    participant SiswaController as 👨‍🎓 Siswa Controller
+    participant MLController as 🧠 ML Controller
+    participant EventService as 📝 Event Service
+    participant Database as 💾 Database
+    participant EventSystem as 🔍 Event System
+
+    %% User Login Scenario
+    Note over User, EventSystem: 🔐 User Login with Event Logging
+    User->>Frontend: 1. Login Request
+    Frontend->>EventMiddleware: 2. POST /auth/login
+    EventMiddleware->>EventService: 3. Log Request Event
+    EventService->>Database: 4. Store Request Event
+    EventMiddleware->>AuthController: 5. Forward Request
+    AuthController->>Database: 6. Validate Credentials
+    Database-->>AuthController: 7. User Data
+    AuthController->>EventService: 8. Log Auth Success
+    EventService->>Database: 9. Store Auth Event
+    AuthController-->>EventMiddleware: 10. Auth Response
+    EventMiddleware->>EventService: 11. Log Response Event
+    EventService->>Database: 12. Store Response Event
+    EventMiddleware-->>Frontend: 13. Return Response
+    Frontend-->>User: 14. Login Success
+
+    %% CRUD Operations with Event Tracking
+    Note over User, EventSystem: 📝 CRUD Operations with Event Tracking
+    User->>Frontend: 15. Create Student Request
+    Frontend->>EventMiddleware: 16. POST /siswa
+    EventMiddleware->>EventService: 17. Log CRUD Request
+    EventService->>Database: 18. Store CRUD Event
+    EventMiddleware->>SiswaController: 19. Forward Request
+    SiswaController->>Database: 20. Create Student Record
+    Database-->>SiswaController: 21. Student Created
+    SiswaController->>EventService: 22. Log CRUD Success
+    EventService->>Database: 23. Store Success Event
+    SiswaController-->>EventMiddleware: 24. Success Response
+    EventMiddleware->>EventService: 25. Log Response
+    EventService->>Database: 26. Store Response Event
+    EventMiddleware-->>Frontend: 27. Return Response
+    Frontend-->>User: 28. Show Success Message
+
+    %% ML Prediction Process
+    Note over User, EventSystem: 🧠 ML Prediction Process
+    User->>Frontend: 29. Request Prediction
+    Frontend->>EventMiddleware: 30. POST /predict
+    EventMiddleware->>EventService: 31. Log ML Request
+    EventService->>Database: 32. Store ML Event
+    EventMiddleware->>MLController: 33. Forward Request
+    MLController->>Database: 34. Fetch Student Data
+    Database-->>MLController: 35. Student Data
+    MLController->>MLController: 36. Load ML Model
+    MLController->>MLController: 37. Generate Prediction
+    MLController->>Database: 38. Save Prediction Result
+    MLController->>EventService: 39. Log ML Success
+    EventService->>Database: 40. Store ML Event
+    MLController-->>EventMiddleware: 41. Prediction Response
+    EventMiddleware->>EventService: 42. Log Response
+    EventService->>Database: 43. Store Response Event
+    EventMiddleware-->>Frontend: 44. Return Prediction
+    Frontend-->>User: 45. Show Prediction Result
+
+    %% Security Event Detection
+    Note over User, EventSystem: 🛡️ Security Event Detection
+    User->>Frontend: 46. Multiple Failed Logins
+    Frontend->>EventMiddleware: 47. POST /auth/login (Failed)
+    EventMiddleware->>EventService: 48. Log Failed Auth
+    EventService->>Database: 49. Store Failed Auth Event
+    EventService->>EventService: 50. Detect Brute Force Pattern
+    EventService->>EventSystem: 51. Trigger Security Alert
+    EventSystem->>Database: 52. Store Security Event
+    EventSystem->>EventSystem: 53. Block IP Address
+    EventSystem-->>EventMiddleware: 54. Security Response
+    EventMiddleware-->>Frontend: 55. Access Blocked
+    Frontend-->>User: 56. Show Security Message
+
+    %% Event Analytics Query
+    Note over User, EventSystem: 📊 Event Analytics Query
+    User->>Frontend: 57. Request Analytics Dashboard
+    Frontend->>EventMiddleware: 58. GET /events/analytics
+    EventMiddleware->>EventService: 59. Log Analytics Request
+    EventService->>Database: 60. Store Analytics Event
+    EventMiddleware->>EventSystem: 61. Forward Analytics Request
+    EventSystem->>Database: 62. Query Event Data
+    Database-->>EventSystem: 63. Aggregated Data
+    EventSystem->>EventSystem: 64. Process Analytics
+    EventSystem-->>EventMiddleware: 65. Analytics Response
+    EventMiddleware->>EventService: 66. Log Analytics Response
+    EventService->>Database: 67. Store Response Event
+    EventMiddleware-->>Frontend: 68. Return Analytics Data
+    Frontend-->>User: 69. Display Dashboard
+
+    %% Background Event Processing
+    Note over EventSystem, Database: ⚙️ Background Event Processing
+    EventSystem->>Database: 70. Query Recent Events
+    Database-->>EventSystem: 71. Event Data
+    EventSystem->>EventSystem: 72. Generate Daily Summary
+    EventSystem->>Database: 73. Store Summary Data
+    EventSystem->>EventSystem: 74. Clean Old Events
+    EventSystem->>Database: 75. Archive Events
+    EventSystem->>EventSystem: 76. Update Metrics
+    EventSystem->>Database: 77. Store Metrics
+
+    %% Error Handling with Event Logging
+    Note over User, EventSystem: ❌ Error Handling with Event Logging
+    User->>Frontend: 78. Invalid Request
+    Frontend->>EventMiddleware: 79. POST /invalid-endpoint
+    EventMiddleware->>EventService: 80. Log Error Request
+    EventService->>Database: 81. Store Error Event
+    EventMiddleware->>EventMiddleware: 82. Handle 404 Error
+    EventMiddleware->>EventService: 83. Log Error Response
+    EventService->>Database: 84. Store Error Event
+    EventMiddleware-->>Frontend: 85. Error Response
+    Frontend-->>User: 86. Show Error Message
+
+    %% Real-time Event Streaming
+    Note over EventSystem, Frontend: 🔄 Real-time Event Streaming
+    EventSystem->>EventSystem: 87. Process Real-time Events
+    EventSystem->>Frontend: 88. WebSocket Event Stream
+    Frontend->>Frontend: 89. Update Live Dashboard
+    EventSystem->>Database: 90. Store Stream Metrics
+    
+    %% Styling and Notes
+    Note over User, EventSystem: 📈 System Performance Metrics
+    Note right of EventService: • Event capture rate: 99.9%<br/>• Average response time: <100ms<br/>• Storage efficiency: <1MB/1000 events
+    Note right of EventSystem: • Real-time processing: <5 seconds<br/>• Analytics queries: <30 seconds<br/>• Security detection: 95% accuracy
+    Note right of Database: • Event retention: 1-5 years<br/>• Daily events: 10,000+<br/>• Storage optimization: Partitioned by date 

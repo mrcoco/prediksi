@@ -1,0 +1,188 @@
+flowchart TD
+    %% Start
+    START([🚀 Start Prediction Process])
+    
+    %% User Authentication
+    AUTH{🔐 User Authenticated?}
+    LOGIN[📋 Redirect to Login]
+    VALIDATE_SESSION[✅ Validate Session]
+    LOG_AUTH[📝 Log Authentication Event]
+    
+    %% Authorization Check
+    AUTHORIZE{👤 User Authorized?}
+    ACCESS_DENIED[🚫 Access Denied]
+    LOG_ACCESS_DENIED[📝 Log Access Denied Event]
+    
+    %% Input Validation
+    GET_INPUT[📥 Get Student ID/Data]
+    VALIDATE_INPUT{✅ Input Valid?}
+    INPUT_ERROR[❌ Show Input Error]
+    LOG_INPUT_ERROR[📝 Log Input Error Event]
+    
+    %% Data Retrieval
+    FETCH_STUDENT[🔍 Fetch Student Data]
+    STUDENT_EXISTS{👨‍🎓 Student Exists?}
+    STUDENT_NOT_FOUND[❌ Student Not Found]
+    LOG_STUDENT_NOT_FOUND[📝 Log Student Not Found Event]
+    
+    %% Data Completeness Check
+    CHECK_COMPLETENESS{📊 Data Complete?}
+    INCOMPLETE_DATA[⚠️ Show Incomplete Data Warning]
+    LOG_INCOMPLETE_DATA[📝 Log Incomplete Data Event]
+    
+    %% Model Loading
+    LOAD_MODEL[🧠 Load ML Model]
+    MODEL_AVAILABLE{🤖 Model Available?}
+    MODEL_NOT_FOUND[❌ Model Not Available]
+    LOG_MODEL_ERROR[📝 Log Model Error Event]
+    TRAIN_MODEL[🏋️ Train New Model]
+    
+    %% Model Training Process
+    COLLECT_TRAINING_DATA[📚 Collect Training Data]
+    SUFFICIENT_DATA{📈 Sufficient Data?}
+    INSUFFICIENT_DATA[⚠️ Insufficient Training Data]
+    LOG_INSUFFICIENT_DATA[📝 Log Insufficient Data Event]
+    
+    PREPROCESS_DATA[🔧 Preprocess Training Data]
+    TRAIN_C45[🌳 Train C4.5 Algorithm]
+    EVALUATE_MODEL[📊 Evaluate Model Performance]
+    SAVE_MODEL[💾 Save Trained Model]
+    LOG_TRAINING[📝 Log Training Event]
+    
+    %% Feature Preparation
+    PREPARE_FEATURES[🔧 Prepare Feature Vector]
+    VALIDATE_FEATURES{✅ Features Valid?}
+    FEATURE_ERROR[❌ Feature Validation Error]
+    LOG_FEATURE_ERROR[📝 Log Feature Error Event]
+    
+    %% Prediction Process
+    MAKE_PREDICTION[🎯 Generate Prediction]
+    PREDICTION_SUCCESS{✅ Prediction Successful?}
+    PREDICTION_ERROR[❌ Prediction Failed]
+    LOG_PREDICTION_ERROR[📝 Log Prediction Error Event]
+    
+    %% Result Processing
+    CALCULATE_CONFIDENCE[📊 Calculate Confidence Score]
+    GENERATE_EXPLANATION[📄 Generate Explanation]
+    SAVE_RESULT[💾 Save Prediction Result]
+    LOG_PREDICTION_SUCCESS[📝 Log Successful Prediction]
+    
+    %% Performance Monitoring
+    MEASURE_PERFORMANCE[⏱️ Measure Response Time]
+    UPDATE_METRICS[📈 Update Performance Metrics]
+    
+    %% Security Monitoring
+    CHECK_ANOMALY{🛡️ Anomaly Detected?}
+    LOG_SECURITY_EVENT[🚨 Log Security Event]
+    SECURITY_ALERT[🚨 Send Security Alert]
+    
+    %% Result Display
+    FORMAT_RESULT[🎨 Format Result for Display]
+    DISPLAY_RESULT[📱 Display Prediction Result]
+    LOG_DISPLAY[📝 Log Result Display Event]
+    
+    %% Error Handling
+    HANDLE_ERROR[⚠️ Handle Error]
+    LOG_ERROR[📝 Log Error Event]
+    SHOW_ERROR[❌ Show Error Message]
+    
+    %% End
+    END([🏁 End Process])
+    
+    %% Flow Connections
+    START --> AUTH
+    AUTH -->|No| LOGIN
+    AUTH -->|Yes| VALIDATE_SESSION
+    LOGIN --> LOG_AUTH
+    LOG_AUTH --> END
+    
+    VALIDATE_SESSION --> AUTHORIZE
+    AUTHORIZE -->|No| ACCESS_DENIED
+    AUTHORIZE -->|Yes| GET_INPUT
+    ACCESS_DENIED --> LOG_ACCESS_DENIED
+    LOG_ACCESS_DENIED --> END
+    
+    GET_INPUT --> VALIDATE_INPUT
+    VALIDATE_INPUT -->|No| INPUT_ERROR
+    VALIDATE_INPUT -->|Yes| FETCH_STUDENT
+    INPUT_ERROR --> LOG_INPUT_ERROR
+    LOG_INPUT_ERROR --> SHOW_ERROR
+    
+    FETCH_STUDENT --> STUDENT_EXISTS
+    STUDENT_EXISTS -->|No| STUDENT_NOT_FOUND
+    STUDENT_EXISTS -->|Yes| CHECK_COMPLETENESS
+    STUDENT_NOT_FOUND --> LOG_STUDENT_NOT_FOUND
+    LOG_STUDENT_NOT_FOUND --> SHOW_ERROR
+    
+    CHECK_COMPLETENESS -->|No| INCOMPLETE_DATA
+    CHECK_COMPLETENESS -->|Yes| LOAD_MODEL
+    INCOMPLETE_DATA --> LOG_INCOMPLETE_DATA
+    LOG_INCOMPLETE_DATA --> LOAD_MODEL
+    
+    LOAD_MODEL --> MODEL_AVAILABLE
+    MODEL_AVAILABLE -->|No| MODEL_NOT_FOUND
+    MODEL_AVAILABLE -->|Yes| PREPARE_FEATURES
+    MODEL_NOT_FOUND --> LOG_MODEL_ERROR
+    LOG_MODEL_ERROR --> TRAIN_MODEL
+    
+    TRAIN_MODEL --> COLLECT_TRAINING_DATA
+    COLLECT_TRAINING_DATA --> SUFFICIENT_DATA
+    SUFFICIENT_DATA -->|No| INSUFFICIENT_DATA
+    SUFFICIENT_DATA -->|Yes| PREPROCESS_DATA
+    INSUFFICIENT_DATA --> LOG_INSUFFICIENT_DATA
+    LOG_INSUFFICIENT_DATA --> SHOW_ERROR
+    
+    PREPROCESS_DATA --> TRAIN_C45
+    TRAIN_C45 --> EVALUATE_MODEL
+    EVALUATE_MODEL --> SAVE_MODEL
+    SAVE_MODEL --> LOG_TRAINING
+    LOG_TRAINING --> PREPARE_FEATURES
+    
+    PREPARE_FEATURES --> VALIDATE_FEATURES
+    VALIDATE_FEATURES -->|No| FEATURE_ERROR
+    VALIDATE_FEATURES -->|Yes| MAKE_PREDICTION
+    FEATURE_ERROR --> LOG_FEATURE_ERROR
+    LOG_FEATURE_ERROR --> HANDLE_ERROR
+    
+    MAKE_PREDICTION --> PREDICTION_SUCCESS
+    PREDICTION_SUCCESS -->|No| PREDICTION_ERROR
+    PREDICTION_SUCCESS -->|Yes| CALCULATE_CONFIDENCE
+    PREDICTION_ERROR --> LOG_PREDICTION_ERROR
+    LOG_PREDICTION_ERROR --> HANDLE_ERROR
+    
+    CALCULATE_CONFIDENCE --> GENERATE_EXPLANATION
+    GENERATE_EXPLANATION --> SAVE_RESULT
+    SAVE_RESULT --> LOG_PREDICTION_SUCCESS
+    LOG_PREDICTION_SUCCESS --> MEASURE_PERFORMANCE
+    
+    MEASURE_PERFORMANCE --> UPDATE_METRICS
+    UPDATE_METRICS --> CHECK_ANOMALY
+    CHECK_ANOMALY -->|Yes| LOG_SECURITY_EVENT
+    CHECK_ANOMALY -->|No| FORMAT_RESULT
+    LOG_SECURITY_EVENT --> SECURITY_ALERT
+    SECURITY_ALERT --> FORMAT_RESULT
+    
+    FORMAT_RESULT --> DISPLAY_RESULT
+    DISPLAY_RESULT --> LOG_DISPLAY
+    LOG_DISPLAY --> END
+    
+    HANDLE_ERROR --> LOG_ERROR
+    LOG_ERROR --> SHOW_ERROR
+    SHOW_ERROR --> END
+    
+    %% Styling
+    classDef startEnd fill:#e8f5e8,stroke:#4caf50,stroke-width:3px,color:#000
+    classDef process fill:#e3f2fd,stroke:#2196f3,stroke-width:2px,color:#000
+    classDef decision fill:#fff3e0,stroke:#ff9800,stroke-width:2px,color:#000
+    classDef error fill:#ffebee,stroke:#f44336,stroke-width:2px,color:#000
+    classDef log fill:#f3e5f5,stroke:#9c27b0,stroke-width:2px,color:#000
+    classDef security fill:#fce4ec,stroke:#e91e63,stroke-width:2px,color:#000
+    classDef ml fill:#e0f2f1,stroke:#009688,stroke-width:2px,color:#000
+    
+    class START,END startEnd
+    class VALIDATE_SESSION,GET_INPUT,FETCH_STUDENT,LOAD_MODEL,PREPARE_FEATURES,MAKE_PREDICTION,CALCULATE_CONFIDENCE,GENERATE_EXPLANATION,SAVE_RESULT,FORMAT_RESULT,DISPLAY_RESULT,MEASURE_PERFORMANCE,UPDATE_METRICS process
+    class AUTH,AUTHORIZE,VALIDATE_INPUT,STUDENT_EXISTS,CHECK_COMPLETENESS,MODEL_AVAILABLE,SUFFICIENT_DATA,VALIDATE_FEATURES,PREDICTION_SUCCESS,CHECK_ANOMALY decision
+    class LOGIN,ACCESS_DENIED,INPUT_ERROR,STUDENT_NOT_FOUND,INCOMPLETE_DATA,MODEL_NOT_FOUND,INSUFFICIENT_DATA,FEATURE_ERROR,PREDICTION_ERROR,HANDLE_ERROR,SHOW_ERROR error
+    class LOG_AUTH,LOG_ACCESS_DENIED,LOG_INPUT_ERROR,LOG_STUDENT_NOT_FOUND,LOG_INCOMPLETE_DATA,LOG_MODEL_ERROR,LOG_INSUFFICIENT_DATA,LOG_FEATURE_ERROR,LOG_PREDICTION_ERROR,LOG_PREDICTION_SUCCESS,LOG_DISPLAY,LOG_ERROR log
+    class LOG_SECURITY_EVENT,SECURITY_ALERT security
+    class TRAIN_MODEL,COLLECT_TRAINING_DATA,PREPROCESS_DATA,TRAIN_C45,EVALUATE_MODEL,SAVE_MODEL,LOG_TRAINING ml 

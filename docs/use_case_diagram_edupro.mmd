@@ -1,0 +1,189 @@
+graph TB
+    %% Actors
+    Admin[("👤 Admin")]
+    Teacher[("👨‍🏫 Teacher")]
+    Student[("👨‍🎓 Student")]
+    System[("🤖 System")]
+    Database[("💾 Database")]
+
+    %% Authentication Use Cases
+    subgraph AUTH ["🔐 Authentication System"]
+        UC_AUTH_001["UC-AUTH-001<br/>User Login"]
+        UC_AUTH_002["UC-AUTH-002<br/>User Logout"]
+        UC_AUTH_003["UC-AUTH-003<br/>Session Management"]
+        UC_AUTH_004["UC-AUTH-004<br/>Password Reset"]
+        UC_AUTH_005["UC-AUTH-005<br/>Role Verification"]
+    end
+
+    %% CRUD Use Cases
+    subgraph CRUD ["📝 CRUD Operations"]
+        UC_CRUD_001["UC-CRUD-001<br/>Create Student Data"]
+        UC_CRUD_002["UC-CRUD-002<br/>Read Student Data"]
+        UC_CRUD_003["UC-CRUD-003<br/>Update Student Data"]
+        UC_CRUD_004["UC-CRUD-004<br/>Delete Student Data"]
+        UC_CRUD_005["UC-CRUD-005<br/>Manage Nilai Raport"]
+        UC_CRUD_006["UC-CRUD-006<br/>Manage Presensi"]
+        UC_CRUD_007["UC-CRUD-007<br/>Manage Penghasilan Ortu"]
+    end
+
+    %% Machine Learning Use Cases
+    subgraph ML ["🧠 Machine Learning"]
+        UC_ML_001["UC-ML-001<br/>Train ML Model"]
+        UC_ML_002["UC-ML-002<br/>Generate Prediction"]
+        UC_ML_003["UC-ML-003<br/>Evaluate Model"]
+        UC_ML_004["UC-ML-004<br/>Feature Analysis"]
+        UC_ML_005["UC-ML-005<br/>Model Versioning"]
+    end
+
+    %% System Operations Use Cases
+    subgraph SYSTEM ["⚙️ System Operations"]
+        UC_SYS_001["UC-SYS-001<br/>System Startup"]
+        UC_SYS_002["UC-SYS-002<br/>Configuration Update"]
+        UC_SYS_003["UC-SYS-003<br/>Database Backup"]
+        UC_SYS_004["UC-SYS-004<br/>System Maintenance"]
+        UC_SYS_005["UC-SYS-005<br/>Health Check"]
+    end
+
+    %% File Operations Use Cases
+    subgraph FILE ["📄 File Operations"]
+        UC_FILE_001["UC-FILE-001<br/>Upload File"]
+        UC_FILE_002["UC-FILE-002<br/>Download File"]
+        UC_FILE_003["UC-FILE-003<br/>Export Data"]
+        UC_FILE_004["UC-FILE-004<br/>Import Data"]
+        UC_FILE_005["UC-FILE-005<br/>Generate Report"]
+    end
+
+    %% Security Use Cases
+    subgraph SECURITY ["🛡️ Security"]
+        UC_SEC_001["UC-SEC-001<br/>Detect Brute Force"]
+        UC_SEC_002["UC-SEC-002<br/>Monitor Suspicious Activity"]
+        UC_SEC_003["UC-SEC-003<br/>IP Blocking"]
+        UC_SEC_004["UC-SEC-004<br/>Security Audit"]
+        UC_SEC_005["UC-SEC-005<br/>Threat Alert"]
+    end
+
+    %% Analytics Use Cases
+    subgraph ANALYTICS ["📊 Analytics & Monitoring"]
+        UC_ANALYTICS_001["UC-ANALYTICS-001<br/>Generate Usage Report"]
+        UC_ANALYTICS_002["UC-ANALYTICS-002<br/>Performance Monitoring"]
+        UC_ANALYTICS_003["UC-ANALYTICS-003<br/>Real-time Dashboard"]
+        UC_ANALYTICS_004["UC-ANALYTICS-004<br/>Event Analysis"]
+        UC_ANALYTICS_005["UC-ANALYTICS-005<br/>Trend Analysis"]
+    end
+
+    %% Event Logging (Central)
+    EVENT_LOG["🔍 Event Logging<br/>(Includes all activities)"]
+
+    %% Actor Relationships
+    Admin --> UC_AUTH_001
+    Admin --> UC_AUTH_002
+    Admin --> UC_AUTH_003
+    Admin --> UC_AUTH_004
+    
+    Admin --> UC_CRUD_001
+    Admin --> UC_CRUD_002
+    Admin --> UC_CRUD_003
+    Admin --> UC_CRUD_004
+    Admin --> UC_CRUD_005
+    Admin --> UC_CRUD_006
+    Admin --> UC_CRUD_007
+    
+    Admin --> UC_ML_001
+    Admin --> UC_ML_002
+    Admin --> UC_ML_003
+    Admin --> UC_ML_004
+    Admin --> UC_ML_005
+    
+    Admin --> UC_SYS_001
+    Admin --> UC_SYS_002
+    Admin --> UC_SYS_003
+    Admin --> UC_SYS_004
+    Admin --> UC_SYS_005
+    
+    Admin --> UC_FILE_001
+    Admin --> UC_FILE_002
+    Admin --> UC_FILE_003
+    Admin --> UC_FILE_004
+    Admin --> UC_FILE_005
+    
+    Admin --> UC_SEC_004
+    Admin --> UC_SEC_005
+    
+    Admin --> UC_ANALYTICS_001
+    Admin --> UC_ANALYTICS_002
+    Admin --> UC_ANALYTICS_003
+    Admin --> UC_ANALYTICS_004
+    Admin --> UC_ANALYTICS_005
+
+    %% Teacher Relationships
+    Teacher --> UC_AUTH_001
+    Teacher --> UC_AUTH_002
+    Teacher --> UC_CRUD_002
+    Teacher --> UC_CRUD_005
+    Teacher --> UC_CRUD_006
+    Teacher --> UC_ML_002
+    Teacher --> UC_FILE_002
+    Teacher --> UC_FILE_005
+
+    %% Student Relationships
+    Student --> UC_AUTH_001
+    Student --> UC_AUTH_002
+    Student --> UC_CRUD_002
+    Student --> UC_ML_002
+
+    %% System Relationships
+    System --> UC_SYS_001
+    System --> UC_SYS_002
+    System --> UC_SYS_003
+    System --> UC_SYS_004
+    System --> UC_SYS_005
+    System --> UC_SEC_001
+    System --> UC_SEC_002
+    System --> UC_SEC_003
+    System --> UC_ANALYTICS_002
+
+    %% Include Relationships (Event Logging)
+    UC_AUTH_001 -.->|includes| EVENT_LOG
+    UC_AUTH_002 -.->|includes| EVENT_LOG
+    UC_CRUD_001 -.->|includes| EVENT_LOG
+    UC_CRUD_002 -.->|includes| EVENT_LOG
+    UC_CRUD_003 -.->|includes| EVENT_LOG
+    UC_CRUD_004 -.->|includes| EVENT_LOG
+    UC_ML_001 -.->|includes| EVENT_LOG
+    UC_ML_002 -.->|includes| EVENT_LOG
+    UC_SEC_001 -.->|includes| EVENT_LOG
+    UC_SEC_002 -.->|includes| EVENT_LOG
+    UC_ANALYTICS_001 -.->|includes| EVENT_LOG
+
+    %% Extend Relationships
+    UC_AUTH_005 -.->|extends| UC_AUTH_001
+    UC_SEC_003 -.->|extends| UC_SEC_001
+    UC_SEC_005 -.->|extends| UC_SEC_002
+
+    %% Database Relationships
+    EVENT_LOG --> Database
+    UC_CRUD_001 --> Database
+    UC_CRUD_002 --> Database
+    UC_CRUD_003 --> Database
+    UC_CRUD_004 --> Database
+
+    %% Styling
+    classDef actorStyle fill:#e1f5fe,stroke:#0277bd,stroke-width:2px,color:#000
+    classDef authStyle fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,color:#000
+    classDef crudStyle fill:#e8f5e8,stroke:#388e3c,stroke-width:2px,color:#000
+    classDef mlStyle fill:#fff3e0,stroke:#f57800,stroke-width:2px,color:#000
+    classDef systemStyle fill:#fce4ec,stroke:#c2185b,stroke-width:2px,color:#000
+    classDef fileStyle fill:#e0f2f1,stroke:#00695c,stroke-width:2px,color:#000
+    classDef securityStyle fill:#ffebee,stroke:#d32f2f,stroke-width:2px,color:#000
+    classDef analyticsStyle fill:#e8eaf6,stroke:#3f51b5,stroke-width:2px,color:#000
+    classDef eventStyle fill:#fff8e1,stroke:#ff8f00,stroke-width:3px,color:#000
+
+    class Admin,Teacher,Student,System,Database actorStyle
+    class UC_AUTH_001,UC_AUTH_002,UC_AUTH_003,UC_AUTH_004,UC_AUTH_005 authStyle
+    class UC_CRUD_001,UC_CRUD_002,UC_CRUD_003,UC_CRUD_004,UC_CRUD_005,UC_CRUD_006,UC_CRUD_007 crudStyle
+    class UC_ML_001,UC_ML_002,UC_ML_003,UC_ML_004,UC_ML_005 mlStyle
+    class UC_SYS_001,UC_SYS_002,UC_SYS_003,UC_SYS_004,UC_SYS_005 systemStyle
+    class UC_FILE_001,UC_FILE_002,UC_FILE_003,UC_FILE_004,UC_FILE_005 fileStyle
+    class UC_SEC_001,UC_SEC_002,UC_SEC_003,UC_SEC_004,UC_SEC_005 securityStyle
+    class UC_ANALYTICS_001,UC_ANALYTICS_002,UC_ANALYTICS_003,UC_ANALYTICS_004,UC_ANALYTICS_005 analyticsStyle
+    class EVENT_LOG eventStyle 

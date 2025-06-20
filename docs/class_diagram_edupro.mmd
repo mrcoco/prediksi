@@ -1,0 +1,246 @@
+classDiagram
+    class Siswa {
+        +int id
+        +string nama
+        +string nis
+        +string jenis_kelamin
+        +string kelas
+        +datetime tanggal_lahir
+        +text alamat
+        +datetime created_at
+        +datetime updated_at
+    }
+
+    class NilaiRaport {
+        +int id
+        +int siswa_id
+        +string semester
+        +string tahun_ajaran
+        +float matematika
+        +float bahasa_indonesia
+        +float bahasa_inggris
+        +float rata_rata
+        +datetime created_at
+        +datetime updated_at
+    }
+
+    class PenghasilanOrtu {
+        +int id
+        +int siswa_id
+        +float penghasilan_ayah
+        +float penghasilan_ibu
+        +string pekerjaan_ayah
+        +string pekerjaan_ibu
+        +float total_penghasilan
+        +string kategori_penghasilan
+        +datetime created_at
+        +datetime updated_at
+    }
+
+    class Presensi {
+        +int id
+        +int siswa_id
+        +string semester
+        +string tahun_ajaran
+        +int jumlah_hadir
+        +int jumlah_sakit
+        +int jumlah_izin
+        +int jumlah_alpa
+        +float persentase_kehadiran
+        +string kategori_kehadiran
+        +datetime created_at
+        +datetime updated_at
+    }
+
+    class Prestasi {
+        +int id
+        +int siswa_id
+        +string semester
+        +string tahun_ajaran
+        +string prediksi_prestasi
+        +float confidence
+        +datetime created_at
+        +datetime updated_at
+    }
+
+    class User {
+        +int id
+        +string username
+        +string email
+        +string role
+        +json profile
+        +bool is_active
+        +string hashed_password
+    }
+
+    class C45Model {
+        -DecisionTreeClassifier model
+        -List features
+        -string target
+        -bool trained
+        +prepare_data()
+        +train_model()
+        +predict_single()
+        +predict_batch()
+        +get_model_metrics()
+        +visualize_tree()
+    }
+
+    class SiswaRouter {
+        +APIRouter router
+        +upload_siswa_excel()
+        +export_siswa_excel()
+        +create_siswa()
+        +get_siswa()
+        +get_all_siswa()
+        +update_siswa()
+        +delete_siswa()
+    }
+
+    class NilaiRouter {
+        +APIRouter router
+        +create_nilai()
+        +get_nilai_by_siswa()
+        +update_nilai()
+        +delete_nilai()
+        +export_nilai_excel()
+    }
+
+    class PresensiRouter {
+        +APIRouter router
+        +create_presensi()
+        +get_presensi_by_siswa()
+        +update_presensi()
+        +delete_presensi()
+        +export_presensi_excel()
+    }
+
+    class PenghasilanRouter {
+        +APIRouter router
+        +create_penghasilan()
+        +get_penghasilan_by_siswa()
+        +update_penghasilan()
+        +delete_penghasilan()
+        +export_penghasilan_excel()
+    }
+
+    class PrediksiRouter {
+        +APIRouter router
+        +train_model()
+        +predict_single()
+        +predict_batch()
+        +get_model_evaluation()
+        +get_feature_statistics()
+        +get_decision_tree_visualization()
+    }
+
+    class AuthRouter {
+        +APIRouter router
+        +login()
+        +refresh_token()
+        +register()
+        +get_current_user_profile()
+        +get_all_users()
+        +update_user()
+        +delete_user()
+    }
+
+    class FastAPIApp {
+        +FastAPI app
+        +CORSMiddleware cors
+        +include_router()
+        +root()
+        +health_check()
+    }
+
+    class FrontendApp {
+        +string API_URL
+        +string TOKEN_KEY
+        +initializeApp()
+        +loadDashboardData()
+        +setupMenuVisibility()
+        +startTokenCountdown()
+    }
+
+    class UIComponents {
+        +SiswaGrid kendoGrid
+        +NilaiGrid kendoGrid
+        +PresensiGrid kendoGrid
+        +PenghasilanGrid kendoGrid
+        +Dashboard charts
+        +UserGuide navigation
+    }
+
+    class AuthenticationService {
+        +getToken()
+        +login()
+        +logout()
+        +refreshToken()
+        +checkTokenExpiry()
+    }
+
+    class DataServices {
+        +loadSiswaData()
+        +loadNilaiData()
+        +loadPresensiData()
+        +loadPenghasilanData()
+        +exportToExcel()
+        +uploadExcel()
+    }
+
+    class VisualizationServices {
+        +loadTreeVisualization()
+        +loadModelEvaluation()
+        +loadFeatureStatistics()
+        +generateBarChart()
+        +displayConfusionMatrix()
+    }
+
+    class DatabaseSession {
+        +Engine engine
+        +SessionLocal sessionmaker
+        +get_db()
+        +init_db()
+    }
+
+    Siswa "1" --> "0..*" NilaiRaport
+    Siswa "1" --> "0..*" PenghasilanOrtu
+    Siswa "1" --> "0..*" Presensi
+    Siswa "1" --> "0..*" Prestasi
+
+    SiswaRouter --> Siswa
+    NilaiRouter --> NilaiRaport
+    PresensiRouter --> Presensi
+    PenghasilanRouter --> PenghasilanOrtu
+    PrediksiRouter --> C45Model
+    PrediksiRouter --> Prestasi
+    AuthRouter --> User
+
+    C45Model --> Siswa
+    C45Model --> NilaiRaport
+    C45Model --> PenghasilanOrtu
+    C45Model --> Presensi
+
+    FastAPIApp --> SiswaRouter
+    FastAPIApp --> NilaiRouter
+    FastAPIApp --> PresensiRouter
+    FastAPIApp --> PenghasilanRouter
+    FastAPIApp --> PrediksiRouter
+    FastAPIApp --> AuthRouter
+
+    FrontendApp --> UIComponents
+    FrontendApp --> AuthenticationService
+    FrontendApp --> DataServices
+    FrontendApp --> VisualizationServices
+
+    UIComponents --> DataServices
+    DataServices --> FastAPIApp
+    AuthenticationService --> FastAPIApp
+    VisualizationServices --> FastAPIApp
+
+    DatabaseSession --> Siswa
+    DatabaseSession --> NilaiRaport
+    DatabaseSession --> PenghasilanOrtu
+    DatabaseSession --> Presensi
+    DatabaseSession --> Prestasi
+    DatabaseSession --> User

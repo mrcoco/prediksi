@@ -1,0 +1,319 @@
+@startuml EduPro_Class_Diagram
+
+!theme plain
+skinparam classAttributeIconSize 0
+skinparam backgroundColor white
+skinparam class {
+    BackgroundColor lightblue
+    BorderColor black
+    ArrowColor black
+}
+
+package "Entity Layer" {
+    class Siswa {
+        +int id
+        +string nama
+        +string nis
+        +string jenis_kelamin
+        +string kelas
+        +datetime tanggal_lahir
+        +text alamat
+        +datetime created_at
+        +datetime updated_at
+    }
+
+    class NilaiRaport {
+        +int id
+        +int siswa_id
+        +string semester
+        +string tahun_ajaran
+        +float matematika
+        +float bahasa_indonesia
+        +float bahasa_inggris
+        +float bahasa_jawa
+        +float ipa
+        +float agama
+        +float pjok
+        +float pkn
+        +float sejarah
+        +float seni
+        +float dasar_kejuruan
+        +float rata_rata
+        +datetime created_at
+        +datetime updated_at
+    }
+
+    class PenghasilanOrtu {
+        +int id
+        +int siswa_id
+        +float penghasilan_ayah
+        +float penghasilan_ibu
+        +string pekerjaan_ayah
+        +string pekerjaan_ibu
+        +string pendidikan_ayah
+        +string pendidikan_ibu
+        +float total_penghasilan
+        +string kategori_penghasilan
+        +datetime created_at
+        +datetime updated_at
+    }
+
+    class Presensi {
+        +int id
+        +int siswa_id
+        +string semester
+        +string tahun_ajaran
+        +int jumlah_hadir
+        +int jumlah_sakit
+        +int jumlah_izin
+        +int jumlah_alpa
+        +float persentase_kehadiran
+        +string kategori_kehadiran
+        +datetime created_at
+        +datetime updated_at
+    }
+
+    class Prestasi {
+        +int id
+        +int siswa_id
+        +string semester
+        +string tahun_ajaran
+        +string prediksi_prestasi
+        +float confidence
+        +datetime created_at
+        +datetime updated_at
+    }
+
+    class User {
+        +int id
+        +string username
+        +string email
+        +string role
+        +json profile
+        +bool is_active
+        +string hashed_password
+    }
+}
+
+package "Machine Learning Layer" {
+    class C45Model {
+        -DecisionTreeClassifier model
+        -List features
+        -string target
+        -bool trained
+        -string tree_visualization
+        -dict confusion_matrix
+        -dict model_metrics
+        -List class_labels
+        -datetime last_trained
+        +prepare_data()
+        +train_model()
+        +predict_single()
+        +predict_batch()
+        +get_model_metrics()
+        +visualize_tree()
+        +export_model()
+        +load_model()
+        +get_feature_importance()
+        +evaluate_model()
+    }
+}
+
+package "Service Layer" {
+    class SiswaRouter {
+        +APIRouter router
+        +upload_siswa_excel()
+        +export_siswa_excel()
+        +create_siswa()
+        +get_siswa()
+        +get_all_siswa()
+        +update_siswa()
+        +delete_siswa()
+    }
+
+    class NilaiRouter {
+        +APIRouter router
+        +create_nilai()
+        +get_nilai_by_siswa()
+        +update_nilai()
+        +delete_nilai()
+        +export_nilai_excel()
+    }
+
+    class PresensiRouter {
+        +APIRouter router
+        +create_presensi()
+        +get_presensi_by_siswa()
+        +update_presensi()
+        +delete_presensi()
+        +export_presensi_excel()
+    }
+
+    class PenghasilanRouter {
+        +APIRouter router
+        +create_penghasilan()
+        +get_penghasilan_by_siswa()
+        +update_penghasilan()
+        +delete_penghasilan()
+        +export_penghasilan_excel()
+    }
+
+    class PrediksiRouter {
+        +APIRouter router
+        +train_model()
+        +predict_single()
+        +predict_batch()
+        +get_model_evaluation()
+        +get_feature_statistics()
+        +get_decision_tree_visualization()
+        +export_batch_results_excel()
+    }
+
+    class AuthRouter {
+        +APIRouter router
+        +OAuth2PasswordBearer oauth2_scheme
+        +CryptContext pwd_context
+        +login()
+        +refresh_token()
+        +register()
+        +get_current_user_profile()
+        +update_profile()
+        +get_all_users()
+        +update_user()
+        +delete_user()
+        +verify_password()
+        +get_password_hash()
+        +create_access_token()
+        +get_current_user()
+    }
+}
+
+package "Application Layer" {
+    class FastAPIApp {
+        +FastAPI app
+        +CORSMiddleware cors
+        +include_router()
+        +root()
+        +health_check()
+        +get_decision_tree_image()
+        +custom_openapi()
+    }
+}
+
+package "Frontend Layer" {
+    class FrontendApp {
+        +string API_URL
+        +string TOKEN_KEY
+        +initializeApp()
+        +loadDashboardData()
+        +setupMenuVisibility()
+        +updateHeaderUserInfo()
+        +startTokenCountdown()
+        +startTokenExpiryChecker()
+    }
+
+    class UIComponents {
+        +SiswaGrid kendoGrid
+        +NilaiGrid kendoGrid
+        +PresensiGrid kendoGrid
+        +PenghasilanGrid kendoGrid
+        +PrediksiForm kendoForm
+        +UserGuide navigation
+        +Dashboard charts
+        +DecisionTree visualization
+        +ConfusionMatrix display
+        +FeatureStatistics charts
+        +TokenExpiryChecker timer
+        +NotificationSystem kendoNotification
+    }
+
+    class AuthenticationService {
+        +getToken()
+        +addAuthHeader()
+        +login()
+        +logout()
+        +refreshToken()
+        +checkTokenExpiry()
+        +updateTokenStatusIndicator()
+    }
+
+    class DataServices {
+        +loadSiswaData()
+        +loadNilaiData()
+        +loadPresensiData()
+        +loadPenghasilanData()
+        +loadPrediksiData()
+        +exportToExcel()
+        +uploadExcel()
+    }
+
+    class VisualizationServices {
+        +loadTreeVisualization()
+        +loadModelEvaluation()
+        +loadFeatureStatistics()
+        +generateBarChart()
+        +generateDashboardBarChart()
+        +displayConfusionMatrix()
+        +displayModelMetrics()
+    }
+}
+
+package "Database Layer" {
+    class DatabaseSession {
+        +Engine engine
+        +SessionLocal sessionmaker
+        +Base declarative_base
+        +get_db()
+        +init_db()
+    }
+}
+
+' Entity Relationships
+Siswa ||--o{ NilaiRaport : "has many"
+Siswa ||--o{ PenghasilanOrtu : "has many"
+Siswa ||--o{ Presensi : "has many"
+Siswa ||--o{ Prestasi : "has many"
+
+' Service Dependencies
+SiswaRouter --> Siswa : "manages"
+NilaiRouter --> NilaiRaport : "manages"
+PresensiRouter --> Presensi : "manages"
+PenghasilanRouter --> PenghasilanOrtu : "manages"
+PrediksiRouter --> C45Model : "uses"
+PrediksiRouter --> Prestasi : "manages"
+AuthRouter --> User : "manages"
+
+' ML Model Dependencies
+C45Model --> Siswa : "trains from"
+C45Model --> NilaiRaport : "trains from"
+C45Model --> PenghasilanOrtu : "trains from"
+C45Model --> Presensi : "trains from"
+
+' Application Layer
+FastAPIApp --> SiswaRouter : "includes"
+FastAPIApp --> NilaiRouter : "includes"
+FastAPIApp --> PresensiRouter : "includes"
+FastAPIApp --> PenghasilanRouter : "includes"
+FastAPIApp --> PrediksiRouter : "includes"
+FastAPIApp --> AuthRouter : "includes"
+
+' Frontend Dependencies
+FrontendApp --> UIComponents : "manages"
+FrontendApp --> AuthenticationService : "uses"
+FrontendApp --> DataServices : "uses"
+FrontendApp --> VisualizationServices : "uses"
+
+UIComponents --> DataServices : "requests data"
+DataServices --> FastAPIApp : "calls API"
+AuthenticationService --> FastAPIApp : "authenticates"
+VisualizationServices --> FastAPIApp : "fetches data"
+
+' Database Layer
+DatabaseSession --> Siswa : "persists"
+DatabaseSession --> NilaiRaport : "persists"
+DatabaseSession --> PenghasilanOrtu : "persists"
+DatabaseSession --> Presensi : "persists"
+DatabaseSession --> Prestasi : "persists"
+DatabaseSession --> User : "persists"
+
+@enduml

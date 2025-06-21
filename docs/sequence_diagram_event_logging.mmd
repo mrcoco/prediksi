@@ -1,130 +1,161 @@
 sequenceDiagram
     participant User as 👤 User
     participant Frontend as 🖥️ Frontend
-    participant EventMiddleware as 🔄 Event Middleware
-    participant AuthController as 🔐 Auth Controller
+    participant AuthMiddleware as 🔐 Auth Middleware
+    participant AuthController as 🔑 Auth Controller
     participant SiswaController as 👨‍🎓 Siswa Controller
-    participant MLController as 🧠 ML Controller
-    participant EventService as 📝 Event Service
+    participant PrediksiController as 🎯 Prediksi Controller
     participant Database as 💾 Database
-    participant EventSystem as 🔍 Event System
 
-    %% User Login Scenario
-    Note over User, EventSystem: 🔐 User Login with Event Logging
+    %% Authentication Flow
+    Note over User, Database: 🔐 Authentication Process
     User->>Frontend: 1. Login Request
-    Frontend->>EventMiddleware: 2. POST /auth/login
-    EventMiddleware->>EventService: 3. Log Request Event
-    EventService->>Database: 4. Store Request Event
-    EventMiddleware->>AuthController: 5. Forward Request
-    AuthController->>Database: 6. Validate Credentials
-    Database-->>AuthController: 7. User Data
-    AuthController->>EventService: 8. Log Auth Success
-    EventService->>Database: 9. Store Auth Event
-    AuthController-->>EventMiddleware: 10. Auth Response
-    EventMiddleware->>EventService: 11. Log Response Event
-    EventService->>Database: 12. Store Response Event
-    EventMiddleware-->>Frontend: 13. Return Response
-    Frontend-->>User: 14. Login Success
-
-    %% CRUD Operations with Event Tracking
-    Note over User, EventSystem: 📝 CRUD Operations with Event Tracking
-    User->>Frontend: 15. Create Student Request
-    Frontend->>EventMiddleware: 16. POST /siswa
-    EventMiddleware->>EventService: 17. Log CRUD Request
-    EventService->>Database: 18. Store CRUD Event
-    EventMiddleware->>SiswaController: 19. Forward Request
-    SiswaController->>Database: 20. Create Student Record
-    Database-->>SiswaController: 21. Student Created
-    SiswaController->>EventService: 22. Log CRUD Success
-    EventService->>Database: 23. Store Success Event
-    SiswaController-->>EventMiddleware: 24. Success Response
-    EventMiddleware->>EventService: 25. Log Response
-    EventService->>Database: 26. Store Response Event
-    EventMiddleware-->>Frontend: 27. Return Response
-    Frontend-->>User: 28. Show Success Message
-
-    %% ML Prediction Process
-    Note over User, EventSystem: 🧠 ML Prediction Process
-    User->>Frontend: 29. Request Prediction
-    Frontend->>EventMiddleware: 30. POST /predict
-    EventMiddleware->>EventService: 31. Log ML Request
-    EventService->>Database: 32. Store ML Event
-    EventMiddleware->>MLController: 33. Forward Request
-    MLController->>Database: 34. Fetch Student Data
-    Database-->>MLController: 35. Student Data
-    MLController->>MLController: 36. Load ML Model
-    MLController->>MLController: 37. Generate Prediction
-    MLController->>Database: 38. Save Prediction Result
-    MLController->>EventService: 39. Log ML Success
-    EventService->>Database: 40. Store ML Event
-    MLController-->>EventMiddleware: 41. Prediction Response
-    EventMiddleware->>EventService: 42. Log Response
-    EventService->>Database: 43. Store Response Event
-    EventMiddleware-->>Frontend: 44. Return Prediction
-    Frontend-->>User: 45. Show Prediction Result
-
-    %% Security Event Detection
-    Note over User, EventSystem: 🛡️ Security Event Detection
-    User->>Frontend: 46. Multiple Failed Logins
-    Frontend->>EventMiddleware: 47. POST /auth/login (Failed)
-    EventMiddleware->>EventService: 48. Log Failed Auth
-    EventService->>Database: 49. Store Failed Auth Event
-    EventService->>EventService: 50. Detect Brute Force Pattern
-    EventService->>EventSystem: 51. Trigger Security Alert
-    EventSystem->>Database: 52. Store Security Event
-    EventSystem->>EventSystem: 53. Block IP Address
-    EventSystem-->>EventMiddleware: 54. Security Response
-    EventMiddleware-->>Frontend: 55. Access Blocked
-    Frontend-->>User: 56. Show Security Message
-
-    %% Event Analytics Query
-    Note over User, EventSystem: 📊 Event Analytics Query
-    User->>Frontend: 57. Request Analytics Dashboard
-    Frontend->>EventMiddleware: 58. GET /events/analytics
-    EventMiddleware->>EventService: 59. Log Analytics Request
-    EventService->>Database: 60. Store Analytics Event
-    EventMiddleware->>EventSystem: 61. Forward Analytics Request
-    EventSystem->>Database: 62. Query Event Data
-    Database-->>EventSystem: 63. Aggregated Data
-    EventSystem->>EventSystem: 64. Process Analytics
-    EventSystem-->>EventMiddleware: 65. Analytics Response
-    EventMiddleware->>EventService: 66. Log Analytics Response
-    EventService->>Database: 67. Store Response Event
-    EventMiddleware-->>Frontend: 68. Return Analytics Data
-    Frontend-->>User: 69. Display Dashboard
-
-    %% Background Event Processing
-    Note over EventSystem, Database: ⚙️ Background Event Processing
-    EventSystem->>Database: 70. Query Recent Events
-    Database-->>EventSystem: 71. Event Data
-    EventSystem->>EventSystem: 72. Generate Daily Summary
-    EventSystem->>Database: 73. Store Summary Data
-    EventSystem->>EventSystem: 74. Clean Old Events
-    EventSystem->>Database: 75. Archive Events
-    EventSystem->>EventSystem: 76. Update Metrics
-    EventSystem->>Database: 77. Store Metrics
-
-    %% Error Handling with Event Logging
-    Note over User, EventSystem: ❌ Error Handling with Event Logging
-    User->>Frontend: 78. Invalid Request
-    Frontend->>EventMiddleware: 79. POST /invalid-endpoint
-    EventMiddleware->>EventService: 80. Log Error Request
-    EventService->>Database: 81. Store Error Event
-    EventMiddleware->>EventMiddleware: 82. Handle 404 Error
-    EventMiddleware->>EventService: 83. Log Error Response
-    EventService->>Database: 84. Store Error Event
-    EventMiddleware-->>Frontend: 85. Error Response
-    Frontend-->>User: 86. Show Error Message
-
-    %% Real-time Event Streaming
-    Note over EventSystem, Frontend: 🔄 Real-time Event Streaming
-    EventSystem->>EventSystem: 87. Process Real-time Events
-    EventSystem->>Frontend: 88. WebSocket Event Stream
-    Frontend->>Frontend: 89. Update Live Dashboard
-    EventSystem->>Database: 90. Store Stream Metrics
+    Frontend->>AuthMiddleware: 2. POST /api/auth/token
+    AuthMiddleware->>AuthController: 3. Forward Request
     
-    %% Styling and Notes
-    Note over User, EventSystem: 📈 System Performance Metrics
-    Note right of EventService: • Event capture rate: 99.9%<br/>• Average response time: <100ms<br/>• Storage efficiency: <1MB/1000 events
-    Note right of EventSystem: • Real-time processing: <5 seconds<br/>• Analytics queries: <30 seconds<br/>• Security detection: 95% accuracy
-    Note right of Database: • Event retention: 1-5 years<br/>• Daily events: 10,000+<br/>• Storage optimization: Partitioned by date 
+    AuthController->>Database: 4. Validate Credentials
+    Database-->>AuthController: 5. User Verified
+    AuthController->>AuthController: 6. Generate JWT Token
+    AuthController->>Database: 7. Store Session Info
+    Database-->>AuthController: 8. Session Stored
+    
+    AuthController-->>Frontend: 9. JWT Token Response
+    Frontend->>Frontend: 10. Store Token
+    Frontend-->>User: 11. Login Success
+
+    %% Data Management Operations
+    Note over User, Database: 📊 CRUD Operations
+    User->>Frontend: 12. Data Management Request
+    Frontend->>AuthMiddleware: 13. POST /api/siswa
+    AuthMiddleware->>AuthController: 14. Validate Token
+    AuthController-->>AuthMiddleware: 15. Token Valid
+    AuthMiddleware->>SiswaController: 16. Forward Request
+    
+    SiswaController->>Database: 17. Execute CRUD Operation
+    Database-->>SiswaController: 18. Operation Result
+    SiswaController-->>Frontend: 19. Success Response
+    Frontend-->>User: 20. Data Updated
+
+    %% Prediction Operations
+    Note over User, Database: 🔮 Prediction Process
+    User->>Frontend: 21. Prediction Request
+    Frontend->>AuthMiddleware: 22. POST /api/prediksi/
+    AuthMiddleware->>AuthController: 23. Validate Token
+    AuthController-->>AuthMiddleware: 24. Token Valid
+    AuthMiddleware->>PrediksiController: 25. Forward Request
+    
+    PrediksiController->>Database: 26. Load Student Data
+    Database-->>PrediksiController: 27. Student Data
+    PrediksiController->>PrediksiController: 28. Execute C4.5 Prediction
+    PrediksiController->>Database: 29. Store Prediction Result
+    Database-->>PrediksiController: 30. Result Stored
+    
+    PrediksiController-->>Frontend: 31. Prediction Response
+    Frontend-->>User: 32. Display Prediction
+
+    %% Batch Prediction Operations
+    Note over User, Database: 📈 Batch Prediction Process
+    User->>Frontend: 33. Batch Prediction Request
+    Frontend->>AuthMiddleware: 34. POST /api/prediksi/batch
+    AuthMiddleware->>AuthController: 35. Validate Token
+    AuthController-->>AuthMiddleware: 36. Token Valid
+    AuthMiddleware->>PrediksiController: 37. Forward Batch Request
+    
+    PrediksiController->>Database: 38. Load All Student Data
+    Database-->>PrediksiController: 39. Batch Data
+    
+    loop For Each Student
+        PrediksiController->>PrediksiController: 40. Execute Prediction
+        PrediksiController->>Database: 41. Store Result
+    end
+    
+    PrediksiController-->>Frontend: 42. Batch Results Response
+    Frontend-->>User: 43. Display Batch Results
+
+    %% Security Monitoring
+    Note over User, Database: 🛡️ Security Events
+    User->>Frontend: 44. Failed Login Attempt
+    Frontend->>AuthMiddleware: 45. POST /api/auth/token (Failed)
+    AuthMiddleware->>AuthController: 46. Validate Credentials
+    AuthController->>Database: 47. Check User Credentials
+    Database-->>AuthController: 48. Invalid Credentials
+    
+    alt Multiple Failed Attempts
+        AuthController->>Database: 49. Log Security Event
+        Database-->>AuthController: 50. Brute Force Detected
+        AuthController-->>Frontend: 51. Access Blocked (429)
+    else Single Failed Attempt
+        AuthController-->>Frontend: 52. Authentication Failed (401)
+    end
+    
+    Frontend-->>User: 53. Login Failed
+
+    %% Model Training Operations
+    Note over User, Database: 🧠 ML Training Process
+    User->>Frontend: 54. Training Request
+    Frontend->>AuthMiddleware: 55. POST /api/prediksi/train
+    AuthMiddleware->>AuthController: 56. Validate Token
+    AuthController-->>AuthMiddleware: 57. Token Valid
+    AuthMiddleware->>PrediksiController: 58. Forward Training Request
+    
+    PrediksiController->>Database: 59. Load Training Data
+    Database-->>PrediksiController: 60. Training Dataset
+    PrediksiController->>PrediksiController: 61. Train C4.5 Model
+    PrediksiController->>Database: 62. Store Model
+    Database-->>PrediksiController: 63. Model Stored
+    
+    PrediksiController-->>Frontend: 64. Training Complete Response
+    Frontend-->>User: 65. Training Success
+
+    %% Export Operations
+    Note over User, Database: 📤 Data Export Process
+    User->>Frontend: 66. Export Request
+    Frontend->>AuthMiddleware: 67. GET /api/siswa/export/excel
+    AuthMiddleware->>AuthController: 68. Validate Token
+    AuthController-->>AuthMiddleware: 69. Token Valid
+    AuthMiddleware->>SiswaController: 70. Forward Export Request
+    
+    SiswaController->>Database: 71. Query Export Data
+    Database-->>SiswaController: 72. Export Dataset
+    SiswaController->>SiswaController: 73. Generate Excel File
+    SiswaController-->>Frontend: 74. Excel File Response
+    Frontend-->>User: 75. Download Excel
+
+    %% Error Handling
+    Note over User, Database: ❌ Error Scenarios
+    rect rgb(255, 248, 248)
+        Note over AuthController: Error Scenarios
+        alt Invalid Endpoint
+            Frontend->>AuthMiddleware: 76. POST /api/invalid-endpoint
+            AuthMiddleware->>AuthMiddleware: 77. Route Not Found
+            AuthMiddleware-->>Frontend: 78. Error Response (404)
+            Frontend-->>User: 79. Page Not Found
+        end
+        
+        alt Database Error
+            SiswaController->>Database: 80. Query Data
+            Database-->>SiswaController: 81. Connection Error
+            SiswaController-->>Frontend: 82. Internal Server Error (500)
+            Frontend-->>User: 83. System Error
+        end
+    end
+
+    %% Statistics and Analytics
+    Note over User, Database: 📊 Feature Statistics
+    User->>Frontend: 84. Statistics Request
+    Frontend->>AuthMiddleware: 85. GET /api/prediksi/feature-statistics
+    AuthMiddleware->>AuthController: 86. Validate Token
+    AuthController-->>AuthMiddleware: 87. Token Valid
+    AuthMiddleware->>PrediksiController: 88. Forward Statistics Request
+    
+    PrediksiController->>Database: 89. Query Statistics Data
+    Database-->>PrediksiController: 90. Statistics Dataset
+    PrediksiController->>PrediksiController: 91. Calculate Statistics
+    PrediksiController-->>Frontend: 92. Statistics Response
+    Frontend-->>User: 93. Display Charts & Analytics
+
+    %% Performance Metrics Summary
+    Note over User, Database: 📊 System Performance & Architecture
+    Note right of AuthController: • Authentication: Bearer token validation<br/>• Session management: JWT based<br/>• Security: Brute force detection<br/>• Response time: <1 second<br/>• Token expiry: Configurable
+    Note right of PrediksiController: • C4.5 prediction: <200ms<br/>• Batch processing: <10 seconds<br/>• Model training: <30 seconds<br/>• Feature statistics: <2 seconds<br/>• Export operations: <5 seconds
+    Note right of Database: • FastAPI routing: Direct controller access<br/>• CORS middleware: Enabled<br/>• Authentication middleware: Built-in<br/>• Database: PostgreSQL with SQLAlchemy<br/>• API documentation: Swagger UI available 

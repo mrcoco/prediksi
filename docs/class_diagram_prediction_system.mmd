@@ -1,0 +1,599 @@
+classDiagram
+    %% Core Domain Classes
+    class Student {
+        +String id
+        +String nama
+        +String nis
+        +String jenis_kelamin
+        +String agama
+        +String status_keluarga
+        +Integer jumlah_saudara
+        +Integer anak_ke
+        +String alamat_siswa
+        +String no_telp
+        +String sekolah_asal
+        +Boolean diterima_beasiswa
+        +String tahun_masuk
+        +Date tanggal_lahir
+        +DateTime created_at
+        +DateTime updated_at
+        
+        +calculateAge() Integer
+        +getFullProfile() StudentProfile
+        +isEligibleForPrediction() Boolean
+        +getDataCompleteness() Float
+        +validateData() ValidationResult
+        +toFeatureVector() FeatureVector
+    }
+
+    class AcademicScore {
+        +String id
+        +String student_id
+        +Float matematika
+        +Float bahasa_indonesia
+        +Float bahasa_inggris
+        +Float ipa
+        +Float ips
+        +Float bahasa_jawa
+        +Float agama
+        +Float pjok
+        +Float pkn
+        +Float sejarah
+        +Float seni_budaya
+        +Float prakarya
+        +String semester
+        +String tahun_ajaran
+        +DateTime created_at
+        +DateTime updated_at
+        
+        +calculateAverage() Float
+        +getGradeLevel() String
+        +validateScores() Boolean
+        +getSubjectPerformance() Map~String, Float~
+        +getTrendAnalysis() TrendAnalysis
+        +getPerformanceCategory() String
+    }
+
+    class AttendanceRecord {
+        +String id
+        +String student_id
+        +Integer hadir
+        +Integer sakit
+        +Integer izin
+        +Integer alpha
+        +Integer total_hari
+        +String semester
+        +String tahun_ajaran
+        +DateTime created_at
+        +DateTime updated_at
+        
+        +calculateAttendanceRate() Float
+        +getTotalDays() Integer
+        +getAttendanceStatus() String
+        +getAttendancePattern() AttendancePattern
+        +isAttendanceGood() Boolean
+        +getAttendanceCategory() String
+    }
+
+    class ParentIncome {
+        +String id
+        +String student_id
+        +Float penghasilan_ayah
+        +Float penghasilan_ibu
+        +String pekerjaan_ayah
+        +String pekerjaan_ibu
+        +String pendidikan_ayah
+        +String pendidikan_ibu
+        +DateTime created_at
+        +DateTime updated_at
+        
+        +getTotalIncome() Float
+        +getIncomeCategory() String
+        +validateIncome() Boolean
+        +getEconomicStatus() String
+        +getParentEducationLevel() String
+        +getSocioeconomicScore() Float
+    }
+
+    class Achievement {
+        +String id
+        +String student_id
+        +String jenis_prestasi
+        +String tingkat_prestasi
+        +String nama_prestasi
+        +String penyelenggara
+        +Date tanggal_prestasi
+        +String bukti_prestasi
+        +Integer poin_prestasi
+        +DateTime created_at
+        +DateTime updated_at
+        
+        +getAchievementLevel() String
+        +calculateScore() Integer
+        +getAchievementCategory() String
+        +getTotalAchievementScore() Integer
+    }
+
+    %% Prediction System Classes
+    class PredictionRequest {
+        +String id
+        +String student_id
+        +String user_id
+        +String request_type
+        +JSONB request_parameters
+        +String status
+        +DateTime requested_at
+        +DateTime processed_at
+        +String priority
+        +JSONB metadata
+        
+        +validate() Boolean
+        +process() PredictionResult
+        +updateStatus(status) void
+        +calculatePriority() String
+        +getProcessingTime() Integer
+    }
+
+    class FeatureVector {
+        +String id
+        +String student_id
+        +Float academic_average
+        +Float attendance_rate
+        +Float income_score
+        +Float socioeconomic_score
+        +Integer achievement_score
+        +Float age_normalized
+        +String gender_encoded
+        +String religion_encoded
+        +String family_status_encoded
+        +Integer sibling_count
+        +Integer birth_order
+        +String school_origin_encoded
+        +Boolean scholarship_status
+        +JSONB additional_features
+        +DateTime created_at
+        +String version
+        
+        +validate() Boolean
+        +normalize() FeatureVector
+        +toArray() Float[]
+        +getFeatureNames() String[]
+        +getFeatureImportance() Map~String, Float~
+        +scale(scaler) FeatureVector
+    }
+
+    class MLModel {
+        +String id
+        +String name
+        +String version
+        +String algorithm
+        +String status
+        +JSONB parameters
+        +JSONB hyperparameters
+        +JSONB metrics
+        +Float accuracy
+        +Float precision
+        +Float recall
+        +Float f1_score
+        +Float auc_score
+        +JSONB confusion_matrix
+        +JSONB feature_importance
+        +String model_path
+        +DateTime trained_at
+        +DateTime created_at
+        +DateTime updated_at
+        +Integer training_samples
+        +String training_data_hash
+        
+        +train(data) ModelTrainingResult
+        +predict(features) PredictionResult
+        +evaluate(testData) ModelEvaluation
+        +save() Boolean
+        +load() Boolean
+        +getFeatureImportance() Map~String, Float~
+        +crossValidate(data, folds) CrossValidationResult
+        +updateMetrics(metrics) void
+        +isActive() Boolean
+        +getModelInfo() ModelInfo
+    }
+
+    class DecisionTree {
+        +String id
+        +TreeNode root
+        +Map~String, Object~ parameters
+        +String[] feature_names
+        +String[] class_labels
+        +Integer max_depth
+        +Integer min_samples_split
+        +Integer min_samples_leaf
+        +Float min_impurity_decrease
+        +String criterion
+        
+        +buildTree(data, features, labels) TreeNode
+        +predict(features) String
+        +getDecisionPath(features) List~TreeNode~
+        +calculateInformationGain(feature, data) Float
+        +findBestSplit(data, features) SplitResult
+        +pruneTree() void
+        +getTreeDepth() Integer
+        +getLeafCount() Integer
+        +visualizeTree() String
+    }
+
+    class TreeNode {
+        +String id
+        +String feature_name
+        +Object split_value
+        +String split_operator
+        +TreeNode left_child
+        +TreeNode right_child
+        +String prediction
+        +Float confidence
+        +Integer sample_count
+        +Map~String, Integer~ class_distribution
+        +Float impurity
+        +Boolean is_leaf
+        
+        +isLeaf() Boolean
+        +addChild(child, direction) void
+        +getDecision(features) String
+        +calculateImpurity() Float
+        +getMajorityClass() String
+        +getConfidence() Float
+        +split(feature, value, operator) void
+    }
+
+    class PredictionResult {
+        +String id
+        +String student_id
+        +String model_id
+        +String request_id
+        +String prediction
+        +Float confidence
+        +JSONB feature_values
+        +JSONB feature_importance
+        +JSONB decision_path
+        +String explanation
+        +JSONB recommendations
+        +DateTime predicted_at
+        +String status
+        +JSONB metadata
+        +String version
+        
+        +getConfidenceLevel() String
+        +explainPrediction() String
+        +getTopFeatures(count) Map~String, Float~
+        +generateRecommendations() List~String~
+        +validate() Boolean
+        +save() Boolean
+        +getDecisionPath() List~String~
+        +formatForDisplay() DisplayResult
+    }
+
+    class ModelTraining {
+        +String id
+        +String model_id
+        +String training_status
+        +JSONB training_config
+        +Integer dataset_size
+        +Float train_test_split
+        +DateTime training_started
+        +DateTime training_completed
+        +Integer training_duration
+        +JSONB training_logs
+        +String error_message
+        +JSONB validation_results
+        
+        +startTraining() void
+        +updateProgress(progress) void
+        +completeTraining(result) void
+        +handleError(error) void
+        +getTrainingProgress() Float
+        +getTrainingLogs() List~String~
+        +validateTrainingData() Boolean
+    }
+
+    class DataPreprocessor {
+        +String id
+        +String version
+        +JSONB preprocessing_config
+        +Map~String, Object~ scalers
+        +Map~String, Object~ encoders
+        +List~String~ feature_names
+        +JSONB statistics
+        
+        +preprocessData(rawData) ProcessedData
+        +handleMissingValues(data, strategy) ProcessedData
+        +encodeCategories(data, columns) ProcessedData
+        +scaleFeatures(data, method) ProcessedData
+        +selectFeatures(data, method) ProcessedData
+        +splitData(data, ratio) DataSplit
+        +validateData(data) ValidationResult
+        +getDataStatistics(data) DataStatistics
+    }
+
+    class ModelEvaluator {
+        +String id
+        +String model_id
+        +JSONB evaluation_config
+        +JSONB evaluation_results
+        +DateTime evaluated_at
+        
+        +evaluateModel(model, testData) EvaluationResult
+        +calculateAccuracy(predictions, actual) Float
+        +calculatePrecision(predictions, actual) Float
+        +calculateRecall(predictions, actual) Float
+        +calculateF1Score(predictions, actual) Float
+        +generateConfusionMatrix(predictions, actual) ConfusionMatrix
+        +calculateROCAUC(predictions, actual) Float
+        +crossValidate(model, data, folds) CrossValidationResult
+        +compareModels(models, testData) ModelComparison
+    }
+
+    %% Service Classes
+    class PredictionService {
+        +MLModelRepository modelRepository
+        +FeatureEngineeringService featureService
+        +DataValidationService validationService
+        +ModelEvaluator evaluator
+        
+        +predictSingle(studentId) PredictionResult
+        +predictBatch(studentIds) List~PredictionResult~
+        +validatePredictionRequest(request) ValidationResult
+        +loadActiveModel() MLModel
+        +processFeatures(student) FeatureVector
+        +generateExplanation(result) String
+        +saveResult(result) Boolean
+        +getModelInfo() ModelInfo
+    }
+
+    class FeatureEngineeringService {
+        +DataPreprocessor preprocessor
+        +FeatureExtractor extractor
+        +FeatureValidator validator
+        
+        +extractFeatures(student) FeatureVector
+        +validateFeatures(features) ValidationResult
+        +normalizeFeatures(features) FeatureVector
+        +selectBestFeatures(features, target) FeatureVector
+        +handleMissingFeatures(features) FeatureVector
+        +calculateFeatureImportance(model, features) Map~String, Float~
+        +getFeatureStatistics(features) FeatureStatistics
+    }
+
+    class ModelTrainingService {
+        +DataCollectionService dataService
+        +DataPreprocessor preprocessor
+        +ModelEvaluator evaluator
+        +MLModelRepository modelRepository
+        
+        +trainNewModel(config) ModelTrainingResult
+        +collectTrainingData() TrainingDataset
+        +preprocessTrainingData(data) ProcessedData
+        +trainC45Model(data) MLModel
+        +evaluateModel(model, testData) EvaluationResult
+        +saveModel(model) Boolean
+        +compareWithPreviousModel(newModel, oldModel) ModelComparison
+        +scheduleRetraining() void
+    }
+
+    class DataValidationService {
+        +ValidationRules rules
+        +DataQualityChecker checker
+        
+        +validateStudentData(student) ValidationResult
+        +checkDataCompleteness(student) CompletenessResult
+        +validateFeatureVector(features) ValidationResult
+        +checkDataQuality(data) QualityResult
+        +identifyDataIssues(data) List~DataIssue~
+        +suggestDataImprovements(student) List~String~
+        +calculateDataScore(student) Float
+    }
+
+    class ExplanationService {
+        +ExplanationGenerator generator
+        +RecommendationEngine engine
+        
+        +generateExplanation(result) String
+        +createDecisionPath(result) List~String~
+        +generateRecommendations(result) List~String~
+        +formatExplanation(explanation, format) String
+        +getFeatureContributions(result) Map~String, Float~
+        +createVisualExplanation(result) VisualizationData
+    }
+
+    %% Repository Classes
+    class StudentRepository {
+        +Database database
+        
+        +findById(id) Student
+        +findAll(filters, pagination) List~Student~
+        +findEligibleForPrediction() List~Student~
+        +findWithCompleteData() List~Student~
+        +getStudentWithAllData(id) StudentCompleteData
+        +updateStudent(id, data) Boolean
+        +getDataCompleteness(id) Float
+        +searchStudents(query) List~Student~
+    }
+
+    class MLModelRepository {
+        +Database database
+        +FileStorage storage
+        
+        +save(model) Boolean
+        +findById(id) MLModel
+        +findActiveModel() MLModel
+        +findByVersion(version) MLModel
+        +findAllVersions() List~MLModel~
+        +updateModelStatus(id, status) Boolean
+        +archiveOldModels() void
+        +getModelHistory() List~MLModel~
+        +loadModelFile(path) Object
+        +saveModelFile(model, path) Boolean
+    }
+
+    class PredictionRepository {
+        +Database database
+        
+        +save(result) Boolean
+        +findById(id) PredictionResult
+        +findByStudentId(studentId) List~PredictionResult~
+        +findByModelId(modelId) List~PredictionResult~
+        +findRecent(limit) List~PredictionResult~
+        +getStatistics() PredictionStatistics
+        +findByDateRange(start, end) List~PredictionResult~
+        +updateResult(id, data) Boolean
+        +deleteOldResults(cutoffDate) Integer
+    }
+
+    class FeatureRepository {
+        +Database database
+        
+        +save(features) Boolean
+        +findByStudentId(studentId) FeatureVector
+        +findLatestFeatures(studentId) FeatureVector
+        +findByVersion(version) List~FeatureVector~
+        +updateFeatures(id, features) Boolean
+        +getFeatureStatistics() FeatureStatistics
+        +findOutliers() List~FeatureVector~
+    }
+
+    %% Controller Classes
+    class PredictionController {
+        +PredictionService predictionService
+        +DataValidationService validationService
+        +AuthenticationService authService
+        +EventLogger eventLogger
+        
+        +predict(request) ResponseEntity~PredictionResult~
+        +batchPredict(request) ResponseEntity~List~PredictionResult~~
+        +getResult(id) ResponseEntity~PredictionResult~
+        +getHistory(studentId) ResponseEntity~List~PredictionResult~~
+        +validateRequest(request) ValidationResult
+        +checkPermissions(user, studentId) Boolean
+        +logPredictionEvent(event) void
+    }
+
+    class ModelController {
+        +ModelTrainingService trainingService
+        +MLModelRepository modelRepository
+        +AuthenticationService authService
+        +EventLogger eventLogger
+        
+        +trainModel(request) ResponseEntity~ModelTrainingResult~
+        +getModelInfo(id) ResponseEntity~ModelInfo~
+        +getActiveModel() ResponseEntity~MLModel~
+        +getModelHistory() ResponseEntity~List~MLModel~~
+        +evaluateModel(id) ResponseEntity~EvaluationResult~
+        +compareModels(request) ResponseEntity~ModelComparison~
+        +updateModelStatus(id, status) ResponseEntity~Boolean~
+    }
+
+    %% Utility Classes
+    class ValidationResult {
+        +Boolean isValid
+        +List~String~ errors
+        +List~String~ warnings
+        +Map~String, Object~ details
+        
+        +addError(message) void
+        +addWarning(message) void
+        +hasErrors() Boolean
+        +hasWarnings() Boolean
+        +getErrorCount() Integer
+        +getWarningCount() Integer
+    }
+
+    class CompletenessResult {
+        +Float completenessScore
+        +Map~String, Boolean~ fieldStatus
+        +List~String~ missingFields
+        +List~String~ recommendations
+        
+        +isComplete() Boolean
+        +getCompletionPercentage() Float
+        +getMissingFieldCount() Integer
+        +getRecommendations() List~String~
+    }
+
+    class ModelInfo {
+        +String modelId
+        +String name
+        +String version
+        +String algorithm
+        +JSONB metrics
+        +DateTime trainedAt
+        +Integer trainingSize
+        +String status
+        
+        +getAccuracy() Float
+        +getTrainingDate() DateTime
+        +isActive() Boolean
+        +getMetricsSummary() String
+    }
+
+    %% Relationships
+    Student ||--o{ AcademicScore : "has"
+    Student ||--o{ AttendanceRecord : "has"
+    Student ||--o{ ParentIncome : "has"
+    Student ||--o{ Achievement : "has"
+    Student ||--o{ PredictionRequest : "requests"
+    Student ||--o{ PredictionResult : "has_predictions"
+    Student ||--|| FeatureVector : "generates"
+
+    PredictionRequest ||--|| PredictionResult : "produces"
+    FeatureVector ||--o{ PredictionResult : "used_in"
+    MLModel ||--o{ PredictionResult : "generates"
+    MLModel ||--|| DecisionTree : "implements"
+    DecisionTree ||--o{ TreeNode : "contains"
+    TreeNode ||--o{ TreeNode : "has_children"
+
+    MLModel ||--o{ ModelTraining : "has_training_history"
+    MLModel ||--o{ ModelEvaluator : "evaluated_by"
+
+    %% Service Dependencies
+    PredictionService ..> MLModelRepository : "uses"
+    PredictionService ..> FeatureEngineeringService : "uses"
+    PredictionService ..> DataValidationService : "uses"
+    PredictionService ..> ModelEvaluator : "uses"
+
+    FeatureEngineeringService ..> DataPreprocessor : "uses"
+    FeatureEngineeringService ..> FeatureRepository : "uses"
+
+    ModelTrainingService ..> DataPreprocessor : "uses"
+    ModelTrainingService ..> ModelEvaluator : "uses"
+    ModelTrainingService ..> MLModelRepository : "uses"
+
+    DataValidationService ..> ValidationResult : "produces"
+    DataValidationService ..> CompletenessResult : "produces"
+
+    ExplanationService ..> PredictionResult : "explains"
+
+    %% Controller Dependencies
+    PredictionController ..> PredictionService : "uses"
+    PredictionController ..> DataValidationService : "uses"
+    ModelController ..> ModelTrainingService : "uses"
+    ModelController ..> MLModelRepository : "uses"
+
+    %% Repository Dependencies
+    StudentRepository ..> Student : "manages"
+    MLModelRepository ..> MLModel : "manages"
+    PredictionRepository ..> PredictionResult : "manages"
+    FeatureRepository ..> FeatureVector : "manages"
+
+    %% Styling
+    classDef domainClass fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
+    classDef predictionClass fill:#fff3e0,stroke:#f57800,stroke-width:2px
+    classDef mlClass fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    classDef serviceClass fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
+    classDef controllerClass fill:#fce4ec,stroke:#c2185b,stroke-width:2px
+    classDef repositoryClass fill:#e0f2f1,stroke:#00695c,stroke-width:2px
+    classDef utilityClass fill:#ffebee,stroke:#d32f2f,stroke-width:2px
+
+    class Student,AcademicScore,AttendanceRecord,ParentIncome,Achievement domainClass
+    class PredictionRequest,FeatureVector,PredictionResult,ModelTraining,DataPreprocessor predictionClass
+    class MLModel,DecisionTree,TreeNode,ModelEvaluator mlClass
+    class PredictionService,FeatureEngineeringService,ModelTrainingService,DataValidationService,ExplanationService serviceClass
+    class PredictionController,ModelController controllerClass
+    class StudentRepository,MLModelRepository,PredictionRepository,FeatureRepository repositoryClass
+    class ValidationResult,CompletenessResult,ModelInfo utilityClass 

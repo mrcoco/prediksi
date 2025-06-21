@@ -1,0 +1,222 @@
+sequenceDiagram
+    participant User as 👤 User
+    participant Frontend as 🖥️ Frontend
+    participant AuthMiddleware as 🔐 Auth Middleware
+    participant EventMiddleware as 📝 Event Middleware
+    participant PredictionController as 🎯 Prediction Controller
+    participant AuthService as 🔑 Auth Service
+    participant SiswaRepository as 👨‍🎓 Siswa Repository
+    participant NilaiRepository as 📊 Nilai Repository
+    participant PresensiRepository as 📅 Presensi Repository
+    participant PenghasilanRepository as 💰 Penghasilan Repository
+    participant MLService as 🧠 ML Service
+    participant MLModel as 🤖 ML Model
+    participant PredictionRepository as 📋 Prediction Repository
+    participant EventLogger as 📝 Event Logger
+    participant Database as 💾 Database
+
+    %% Authentication & Request Initiation
+    Note over User, Database: 🔐 Authentication & Request Validation
+    User->>Frontend: 1. Request Prediction for Student
+    Frontend->>AuthMiddleware: 2. POST /api/predict/{siswa_id}
+    AuthMiddleware->>AuthService: 3. Validate JWT Token
+    AuthService->>Database: 4. Verify User Session
+    Database-->>AuthService: 5. Session Valid
+    AuthService-->>AuthMiddleware: 6. User Authenticated
+    AuthMiddleware->>EventMiddleware: 7. Forward Request
+
+    %% Event Logging Start
+    EventMiddleware->>EventLogger: 8. Log Prediction Request
+    EventLogger->>Database: 9. Store Event (ML/PREDICTION_REQUEST)
+    EventMiddleware->>PredictionController: 10. Route to Controller
+
+    %% Authorization Check
+    Note over PredictionController, Database: 👥 Authorization & Permission Check
+    PredictionController->>AuthService: 11. Check User Permissions
+    AuthService->>Database: 12. Verify User Role & Access
+    Database-->>AuthService: 13. Permission Granted
+    AuthService-->>PredictionController: 14. Authorization Success
+
+    %% Student Data Validation
+    Note over PredictionController, Database: 👨‍🎓 Student Data Validation
+    PredictionController->>SiswaRepository: 15. Find Student by ID
+    SiswaRepository->>Database: 16. SELECT * FROM siswa WHERE id = ?
+    Database-->>SiswaRepository: 17. Student Data
+    SiswaRepository-->>PredictionController: 18. Student Found
+
+    alt Student Not Found
+        SiswaRepository-->>PredictionController: Student Not Found
+        PredictionController->>EventLogger: Log Error Event
+        EventLogger->>Database: Store Error Event
+        PredictionController-->>EventMiddleware: 404 Not Found
+        EventMiddleware-->>Frontend: Error Response
+        Frontend-->>User: Student Not Found
+    end
+
+    %% Feature Data Collection
+    Note over PredictionController, Database: 📊 Feature Data Collection
+    
+    %% Academic Scores
+    PredictionController->>NilaiRepository: 19. Get Latest Nilai Raport
+    NilaiRepository->>Database: 20. SELECT * FROM nilai_raport WHERE siswa_id = ? ORDER BY created_at DESC LIMIT 1
+    Database-->>NilaiRepository: 21. Nilai Data
+    NilaiRepository-->>PredictionController: 22. Academic Scores
+
+    %% Attendance Data
+    PredictionController->>PresensiRepository: 23. Get Latest Presensi
+    PresensiRepository->>Database: 24. SELECT * FROM presensi WHERE siswa_id = ? ORDER BY created_at DESC LIMIT 1
+    Database-->>PresensiRepository: 25. Attendance Data
+    PresensiRepository-->>PredictionController: 26. Attendance Records
+
+    %% Parent Income Data
+    PredictionController->>PenghasilanRepository: 27. Get Penghasilan Ortu
+    PenghasilanRepository->>Database: 28. SELECT * FROM penghasilan_ortu WHERE siswa_id = ?
+    Database-->>PenghasilanRepository: 29. Income Data
+    PenghasilanRepository-->>PredictionController: 30. Parent Income Info
+
+    %% Data Completeness Check
+    Note over PredictionController, MLService: 🔍 Data Completeness Validation
+    PredictionController->>PredictionController: 31. Validate Data Completeness
+    
+    alt Incomplete Data
+        PredictionController->>EventLogger: 32. Log Incomplete Data Warning
+        EventLogger->>Database: 33. Store Warning Event
+        Note over PredictionController: Continue with available data
+    end
+
+    %% Feature Engineering
+    Note over PredictionController, MLService: 🔧 Feature Engineering & Preprocessing
+    PredictionController->>MLService: 34. Prepare Features for Prediction
+    MLService->>MLService: 35. Extract Features from Raw Data
+    MLService->>MLService: 36. Normalize & Scale Features
+    MLService->>MLService: 37. Validate Feature Vector
+
+    alt Feature Validation Failed
+        MLService-->>PredictionController: Feature Validation Error
+        PredictionController->>EventLogger: Log Feature Error
+        EventLogger->>Database: Store Error Event
+        PredictionController-->>EventMiddleware: 400 Bad Request
+        EventMiddleware-->>Frontend: Error Response
+        Frontend-->>User: Feature Processing Error
+    end
+
+    %% Model Loading & Prediction
+    Note over MLService, MLModel: 🤖 ML Model Loading & Prediction
+    MLService->>MLModel: 38. Load Trained Model
+    MLModel->>Database: 39. SELECT * FROM ml_models WHERE status = 'ACTIVE' ORDER BY created_at DESC LIMIT 1
+    Database-->>MLModel: 40. Model Data & Parameters
+    MLModel-->>MLService: 41. Model Loaded Successfully
+
+    alt Model Not Available
+        MLModel-->>MLService: Model Loading Failed
+        MLService-->>PredictionController: Model Error
+        PredictionController->>EventLogger: Log Model Error
+        EventLogger->>Database: Store Error Event
+        PredictionController-->>EventMiddleware: 503 Service Unavailable
+        EventMiddleware-->>Frontend: Error Response
+        Frontend-->>User: Prediction Service Unavailable
+    end
+
+    %% Execute Prediction
+    MLService->>MLModel: 42. Execute C4.5 Prediction
+    MLModel->>MLModel: 43. Apply Decision Tree Algorithm
+    MLModel->>MLModel: 44. Calculate Confidence Score
+    MLModel->>MLModel: 45. Generate Feature Importance
+    MLModel-->>MLService: 46. Prediction Result
+
+    %% Result Processing
+    Note over MLService, Database: 📋 Result Processing & Storage
+    MLService->>MLService: 47. Process Prediction Result
+    MLService->>MLService: 48. Generate Explanation Text
+    MLService->>MLService: 49. Calculate Confidence Level
+    MLService-->>PredictionController: 50. Formatted Prediction Result
+
+    %% Save Prediction Result
+    PredictionController->>PredictionRepository: 51. Save Prediction Result
+    PredictionRepository->>Database: 52. INSERT INTO prediction_results
+    Database-->>PredictionRepository: 53. Result Saved (ID: UUID)
+    PredictionRepository-->>PredictionController: 54. Save Confirmation
+
+    %% Event Logging Success
+    PredictionController->>EventLogger: 55. Log Successful Prediction
+    EventLogger->>EventLogger: 56. Create Success Event Data
+    EventLogger->>Database: 57. Store Event (ML/PREDICTION_SUCCESS)
+
+    %% Performance Monitoring
+    Note over EventLogger, Database: ⚡ Performance & Security Monitoring
+    EventLogger->>EventLogger: 58. Calculate Response Time
+    EventLogger->>EventLogger: 59. Check Performance Thresholds
+    EventLogger->>Database: 60. Store Performance Metrics
+
+    %% Security Check
+    EventLogger->>EventLogger: 61. Check for Anomalies
+    
+    alt Anomaly Detected
+        EventLogger->>Database: 62. Store Security Event
+        EventLogger->>EventLogger: 63. Trigger Security Alert
+    end
+
+    %% Response Preparation
+    Note over PredictionController, Frontend: 📤 Response Preparation & Delivery
+    PredictionController->>PredictionController: 64. Format Response Data
+    PredictionController-->>EventMiddleware: 65. Prediction Response (200 OK)
+    
+    EventMiddleware->>EventLogger: 66. Log Response Event
+    EventLogger->>Database: 67. Store Response Event
+    EventMiddleware-->>Frontend: 68. JSON Response
+
+    %% Frontend Processing
+    Frontend->>Frontend: 69. Process Prediction Data
+    Frontend->>Frontend: 70. Format for Display
+    Frontend-->>User: 71. Display Prediction Result
+
+    %% Background Analytics Update
+    Note over Database, MLService: 📊 Background Analytics Processing
+    rect rgb(240, 248, 255)
+        Note over Database: Background Process (Async)
+        Database->>Database: 72. Update Daily Statistics
+        Database->>Database: 73. Update Model Usage Metrics
+        MLService->>Database: 74. Update Feature Importance Stats
+        Database->>Database: 75. Generate Analytics Summary
+    end
+
+    %% Real-time Dashboard Update
+    Note over Frontend, User: 📈 Real-time Dashboard Updates
+    rect rgb(248, 255, 248)
+        Note over Frontend: Real-time Updates (WebSocket)
+        Frontend->>Frontend: 76. Update Live Dashboard
+        Frontend->>User: 77. Push Notification (if enabled)
+        Frontend->>Frontend: 78. Update Usage Statistics
+    end
+
+    %% Error Handling Flow (Alternative)
+    Note over User, Database: ❌ Error Handling Scenarios
+    rect rgb(255, 248, 248)
+        Note over PredictionController: Error Scenarios
+        alt Database Connection Error
+            Database-->>PredictionRepository: Connection Failed
+            PredictionRepository-->>PredictionController: Database Error
+            PredictionController->>EventLogger: Log Database Error
+            EventLogger->>Database: Store Error Event (if possible)
+            PredictionController-->>EventMiddleware: 500 Internal Server Error
+        end
+        
+        alt ML Service Timeout
+            MLService-->>PredictionController: Service Timeout
+            PredictionController->>EventLogger: Log Timeout Error
+            EventLogger->>Database: Store Timeout Event
+            PredictionController-->>EventMiddleware: 504 Gateway Timeout
+        end
+        
+        alt Rate Limit Exceeded
+            AuthMiddleware->>EventLogger: Log Rate Limit Event
+            EventLogger->>Database: Store Rate Limit Event
+            AuthMiddleware-->>Frontend: 429 Too Many Requests
+        end
+    end
+
+    %% Performance Metrics Summary
+    Note over User, Database: 📊 Performance Metrics
+    Note right of EventLogger: • Request processing: <2 seconds<br/>• Model loading: <500ms<br/>• Feature extraction: <300ms<br/>• Prediction execution: <200ms<br/>• Database operations: <100ms
+    Note right of MLService: • Prediction accuracy: >85%<br/>• Confidence threshold: >70%<br/>• Feature importance: Available<br/>• Model version tracking: Yes<br/>• A/B testing support: Ready
+    Note right of Database: • Event logging: 100% coverage<br/>• Performance monitoring: Real-time<br/>• Error tracking: Comprehensive<br/>• Analytics: Daily aggregation<br/>• Retention: 1-5 years 

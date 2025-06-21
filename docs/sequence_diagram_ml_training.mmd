@@ -1,0 +1,205 @@
+sequenceDiagram
+    participant Admin as 👤 Admin
+    participant Frontend as 🖥️ Frontend
+    participant AuthMiddleware as 🔐 Auth Middleware
+    participant MLController as 🧠 ML Controller
+    participant MLService as ⚙️ ML Service
+    participant DataCollector as 📊 Data Collector
+    participant SiswaRepository as 👨‍🎓 Siswa Repository
+    participant NilaiRepository as 📚 Nilai Repository
+    participant PresensiRepository as 📅 Presensi Repository
+    participant PenghasilanRepository as 💰 Penghasilan Repository
+    participant MLModel as 🤖 ML Model
+    participant ModelRepository as 💾 Model Repository
+    participant EventLogger as 📝 Event Logger
+    participant Database as 🗄️ Database
+
+    %% Training Initiation
+    Note over Admin, Database: 🚀 ML Model Training Initiation
+    Admin->>Frontend: 1. Request Model Training
+    Frontend->>AuthMiddleware: 2. POST /api/ml/train
+    AuthMiddleware->>AuthMiddleware: 3. Validate Admin Token
+    AuthMiddleware->>MLController: 4. Forward Training Request
+
+    %% Event Logging Start
+    MLController->>EventLogger: 5. Log Training Start Event
+    EventLogger->>Database: 6. Store Event (ML/TRAINING_START)
+
+    %% Data Collection Phase
+    Note over MLController, Database: 📊 Training Data Collection
+    MLController->>DataCollector: 7. Collect Training Data
+    
+    %% Student Data Collection
+    DataCollector->>SiswaRepository: 8. Get All Students
+    SiswaRepository->>Database: 9. SELECT * FROM siswa WHERE created_at >= ?
+    Database-->>SiswaRepository: 10. Student Records
+    SiswaRepository-->>DataCollector: 11. Student Data (N records)
+
+    %% Academic Scores Collection
+    DataCollector->>NilaiRepository: 12. Get All Nilai Raport
+    NilaiRepository->>Database: 13. SELECT * FROM nilai_raport
+    Database-->>NilaiRepository: 14. Academic Scores
+    NilaiRepository-->>DataCollector: 15. Scores Data
+
+    %% Attendance Collection
+    DataCollector->>PresensiRepository: 16. Get All Presensi
+    PresensiRepository->>Database: 17. SELECT * FROM presensi
+    Database-->>PresensiRepository: 18. Attendance Records
+    PresensiRepository-->>DataCollector: 19. Attendance Data
+
+    %% Parent Income Collection
+    DataCollector->>PenghasilanRepository: 20. Get All Penghasilan
+    PenghasilanRepository->>Database: 21. SELECT * FROM penghasilan_ortu
+    Database-->>PenghasilanRepository: 22. Income Data
+    PenghasilanRepository-->>DataCollector: 23. Income Records
+
+    %% Data Validation
+    DataCollector->>DataCollector: 24. Merge & Validate Data
+    DataCollector->>DataCollector: 25. Check Data Completeness
+    
+    alt Insufficient Data
+        DataCollector-->>MLController: Insufficient Training Data
+        MLController->>EventLogger: 26. Log Insufficient Data Error
+        EventLogger->>Database: 27. Store Error Event
+        MLController-->>Frontend: 28. Training Failed Response
+        Frontend-->>Admin: 29. Error: Need More Data
+    end
+
+    DataCollector-->>MLController: 30. Training Dataset Ready
+
+    %% Event Logging Data Collection
+    MLController->>EventLogger: 31. Log Data Collection Success
+    EventLogger->>Database: 32. Store Event (ML/DATA_COLLECTION_SUCCESS)
+
+    %% Feature Engineering
+    Note over MLController, MLService: 🔧 Feature Engineering & Preprocessing
+    MLController->>MLService: 33. Start Feature Engineering
+    MLService->>MLService: 34. Extract Features from Raw Data
+    MLService->>MLService: 35. Handle Missing Values
+    MLService->>MLService: 36. Normalize Numerical Features
+    MLService->>MLService: 37. Encode Categorical Features
+    MLService->>MLService: 38. Create Feature Matrix
+
+    %% Data Splitting
+    MLService->>MLService: 39. Split Data (80% Train, 20% Test)
+    MLService->>MLService: 40. Validate Feature Distribution
+    MLService-->>MLController: 41. Features Ready for Training
+
+    %% Model Training
+    Note over MLController, MLModel: 🤖 C4.5 Decision Tree Training
+    MLController->>MLModel: 42. Initialize C4.5 Algorithm
+    MLModel->>MLModel: 43. Calculate Information Gain
+    MLModel->>MLModel: 44. Build Decision Tree
+    
+    loop Tree Construction
+        MLModel->>MLModel: 45. Select Best Split Attribute
+        MLModel->>MLModel: 46. Create Tree Node
+        MLModel->>MLModel: 47. Recursive Tree Building
+    end
+
+    MLModel->>MLModel: 48. Prune Decision Tree
+    MLModel->>MLModel: 49. Finalize Model Structure
+
+    %% Model Evaluation
+    Note over MLModel, Database: 📈 Model Evaluation & Metrics
+    MLModel->>MLModel: 50. Test Model on Test Set
+    MLModel->>MLModel: 51. Calculate Accuracy
+    MLModel->>MLModel: 52. Calculate Precision & Recall
+    MLModel->>MLModel: 53. Calculate F1-Score
+    MLModel->>MLModel: 54. Generate Confusion Matrix
+    MLModel->>MLModel: 55. Calculate Feature Importance
+
+    alt Model Performance Poor
+        MLModel-->>MLController: Low Performance Model
+        MLController->>EventLogger: 56. Log Poor Performance Warning
+        EventLogger->>Database: 57. Store Warning Event
+        Note over MLController: Continue with model but flag for review
+    end
+
+    MLModel-->>MLController: 58. Training Complete with Metrics
+
+    %% Model Saving
+    Note over MLController, Database: 💾 Model Persistence & Versioning
+    MLController->>ModelRepository: 59. Save Trained Model
+    ModelRepository->>Database: 60. INSERT INTO ml_models (name, version, algorithm, metrics, ...)
+    Database-->>ModelRepository: 61. Model Saved (ID: UUID)
+    ModelRepository-->>MLController: 62. Model Persistence Confirmed
+
+    %% Model File Storage
+    MLController->>MLService: 63. Serialize Model to File
+    MLService->>MLService: 64. Save Model Binary to Storage
+    MLService-->>MLController: 65. Model File Saved
+
+    %% Update Model Status
+    MLController->>ModelRepository: 66. Update Previous Model Status
+    ModelRepository->>Database: 67. UPDATE ml_models SET status = 'ARCHIVED' WHERE status = 'ACTIVE'
+    ModelRepository->>Database: 68. UPDATE new model SET status = 'ACTIVE'
+    Database-->>ModelRepository: 69. Status Updated
+    ModelRepository-->>MLController: 70. Model Activation Complete
+
+    %% Event Logging Success
+    MLController->>EventLogger: 71. Log Training Success
+    EventLogger->>EventLogger: 72. Create Training Success Event
+    Note over EventLogger: Include: model_id, accuracy, precision, recall, f1_score, training_duration, dataset_size
+    EventLogger->>Database: 73. Store Event (ML/TRAINING_SUCCESS)
+
+    %% Response Preparation
+    Note over MLController, Frontend: 📤 Training Results Response
+    MLController->>MLController: 74. Prepare Training Summary
+    MLController-->>Frontend: 75. Training Success Response
+    Frontend->>Frontend: 76. Format Training Results
+    Frontend-->>Admin: 77. Display Training Results
+
+    %% Background Model Analysis
+    Note over Database, MLService: 📊 Background Model Analysis
+    rect rgb(240, 248, 255)
+        Note over Database: Background Process (Async)
+        Database->>Database: 78. Update Model Statistics
+        MLService->>Database: 79. Generate Model Comparison Report
+        Database->>Database: 80. Update Feature Importance Rankings
+        MLService->>Database: 81. Calculate Model Performance Trends
+    end
+
+    %% Model Validation Testing
+    Note over MLController, Database: ✅ Post-Training Validation
+    rect rgb(248, 255, 248)
+        Note over MLController: Validation Process
+        MLController->>MLService: 82. Run Validation Tests
+        MLService->>MLModel: 83. Test with Known Data
+        MLModel-->>MLService: 84. Validation Results
+        MLService->>EventLogger: 85. Log Validation Results
+        EventLogger->>Database: 86. Store Validation Event
+    end
+
+    %% Error Handling Scenarios
+    Note over Admin, Database: ❌ Error Handling Scenarios
+    rect rgb(255, 248, 248)
+        Note over MLController: Error Scenarios
+        alt Training Algorithm Failure
+            MLModel-->>MLController: Algorithm Error
+            MLController->>EventLogger: Log Algorithm Error
+            EventLogger->>Database: Store Error Event
+            MLController-->>Frontend: 500 Training Failed
+        end
+        
+        alt Database Connection Lost
+            Database-->>ModelRepository: Connection Lost
+            ModelRepository-->>MLController: Database Error
+            MLController->>EventLogger: Log Database Error
+            MLController-->>Frontend: 503 Service Unavailable
+        end
+        
+        alt Memory/Resource Exhaustion
+            MLModel-->>MLService: Out of Memory
+            MLService-->>MLController: Resource Error
+            MLController->>EventLogger: Log Resource Error
+            EventLogger->>Database: Store Resource Event
+            MLController-->>Frontend: 507 Insufficient Storage
+        end
+    end
+
+    %% Performance Metrics Summary
+    Note over Admin, Database: 📊 Training Performance Metrics
+    Note right of EventLogger: • Data collection: ~30 seconds<br/>• Feature engineering: ~45 seconds<br/>• Model training: 2-5 minutes<br/>• Model evaluation: ~15 seconds<br/>• Total training time: 3-6 minutes
+    Note right of MLModel: • Minimum accuracy: >80%<br/>• Target accuracy: >85%<br/>• Cross-validation: 5-fold<br/>• Feature importance: Top 10<br/>• Model versioning: Automatic
+    Note right of Database: • Training data: 100+ students minimum<br/>• Model storage: <50MB per model<br/>• Event logging: 100% coverage<br/>• Model history: All versions kept<br/>• Backup frequency: After each training 

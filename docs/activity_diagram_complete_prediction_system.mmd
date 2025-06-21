@@ -1,0 +1,383 @@
+flowchart TD
+    %% Start Points
+    START_ADMIN([🔧 Admin Start])
+    START_TEACHER([👨‍🏫 Teacher Start])
+    START_STUDENT([👨‍🎓 Student Start])
+    START_SYSTEM([🤖 System Start])
+
+    %% Authentication Flow
+    LOGIN{🔐 Login Required?}
+    ENTER_CREDENTIALS[📝 Enter Username & Password]
+    VALIDATE_AUTH{✅ Credentials Valid?}
+    AUTH_FAILED[❌ Authentication Failed]
+    AUTH_SUCCESS[✅ Authentication Success]
+    CHECK_ROLE{👤 Check User Role}
+
+    %% Admin Activities
+    ADMIN_DASHBOARD[📊 Admin Dashboard]
+    ADMIN_MENU{📋 Select Admin Activity}
+    MANAGE_USERS[👥 Manage Users]
+    MANAGE_STUDENTS[👨‍🎓 Manage Students]
+    VIEW_ANALYTICS[📈 View System Analytics]
+    TRAIN_MODEL[🧠 Train ML Model]
+    SYSTEM_CONFIG[⚙️ System Configuration]
+
+    %% Teacher Activities
+    TEACHER_DASHBOARD[📚 Teacher Dashboard]
+    TEACHER_MENU{📋 Select Teacher Activity}
+    VIEW_STUDENTS[👀 View Students]
+    INPUT_GRADES[📊 Input Grades]
+    INPUT_ATTENDANCE[📅 Input Attendance]
+    REQUEST_PREDICTION[🎯 Request Prediction]
+    VIEW_REPORTS[📄 View Reports]
+
+    %% Student Activities
+    STUDENT_DASHBOARD[📖 Student Dashboard]
+    STUDENT_MENU{📋 Select Student Activity}
+    VIEW_PROFILE[👤 View Profile]
+    VIEW_GRADES[📊 View Grades]
+    VIEW_ATTENDANCE[📅 View Attendance]
+    VIEW_PREDICTION[🔮 View Prediction]
+
+    %% System Activities
+    SYSTEM_MENU{⚙️ System Activity}
+    AUTO_BACKUP[💾 Automatic Backup]
+    HEALTH_CHECK[🏥 Health Check]
+    DATA_CLEANUP[🧹 Data Cleanup]
+    PERFORMANCE_MONITOR[📈 Performance Monitor]
+    SECURITY_SCAN[🛡️ Security Scan]
+
+    %% Student Management Flow
+    STUDENT_FORM[📝 Student Data Form]
+    VALIDATE_STUDENT_DATA{✅ Data Valid?}
+    STUDENT_DATA_ERROR[❌ Data Validation Error]
+    SAVE_STUDENT[💾 Save Student Data]
+    STUDENT_SAVED[✅ Student Saved Successfully]
+
+    %% Grade Input Flow
+    SELECT_STUDENT[👨‍🎓 Select Student]
+    GRADE_FORM[📊 Grade Input Form]
+    VALIDATE_GRADES{✅ Grades Valid?}
+    GRADE_ERROR[❌ Grade Validation Error]
+    SAVE_GRADES[💾 Save Grades]
+    GRADES_SAVED[✅ Grades Saved Successfully]
+
+    %% Attendance Input Flow
+    ATTENDANCE_FORM[📅 Attendance Form]
+    VALIDATE_ATTENDANCE{✅ Attendance Valid?}
+    ATTENDANCE_ERROR[❌ Attendance Error]
+    SAVE_ATTENDANCE[💾 Save Attendance]
+    ATTENDANCE_SAVED[✅ Attendance Saved]
+
+    %% Prediction Flow
+    SELECT_STUDENT_PREDICT[👨‍🎓 Select Student for Prediction]
+    CHECK_STUDENT_DATA{📊 Student Data Complete?}
+    INCOMPLETE_DATA_WARNING[⚠️ Incomplete Data Warning]
+    CONTINUE_PREDICTION{🤔 Continue with Prediction?}
+    COLLECT_FEATURES[🔧 Collect Feature Data]
+    
+    %% Feature Collection Subflow
+    GET_ACADEMIC_DATA[📚 Get Academic Scores]
+    GET_ATTENDANCE_DATA[📅 Get Attendance Records]
+    GET_INCOME_DATA[💰 Get Parent Income]
+    GET_PERSONAL_DATA[👤 Get Personal Info]
+    
+    %% Feature Processing
+    PROCESS_FEATURES[🔧 Process Features]
+    VALIDATE_FEATURES{✅ Features Valid?}
+    FEATURE_ERROR[❌ Feature Processing Error]
+    
+    %% Model Loading and Prediction
+    LOAD_ML_MODEL[🤖 Load ML Model]
+    MODEL_AVAILABLE{🧠 Model Available?}
+    MODEL_ERROR[❌ Model Not Available]
+    TRAIN_NEW_MODEL[🏋️ Train New Model]
+    
+    %% Training Subflow
+    COLLECT_TRAINING_DATA[📊 Collect Training Data]
+    SUFFICIENT_DATA{📈 Sufficient Data?}
+    INSUFFICIENT_DATA[⚠️ Insufficient Training Data]
+    PREPROCESS_DATA[🔧 Preprocess Data]
+    TRAIN_C45[🌳 Train C4.5 Algorithm]
+    EVALUATE_MODEL[📊 Evaluate Model]
+    MODEL_PERFORMANCE{📈 Performance Acceptable?}
+    POOR_PERFORMANCE[⚠️ Poor Model Performance]
+    SAVE_MODEL[💾 Save Trained Model]
+    MODEL_READY[✅ Model Ready]
+    
+    %% Prediction Execution
+    EXECUTE_PREDICTION[🎯 Execute Prediction]
+    PREDICTION_SUCCESS{✅ Prediction Successful?}
+    PREDICTION_ERROR[❌ Prediction Failed]
+    CALCULATE_CONFIDENCE[📊 Calculate Confidence]
+    CONFIDENCE_CHECK{🎯 Confidence > Threshold?}
+    LOW_CONFIDENCE_WARNING[⚠️ Low Confidence Warning]
+    GENERATE_EXPLANATION[📄 Generate Explanation]
+    SAVE_PREDICTION_RESULT[💾 Save Prediction Result]
+    
+    %% Result Display
+    FORMAT_RESULT[🎨 Format Result]
+    DISPLAY_PREDICTION[📱 Display Prediction]
+    PREDICTION_DETAILS[📋 Show Prediction Details]
+    FEATURE_IMPORTANCE[📊 Show Feature Importance]
+    CONFIDENCE_SCORE[🎯 Show Confidence Score]
+    
+    %% Analytics Flow
+    ANALYTICS_MENU{📊 Analytics Options}
+    STUDENT_ANALYTICS[👨‍🎓 Student Analytics]
+    PREDICTION_ANALYTICS[🎯 Prediction Analytics]
+    SYSTEM_ANALYTICS[⚙️ System Analytics]
+    PERFORMANCE_ANALYTICS[📈 Performance Analytics]
+    GENERATE_REPORT[📄 Generate Report]
+    EXPORT_DATA[📤 Export Data]
+    
+    %% System Monitoring
+    MONITOR_PERFORMANCE[📈 Monitor System Performance]
+    CHECK_RESOURCES{💻 Resources OK?}
+    RESOURCE_ALERT[🚨 Resource Alert]
+    OPTIMIZE_SYSTEM[⚡ Optimize System]
+    
+    %% Security Monitoring
+    SECURITY_CHECK[🛡️ Security Check]
+    THREAT_DETECTED{🚨 Threat Detected?}
+    SECURITY_ALERT[🚨 Security Alert]
+    BLOCK_THREAT[🚫 Block Threat]
+    LOG_SECURITY_EVENT[📝 Log Security Event]
+    
+    %% Error Handling
+    HANDLE_ERROR[⚠️ Handle Error]
+    LOG_ERROR[📝 Log Error]
+    NOTIFY_ADMIN[📧 Notify Admin]
+    RETRY_OPERATION{🔄 Retry Operation?}
+    
+    %% Logout and End
+    LOGOUT_MENU{🚪 Logout Options}
+    SAVE_SESSION[💾 Save Session Data]
+    CLEAR_SESSION[🧹 Clear Session]
+    LOGOUT_SUCCESS[✅ Logout Success]
+    END([🏁 End])
+
+    %% Flow Connections - Start Points
+    START_ADMIN --> LOGIN
+    START_TEACHER --> LOGIN
+    START_STUDENT --> LOGIN
+    START_SYSTEM --> SYSTEM_MENU
+
+    %% Authentication Flow
+    LOGIN -->|Yes| ENTER_CREDENTIALS
+    LOGIN -->|No| CHECK_ROLE
+    ENTER_CREDENTIALS --> VALIDATE_AUTH
+    VALIDATE_AUTH -->|No| AUTH_FAILED
+    VALIDATE_AUTH -->|Yes| AUTH_SUCCESS
+    AUTH_FAILED --> ENTER_CREDENTIALS
+    AUTH_SUCCESS --> CHECK_ROLE
+
+    %% Role-based Routing
+    CHECK_ROLE -->|Admin| ADMIN_DASHBOARD
+    CHECK_ROLE -->|Teacher| TEACHER_DASHBOARD
+    CHECK_ROLE -->|Student| STUDENT_DASHBOARD
+
+    %% Admin Flow
+    ADMIN_DASHBOARD --> ADMIN_MENU
+    ADMIN_MENU -->|Manage Users| MANAGE_USERS
+    ADMIN_MENU -->|Manage Students| MANAGE_STUDENTS
+    ADMIN_MENU -->|View Analytics| VIEW_ANALYTICS
+    ADMIN_MENU -->|Train Model| TRAIN_MODEL
+    ADMIN_MENU -->|System Config| SYSTEM_CONFIG
+    ADMIN_MENU -->|Logout| LOGOUT_MENU
+
+    %% Teacher Flow
+    TEACHER_DASHBOARD --> TEACHER_MENU
+    TEACHER_MENU -->|View Students| VIEW_STUDENTS
+    TEACHER_MENU -->|Input Grades| INPUT_GRADES
+    TEACHER_MENU -->|Input Attendance| INPUT_ATTENDANCE
+    TEACHER_MENU -->|Request Prediction| REQUEST_PREDICTION
+    TEACHER_MENU -->|View Reports| VIEW_REPORTS
+    TEACHER_MENU -->|Logout| LOGOUT_MENU
+
+    %% Student Flow
+    STUDENT_DASHBOARD --> STUDENT_MENU
+    STUDENT_MENU -->|View Profile| VIEW_PROFILE
+    STUDENT_MENU -->|View Grades| VIEW_GRADES
+    STUDENT_MENU -->|View Attendance| VIEW_ATTENDANCE
+    STUDENT_MENU -->|View Prediction| VIEW_PREDICTION
+    STUDENT_MENU -->|Logout| LOGOUT_MENU
+
+    %% System Flow
+    SYSTEM_MENU -->|Auto Backup| AUTO_BACKUP
+    SYSTEM_MENU -->|Health Check| HEALTH_CHECK
+    SYSTEM_MENU -->|Data Cleanup| DATA_CLEANUP
+    SYSTEM_MENU -->|Performance Monitor| PERFORMANCE_MONITOR
+    SYSTEM_MENU -->|Security Scan| SECURITY_SCAN
+
+    %% Student Management
+    MANAGE_STUDENTS --> STUDENT_FORM
+    STUDENT_FORM --> VALIDATE_STUDENT_DATA
+    VALIDATE_STUDENT_DATA -->|No| STUDENT_DATA_ERROR
+    VALIDATE_STUDENT_DATA -->|Yes| SAVE_STUDENT
+    STUDENT_DATA_ERROR --> STUDENT_FORM
+    SAVE_STUDENT --> STUDENT_SAVED
+    STUDENT_SAVED --> ADMIN_MENU
+
+    %% Grade Input
+    INPUT_GRADES --> SELECT_STUDENT
+    SELECT_STUDENT --> GRADE_FORM
+    GRADE_FORM --> VALIDATE_GRADES
+    VALIDATE_GRADES -->|No| GRADE_ERROR
+    VALIDATE_GRADES -->|Yes| SAVE_GRADES
+    GRADE_ERROR --> GRADE_FORM
+    SAVE_GRADES --> GRADES_SAVED
+    GRADES_SAVED --> TEACHER_MENU
+
+    %% Attendance Input
+    INPUT_ATTENDANCE --> ATTENDANCE_FORM
+    ATTENDANCE_FORM --> VALIDATE_ATTENDANCE
+    VALIDATE_ATTENDANCE -->|No| ATTENDANCE_ERROR
+    VALIDATE_ATTENDANCE -->|Yes| SAVE_ATTENDANCE
+    ATTENDANCE_ERROR --> ATTENDANCE_FORM
+    SAVE_ATTENDANCE --> ATTENDANCE_SAVED
+    ATTENDANCE_SAVED --> TEACHER_MENU
+
+    %% Prediction Flow
+    REQUEST_PREDICTION --> SELECT_STUDENT_PREDICT
+    VIEW_PREDICTION --> SELECT_STUDENT_PREDICT
+    SELECT_STUDENT_PREDICT --> CHECK_STUDENT_DATA
+    CHECK_STUDENT_DATA -->|No| INCOMPLETE_DATA_WARNING
+    CHECK_STUDENT_DATA -->|Yes| COLLECT_FEATURES
+    INCOMPLETE_DATA_WARNING --> CONTINUE_PREDICTION
+    CONTINUE_PREDICTION -->|Yes| COLLECT_FEATURES
+    CONTINUE_PREDICTION -->|No| TEACHER_MENU
+
+    %% Feature Collection
+    COLLECT_FEATURES --> GET_ACADEMIC_DATA
+    GET_ACADEMIC_DATA --> GET_ATTENDANCE_DATA
+    GET_ATTENDANCE_DATA --> GET_INCOME_DATA
+    GET_INCOME_DATA --> GET_PERSONAL_DATA
+    GET_PERSONAL_DATA --> PROCESS_FEATURES
+
+    %% Feature Processing
+    PROCESS_FEATURES --> VALIDATE_FEATURES
+    VALIDATE_FEATURES -->|No| FEATURE_ERROR
+    VALIDATE_FEATURES -->|Yes| LOAD_ML_MODEL
+    FEATURE_ERROR --> HANDLE_ERROR
+
+    %% Model Loading
+    LOAD_ML_MODEL --> MODEL_AVAILABLE
+    MODEL_AVAILABLE -->|No| MODEL_ERROR
+    MODEL_AVAILABLE -->|Yes| EXECUTE_PREDICTION
+    MODEL_ERROR --> TRAIN_NEW_MODEL
+
+    %% Training Flow
+    TRAIN_MODEL --> COLLECT_TRAINING_DATA
+    TRAIN_NEW_MODEL --> COLLECT_TRAINING_DATA
+    COLLECT_TRAINING_DATA --> SUFFICIENT_DATA
+    SUFFICIENT_DATA -->|No| INSUFFICIENT_DATA
+    SUFFICIENT_DATA -->|Yes| PREPROCESS_DATA
+    INSUFFICIENT_DATA --> HANDLE_ERROR
+    PREPROCESS_DATA --> TRAIN_C45
+    TRAIN_C45 --> EVALUATE_MODEL
+    EVALUATE_MODEL --> MODEL_PERFORMANCE
+    MODEL_PERFORMANCE -->|No| POOR_PERFORMANCE
+    MODEL_PERFORMANCE -->|Yes| SAVE_MODEL
+    POOR_PERFORMANCE --> HANDLE_ERROR
+    SAVE_MODEL --> MODEL_READY
+    MODEL_READY --> EXECUTE_PREDICTION
+
+    %% Prediction Execution
+    EXECUTE_PREDICTION --> PREDICTION_SUCCESS
+    PREDICTION_SUCCESS -->|No| PREDICTION_ERROR
+    PREDICTION_SUCCESS -->|Yes| CALCULATE_CONFIDENCE
+    PREDICTION_ERROR --> HANDLE_ERROR
+    CALCULATE_CONFIDENCE --> CONFIDENCE_CHECK
+    CONFIDENCE_CHECK -->|No| LOW_CONFIDENCE_WARNING
+    CONFIDENCE_CHECK -->|Yes| GENERATE_EXPLANATION
+    LOW_CONFIDENCE_WARNING --> GENERATE_EXPLANATION
+    GENERATE_EXPLANATION --> SAVE_PREDICTION_RESULT
+
+    %% Result Display
+    SAVE_PREDICTION_RESULT --> FORMAT_RESULT
+    FORMAT_RESULT --> DISPLAY_PREDICTION
+    DISPLAY_PREDICTION --> PREDICTION_DETAILS
+    PREDICTION_DETAILS --> FEATURE_IMPORTANCE
+    FEATURE_IMPORTANCE --> CONFIDENCE_SCORE
+    CONFIDENCE_SCORE --> TEACHER_MENU
+
+    %% Analytics
+    VIEW_ANALYTICS --> ANALYTICS_MENU
+    VIEW_REPORTS --> ANALYTICS_MENU
+    ANALYTICS_MENU -->|Student Analytics| STUDENT_ANALYTICS
+    ANALYTICS_MENU -->|Prediction Analytics| PREDICTION_ANALYTICS
+    ANALYTICS_MENU -->|System Analytics| SYSTEM_ANALYTICS
+    ANALYTICS_MENU -->|Performance Analytics| PERFORMANCE_ANALYTICS
+    STUDENT_ANALYTICS --> GENERATE_REPORT
+    PREDICTION_ANALYTICS --> GENERATE_REPORT
+    SYSTEM_ANALYTICS --> GENERATE_REPORT
+    PERFORMANCE_ANALYTICS --> GENERATE_REPORT
+    GENERATE_REPORT --> EXPORT_DATA
+    EXPORT_DATA --> ADMIN_MENU
+
+    %% System Monitoring
+    PERFORMANCE_MONITOR --> MONITOR_PERFORMANCE
+    MONITOR_PERFORMANCE --> CHECK_RESOURCES
+    CHECK_RESOURCES -->|No| RESOURCE_ALERT
+    CHECK_RESOURCES -->|Yes| SYSTEM_MENU
+    RESOURCE_ALERT --> OPTIMIZE_SYSTEM
+    OPTIMIZE_SYSTEM --> SYSTEM_MENU
+
+    %% Security
+    SECURITY_SCAN --> SECURITY_CHECK
+    SECURITY_CHECK --> THREAT_DETECTED
+    THREAT_DETECTED -->|Yes| SECURITY_ALERT
+    THREAT_DETECTED -->|No| SYSTEM_MENU
+    SECURITY_ALERT --> BLOCK_THREAT
+    BLOCK_THREAT --> LOG_SECURITY_EVENT
+    LOG_SECURITY_EVENT --> SYSTEM_MENU
+
+    %% Error Handling
+    HANDLE_ERROR --> LOG_ERROR
+    LOG_ERROR --> NOTIFY_ADMIN
+    NOTIFY_ADMIN --> RETRY_OPERATION
+    RETRY_OPERATION -->|Yes| COLLECT_FEATURES
+    RETRY_OPERATION -->|No| TEACHER_MENU
+
+    %% Logout Flow
+    LOGOUT_MENU --> SAVE_SESSION
+    SAVE_SESSION --> CLEAR_SESSION
+    CLEAR_SESSION --> LOGOUT_SUCCESS
+    LOGOUT_SUCCESS --> END
+
+    %% Return to Menu Connections
+    MANAGE_USERS --> ADMIN_MENU
+    SYSTEM_CONFIG --> ADMIN_MENU
+    VIEW_STUDENTS --> TEACHER_MENU
+    VIEW_PROFILE --> STUDENT_MENU
+    VIEW_GRADES --> STUDENT_MENU
+    VIEW_ATTENDANCE --> STUDENT_MENU
+    AUTO_BACKUP --> SYSTEM_MENU
+    HEALTH_CHECK --> SYSTEM_MENU
+    DATA_CLEANUP --> SYSTEM_MENU
+
+    %% Styling
+    classDef startEnd fill:#e8f5e8,stroke:#4caf50,stroke-width:3px,color:#000
+    classDef process fill:#e3f2fd,stroke:#2196f3,stroke-width:2px,color:#000
+    classDef decision fill:#fff3e0,stroke:#ff9800,stroke-width:2px,color:#000
+    classDef error fill:#ffebee,stroke:#f44336,stroke-width:2px,color:#000
+    classDef success fill:#e8f5e8,stroke:#4caf50,stroke-width:2px,color:#000
+    classDef warning fill:#fff8e1,stroke:#ffc107,stroke-width:2px,color:#000
+    classDef admin fill:#f3e5f5,stroke:#9c27b0,stroke-width:2px,color:#000
+    classDef teacher fill:#e0f2f1,stroke:#009688,stroke-width:2px,color:#000
+    classDef student fill:#e1f5fe,stroke:#03a9f4,stroke-width:2px,color:#000
+    classDef system fill:#fce4ec,stroke:#e91e63,stroke-width:2px,color:#000
+    classDef ml fill:#fff3e0,stroke:#ff9800,stroke-width:2px,color:#000
+
+    class START_ADMIN,START_TEACHER,START_STUDENT,START_SYSTEM,END startEnd
+    class ENTER_CREDENTIALS,STUDENT_FORM,GRADE_FORM,ATTENDANCE_FORM,COLLECT_FEATURES,PROCESS_FEATURES,LOAD_ML_MODEL,EXECUTE_PREDICTION,FORMAT_RESULT,DISPLAY_PREDICTION process
+    class LOGIN,VALIDATE_AUTH,CHECK_ROLE,VALIDATE_STUDENT_DATA,VALIDATE_GRADES,VALIDATE_ATTENDANCE,CHECK_STUDENT_DATA,CONTINUE_PREDICTION,VALIDATE_FEATURES,MODEL_AVAILABLE,SUFFICIENT_DATA,MODEL_PERFORMANCE,PREDICTION_SUCCESS,CONFIDENCE_CHECK,CHECK_RESOURCES,THREAT_DETECTED,RETRY_OPERATION decision
+    class AUTH_FAILED,STUDENT_DATA_ERROR,GRADE_ERROR,ATTENDANCE_ERROR,FEATURE_ERROR,MODEL_ERROR,INSUFFICIENT_DATA,POOR_PERFORMANCE,PREDICTION_ERROR,RESOURCE_ALERT,SECURITY_ALERT error
+    class AUTH_SUCCESS,STUDENT_SAVED,GRADES_SAVED,ATTENDANCE_SAVED,MODEL_READY,LOGOUT_SUCCESS success
+    class INCOMPLETE_DATA_WARNING,LOW_CONFIDENCE_WARNING warning
+    class ADMIN_DASHBOARD,ADMIN_MENU,MANAGE_USERS,MANAGE_STUDENTS,VIEW_ANALYTICS,TRAIN_MODEL,SYSTEM_CONFIG admin
+    class TEACHER_DASHBOARD,TEACHER_MENU,VIEW_STUDENTS,INPUT_GRADES,INPUT_ATTENDANCE,REQUEST_PREDICTION,VIEW_REPORTS teacher
+    class STUDENT_DASHBOARD,STUDENT_MENU,VIEW_PROFILE,VIEW_GRADES,VIEW_ATTENDANCE,VIEW_PREDICTION student
+    class SYSTEM_MENU,AUTO_BACKUP,HEALTH_CHECK,DATA_CLEANUP,PERFORMANCE_MONITOR,SECURITY_SCAN system
+    class TRAIN_C45,EVALUATE_MODEL,CALCULATE_CONFIDENCE,GENERATE_EXPLANATION ml 

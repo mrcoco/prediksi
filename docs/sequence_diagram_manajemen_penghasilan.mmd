@@ -1,0 +1,175 @@
+sequenceDiagram
+    participant U as User
+    participant F as Frontend (Kendo Grid)
+    participant A as Backend API
+    participant D as Database
+    participant S as Siswa Table
+    participant P as Penghasilan Table
+
+    Note over U,P: Sequence Diagram - Manajemen Penghasilan Orang Tua
+
+    %% Create Penghasilan
+    rect rgb(240, 248, 255)
+        Note over U,P: 1. CREATE PENGHASILAN (Tambah Data Baru)
+        
+        U->>F: Click "Add New" button
+        F->>U: Show form popup
+        U->>F: Fill form (siswa_id, penghasilan_ayah, penghasilan_ibu, etc.)
+        U->>F: Click "Save" button
+        
+        F->>A: POST /api/penghasilan/<br/>Bearer Token + Data
+        
+        Note over A: Authentication Check
+        A->>A: Validate Bearer Token
+        
+        Note over A: Student Validation
+        A->>S: SELECT * FROM siswa WHERE id = siswa_id
+        S-->>A: Return siswa data or null
+        
+        alt Siswa tidak ditemukan
+            A-->>F: HTTP 404 - Siswa tidak ditemukan
+            F-->>U: Show error notification
+        else Siswa valid
+            Note over A: Duplicate Check
+            A->>P: SELECT * FROM penghasilan_ortu WHERE siswa_id = ?
+            P-->>A: Return existing data or null
+            
+            alt Data sudah ada
+                A-->>F: HTTP 400 - Data sudah ada
+                F-->>U: Show error notification
+            else Data belum ada
+                Note over A: Business Logic
+                A->>A: Calculate total_penghasilan = ayah + ibu
+                A->>A: Determine kategori_penghasilan<br/>(Tinggi ≥5jt, Menengah ≥2.3jt, Rendah <2.3jt)
+                
+                Note over A: Data Persistence
+                A->>P: INSERT INTO penghasilan_ortu
+                P-->>A: Return new record with ID
+                
+                A-->>F: HTTP 201 - Created with data
+                F->>F: Refresh grid data
+                F-->>U: Show success notification
+            end
+        end
+    end
+
+    %% Read Penghasilan
+    rect rgb(240, 255, 240)
+        Note over U,P: 2. READ PENGHASILAN (Tampil Data)
+        
+        U->>F: Navigate to Penghasilan page
+        F->>A: GET /api/penghasilan?skip=0&limit=100<br/>Bearer Token
+        
+        Note over A: Authentication Check
+        A->>A: Validate Bearer Token
+        
+        Note over A: JOIN Query
+        A->>D: SELECT p.*, s.nama as nama_siswa<br/>FROM penghasilan_ortu p<br/>JOIN siswa s ON p.siswa_id = s.id<br/>LIMIT 100 OFFSET 0
+        
+        D-->>A: Return joined data with siswa names
+        A-->>F: HTTP 200 - Array of penghasilan with nama_siswa
+        
+        F->>F: Populate Kendo Grid
+        F-->>U: Display data table with columns:<br/>Nama Siswa, Penghasilan Ayah/Ibu,<br/>Total, Kategori, Actions
+    end
+
+    %% Update Penghasilan
+    rect rgb(255, 248, 220)
+        Note over U,P: 3. UPDATE PENGHASILAN (Edit Data)
+        
+        U->>F: Click "Edit" button on row
+        F->>A: GET /api/penghasilan/{id}<br/>Bearer Token
+        A->>P: SELECT * FROM penghasilan_ortu WHERE id = ?
+        P-->>A: Return penghasilan data
+        A-->>F: HTTP 200 - Penghasilan data
+        
+        F->>U: Show edit form with current data
+        U->>F: Modify fields (penghasilan_ayah, penghasilan_ibu, etc.)
+        U->>F: Click "Update" button
+        
+        F->>A: PUT /api/penghasilan/{id}<br/>Bearer Token + Updated Data
+        
+        Note over A: Authentication & Validation
+        A->>A: Validate Bearer Token
+        A->>P: SELECT * FROM penghasilan_ortu WHERE id = ?
+        P-->>A: Return existing record or null
+        
+        alt Record tidak ditemukan
+            A-->>F: HTTP 404 - Data tidak ditemukan
+            F-->>U: Show error notification
+        else Record ditemukan
+            Note over A: Business Logic Update
+            A->>A: Check if penghasilan_ayah or penghasilan_ibu changed
+            
+            alt Penghasilan berubah
+                A->>A: Recalculate total_penghasilan = ayah + ibu
+                A->>A: Redetermine kategori_penghasilan<br/>(Tinggi ≥5jt, Menengah ≥2.3jt, Rendah <2.3jt)
+            end
+            
+            A->>A: Update timestamp = now()
+            
+            Note over A: Data Persistence
+            A->>P: UPDATE penghasilan_ortu SET ... WHERE id = ?
+            P-->>A: Return updated record
+            
+            A-->>F: HTTP 200 - Updated data
+            F->>F: Refresh grid data
+            F-->>U: Show success notification
+        end
+    end
+
+    %% Delete Penghasilan
+    rect rgb(255, 240, 240)
+        Note over U,P: 4. DELETE PENGHASILAN (Hapus Data)
+        
+        U->>F: Click "Delete" button on row
+        F->>U: Show confirmation modal with:<br/>Nama Siswa, Penghasilan details
+        U->>F: Click "Confirm Delete"
+        
+        F->>A: DELETE /api/penghasilan/{id}<br/>Bearer Token
+        
+        Note over A: Authentication & Validation
+        A->>A: Validate Bearer Token
+        A->>P: SELECT * FROM penghasilan_ortu WHERE id = ?
+        P-->>A: Return record or null
+        
+        alt Record tidak ditemukan
+            A-->>F: HTTP 404 - Data tidak ditemukan
+            F-->>U: Show error notification
+        else Record ditemukan
+            Note over A: Data Deletion
+            A->>P: DELETE FROM penghasilan_ortu WHERE id = ?
+            P-->>A: Confirm deletion
+            
+            A-->>F: HTTP 204 - No Content (Success)
+            F->>F: Refresh grid data
+            F-->>U: Show success notification<br/>Remove row from grid
+        end
+    end
+
+    %% Export Excel
+    rect rgb(248, 240, 255)
+        Note over U,P: 5. EXPORT EXCEL
+        
+        U->>F: Click "Export Excel" button
+        F->>A: GET /api/penghasilan/export/excel<br/>Bearer Token
+        
+        Note over A: Authentication Check
+        A->>A: Validate Bearer Token
+        
+        Note over A: Data Collection
+        A->>D: SELECT p.*, s.nama as nama_siswa<br/>FROM penghasilan_ortu p<br/>JOIN siswa s ON p.siswa_id = s.id<br/>ORDER BY s.nama
+        
+        D-->>A: Return all penghasilan data with siswa names
+        
+        Note over A: Excel Generation
+        A->>A: Convert data to pandas DataFrame
+        A->>A: Generate Excel file in memory (BytesIO)
+        A->>A: Set filename: "Data_Penghasilan_Orang_Tua.xlsx"
+        
+        A-->>F: HTTP 200 - StreamingResponse<br/>Content-Type: application/vnd.openxmlformats-<br/>officedocument.spreadsheetml.sheet
+        
+        F->>F: Create download link
+        F->>F: Trigger file download
+        F-->>U: Download Excel file<br/>Show success notification
+    end 

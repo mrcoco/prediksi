@@ -1,0 +1,193 @@
+graph TB
+    %% Use Case Diagram - Manajemen Prediksi Prestasi Siswa
+    %% Sistem EduPro
+    
+    %% Actors
+    User([User])
+    AuthSystem([Authentication System])
+    
+    %% CRUD Operations Package
+    subgraph CRUD["CRUD Operations"]
+        UC01[Create Prediction Individual]
+        UC02[Create Prediction Batch]
+        UC03[Read Prediction History]
+        UC04[Read Single Prediction]
+        UC05[Delete Prediction History]
+    end
+    
+    %% Machine Learning Operations Package
+    subgraph ML["Machine Learning Operations"]
+        UC06[Train C4.5 Model]
+        UC07[Generate Labeled Data]
+        UC08[Validate Model Performance]
+        UC09[Get Model Metrics]
+        UC10[Get Confusion Matrix]
+    end
+    
+    %% Data Management Package
+    subgraph DM["Data Management"]
+        UC11[Export Prediction History Excel]
+        UC12[Export Batch Results Excel]
+        UC13[Generate Dummy Data]
+        UC14[Count Prediction Data]
+    end
+    
+    %% Visualization Package
+    subgraph VIS["Visualization"]
+        UC15[Generate Tree Visualization Static]
+        UC16[Generate Tree Visualization D3.js]
+        UC17[Get Tree Data JSON]
+        UC18[Display Prediction Results]
+    end
+    
+    %% Analysis & Statistics Package
+    subgraph STAT["Analysis & Statistics"]
+        UC19[Get Feature Statistics]
+        UC20[Generate Correlation Matrix]
+        UC21[Generate Bar Chart Analysis]
+        UC22[Get Model Rules]
+    end
+    
+    %% Validation Package
+    subgraph VAL["Validation"]
+        UC23[Validate Student Data]
+        UC24[Validate Prediction Input]
+        UC25[Check Data Completeness]
+    end
+    
+    %% Authentication Package
+    subgraph AUTH["Authentication"]
+        UC26[Login User]
+        UC27[Authorize Prediction Access]
+        UC28[Validate Token]
+    end
+    
+    %% Notification Package
+    subgraph NOTIF["Notification"]
+        UC29[Show Success Notification]
+        UC30[Show Error Notification]
+        UC31[Show Info Notification]
+    end
+    
+    %% User Relationships
+    User --> UC01
+    User --> UC02
+    User --> UC03
+    User --> UC04
+    User --> UC05
+    User --> UC06
+    User --> UC07
+    User --> UC08
+    User --> UC09
+    User --> UC10
+    User --> UC11
+    User --> UC12
+    User --> UC13
+    User --> UC14
+    User --> UC15
+    User --> UC16
+    User --> UC17
+    User --> UC18
+    User --> UC19
+    User --> UC20
+    User --> UC21
+    User --> UC22
+    User --> UC23
+    User --> UC24
+    User --> UC25
+    
+    %% Authentication System Relationships
+    AuthSystem --> UC26
+    AuthSystem --> UC27
+    AuthSystem --> UC28
+    AuthSystem --> UC29
+    AuthSystem --> UC30
+    AuthSystem --> UC31
+    
+    %% Include Relationships (dotted lines)
+    UC01 -.-> UC23
+    UC01 -.-> UC24
+    UC01 -.-> UC25
+    UC01 -.-> UC27
+    UC01 -.-> UC29
+    
+    UC02 -.-> UC23
+    UC02 -.-> UC24
+    UC02 -.-> UC25
+    UC02 -.-> UC27
+    UC02 -.-> UC29
+    
+    UC03 -.-> UC27
+    UC03 -.-> UC28
+    
+    UC04 -.-> UC27
+    UC04 -.-> UC28
+    
+    UC05 -.-> UC27
+    UC05 -.-> UC29
+    
+    UC06 -.-> UC07
+    UC06 -.-> UC08
+    UC06 -.-> UC27
+    UC06 -.-> UC29
+    
+    UC08 -.-> UC09
+    UC08 -.-> UC10
+    
+    UC11 -.-> UC27
+    UC11 -.-> UC29
+    
+    UC12 -.-> UC27
+    UC12 -.-> UC29
+    
+    UC13 -.-> UC27
+    UC13 -.-> UC29
+    
+    UC15 -.-> UC06
+    UC15 -.-> UC27
+    
+    UC16 -.-> UC17
+    UC16 -.-> UC27
+    
+    UC19 -.-> UC27
+    
+    UC20 -.-> UC19
+    UC20 -.-> UC27
+    
+    UC21 -.-> UC19
+    UC21 -.-> UC27
+    
+    UC22 -.-> UC06
+    UC22 -.-> UC27
+    
+    %% Extend Relationships (dashed lines)
+    UC01 -.- UC30
+    UC02 -.- UC30
+    UC06 -.- UC30
+    UC11 -.- UC30
+    UC12 -.- UC30
+    UC13 -.- UC30
+    
+    UC18 -.- UC31
+    
+    %% Styling
+    classDef userClass fill:#e1f5fe,stroke:#01579b,stroke-width:2px,color:#000
+    classDef authClass fill:#f3e5f5,stroke:#4a148c,stroke-width:2px,color:#000
+    classDef crudClass fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px,color:#000
+    classDef mlClass fill:#fff3e0,stroke:#ef6c00,stroke-width:2px,color:#000
+    classDef dmClass fill:#fce4ec,stroke:#c2185b,stroke-width:2px,color:#000
+    classDef visClass fill:#e0f2f1,stroke:#00695c,stroke-width:2px,color:#000
+    classDef statClass fill:#f1f8e9,stroke:#558b2f,stroke-width:2px,color:#000
+    classDef valClass fill:#fff8e1,stroke:#f57f17,stroke-width:2px,color:#000
+    classDef notifClass fill:#ffebee,stroke:#d32f2f,stroke-width:2px,color:#000
+    
+    class User userClass
+    class AuthSystem authClass
+    class UC01,UC02,UC03,UC04,UC05 crudClass
+    class UC06,UC07,UC08,UC09,UC10 mlClass
+    class UC11,UC12,UC13,UC14 dmClass
+    class UC15,UC16,UC17,UC18 visClass
+    class UC19,UC20,UC21,UC22 statClass
+    class UC23,UC24,UC25 valClass
+    class UC26,UC27,UC28 authClass
+    class UC29,UC30,UC31 notifClass 

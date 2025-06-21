@@ -1,0 +1,131 @@
+graph TB
+    %% Actors
+    User["👤 User<br/>(Guru/Admin)"]
+    Auth["🔐 Authentication<br/>System"]
+    
+    %% System Boundary
+    subgraph System["📚 Sistem Manajemen Siswa"]
+        
+        %% Core CRUD Operations
+        subgraph CRUD["🔄 CRUD Operations"]
+            UC1["➕ Tambah Data Siswa<br/>(Create)"]
+            UC2["📋 Lihat Daftar Siswa<br/>(Read All)"]
+            UC3["👤 Lihat Detail Siswa<br/>(Read Single)"]
+            UC4["✏️ Edit Data Siswa<br/>(Update)"]
+            UC5["🗑️ Hapus Data Siswa<br/>(Delete)"]
+        end
+        
+        %% Search & Filter Operations
+        subgraph Search["🔍 Search & Filter"]
+            UC6["🔎 Cari Siswa<br/>(Search)"]
+            UC7["📊 Filter Siswa<br/>(Filter)"]
+            UC8["📄 Pagination<br/>(Paging)"]
+        end
+        
+        %% Data Management Operations
+        subgraph DataMgmt["📁 Data Management"]
+            UC9["📤 Upload Excel<br/>(Import)"]
+            UC10["📥 Export Excel<br/>(Export)"]
+            UC11["🔢 Hitung Total Siswa<br/>(Count)"]
+            UC12["📝 Dropdown Siswa<br/>(Dropdown)"]
+        end
+        
+        %% Validation Operations
+        subgraph Validation["✅ Validation"]
+            UC13["🆔 Validasi NIS<br/>(NIS Validation)"]
+            UC14["📋 Validasi Data<br/>(Data Validation)"]
+            UC15["🔍 Cek Duplikasi<br/>(Duplicate Check)"]
+        end
+        
+        %% Authentication Operations
+        subgraph Authentication["🔐 Authentication"]
+            UC16["🔑 Login<br/>(Authentication)"]
+            UC17["🛡️ Autorisasi<br/>(Authorization)"]
+            UC18["🔒 Validasi Token<br/>(Token Validation)"]
+        end
+        
+        %% Notification Operations
+        subgraph Notification["🔔 Notification"]
+            UC19["✅ Notifikasi Sukses<br/>(Success Notification)"]
+            UC20["❌ Notifikasi Error<br/>(Error Notification)"]
+            UC21["ℹ️ Notifikasi Info<br/>(Info Notification)"]
+        end
+    end
+    
+    %% User Relationships
+    User --> UC1
+    User --> UC2
+    User --> UC3
+    User --> UC4
+    User --> UC5
+    User --> UC6
+    User --> UC7
+    User --> UC8
+    User --> UC9
+    User --> UC10
+    User --> UC11
+    User --> UC12
+    
+    %% Authentication System Relationships
+    Auth --> UC16
+    Auth --> UC17
+    Auth --> UC18
+    
+    %% Include Relationships (shown as dependencies)
+    UC1 -.-> UC13
+    UC1 -.-> UC14
+    UC1 -.-> UC15
+    UC1 -.-> UC18
+    
+    UC2 -.-> UC18
+    UC2 -.-> UC6
+    UC2 -.-> UC7
+    UC2 -.-> UC8
+    
+    UC3 -.-> UC18
+    UC3 -.-> UC14
+    
+    UC4 -.-> UC18
+    UC4 -.-> UC13
+    UC4 -.-> UC14
+    UC4 -.-> UC15
+    
+    UC5 -.-> UC18
+    UC5 -.-> UC14
+    
+    UC9 -.-> UC18
+    UC9 -.-> UC14
+    UC9 -.-> UC15
+    
+    UC10 -.-> UC18
+    UC11 -.-> UC18
+    UC12 -.-> UC18
+    
+    %% Extend Relationships (shown as optional connections)
+    UC1 -.- UC19
+    UC1 -.- UC20
+    UC2 -.- UC19
+    UC2 -.- UC20
+    UC3 -.- UC20
+    UC4 -.- UC19
+    UC4 -.- UC20
+    UC5 -.- UC19
+    UC5 -.- UC20
+    UC9 -.- UC19
+    UC9 -.- UC20
+    UC10 -.- UC19
+    UC10 -.- UC20
+    UC13 -.- UC20
+    UC14 -.- UC20
+    UC15 -.- UC20
+    
+    %% Styling
+    classDef userStyle fill:#A23B72,stroke:#2E86AB,stroke-width:2px,color:#fff
+    classDef authStyle fill:#2E86AB,stroke:#A23B72,stroke-width:2px,color:#fff
+    classDef usecaseStyle fill:#F18F01,stroke:#C73E1D,stroke-width:2px,color:#000
+    classDef systemStyle fill:#E8F4FD,stroke:#2E86AB,stroke-width:3px
+    classDef packageStyle fill:#FFF5E6,stroke:#F18F01,stroke-width:2px
+    
+    class User userStyle
+    class Auth authStyle
+    class UC1,UC2,UC3,UC4,UC5,UC6,UC7,UC8,UC9,UC10,UC11,UC12,UC13,UC14,UC15,UC16,UC17,UC18,UC19,UC20,UC21 usecaseStyle 

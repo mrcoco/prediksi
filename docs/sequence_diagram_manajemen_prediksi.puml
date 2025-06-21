@@ -1,0 +1,343 @@
+@startuml Sequence_Diagram_Manajemen_Prediksi
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 10
+skinparam maxmessagesize 60
+
+title Sequence Diagram - Manajemen Prediksi Prestasi Siswa\\nSistem EduPro
+
+participant "User" as U
+participant "Frontend\\n(Dashboard)" as F
+participant "Backend API\\n(/api/prediksi)" as A
+participant "Database" as D
+participant "C45 Model" as M
+participant "Siswa Table" as S
+participant "NilaiRaport Table" as N
+participant "Presensi Table" as P
+participant "PenghasilanOrtu Table" as PO
+participant "Prestasi Table" as PR
+
+== 1. TRAIN MODEL (Melatih Model C4.5) ==
+
+U -> F: Click "Train Model" button
+F -> U: Show loading state "Melatih..."
+
+F -> A: POST /api/prediksi/train\\nBearer Token
+
+note over A: Authentication Check
+A -> A: Validate Bearer Token\\nExtract current_user
+
+note over A: Model Training Process
+A -> M: c45_model.train(db)
+
+note over M: Data Preparation
+M -> D: SELECT siswa.*, nilai.*, presensi.*, penghasilan.*\\nFROM siswa\\nJOIN nilai_raport ON siswa.id = nilai.siswa_id\\nJOIN presensi ON siswa.id = presensi.siswa_id\\nJOIN penghasilan_ortu ON siswa.id = penghasilan.siswa_id
+D --> M: Return complete dataset for training
+
+note over M: Feature Engineering
+M -> M: Extract features:\\n- rata_rata (from nilai)\\n- kategori_penghasilan (from penghasilan)\\n- kategori_kehadiran (from presensi)
+M -> M: Generate labels using business rules:\\nIF rata_rata >= 85 AND kategori_penghasilan = 'Tinggi'\\nAND kategori_kehadiran = 'Tinggi' THEN 'Tinggi'\\nELIF rata_rata >= 75 AND kategori_kehadiran = 'Tinggi'\\nTHEN 'Sedang' ELSE 'Rendah'
+
+note over M: Model Training
+M -> M: Encode categorical features:\\nkategori_penghasilan: {Rendah:0, Menengah:1, Tinggi:2}\\nkategori_kehadiran: {Rendah:0, Sedang:1, Tinggi:2}
+M -> M: Split data: 80% training, 20% testing
+M -> M: Train DecisionTreeClassifier with entropy criterion
+M -> M: Evaluate model: accuracy, classification_report
+M -> M: Generate tree visualization (PNG format)
+M -> M: Set trained = True
+
+M --> A: Return training results:\\n{accuracy, classification_report, training_samples}
+
+A --> F: HTTP 200 - Training completed with metrics
+F -> F: Hide loading state
+F -> F: Update UI with training results
+F --> U: Show success notification:\\n"Model berhasil dilatih dengan akurasi XX%"
+F -> F: Load tree visualization
+F -> F: Load model metrics
+
+== 2. SINGLE PREDICTION (Prediksi Individual) ==
+
+U -> F: Navigate to Prediksi page
+F -> U: Show prediction form with dropdowns:\\n- siswa_id (dropdown)\\n- semester, tahun_ajaran
+
+U -> F: Select siswa and fill form data
+U -> F: Click "Prediksi" button
+
+F -> A: POST /api/prediksi/\\nBearer Token + PrediksiRequest
+
+note over A: Authentication & Validation
+A -> A: Validate Bearer Token\\nExtract current_user
+
+note over A: Data Validation - Siswa
+A -> S: SELECT * FROM siswa WHERE id = siswa_id
+S --> A: Return siswa data or null
+
+alt Siswa tidak ditemukan
+    A --> F: HTTP 404\\n"Siswa dengan ID tidak ditemukan"
+    F --> U: Show error notification
+else Siswa valid
+    note over A: Data Validation - Nilai Raport
+    A -> N: SELECT * FROM nilai_raport\\nWHERE siswa_id = ? AND semester = ?\\nAND tahun_ajaran = ?
+    N --> A: Return nilai data or null
+    
+    alt Nilai tidak ditemukan
+        A --> F: HTTP 404\\n"Data nilai tidak ditemukan untuk semester ini"
+        F --> U: Show error notification
+    else Nilai valid
+        note over A: Data Validation - Presensi
+        A -> P: SELECT * FROM presensi\\nWHERE siswa_id = ? AND semester = ?\\nAND tahun_ajaran = ?
+        P --> A: Return presensi data or null
+        
+        alt Presensi tidak ditemukan
+            A --> F: HTTP 404\\n"Data presensi tidak ditemukan untuk semester ini"
+            F --> U: Show error notification
+        else Presensi valid
+            note over A: Data Validation - Penghasilan Ortu
+            A -> PO: SELECT * FROM penghasilan_ortu\\nWHERE siswa_id = ?
+            PO --> A: Return penghasilan data or null
+            
+            alt Penghasilan tidak ditemukan
+                A --> F: HTTP 404\\n"Data penghasilan orang tua tidak ditemukan"
+                F --> U: Show error notification
+            else Data lengkap
+                note over A: Model Check & Auto-Train
+                alt Model belum dilatih
+                    A -> M: Check c45_model.trained
+                    M --> A: Return False
+                    A -> M: c45_model.train(db)
+                    M --> A: Auto-training completed
+                end
+                
+                note over A: Prediction Process
+                A -> A: Prepare prediction_data:\\n{rata_rata: nilai.rata_rata,\\nkategori_penghasilan: penghasilan.kategori_penghasilan,\\nkategori_kehadiran: presensi.kategori_kehadiran}
+                
+                A -> M: c45_model.predict(prediction_data)
+                
+                note over M: Model Prediction
+                M -> M: Validate input features
+                M -> M: Convert categorical to numeric:\\nkategori_penghasilan: {Rendah:0, Menengah:1, Tinggi:2}\\nkategori_kehadiran: {Rendah:0, Sedang:1, Tinggi:2}
+                M -> M: Create DataFrame with features
+                M -> M: model.predict(X_pred) -> prediction
+                M -> M: model.predict_proba(X_pred) -> confidence
+                M -> M: Get feature_importances from model
+                
+                M --> A: Return prediction result:\\n{prediksi, confidence, feature_importances}
+                
+                note over A: Save Prediction Result
+                A -> PR: Check existing prediction:\\nSELECT * FROM prestasi\\nWHERE siswa_id = ? AND semester = ?\\nAND tahun_ajaran = ?
+                PR --> A: Return existing record or null
+                
+                alt Prediction exists
+                    A -> PR: UPDATE prestasi SET\\nprediksi_prestasi = ?, confidence = ?,\\nupdated_at = CURRENT_TIMESTAMP\\nWHERE id = ?
+                else New prediction
+                    A -> PR: INSERT INTO prestasi\\n(siswa_id, semester, tahun_ajaran,\\nprediksi_prestasi, confidence)
+                end
+                
+                note over A: Prepare Response
+                A -> A: Build comprehensive response:\\n{siswa_id, nama_siswa, prediksi_prestasi,\\nconfidence, detail_faktor}
+                
+                A --> F: HTTP 200 - Prediction result with details
+                F -> F: Display prediction results:\\n- Prediksi Prestasi\\n- Confidence Level\\n- Detail Faktor (nilai, kehadiran, penghasilan)\\n- Feature Importances
+                F --> U: Show prediction results with visual indicators
+            end
+        end
+    end
+end
+
+== 3. BATCH PREDICTION (Prediksi Massal) ==
+
+U -> F: Click "Prediksi Massal" tab
+F -> U: Show batch prediction form:\\n- semester (dropdown)\\n- tahun_ajaran (dropdown)
+
+U -> F: Select semester and tahun_ajaran
+U -> F: Click "Prediksi Semua Siswa" button
+
+F -> A: POST /api/prediksi/batch\\nBearer Token + {semester, tahun_ajaran}
+
+note over A: Authentication & Validation
+A -> A: Validate Bearer Token\\nExtract current_user
+A -> A: Validate semester and tahun_ajaran not empty
+
+note over A: Model Check & Auto-Train
+alt Model belum dilatih
+    A -> M: Check c45_model.trained
+    M --> A: Return False
+    A -> M: c45_model.train(db)
+    M --> A: Auto-training completed
+end
+
+note over A: Get Students with Complete Data
+A -> D: Complex JOIN query:\\nSELECT DISTINCT siswa.*\\nFROM siswa\\nJOIN nilai_raport ON siswa.id = nilai_raport.siswa_id\\nJOIN presensi ON siswa.id = presensi.siswa_id\\nJOIN penghasilan_ortu ON siswa.id = penghasilan_ortu.siswa_id\\nWHERE nilai_raport.semester = ? AND nilai_raport.tahun_ajaran = ?\\nAND presensi.semester = ? AND presensi.tahun_ajaran = ?
+
+D --> A: Return list of students with complete data
+
+alt No students found
+    A --> F: HTTP 404\\n"Tidak ada siswa dengan data lengkap"
+    F --> U: Show error notification
+else Students found
+    note over A: Batch Prediction Loop
+    A -> A: Initialize results array, counters
+    
+    loop For each student
+        A -> N: Get nilai for student
+        A -> P: Get presensi for student
+        A -> PO: Get penghasilan for student
+        
+        alt Data complete for student
+            A -> M: c45_model.predict(student_data)
+            M --> A: Return prediction result
+            
+            A -> PR: Save/Update prediction in database
+            A -> A: Add to results array, increment success_count
+        else Data incomplete
+            A -> A: Add to errors array, increment error_count
+        end
+    end
+    
+    note over A: Batch Results Summary
+    A --> F: HTTP 200 - Batch prediction results:\\n{results, success_count, error_count, errors}
+    
+    F -> F: Display batch results:\\n- Total predictions: success_count\\n- Errors: error_count\\n- Results table with all predictions
+    F --> U: Show batch prediction summary with detailed results
+end
+
+== 4. PREDICTION HISTORY (Riwayat Prediksi) ==
+
+U -> F: Click "Riwayat Prediksi" menu
+F -> A: GET /api/prediksi/history?skip=0&limit=10\\nBearer Token
+
+note over A: Authentication & Data Retrieval
+A -> A: Validate Bearer Token\\nExtract current_user
+
+A -> D: SELECT prestasi.*, siswa.nama as nama_siswa\\nFROM prestasi\\nJOIN siswa ON prestasi.siswa_id = siswa.id\\nORDER BY prestasi.created_at DESC\\nLIMIT 10 OFFSET 0
+
+D --> A: Return prediction history with siswa names
+
+A --> F: HTTP 200 - Array of prediction history
+F -> F: Populate history table:\\n- Nama Siswa\\n- Semester, Tahun Ajaran\\n- Prediksi Prestasi\\n- Confidence\\n- Tanggal Prediksi\\n- Actions (Delete)
+
+F --> U: Display prediction history table with pagination
+
+note over U,PR: 4a. DELETE PREDICTION HISTORY
+U -> F: Click "Delete" button on history row
+F -> U: Show confirmation modal:\\n"Yakin hapus riwayat prediksi ini?"
+
+U -> F: Confirm deletion
+F -> A: DELETE /api/prediksi/history/{prestasi_id}\\nBearer Token
+
+A -> A: Validate Bearer Token
+A -> PR: SELECT * FROM prestasi WHERE id = prestasi_id
+PR --> A: Return prestasi record or null
+
+alt Prestasi not found
+    A --> F: HTTP 404\\n"Riwayat prediksi tidak ditemukan"
+    F --> U: Show error notification
+else Prestasi found
+    A -> PR: DELETE FROM prestasi WHERE id = prestasi_id
+    A --> F: HTTP 204 - No Content
+    F -> F: Remove row from table
+    F --> U: Show success notification\\n"Riwayat prediksi berhasil dihapus"
+end
+
+== 5. EXPORT PREDICTION HISTORY (Export Excel) ==
+
+U -> F: Click "Export Excel" button in history page
+F -> A: GET /api/prediksi/history/export/excel\\nBearer Token
+
+note over A: Authentication & Data Collection
+A -> A: Validate Bearer Token\\nExtract current_user
+
+A -> D: SELECT prestasi.*, siswa.nama as nama_siswa,\\nsis wa.nis, siswa.kelas\\nFROM prestasi\\nJOIN siswa ON prestasi.siswa_id = siswa.id\\nORDER BY prestasi.created_at DESC
+
+D --> A: Return complete prediction history
+
+note over A: Excel Generation
+A -> A: Create pandas DataFrame with columns:\\n- NIS, Nama Siswa, Kelas\\n- Semester, Tahun Ajaran\\n- Prediksi Prestasi, Confidence\\n- Tanggal Prediksi
+A -> A: Generate Excel file in memory (BytesIO)
+A -> A: Set proper headers:\\nContent-Type: application/vnd.openxmlformats\\nContent-Disposition: attachment; filename="Riwayat_Prediksi.xlsx"
+
+A --> F: StreamingResponse with Excel file
+F -> F: Trigger browser download
+F --> U: Download Excel file "Riwayat_Prediksi.xlsx"
+
+== 6. MODEL VISUALIZATION & METRICS ==
+
+U -> F: Click "Visualisasi Model" tab
+
+note over U,PR: 6a. TREE VISUALIZATION
+F -> A: GET /api/prediksi/visualization\\nBearer Token
+
+alt Model not trained
+    A --> F: HTTP 400\\n"Model belum dilatih"
+    F --> U: Show error notification
+else Model trained
+    A -> M: c45_model.visualize()
+    M -> M: Generate tree visualization as base64 PNG
+    M --> A: Return base64 image string
+    
+    A --> F: HTTP 200 - {status: "success", image: base64_data}
+    F -> F: Display tree visualization image
+    F --> U: Show decision tree visualization
+end
+
+note over U,PR: 6b. MODEL METRICS
+F -> A: GET /api/prediksi/model-metrics\\nBearer Token
+
+alt Model not trained
+    A --> F: HTTP 400\\n"Model belum dilatih"
+    F --> U: Show error notification
+else Model trained
+    A -> M: c45_model.get_model_metrics()
+    M --> A: Return model metrics:\\n{accuracy, precision, recall, f1_score}
+    
+    A --> F: HTTP 200 - Model metrics with last_trained
+    F -> F: Display metrics dashboard:\\n- Accuracy gauge\\n- Precision, Recall, F1-Score cards\\n- Last trained timestamp
+    F --> U: Show model performance metrics
+end
+
+note over U,PR: 6c. CONFUSION MATRIX
+F -> A: GET /api/prediksi/confusion-matrix\\nBearer Token
+
+alt Model not trained
+    A --> F: HTTP 400\\n"Model belum dilatih"
+    F --> U: Show error notification
+else Model trained
+    A -> M: c45_model.get_confusion_matrix()
+    M --> A: Return confusion matrix data:\\n[[10,2,1], [1,15,2], [0,1,12]]
+    
+    A --> F: HTTP 200 - Confusion matrix with labels
+    F -> F: Generate confusion matrix heatmap
+    F --> U: Show confusion matrix visualization
+end
+
+== 7. GENERATE DUMMY DATA (Testing Support) ==
+
+U -> F: Click "Generate Data Dummy" button
+F -> U: Show input form: "Jumlah data (10-1000)"
+
+U -> F: Enter count (e.g., 100)
+U -> F: Click "Generate" button
+
+F -> A: POST /api/prediksi/generate-dummy-data\\nBearer Token + {count: 100}
+
+note over A: Authentication & Validation
+A -> A: Validate Bearer Token
+A -> A: Validate count (min: 10, max: 1000)
+
+note over A: Dummy Data Generation
+A -> A: Generate random siswa data with realistic names
+A -> A: Generate random nilai data (rata_rata: 60-95)
+A -> A: Generate random presensi data with calculated categories
+A -> A: Generate random penghasilan data with categories
+
+A -> S: INSERT siswa dummy data
+A -> N: INSERT nilai dummy data
+A -> P: INSERT presensi dummy data
+A -> PO: INSERT penghasilan dummy data
+
+A --> F: HTTP 201 - Data generation completed:\\n{message, siswa_count, nilai_count, presensi_count, penghasilan_count}
+
+F --> U: Show success notification:\\n"Berhasil generate 100 data dummy"
+
+@enduml 

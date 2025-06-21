@@ -1,0 +1,139 @@
+@startuml Use_Case_Diagram_Manajemen_Penghasilan
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam actorBorderColor #2E86AB
+skinparam actorBackgroundColor #A23B72
+skinparam usecaseBorderColor #F18F01
+skinparam usecaseBackgroundColor #C73E1D
+
+title Use Case Diagram - Manajemen Penghasilan Orang Tua\\\\nSistem EduPro
+
+left to right direction
+
+' Actors
+actor "👤 User\\\\n(Guru/Admin)" as User
+actor "🔐 Authentication\\\\nSystem" as Auth
+
+' System Boundary
+rectangle "💰 Sistem Manajemen Penghasilan Orang Tua" {
+    
+    ' Core CRUD Operations
+    package "🔄 CRUD Operations" {
+        usecase "➕ Tambah Data Penghasilan\\\\n(Create)" as UC1
+        usecase "📋 Lihat Daftar Penghasilan\\\\n(Read All)" as UC2
+        usecase "👤 Lihat Detail Penghasilan\\\\n(Read Single)" as UC3
+        usecase "✏️ Edit Data Penghasilan\\\\n(Update)" as UC4
+        usecase "🗑️ Hapus Data Penghasilan\\\\n(Delete)" as UC5
+    }
+    
+    ' Search & Filter Operations
+    package "🔍 Search & Filter" {
+        usecase "🔎 Cari Penghasilan\\\\n(Search)" as UC6
+        usecase "📊 Filter Penghasilan\\\\n(Filter)" as UC7
+        usecase "📄 Pagination\\\\n(Paging)" as UC8
+    }
+    
+    ' Data Management Operations
+    package "📁 Data Management" {
+        usecase "📥 Export Excel\\\\n(Export)" as UC9
+        usecase "🔢 Hitung Total Data\\\\n(Count)" as UC10
+        usecase "📝 Dropdown Siswa\\\\n(Dropdown)" as UC11
+    }
+    
+    ' Business Logic Operations
+    package "💼 Business Logic" {
+        usecase "🧮 Hitung Total Penghasilan\\\\n(Calculate Total)" as UC12
+        usecase "📊 Tentukan Kategori\\\\n(Categorize)" as UC13
+        usecase "💱 Format Currency\\\\n(Format)" as UC14
+    }
+    
+    ' Validation Operations
+    package "✅ Validation" {
+        usecase "🆔 Validasi Siswa\\\\n(Student Validation)" as UC15
+        usecase "📋 Validasi Data\\\\n(Data Validation)" as UC16
+        usecase "🔍 Cek Duplikasi\\\\n(Duplicate Check)" as UC17
+    }
+    
+    ' Authentication Operations
+    package "🔐 Authentication" {
+        usecase "🔑 Login\\\\n(Authentication)" as UC18
+        usecase "🛡️ Autorisasi\\\\n(Authorization)" as UC19
+        usecase "🔒 Validasi Token\\\\n(Token Validation)" as UC20
+    }
+    
+    ' Notification Operations
+    package "🔔 Notification" {
+        usecase "✅ Notifikasi Sukses\\\\n(Success Notification)" as UC21
+        usecase "❌ Notifikasi Error\\\\n(Error Notification)" as UC22
+        usecase "ℹ️ Notifikasi Info\\\\n(Info Notification)" as UC23
+    }
+}
+
+' User Relationships
+User --> UC1
+User --> UC2
+User --> UC3
+User --> UC4
+User --> UC5
+User --> UC6
+User --> UC7
+User --> UC8
+User --> UC9
+User --> UC10
+User --> UC11
+
+' Authentication System Relationships
+Auth --> UC18
+Auth --> UC19
+Auth --> UC20
+
+' Include Relationships
+UC1 ..> UC15 : <<include>>
+UC1 ..> UC16 : <<include>>
+UC1 ..> UC17 : <<include>>
+UC1 ..> UC12 : <<include>>
+UC1 ..> UC13 : <<include>>
+UC1 ..> UC20 : <<include>>
+
+UC2 ..> UC20 : <<include>>
+UC2 ..> UC6 : <<include>>
+UC2 ..> UC7 : <<include>>
+UC2 ..> UC8 : <<include>>
+UC2 ..> UC14 : <<include>>
+
+UC3 ..> UC20 : <<include>>
+UC3 ..> UC16 : <<include>>
+UC3 ..> UC14 : <<include>>
+
+UC4 ..> UC20 : <<include>>
+UC4 ..> UC15 : <<include>>
+UC4 ..> UC16 : <<include>>
+UC4 ..> UC12 : <<include>>
+UC4 ..> UC13 : <<include>>
+
+UC5 ..> UC20 : <<include>>
+UC5 ..> UC16 : <<include>>
+
+UC9 ..> UC20 : <<include>>
+UC9 ..> UC14 : <<include>>
+
+UC10 ..> UC20 : <<include>>
+UC11 ..> UC20 : <<include>>
+
+' Extend Relationships
+UC1 ..> UC21 : <<extend>>
+UC1 ..> UC22 : <<extend>>
+UC2 ..> UC21 : <<extend>>
+UC2 ..> UC22 : <<extend>>
+UC3 ..> UC22 : <<extend>>
+UC4 ..> UC21 : <<extend>>
+UC4 ..> UC22 : <<extend>>
+UC5 ..> UC21 : <<extend>>
+UC5 ..> UC22 : <<extend>>
+UC9 ..> UC21 : <<extend>>
+UC9 ..> UC22 : <<extend>>
+UC15 ..> UC22 : <<extend>>
+UC16 ..> UC22 : <<extend>>
+UC17 ..> UC22 : <<extend>>
+
+@enduml 

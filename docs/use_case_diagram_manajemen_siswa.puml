@@ -1,0 +1,176 @@
+@startuml Use_Case_Diagram_Manajemen_Siswa
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam actorBorderColor #2E86AB
+skinparam actorBackgroundColor #A23B72
+skinparam usecaseBorderColor #F18F01
+skinparam usecaseBackgroundColor #C73E1D
+
+title Use Case Diagram - Manajemen Siswa\\nSistem EduPro
+
+left to right direction
+
+' Actors
+actor "👤 User\\n(Guru/Admin)" as User
+actor "🔐 Authentication\\nSystem" as Auth
+
+' System Boundary
+rectangle "📚 Sistem Manajemen Siswa" {
+    
+    ' Core CRUD Operations
+    package "🔄 CRUD Operations" {
+        usecase "➕ Tambah Data Siswa\\n(Create)" as UC1
+        usecase "📋 Lihat Daftar Siswa\\n(Read All)" as UC2
+        usecase "👤 Lihat Detail Siswa\\n(Read Single)" as UC3
+        usecase "✏️ Edit Data Siswa\\n(Update)" as UC4
+        usecase "🗑️ Hapus Data Siswa\\n(Delete)" as UC5
+    }
+    
+    ' Search & Filter Operations
+    package "🔍 Search & Filter" {
+        usecase "🔎 Cari Siswa\\n(Search)" as UC6
+        usecase "📊 Filter Siswa\\n(Filter)" as UC7
+        usecase "📄 Pagination\\n(Paging)" as UC8
+    }
+    
+    ' Data Management Operations
+    package "📁 Data Management" {
+        usecase "📤 Upload Excel\\n(Import)" as UC9
+        usecase "📥 Export Excel\\n(Export)" as UC10
+        usecase "🔢 Hitung Total Siswa\\n(Count)" as UC11
+        usecase "📝 Dropdown Siswa\\n(Dropdown)" as UC12
+    }
+    
+    ' Validation Operations
+    package "✅ Validation" {
+        usecase "🆔 Validasi NIS\\n(NIS Validation)" as UC13
+        usecase "📋 Validasi Data\\n(Data Validation)" as UC14
+        usecase "🔍 Cek Duplikasi\\n(Duplicate Check)" as UC15
+    }
+    
+    ' Authentication Operations
+    package "🔐 Authentication" {
+        usecase "🔑 Login\\n(Authentication)" as UC16
+        usecase "🛡️ Autorisasi\\n(Authorization)" as UC17
+        usecase "🔒 Validasi Token\\n(Token Validation)" as UC18
+    }
+    
+    ' Notification Operations
+    package "🔔 Notification" {
+        usecase "✅ Notifikasi Sukses\\n(Success Notification)" as UC19
+        usecase "❌ Notifikasi Error\\n(Error Notification)" as UC20
+        usecase "ℹ️ Notifikasi Info\\n(Info Notification)" as UC21
+    }
+}
+
+' User Relationships
+User --> UC1 : Tambah siswa baru
+User --> UC2 : Lihat semua siswa
+User --> UC3 : Lihat detail siswa
+User --> UC4 : Edit data siswa
+User --> UC5 : Hapus data siswa
+User --> UC6 : Cari siswa
+User --> UC7 : Filter siswa
+User --> UC8 : Navigasi halaman
+User --> UC9 : Upload file Excel
+User --> UC10 : Download Excel
+User --> UC11 : Lihat total siswa
+User --> UC12 : Pilih siswa dropdown
+
+' Authentication System Relationships
+Auth --> UC16 : Proses login
+Auth --> UC17 : Cek hak akses
+Auth --> UC18 : Validasi token
+
+' Include Relationships
+UC1 ..> UC13 : <<include>>
+UC1 ..> UC14 : <<include>>
+UC1 ..> UC15 : <<include>>
+UC1 ..> UC18 : <<include>>
+
+UC2 ..> UC18 : <<include>>
+UC2 ..> UC6 : <<include>>
+UC2 ..> UC7 : <<include>>
+UC2 ..> UC8 : <<include>>
+
+UC3 ..> UC18 : <<include>>
+UC3 ..> UC14 : <<include>>
+
+UC4 ..> UC18 : <<include>>
+UC4 ..> UC13 : <<include>>
+UC4 ..> UC14 : <<include>>
+UC4 ..> UC15 : <<include>>
+
+UC5 ..> UC18 : <<include>>
+UC5 ..> UC14 : <<include>>
+
+UC9 ..> UC18 : <<include>>
+UC9 ..> UC14 : <<include>>
+UC9 ..> UC15 : <<include>>
+
+UC10 ..> UC18 : <<include>>
+
+UC11 ..> UC18 : <<include>>
+
+UC12 ..> UC18 : <<include>>
+
+' Extend Relationships
+UC1 ..> UC19 : <<extend>>
+UC1 ..> UC20 : <<extend>>
+
+UC2 ..> UC19 : <<extend>>
+UC2 ..> UC20 : <<extend>>
+
+UC3 ..> UC20 : <<extend>>
+
+UC4 ..> UC19 : <<extend>>
+UC4 ..> UC20 : <<extend>>
+
+UC5 ..> UC19 : <<extend>>
+UC5 ..> UC20 : <<extend>>
+
+UC9 ..> UC19 : <<extend>>
+UC9 ..> UC20 : <<extend>>
+
+UC10 ..> UC19 : <<extend>>
+UC10 ..> UC20 : <<extend>>
+
+UC13 ..> UC20 : <<extend>>
+UC14 ..> UC20 : <<extend>>
+UC15 ..> UC20 : <<extend>>
+
+' Notes
+note right of UC1
+  **Data yang dibutuhkan:**
+  - Nama (required)
+  - NIS (required, unique)
+  - Jenis Kelamin (L/P)
+  - Kelas (required)
+  - Tanggal Lahir (required)
+  - Alamat (optional)
+end note
+
+note right of UC9
+  **Format Excel:**
+  - Kolom: Nama, NIS, Jenis Kelamin,
+    Kelas, Tanggal Lahir, Alamat
+  - Format: .xlsx atau .xls
+  - Validasi duplikasi NIS
+end note
+
+note right of UC10
+  **Export Excel:**
+  - Semua data siswa
+  - Format: .xlsx
+  - Filename: Data_Siswa.xlsx
+  - Include timestamps
+end note
+
+note right of UC18
+  **Authentication:**
+  - Bearer JWT Token
+  - Token validation setiap request
+  - Auto-redirect jika expired
+end note
+
+@enduml 

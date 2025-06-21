@@ -1,0 +1,211 @@
+@startuml Sequence_Diagram_Manajemen_Nilai
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 10
+skinparam maxmessagesize 60
+
+title Sequence Diagram - Manajemen Nilai Raport Siswa\\nSistem EduPro
+
+participant "User" as U
+participant "Frontend\\n(Kendo Grid)" as F
+participant "Backend API\\n(/api/nilai)" as A
+participant "Database" as D
+participant "Siswa Table" as S
+participant "NilaiRaport Table" as N
+
+== 1. CREATE NILAI (Tambah Data Baru) ==
+
+U -> F: Click "Add New" button
+F -> U: Show form popup with defaults:\\nsemester="Ganjil"\\ntahun_ajaran="2024/2025"
+U -> F: Fill form data:\\n- siswa_id (dropdown selection)\\n- semester, tahun_ajaran\\n- 11 mata pelajaran values\\n(matematika, bahasa_indonesia, bahasa_inggris,\\nbahasa_jawa, ipa, agama, pjok, pkn,\\nsejarah, seni, dasar_kejuruan)
+
+note over F: Auto-Calculate on Form (Real-time)
+F -> F: Calculate rata_rata = (sum of 11 subjects) / 11
+F -> F: Update form display real-time
+F -> F: Validate all subjects (0-100 range)
+
+U -> F: Click "Save" button
+
+F -> A: POST /api/nilai/\\nBearer Token + Form Data
+
+note over A: Authentication Check
+A -> A: Validate Bearer Token\\nExtract current_user
+
+note over A: Student Validation
+A -> S: SELECT * FROM siswa\\nWHERE id = siswa_id
+S --> A: Return siswa data or null
+
+alt Siswa tidak ditemukan
+    A --> F: HTTP 404\\n"Siswa dengan ID tidak ditemukan"
+    F --> U: Show error notification
+else Siswa valid
+    note over A: Duplicate Check (Semester & Tahun)
+    A -> N: SELECT * FROM nilai_raport\\nWHERE siswa_id = ? AND semester = ?\\nAND tahun_ajaran = ?
+    N --> A: Return existing data or null
+    
+    alt Data nilai sudah ada
+        A --> F: HTTP 400\\n"Nilai untuk siswa pada semester ini sudah ada"
+        F --> U: Show error notification
+    else Data belum ada
+        note over A: Business Logic Calculation
+        A -> A: Extract 11 subject values from request
+        A -> A: Calculate rata_rata = (matematika + bahasa_indonesia +\\nbahasa_inggris + bahasa_jawa + ipa + agama +\\npjok + pkn + sejarah + seni + dasar_kejuruan) / 11
+        A -> A: Validate all subjects (0-100 range)
+        
+        note over A: Data Persistence
+        A -> N: INSERT INTO nilai_raport\\n(siswa_id, semester, tahun_ajaran,\\nmatematika, bahasa_indonesia, bahasa_inggris,\\nbahasa_jawa, ipa, agama, pjok, pkn,\\nsejarah, seni, dasar_kejuruan, rata_rata)
+        N --> A: Return new record with ID
+        
+        A --> F: HTTP 201 - Created with calculated data
+        F -> F: Refresh grid data
+        F --> U: Show success notification
+    end
+end
+
+== 2. READ NILAI (Tampil Data) ==
+
+U -> F: Navigate to Nilai page
+F -> A: GET /api/nilai?skip=0&limit=100\\nBearer Token
+
+note over A: Authentication Check
+A -> A: Validate Bearer Token\\nExtract current_user
+
+note over A: JOIN Query with Siswa
+A -> D: SELECT n.id, n.siswa_id, s.nama as nama_siswa,\\nn.semester, n.tahun_ajaran,\\nn.matematika, n.bahasa_indonesia, n.bahasa_inggris,\\nn.ipa, n.bahasa_jawa, n.agama, n.pjok, n.pkn,\\nn.sejarah, n.seni, n.dasar_kejuruan, n.rata_rata,\\nn.created_at, n.updated_at\\nFROM nilai_raport n\\nJOIN siswa s ON n.siswa_id = s.id\\nORDER BY s.nama\\nLIMIT 100 OFFSET 0
+
+D --> A: Return joined data with siswa names
+
+note over A: Data Transformation
+A -> A: Convert query results to JSON array\\nFormat rata_rata to 1 decimal place
+
+A --> F: HTTP 200 - Array of nilai with nama_siswa
+
+F -> F: Populate Kendo Grid:\\n- Configure columns with proper formatting\\n- Set data source with pagination\\n- Enable sorting, filtering\\n- Hide some columns for space optimization
+
+F --> U: Display data table with columns:\\nNama Siswa, Semester, Tahun Ajaran,\\nMTK, B.IND, B.ING, IPA, Rata²,\\nActions (Edit/Delete)
+
+== 3. UPDATE NILAI (Edit Data) ==
+
+U -> F: Click "Edit" button on grid row
+F -> A: GET /api/nilai/{id}\\nBearer Token
+A -> N: SELECT * FROM nilai_raport WHERE id = ?
+N --> A: Return nilai record
+A --> F: HTTP 200 - Nilai data for editing
+
+F -> U: Show edit form popup\\nPre-filled with current data
+U -> F: Modify subject values:\\n- matematika, bahasa_indonesia\\n- bahasa_inggris, ipa, etc.
+
+note over F: Real-time Calculation
+F -> F: On input change:\\nCalculate rata_rata = (sum of 11 subjects) / 11
+F -> F: Update rata_rata field immediately
+F -> F: Validate all subjects (0-100 range)
+
+U -> F: Click "Update" button
+
+F -> A: PUT /api/nilai/{id}\\nBearer Token + Updated Data
+
+note over A: Authentication & Validation
+A -> A: Validate Bearer Token\\nExtract current_user
+A -> N: SELECT * FROM nilai_raport WHERE id = ?
+N --> A: Return existing record or null
+
+alt Record tidak ditemukan
+    A --> F: HTTP 404\\n"Nilai tidak ditemukan"
+    F --> U: Show error notification
+else Record ditemukan
+    note over A: Business Logic for Updates
+    A -> A: Check if any subject values changed
+    A -> A: Get update_data with exclude_unset=True
+    
+    alt Subject values changed
+        A -> A: Get updated values from request
+        A -> A: Get existing values for unchanged fields
+        A -> A: Recalculate rata_rata = (sum of all 11 subjects) / 11
+        A -> A: Add rata_rata to update_data
+    end
+    
+    A -> A: Set updated_at = current_timestamp()
+    
+    note over A: Data Update
+    A -> N: UPDATE nilai_raport SET\\nmatematika = ?, bahasa_indonesia = ?,\\nbahasa_inggris = ?, bahasa_jawa = ?,\\nipa = ?, agama = ?, pjok = ?, pkn = ?,\\nsejarah = ?, seni = ?, dasar_kejuruan = ?,\\nrata_rata = ?, updated_at = ?\\nWHERE id = ?
+    N --> A: Return updated record
+    
+    A --> F: HTTP 200 - Updated nilai data
+    F -> F: Refresh grid data source
+    F --> U: Show success notification
+end
+
+== 4. DELETE NILAI (Hapus Data) ==
+
+U -> F: Click "Hapus" button on grid row
+
+note over F: Confirmation Modal
+F -> F: Extract safe data from dataItem:\\n- id, nama_siswa, semester, tahun_ajaran\\n- matematika, bahasa_indonesia, bahasa_inggris\\n- ipa, rata_rata
+
+F -> U: Show confirmation modal with details:\\n"Apakah Anda yakin ingin menghapus nilai raport\\nuntuk [nama_siswa] semester [semester]\\ntahun ajaran [tahun_ajaran]?\\nRata-rata: [rata_rata]"
+
+U -> F: Click "Ya, Hapus" confirmation
+
+F -> A: DELETE /api/nilai/{id}\\nBearer Token
+
+note over A: Authentication & Validation
+A -> A: Validate Bearer Token\\nExtract current_user
+A -> N: SELECT * FROM nilai_raport WHERE id = ?
+N --> A: Return record or null
+
+alt Record tidak ditemukan
+    A --> F: HTTP 404\\n"Nilai tidak ditemukan"
+    F --> U: Show error notification
+else Record ditemukan
+    note over A: Data Deletion
+    A -> N: DELETE FROM nilai_raport WHERE id = ?
+    N --> A: Deletion successful
+    
+    A --> F: HTTP 204 - No Content
+    F -> F: Refresh grid data source
+    F --> U: Show success notification:\\n"Data nilai raport berhasil dihapus"
+end
+
+== 5. EXPORT EXCEL ==
+
+U -> F: Click "Export Excel" button
+F -> A: GET /api/nilai/export/excel\\nBearer Token
+
+note over A: Authentication Check
+A -> A: Validate Bearer Token\\nExtract current_user
+
+note over A: Data Collection
+A -> D: SELECT n.id, n.siswa_id, s.nama as nama_siswa,\\nn.semester, n.tahun_ajaran,\\nn.matematika, n.bahasa_indonesia, n.bahasa_inggris,\\nn.ipa, n.bahasa_jawa, n.agama, n.pjok, n.pkn,\\nn.sejarah, n.seni, n.dasar_kejuruan, n.rata_rata,\\nn.created_at, n.updated_at\\nFROM nilai_raport n\\nJOIN siswa s ON n.siswa_id = s.id\\nORDER BY s.nama
+
+D --> A: Return all nilai data with siswa names
+
+note over A: Excel Generation
+A -> A: Convert data to pandas DataFrame with columns:\\nID, Siswa ID, Nama Siswa, Semester, Tahun Ajaran,\\nMatematika, Bahasa Indonesia, Bahasa Inggris, IPA,\\nBahasa Jawa, Agama, PJOK, PKN, Sejarah, Seni,\\nDasar Kejuruan, Rata-rata, Dibuat, Diperbarui
+A -> A: Create BytesIO in-memory file
+A -> A: Write DataFrame to Excel with openpyxl engine
+A -> A: Set proper headers for file download
+
+A --> F: StreamingResponse with Excel file\\nContent-Disposition: attachment;\\nfilename=Data_Nilai_Raport.xlsx
+
+F -> F: Trigger browser download
+F --> U: File downloaded successfully
+
+== 6. FILTER BY SISWA (Optional Feature) ==
+
+U -> F: Apply siswa filter in grid
+F -> A: GET /api/nilai?siswa_id={siswa_id}\\nBearer Token
+
+note over A: Authentication Check
+A -> A: Validate Bearer Token\\nExtract current_user
+
+note over A: Filtered Query
+A -> D: SELECT n.id, n.siswa_id, s.nama as nama_siswa,\\nn.semester, n.tahun_ajaran,\\nn.matematika, n.bahasa_indonesia, n.bahasa_inggris,\\nn.ipa, n.bahasa_jawa, n.agama, n.pjok, n.pkn,\\nn.sejarah, n.seni, n.dasar_kejuruan, n.rata_rata,\\nn.created_at, n.updated_at\\nFROM nilai_raport n\\nJOIN siswa s ON n.siswa_id = s.id\\nWHERE n.siswa_id = {siswa_id}\\nORDER BY n.semester, n.tahun_ajaran
+
+D --> A: Return filtered nilai data
+
+A --> F: HTTP 200 - Filtered array of nilai
+F -> F: Update grid with filtered data
+F --> U: Display filtered results with indicator
+
+@enduml 

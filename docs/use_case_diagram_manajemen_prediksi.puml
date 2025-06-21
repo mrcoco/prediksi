@@ -1,0 +1,198 @@
+@startuml Use Case Diagram - Manajemen Prediksi Prestasi Siswa
+!theme blueprint
+skinparam packageStyle rectangle
+
+title Use Case Diagram - Manajemen Prediksi Prestasi Siswa\nSistem EduPro
+
+left to right direction
+
+actor User as U
+actor "Authentication System" as Auth
+
+package "CRUD Operations" as CRUD {
+    usecase "Create Prediction\n(Individual)" as UC01
+    usecase "Create Prediction\n(Batch)" as UC02
+    usecase "Read Prediction History" as UC03
+    usecase "Read Single Prediction" as UC04
+    usecase "Delete Prediction History" as UC05
+}
+
+package "Machine Learning Operations" as ML {
+    usecase "Train C4.5 Model" as UC06
+    usecase "Generate Labeled Data" as UC07
+    usecase "Validate Model Performance" as UC08
+    usecase "Get Model Metrics" as UC09
+    usecase "Get Confusion Matrix" as UC10
+}
+
+package "Data Management" as DM {
+    usecase "Export Prediction History\n(Excel)" as UC11
+    usecase "Export Batch Results\n(Excel)" as UC12
+    usecase "Generate Dummy Data" as UC13
+    usecase "Count Prediction Data" as UC14
+}
+
+package "Visualization" as VIS {
+    usecase "Generate Tree Visualization\n(Static)" as UC15
+    usecase "Generate Tree Visualization\n(D3.js Interactive)" as UC16
+    usecase "Get Tree Data JSON" as UC17
+    usecase "Display Prediction Results" as UC18
+}
+
+package "Analysis & Statistics" as STAT {
+    usecase "Get Feature Statistics" as UC19
+    usecase "Generate Correlation Matrix" as UC20
+    usecase "Generate Bar Chart Analysis" as UC21
+    usecase "Get Model Rules" as UC22
+}
+
+package "Validation" as VAL {
+    usecase "Validate Student Data" as UC23
+    usecase "Validate Prediction Input" as UC24
+    usecase "Check Data Completeness" as UC25
+}
+
+package "Authentication" as AUTH {
+    usecase "Login User" as UC26
+    usecase "Authorize Prediction Access" as UC27
+    usecase "Validate Token" as UC28
+}
+
+package "Notification" as NOTIF {
+    usecase "Show Success Notification" as UC29
+    usecase "Show Error Notification" as UC30
+    usecase "Show Info Notification" as UC31
+}
+
+' User relationships
+U --> UC01
+U --> UC02
+U --> UC03
+U --> UC04
+U --> UC05
+U --> UC06
+U --> UC07
+U --> UC08
+U --> UC09
+U --> UC10
+U --> UC11
+U --> UC12
+U --> UC13
+U --> UC14
+U --> UC15
+U --> UC16
+U --> UC17
+U --> UC18
+U --> UC19
+U --> UC20
+U --> UC21
+U --> UC22
+U --> UC23
+U --> UC24
+U --> UC25
+
+' Authentication System relationships
+Auth --> UC26
+Auth --> UC27
+Auth --> UC28
+Auth --> UC29
+Auth --> UC30
+Auth --> UC31
+
+' Include relationships
+UC01 ..> UC23 : <<include>>
+UC01 ..> UC24 : <<include>>
+UC01 ..> UC25 : <<include>>
+UC01 ..> UC27 : <<include>>
+UC01 ..> UC29 : <<include>>
+
+UC02 ..> UC23 : <<include>>
+UC02 ..> UC24 : <<include>>
+UC02 ..> UC25 : <<include>>
+UC02 ..> UC27 : <<include>>
+UC02 ..> UC29 : <<include>>
+
+UC03 ..> UC27 : <<include>>
+UC03 ..> UC28 : <<include>>
+
+UC04 ..> UC27 : <<include>>
+UC04 ..> UC28 : <<include>>
+
+UC05 ..> UC27 : <<include>>
+UC05 ..> UC29 : <<include>>
+
+UC06 ..> UC07 : <<include>>
+UC06 ..> UC08 : <<include>>
+UC06 ..> UC27 : <<include>>
+UC06 ..> UC29 : <<include>>
+
+UC08 ..> UC09 : <<include>>
+UC08 ..> UC10 : <<include>>
+
+UC11 ..> UC27 : <<include>>
+UC11 ..> UC29 : <<include>>
+
+UC12 ..> UC27 : <<include>>
+UC12 ..> UC29 : <<include>>
+
+UC13 ..> UC27 : <<include>>
+UC13 ..> UC29 : <<include>>
+
+UC15 ..> UC06 : <<include>>
+UC15 ..> UC27 : <<include>>
+
+UC16 ..> UC17 : <<include>>
+UC16 ..> UC27 : <<include>>
+
+UC19 ..> UC27 : <<include>>
+
+UC20 ..> UC19 : <<include>>
+UC20 ..> UC27 : <<include>>
+
+UC21 ..> UC19 : <<include>>
+UC21 ..> UC27 : <<include>>
+
+UC22 ..> UC06 : <<include>>
+UC22 ..> UC27 : <<include>>
+
+' Extend relationships
+UC01 ..> UC30 : <<extend>>
+UC02 ..> UC30 : <<extend>>
+UC06 ..> UC30 : <<extend>>
+UC11 ..> UC30 : <<extend>>
+UC12 ..> UC30 : <<extend>>
+UC13 ..> UC30 : <<extend>>
+
+UC18 ..> UC31 : <<extend>>
+
+note right of UC01
+  Prediksi individual siswa
+  berdasarkan data nilai,
+  presensi, dan penghasilan
+end note
+
+note right of UC02
+  Prediksi batch untuk
+  semua siswa dalam
+  semester tertentu
+end note
+
+note right of UC06
+  Melatih model C4.5
+  dengan algoritma
+  decision tree
+end note
+
+note right of UC15
+  Visualisasi pohon
+  keputusan statis
+  dengan matplotlib
+end note
+
+note right of UC16
+  Visualisasi pohon
+  keputusan interaktif
+  dengan D3.js
+end note
+
+@enduml 

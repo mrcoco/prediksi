@@ -1,0 +1,143 @@
+graph TB
+    %% Actors
+    User["👤 User<br/>(Guru/Admin)"]
+    Auth["🔐 Authentication<br/>System"]
+    
+    %% System Boundary
+    subgraph System["📅 Sistem Manajemen Presensi Siswa"]
+        
+        %% Core CRUD Operations
+        subgraph CRUD["🔄 CRUD Operations"]
+            UC1["➕ Tambah Data Presensi<br/>(Create)"]
+            UC2["📋 Lihat Daftar Presensi<br/>(Read All)"]
+            UC3["👤 Lihat Detail Presensi<br/>(Read Single)"]
+            UC4["✏️ Edit Data Presensi<br/>(Update)"]
+            UC5["🗑️ Hapus Data Presensi<br/>(Delete)"]
+        end
+        
+        %% Search & Filter Operations
+        subgraph Search["🔍 Search & Filter"]
+            UC6["🔎 Cari Presensi<br/>(Search)"]
+            UC7["📊 Filter Presensi<br/>(Filter)"]
+            UC8["📄 Pagination<br/>(Paging)"]
+        end
+        
+        %% Data Management Operations
+        subgraph DataMgmt["📁 Data Management"]
+            UC9["📥 Export Excel<br/>(Export)"]
+            UC10["🔢 Hitung Total Data<br/>(Count)"]
+            UC11["📝 Dropdown Siswa<br/>(Dropdown)"]
+        end
+        
+        %% Business Logic Operations
+        subgraph BusinessLogic["📊 Business Logic"]
+            UC12["🧮 Hitung Persentase Kehadiran<br/>(Calculate Percentage)"]
+            UC13["📈 Tentukan Kategori Kehadiran<br/>(Categorize Attendance)"]
+            UC14["📋 Validasi Total Hari<br/>(Validate Total Days)"]
+            UC15["📅 Format Periode<br/>(Format Period)"]
+        end
+        
+        %% Validation Operations
+        subgraph Validation["✅ Validation"]
+            UC16["🆔 Validasi Siswa<br/>(Student Validation)"]
+            UC17["📋 Validasi Data<br/>(Data Validation)"]
+            UC18["🔍 Cek Duplikasi<br/>(Duplicate Check)"]
+            UC19["📊 Validasi Semester<br/>(Semester Validation)"]
+        end
+        
+        %% Authentication Operations
+        subgraph Authentication["🔐 Authentication"]
+            UC20["🔑 Login<br/>(Authentication)"]
+            UC21["🛡️ Autorisasi<br/>(Authorization)"]
+            UC22["🔒 Validasi Token<br/>(Token Validation)"]
+        end
+        
+        %% Notification Operations
+        subgraph Notification["🔔 Notification"]
+            UC23["✅ Notifikasi Sukses<br/>(Success Notification)"]
+            UC24["❌ Notifikasi Error<br/>(Error Notification)"]
+            UC25["ℹ️ Notifikasi Info<br/>(Info Notification)"]
+        end
+    end
+    
+    %% User Relationships
+    User --> UC1
+    User --> UC2
+    User --> UC3
+    User --> UC4
+    User --> UC5
+    User --> UC6
+    User --> UC7
+    User --> UC8
+    User --> UC9
+    User --> UC10
+    User --> UC11
+    
+    %% Authentication System Relationships
+    Auth --> UC20
+    Auth --> UC21
+    Auth --> UC22
+    
+    %% Include Relationships (shown as dependencies)
+    UC1 -.-> UC16
+    UC1 -.-> UC17
+    UC1 -.-> UC18
+    UC1 -.-> UC19
+    UC1 -.-> UC12
+    UC1 -.-> UC13
+    UC1 -.-> UC14
+    UC1 -.-> UC22
+    
+    UC2 -.-> UC22
+    UC2 -.-> UC6
+    UC2 -.-> UC7
+    UC2 -.-> UC8
+    UC2 -.-> UC15
+    
+    UC3 -.-> UC22
+    UC3 -.-> UC17
+    UC3 -.-> UC15
+    
+    UC4 -.-> UC22
+    UC4 -.-> UC16
+    UC4 -.-> UC17
+    UC4 -.-> UC12
+    UC4 -.-> UC13
+    UC4 -.-> UC14
+    
+    UC5 -.-> UC22
+    UC5 -.-> UC17
+    
+    UC9 -.-> UC22
+    UC9 -.-> UC15
+    
+    UC10 -.-> UC22
+    UC11 -.-> UC22
+    
+    %% Extend Relationships (shown as optional connections)
+    UC1 -.- UC23
+    UC1 -.- UC24
+    UC2 -.- UC23
+    UC2 -.- UC24
+    UC3 -.- UC24
+    UC4 -.- UC23
+    UC4 -.- UC24
+    UC5 -.- UC23
+    UC5 -.- UC24
+    UC9 -.- UC23
+    UC9 -.- UC24
+    UC16 -.- UC24
+    UC17 -.- UC24
+    UC18 -.- UC24
+    UC19 -.- UC24
+    
+    %% Styling
+    classDef userStyle fill:#A23B72,stroke:#2E86AB,stroke-width:2px,color:#fff
+    classDef authStyle fill:#2E86AB,stroke:#A23B72,stroke-width:2px,color:#fff
+    classDef usecaseStyle fill:#F18F01,stroke:#C73E1D,stroke-width:2px,color:#000
+    classDef systemStyle fill:#E8F4FD,stroke:#2E86AB,stroke-width:3px
+    classDef packageStyle fill:#FFF5E6,stroke:#F18F01,stroke-width:2px
+    
+    class User userStyle
+    class Auth authStyle
+    class UC1,UC2,UC3,UC4,UC5,UC6,UC7,UC8,UC9,UC10,UC11,UC12,UC13,UC14,UC15,UC16,UC17,UC18,UC19,UC20,UC21,UC22,UC23,UC24,UC25 usecaseStyle 

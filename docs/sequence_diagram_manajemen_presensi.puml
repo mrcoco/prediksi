@@ -1,0 +1,214 @@
+@startuml Sequence_Diagram_Manajemen_Presensi
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 10
+skinparam maxmessagesize 60
+
+title Sequence Diagram - Manajemen Presensi Siswa\nSistem EduPro
+
+participant "User" as U
+participant "Frontend\n(Kendo Grid)" as F
+participant "Backend API\n(/api/presensi)" as A
+participant "Database" as D
+participant "Siswa Table" as S
+participant "Presensi Table" as P
+
+== 1. CREATE PRESENSI (Tambah Data Baru) ==
+
+U -> F: Click "Add New" button
+F -> U: Show form popup with defaults:\nsemester="Ganjil"\ntahun_ajaran="2024/2025"
+U -> F: Fill form data:\n- siswa_id (dropdown selection)\n- semester, tahun_ajaran\n- jumlah_hadir, jumlah_sakit\n- jumlah_izin, jumlah_alpa
+
+note over F: Auto-Calculate on Form (Real-time)
+F -> F: Calculate total_hari =\nhadir + sakit + izin + alpa
+F -> F: Calculate persentase_kehadiran =\n(hadir / total_hari) × 100
+F -> F: Determine kategori_kehadiran:\n≥80% = "Tinggi"\n≥75% = "Sedang"\n<75% = "Rendah"
+F -> F: Update form display real-time\nwith calculated values
+
+U -> F: Click "Save" button
+
+F -> A: POST /api/presensi/\nBearer Token + Form Data
+
+note over A: Authentication & Authorization
+A -> A: Validate Bearer Token\nExtract current_user info
+
+note over A: Student Validation
+A -> S: SELECT * FROM siswa\nWHERE id = siswa_id
+S --> A: Return siswa record or null
+
+alt Siswa tidak ditemukan
+    A --> F: HTTP 404\n"Siswa dengan ID tidak ditemukan"
+    F --> U: Show error notification
+else Siswa valid
+    note over A: Duplicate Prevention (Semester & Tahun)
+    A -> P: SELECT * FROM presensi\nWHERE siswa_id = ?\nAND semester = ?\nAND tahun_ajaran = ?
+    P --> A: Return existing record or null
+    
+    alt Data presensi sudah ada
+        A --> F: HTTP 400\n"Presensi untuk semester ini sudah ada"
+        F --> U: Show error notification
+    else Data belum ada
+        note over A: Business Logic Calculation
+        A -> A: Calculate total_hari =\nhadir + sakit + izin + alpa
+        A -> A: Calculate persentase_kehadiran =\n(hadir / total_hari) × 100
+        A -> A: Determine kategori_kehadiran:\n≥80% = "Tinggi"\n≥75% = "Sedang"\n<75% = "Rendah"
+        
+        note over A: Data Persistence
+        A -> P: INSERT INTO presensi\n(siswa_id, semester, tahun_ajaran,\njumlah_hadir, jumlah_sakit, jumlah_izin, jumlah_alpa,\npersentase_kehadiran, kategori_kehadiran,\ncreated_at)\nVALUES (...)
+        P --> A: Return new record with generated ID
+        
+        A --> F: HTTP 201 Created\nReturn new presensi data with calculations
+        F -> F: Refresh Kendo Grid datasource
+        F --> U: Show success notification\n"Data presensi berhasil ditambahkan"
+    end
+end
+
+== 2. READ PRESENSI (Tampil Data) ==
+
+U -> F: Navigate to Presensi page\nOr refresh grid
+F -> A: GET /api/presensi\n?skip=0&limit=100\nBearer Token
+
+note over A: Authentication Check
+A -> A: Validate Bearer Token\nExtract user info
+
+note over A: Data Retrieval with JOIN
+A -> D: SELECT p.id, p.siswa_id,\ns.nama as nama_siswa,\np.semester, p.tahun_ajaran,\np.jumlah_hadir, p.jumlah_sakit,\np.jumlah_izin, p.jumlah_alpa,\np.persentase_kehadiran, p.kategori_kehadiran,\np.created_at, p.updated_at\nFROM presensi p\nJOIN siswa s ON p.siswa_id = s.id\nORDER BY s.nama\nLIMIT 100 OFFSET 0
+
+D --> A: Return joined records with siswa names
+
+note over A: Data Transformation
+A -> A: Convert query results to JSON array\nFormat persentase_kehadiran to 1 decimal place\nFormat timestamps to readable format
+
+A --> F: HTTP 200 OK\nArray of presensi objects with nama_siswa
+
+F -> F: Populate Kendo Grid:\n- Configure columns with proper formatting\n- Set data source with pagination\n- Enable sorting, filtering, search
+F -> F: Format persentase column as percentage\nFormat kategori with badge styling
+
+F --> U: Display data table with columns:\n- Nama Siswa\n- Semester, Tahun Ajaran\n- Hadir/Sakit/Izin/Alpa (numbers)\n- Persentase Kehadiran (formatted %)\n- Kategori Kehadiran (badge)\n- Actions (Edit/Delete buttons)
+
+== 3. UPDATE PRESENSI (Edit Data) ==
+
+U -> F: Click "Edit" button on grid row
+F -> A: GET /api/presensi/{id}\nBearer Token
+A -> P: SELECT * FROM presensi\nWHERE id = ?
+P --> A: Return presensi record
+A --> F: HTTP 200\nPresensi data for editing
+
+F -> U: Show edit form popup\nPre-filled with current data
+U -> F: Modify attendance fields:\n- jumlah_hadir\n- jumlah_sakit\n- jumlah_izin\n- jumlah_alpa
+
+note over F: Real-time Calculation on Form
+F -> F: On each input change:\nCalculate total_hari = hadir + sakit + izin + alpa
+F -> F: Calculate persentase_kehadiran =\n(hadir / total_hari) × 100
+F -> F: Update kategori_kehadiran:\n≥80% = "Tinggi"\n≥75% = "Sedang"\n<75% = "Rendah"
+F -> F: Update form display immediately\nwith new calculated values
+
+U -> F: Click "Update" button
+
+F -> A: PUT /api/presensi/{id}\nBearer Token + Updated Data
+
+note over A: Authentication & Validation
+A -> A: Validate Bearer Token\nExtract current_user
+A -> P: SELECT * FROM presensi\nWHERE id = ?
+P --> A: Return existing record or null
+
+alt Record tidak ditemukan
+    A --> F: HTTP 404\n"Presensi tidak ditemukan"
+    F --> U: Show error notification
+else Record ditemukan
+    note over A: Business Logic for Updates
+    A -> A: Check if attendance fields changed:\njumlah_hadir, jumlah_sakit,\njumlah_izin, jumlah_alpa
+    
+    alt Attendance data changed
+        A -> A: Get updated values from request
+        A -> A: Recalculate total_hari =\nhadir + sakit + izin + alpa
+        A -> A: Recalculate persentase_kehadiran =\n(hadir / total_hari) × 100
+        A -> A: Redetermine kategori_kehadiran:\n≥80% = "Tinggi"\n≥75% = "Sedang"\n<75% = "Rendah"
+    end
+    
+    A -> A: Set updated_at = current_timestamp()
+    
+    note over A: Data Update
+    A -> P: UPDATE presensi SET\njumlah_hadir = ?, jumlah_sakit = ?,\njumlah_izin = ?, jumlah_alpa = ?,\npersentase_kehadiran = ?,\nkategori_kehadiran = ?,\nupdated_at = ?\nWHERE id = ?
+    P --> A: Return updated record
+    
+    A --> F: HTTP 200 OK\nUpdated presensi data
+    F -> F: Refresh grid data source
+    F --> U: Show success notification\n"Data presensi berhasil diperbarui"
+end
+
+== 4. DELETE PRESENSI (Hapus Data) ==
+
+U -> F: Click "Delete" button on grid row
+F -> U: Show confirmation modal with details:\n"Hapus data presensi untuk [Nama Siswa]?"\nSemester: [Semester] [Tahun Ajaran]\nHadir: [X] hari, Sakit: [Y] hari\nIzin: [Z] hari, Alpa: [W] hari\nPersentase: [XX.X]%\nKategori: [Kategori]
+
+U -> F: Click "Confirm Delete" button
+
+F -> A: DELETE /api/presensi/{id}\nBearer Token
+
+note over A: Authentication & Validation
+A -> A: Validate Bearer Token\nCheck delete permissions
+A -> P: SELECT * FROM presensi\nWHERE id = ?
+P --> A: Return record or null
+
+alt Record tidak ditemukan
+    A --> F: HTTP 404\n"Presensi tidak ditemukan"
+    F --> U: Show error notification
+else Record ditemukan
+    note over A: Data Deletion
+    A -> P: DELETE FROM presensi\nWHERE id = ?
+    P --> A: Confirm successful deletion
+    
+    A --> F: HTTP 204 No Content\n(Successful deletion)
+    F -> F: Remove row from grid\nRefresh data source
+    F --> U: Show success notification\n"Data presensi berhasil dihapus"
+end
+
+== 5. EXPORT EXCEL ==
+
+U -> F: Click "Export Excel" button in toolbar
+F -> A: GET /api/presensi/export/excel\nBearer Token
+
+note over A: Authentication Check
+A -> A: Validate Bearer Token\nCheck export permissions
+
+note over A: Data Collection for Export
+A -> D: SELECT p.id, p.siswa_id,\ns.nama as nama_siswa,\np.semester, p.tahun_ajaran,\np.jumlah_hadir, p.jumlah_sakit,\np.jumlah_izin, p.jumlah_alpa,\np.persentase_kehadiran, p.kategori_kehadiran,\np.created_at, p.updated_at\nFROM presensi p\nJOIN siswa s ON p.siswa_id = s.id\nORDER BY s.nama
+
+D --> A: Return all presensi records\nwith siswa names
+
+note over A: Excel File Generation
+A -> A: Transform data to standardized format:\n- Format persentase to 1 decimal place\n- Format timestamps to readable format\n- Clean and organize column headers\n- Sort data by student name
+A -> A: Create pandas DataFrame\nfrom transformed data
+A -> A: Generate Excel file using\nopenpyxl engine in BytesIO buffer
+A -> A: Set worksheet name: "Data Presensi"
+A -> A: Apply basic formatting to headers
+A -> A: Set download filename: "Data_Presensi.xlsx"
+
+A --> F: HTTP 200 OK\nStreamingResponse with:\n- Content-Type: application/vnd.\nopenxmlformats-officedocument.\nspreadsheetml.sheet\n- Content-Disposition: attachment;\nfilename="Data_Presensi.xlsx"
+
+F -> F: Create blob from response data
+F -> F: Create temporary download link\nTrigger browser download mechanism
+F --> U: File download starts\nShow success notification:\n"File Excel berhasil diunduh"
+
+note over U: User receives Excel file with:\n- Complete presensi data\n- Proper column formatting\n- Ready for external analysis
+
+== 6. FILTER BY SISWA (Optional Feature) ==
+
+U -> F: Use siswa filter in grid\nOr apply search/filter
+F -> A: GET /api/presensi\n?siswa_id={siswa_id}\nBearer Token
+
+note over A: Authentication Check
+A -> A: Validate Bearer Token
+
+note over A: Filtered Query
+A -> D: SELECT p.id, p.siswa_id,\ns.nama as nama_siswa,\np.semester, p.tahun_ajaran,\np.jumlah_hadir, p.jumlah_sakit,\np.jumlah_izin, p.jumlah_alpa,\np.persentase_kehadiran, p.kategori_kehadiran,\np.created_at, p.updated_at\nFROM presensi p\nJOIN siswa s ON p.siswa_id = s.id\nWHERE p.siswa_id = {siswa_id}\nORDER BY p.tahun_ajaran DESC, p.semester
+
+D --> A: Return filtered presensi data\nfor specific student
+A --> F: HTTP 200\nFiltered array of presensi records
+
+F -> F: Update grid with filtered data\nMaintain grid functionality
+F --> U: Display filtered results\nShow filter indicator/badge\nMaintain all CRUD operations
+
+@enduml 

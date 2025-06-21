@@ -1,0 +1,220 @@
+sequenceDiagram
+    participant User as 👤 User
+    participant Frontend as 🖥️ Frontend
+    participant AuthMiddleware as 🔐 Auth Middleware
+    participant SiswaController as 👨‍🎓 Siswa Controller
+    participant AuthService as 🔑 Auth Service
+    participant Database as 💾 Database
+
+    %% Create Siswa (Tambah Data Siswa)
+    Note over User, Database: ➕ Create Siswa - Tambah Data Siswa Baru
+    User->>Frontend: 1. Input Data Siswa Baru
+    Frontend->>AuthMiddleware: 2. POST /api/siswa/
+    AuthMiddleware->>AuthService: 3. Validate Bearer Token
+    AuthService->>Database: 4. Verify User Session
+    Database-->>AuthService: 5. Session Valid
+    AuthService-->>AuthMiddleware: 6. User Authenticated
+    AuthMiddleware->>SiswaController: 7. Route to create_siswa()
+
+    %% Validation and Duplicate Check
+    SiswaController->>Database: 8. Check Existing NIS
+    Database-->>SiswaController: 9. NIS Check Result
+    
+    alt NIS Already Exists
+        SiswaController-->>Frontend: 10. HTTP 400 Bad Request
+        Frontend-->>User: 11. Error: NIS sudah terdaftar
+    else NIS Available
+        SiswaController->>Database: 12. INSERT INTO siswa
+        Database-->>SiswaController: 13. Insert Success
+        SiswaController-->>Frontend: 14. HTTP 201 Created
+        Frontend-->>User: 15. Success: Siswa berhasil ditambahkan
+    end
+
+    %% Read Siswa (Daftar Semua Siswa)
+    Note over User, Database: 📋 Read Siswa - Daftar Semua Siswa dengan Pagination
+    User->>Frontend: 16. Request Daftar Siswa
+    Frontend->>AuthMiddleware: 17. GET /api/siswa/?skip=0&limit=100&search=
+    AuthMiddleware->>AuthService: 18. Validate Bearer Token
+    AuthService-->>AuthMiddleware: 19. Token Valid
+    AuthMiddleware->>SiswaController: 20. Route to get_all_siswa()
+
+    SiswaController->>Database: 21. SELECT * FROM siswa with pagination
+    Database-->>SiswaController: 22. Siswa Records
+    SiswaController-->>Frontend: 23. HTTP 200 OK with data
+    Frontend-->>User: 24. Display Siswa List
+
+    %% Read Single Siswa (Detail Siswa)
+    Note over User, Database: 👤 Read Single Siswa - Detail Data Siswa
+    User->>Frontend: 25. Request Detail Siswa
+    Frontend->>AuthMiddleware: 26. GET /api/siswa/{siswa_id}
+    AuthMiddleware->>AuthService: 27. Validate Bearer Token
+    AuthService-->>AuthMiddleware: 28. Token Valid
+    AuthMiddleware->>SiswaController: 29. Route to get_siswa()
+
+    SiswaController->>Database: 30. SELECT * FROM siswa WHERE id = ?
+    Database-->>SiswaController: 31. Siswa Data
+    
+    alt Siswa Found
+        SiswaController-->>Frontend: 32. HTTP 200 OK with data
+        Frontend-->>User: 33. Display Siswa Detail
+    else Siswa Not Found
+        SiswaController-->>Frontend: 34. HTTP 404 Not Found
+        Frontend-->>User: 35. Error: Siswa tidak ditemukan
+    end
+
+    %% Update Siswa (Edit Data Siswa)
+    Note over User, Database: ✏️ Update Siswa - Edit Data Siswa
+    User->>Frontend: 36. Edit Siswa Data
+    Frontend->>AuthMiddleware: 37. PUT /api/siswa/{siswa_id}
+    AuthMiddleware->>AuthService: 38. Validate Bearer Token
+    AuthService-->>AuthMiddleware: 39. Token Valid
+    AuthMiddleware->>SiswaController: 40. Route to update_siswa()
+
+    SiswaController->>Database: 41. Find Siswa by ID
+    Database-->>SiswaController: 42. Siswa Found
+    
+    alt NIS Changed - Check Uniqueness
+        SiswaController->>Database: 43. Check NIS Uniqueness
+        Database-->>SiswaController: 44. NIS Check Result
+        
+        alt NIS Conflict
+            SiswaController-->>Frontend: 45. HTTP 400 Bad Request
+            Frontend-->>User: 46. Error: NIS sudah digunakan
+        else NIS OK
+            SiswaController->>Database: 47. UPDATE siswa SET ... WHERE id = ?
+            Database-->>SiswaController: 48. Update Success
+            SiswaController-->>Frontend: 49. HTTP 200 OK
+            Frontend-->>User: 50. Success: Data berhasil diupdate
+        end
+    else No NIS Change
+        SiswaController->>Database: 51. UPDATE siswa SET ... WHERE id = ?
+        Database-->>SiswaController: 52. Update Success
+        SiswaController-->>Frontend: 53. HTTP 200 OK
+        Frontend-->>User: 54. Success: Data berhasil diupdate
+    end
+
+    %% Delete Siswa (Hapus Data Siswa)
+    Note over User, Database: 🗑️ Delete Siswa - Hapus Data Siswa
+    User->>Frontend: 55. Request Delete Siswa
+    Frontend->>AuthMiddleware: 56. DELETE /api/siswa/{siswa_id}
+    AuthMiddleware->>AuthService: 57. Validate Bearer Token
+    AuthService-->>AuthMiddleware: 58. Token Valid
+    AuthMiddleware->>SiswaController: 59. Route to delete_siswa()
+
+    SiswaController->>Database: 60. Find Siswa by ID
+    Database-->>SiswaController: 61. Siswa Found
+    
+    alt Siswa Exists
+        SiswaController->>Database: 62. DELETE FROM siswa WHERE id = ?
+        Database-->>SiswaController: 63. Delete Success
+        SiswaController-->>Frontend: 64. HTTP 204 No Content
+        Frontend-->>User: 65. Success: Siswa berhasil dihapus
+    else Siswa Not Found
+        SiswaController-->>Frontend: 66. HTTP 404 Not Found
+        Frontend-->>User: 67. Error: Siswa tidak ditemukan
+    end
+
+    %% Count Siswa (Jumlah Total Siswa)
+    Note over User, Database: 🔢 Count Siswa - Jumlah Total Siswa
+    User->>Frontend: 68. Request Total Count
+    Frontend->>AuthMiddleware: 69. GET /api/siswa/count
+    AuthMiddleware->>AuthService: 70. Validate Bearer Token
+    AuthService-->>AuthMiddleware: 71. Token Valid
+    AuthMiddleware->>SiswaController: 72. Route to get_siswa_count()
+
+    SiswaController->>Database: 73. SELECT COUNT(*) FROM siswa
+    Database-->>SiswaController: 74. Total Count
+    SiswaController-->>Frontend: 75. HTTP 200 OK with count
+    Frontend-->>User: 76. Display Total Count
+
+    %% Dropdown Siswa (Siswa untuk Dropdown)
+    Note over User, Database: 📝 Dropdown Siswa - List untuk Select Option
+    User->>Frontend: 77. Request Dropdown Data
+    Frontend->>AuthMiddleware: 78. GET /api/siswa/dropdown
+    AuthMiddleware->>AuthService: 79. Validate Bearer Token
+    AuthService-->>AuthMiddleware: 80. Token Valid
+    AuthMiddleware->>SiswaController: 81. Route to get_siswa_dropdown()
+
+    SiswaController->>Database: 82. SELECT id, nama, kelas FROM siswa
+    Database-->>SiswaController: 83. Dropdown Data
+    SiswaController-->>Frontend: 84. HTTP 200 OK with dropdown
+    Frontend-->>User: 85. Populate Dropdown Options
+
+    %% Upload Excel (Upload Data Siswa dari Excel)
+    Note over User, Database: 📤 Upload Excel - Import Data Siswa Massal
+    User->>Frontend: 86. Upload Excel File
+    Frontend->>AuthMiddleware: 87. POST /api/siswa/upload/excel
+    AuthMiddleware->>AuthService: 88. Validate Bearer Token
+    AuthService-->>AuthMiddleware: 89. Token Valid
+    AuthMiddleware->>SiswaController: 90. Route to upload_siswa_excel()
+
+    SiswaController->>SiswaController: 91. Validate File Format (.xlsx/.xls)
+    SiswaController->>SiswaController: 92. Read Excel with pandas
+    SiswaController->>SiswaController: 93. Validate Required Columns
+    
+    loop For Each Row in Excel
+        SiswaController->>Database: 94. Check Existing NIS
+        Database-->>SiswaController: 95. NIS Check Result
+        
+        alt NIS Not Exists
+            SiswaController->>Database: 96. INSERT INTO siswa
+            Database-->>SiswaController: 97. Insert Success
+        else NIS Exists
+            Note over SiswaController: Skip row (increment error_count)
+        end
+    end
+    
+    SiswaController->>Database: 98. COMMIT Transaction
+    Database-->>SiswaController: 99. Commit Success
+    SiswaController-->>Frontend: 100. HTTP 200 OK with summary
+    Frontend-->>User: 101. Display Upload Results
+
+    %% Export Excel (Export Data Siswa ke Excel)
+    Note over User, Database: 📥 Export Excel - Download Data Siswa
+    User->>Frontend: 102. Request Export Excel
+    Frontend->>AuthMiddleware: 103. GET /api/siswa/export/excel
+    AuthMiddleware->>AuthService: 104. Validate Bearer Token
+    AuthService-->>AuthMiddleware: 105. Token Valid
+    AuthMiddleware->>SiswaController: 106. Route to export_siswa_excel()
+
+    SiswaController->>Database: 107. SELECT * FROM siswa
+    Database-->>SiswaController: 108. All Siswa Data
+    SiswaController->>SiswaController: 109. Convert to DataFrame
+    SiswaController->>SiswaController: 110. Generate Excel File
+    SiswaController-->>Frontend: 111. StreamingResponse with Excel
+    Frontend-->>User: 112. Download Excel File
+
+    %% Error Handling Scenarios
+    Note over User, Database: ❌ Error Handling Scenarios
+    rect rgb(255, 248, 248)
+        Note over SiswaController: Common Error Scenarios
+        alt Database Connection Error
+            Database-->>SiswaController: Connection Failed
+            SiswaController-->>Frontend: 500 Internal Server Error
+            Frontend-->>User: System Error
+        end
+        
+        alt Invalid Input Data
+            SiswaController->>SiswaController: Validate Input
+            SiswaController-->>Frontend: 422 Validation Error
+            Frontend-->>User: Input Error Messages
+        end
+        
+        alt Authorization Failed
+            AuthService-->>SiswaController: Access Denied
+            SiswaController-->>Frontend: 403 Forbidden
+            Frontend-->>User: Access Denied
+        end
+        
+        alt File Upload Error
+            SiswaController->>SiswaController: File Validation Failed
+            SiswaController-->>Frontend: 400 Bad Request
+            Frontend-->>User: File Format Error
+        end
+    end
+
+    %% Performance Metrics Summary
+    Note over User, Database: 📊 Performance Metrics & System Specifications
+    Note right of SiswaController: • CRUD operations: <1 second<br/>• Pagination: 100 records default<br/>• Search: nama, NIS, kelas<br/>• Excel upload: Batch processing<br/>• Excel export: StreamingResponse
+    Note right of Database: • PostgreSQL with SQLAlchemy ORM<br/>• Unique constraint: NIS field<br/>• Timestamps: created_at, updated_at<br/>• Soft delete: Not implemented<br/>• Indexing: Primary key + NIS unique
+    Note right of AuthService: • Bearer token authentication<br/>• Role-based access control<br/>• Session validation<br/>• JWT token verification<br/>• User permission checking 

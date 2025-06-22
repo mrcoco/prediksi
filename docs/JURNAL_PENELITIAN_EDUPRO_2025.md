@@ -98,22 +98,64 @@ Untuk keamanan, sistem otentikasi berbasis JWT (*JSON Web Token*) diimplementasi
 
 ### 2.3. Implementasi Frontend
 
-Berbeda dengan arsitektur *Single Page Application* (SPA) modern, antarmuka pengguna sistem EduPro dibangun menggunakan pendekatan web tradisional dengan file statis, yang disajikan secara efisien oleh Nginx.
+Antarmuka pengguna sistem EduPro dibangun menggunakan pendekatan pragmatis yang berfokus pada komponen antarmuka (UI) yang kaya fitur tanpa memerlukan *overhead* dari *framework* JavaScript modern. Implementasi ini memanfaatkan *library* **Kendo UI for jQuery**, yang diintegrasikan ke dalam arsitektur web statis tradisional dan disajikan secara efisien oleh Nginx.
 
 #### 2.3.1. Struktur dan Teknologi
-*Frontend* terdiri dari beberapa file HTML inti (misalnya, `login.html`, `index.html`) yang mendefinisikan struktur halaman. *Styling* disediakan melalui file CSS kustom di dalam direktori `styles/`, dan logika interaktif diimplementasikan dalam file JavaScript di dalam direktori `js/`.
+*Frontend* terdiri dari beberapa file HTML inti (misalnya, `login.html`, `index.html`) yang mendefinisikan struktur halaman. Logika dan interaktivitasnya didukung oleh *library* Kendo UI dan jQuery, yang diinisialisasi dan dikontrol melalui file JavaScript murni yang ditempatkan di dalam direktori `js/`.
 
-Pendekatan ini dipilih karena kesederhanaan dan kecepatan pengembangannya. Tidak ada langkah kompilasi atau *bundling* yang diperlukan, memungkinkan perubahan untuk segera terlihat dengan me-*refresh browser*.
+Pendekatan ini dipilih untuk memanfaatkan secara langsung koleksi *widget* UI yang matang dan komprehensif dari Kendo UI, seperti *Data Grids*, *Charts*, dan *Form Inputs*. Dengan menggunakan versi berbasis jQuery, kami dapat mengimplementasikan fungsionalitas yang kompleks dengan cepat tanpa perlu manajemen *state* dan siklus hidup komponen yang rumit seperti pada *framework* SPA.
 
-#### 2.3.2. Interaksi dengan API
-Logika JavaScript di dalam direktori `js/` bertanggung jawab untuk berinteraksi dengan API *backend*. Ini dilakukan dengan menggunakan *standard browser API* seperti `fetch()` atau *library* `XMLHttpRequest`. Skrip ini menangani alur kerja pengguna:
-1.  Mengirimkan kredensial dari `login.html` ke *endpoint* `/api/auth/login`.
-2.  Menyimpan token JWT yang diterima (misalnya, di `localStorage`).
-3.  Menyertakan token JWT dalam *header* `Authorization` untuk semua permintaan berikutnya ke *endpoint* yang dilindungi.
-4.  Mengambil data dari *backend* (misalnya, daftar siswa) dan secara dinamis me-*render*-nya ke dalam tabel HTML di `index.html`.
-5.  Mengirimkan data dari formulir untuk membuat atau memperbarui entitas.
+**Contoh Inisialisasi Kendo UI Grid dengan JavaScript:**
+```javascript
+// Di dalam file, misalnya, js/app.js
+$(document).ready(function() {
+    $("#grid").kendoGrid({
+        dataSource: {
+            transport: {
+                read: {
+                    url: "http://localhost:8000/api/siswa",
+                    dataType: "json",
+                    beforeSend: function(xhr) {
+                        const token = localStorage.getItem('jwt_token');
+                        if (token) {
+                            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+                        }
+                    }
+                }
+            },
+            schema: {
+                model: {
+                    fields: {
+                        nama: { type: "string" },
+                        nis: { type: "string" },
+                        kelas: { type: "string" }
+                    }
+                }
+            },
+            pageSize: 20
+        },
+        height: 550,
+        sortable: true,
+        pageable: true,
+        columns: [
+            { field: "nama", title: "Nama Siswa" },
+            { field: "nis", title: "NIS" },
+            { field: "kelas", title: "Kelas" }
+        ]
+    });
+});
+```
 
-Meskipun tidak sekuat *framework* seperti React atau Vue, arsitektur ini terbukti cukup untuk kebutuhan sistem dan memberikan kinerja pemuatan halaman yang sangat cepat karena sifatnya yang statis.
+#### 2.3.2. Interaksi dengan API dan Manajemen Data
+Interaksi dengan API *backend* dikelola langsung oleh komponen Kendo UI, terutama melalui `Kendo UI DataSource`. Komponen ini secara native mendukung operasi data seperti membaca (read), membuat (create), memperbarui (update), dan menghapus (delete) melalui konfigurasi transport RESTful.
+
+Logika JavaScript kustom menangani alur kerja pengguna:
+1.  Mengirimkan kredensial dari formulir login HTML ke *endpoint* `/api/auth/login` menggunakan `jQuery.ajax` atau `fetch`.
+2.  Menyimpan token JWT yang diterima di `localStorage`.
+3.  Mengkonfigurasi `Kendo UI DataSource` untuk secara otomatis menyertakan token otentikasi pada setiap permintaan ke *backend*, seperti yang ditunjukkan pada contoh kode di atas.
+4.  Data yang diterima dari API secara otomatis diikat (*bound*) ke *widget* UI seperti *Grid*, yang menangani rendering, paginasi, dan operasi lainnya secara internal.
+
+Pendekatan ini memisahkan logika pengambilan data dari manipulasi DOM manual, karena sebagian besar pekerjaan tersebut ditangani oleh *library* Kendo UI, menghasilkan kode aplikasi yang lebih bersih dan lebih fokus pada konfigurasi daripada implementasi imperatif.
 
 ## 3. Hasil dan Pembahasan
 

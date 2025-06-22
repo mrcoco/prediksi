@@ -157,6 +157,63 @@ Logika JavaScript kustom menangani alur kerja pengguna:
 
 Pendekatan ini memisahkan logika pengambilan data dari manipulasi DOM manual, karena sebagian besar pekerjaan tersebut ditangani oleh *library* Kendo UI, menghasilkan kode aplikasi yang lebih bersih dan lebih fokus pada konfigurasi daripada implementasi imperatif.
 
+### 2.4. Implementasi Algoritma Prediksi (C4.5)
+
+Inti dari sistem EduPro adalah kemampuannya untuk memprediksi prestasi akademik. Untuk tujuan ini, kami mengimplementasikan model *machine learning* berdasarkan algoritma C4.5, sebuah pembangun pohon keputusan (*decision tree*) yang populer karena kemampuannya menghasilkan model yang dapat diinterpretasikan. Implementasi menggunakan *library* `scikit-learn` di Python.
+
+Proses implementasi model prediksi dibagi menjadi beberapa tahapan kunci:
+
+#### 2.4.1. Pengumpulan dan Pra-pemrosesan Data
+Data mentah untuk pelatihan model dikumpulkan dari beberapa tabel dalam basis data PostgreSQL, yang mencakup data `siswa`, `nilai_raport`, `presensi`, dan `penghasilan_ortu`. Sebuah skrip kustom (`generate_training_data.py`) digunakan untuk menggabungkan data ini menjadi satu set data yang koheren untuk setiap siswa.
+
+#### 2.4.2. Rekayasa Fitur (*Feature Engineering*)
+Tiga fitur utama direkayasa dari data mentah untuk menjadi input bagi model. Fitur-fitur ini dipilih karena relevansi pedagogisnya yang tinggi:
+1.  **`rata_rata_nilai` (Numerik)**: Rata-rata dari 11 mata pelajaran utama dihitung secara otomatis di tingkat basis data untuk setiap siswa per semester.
+2.  **`kategori_kehadiran` (Kategorikal)**: Persentase kehadiran siswa diubah menjadi tiga kategori: 'Tinggi' (≥ 80%), 'Sedang' (≥ 75%), dan 'Rendah' (< 75%).
+3.  **`kategori_penghasilan` (Kategorikal)**: Total penghasilan orang tua dikategorikan berdasarkan standar Upah Minimum Regional (UMK) menjadi: 'Tinggi', 'Menengah', dan 'Rendah'.
+
+Fitur-fitur kategorikal ini kemudian diubah menjadi representasi numerik menggunakan teknik *one-hot encoding* agar dapat diproses oleh model `scikit-learn`.
+
+#### 2.4.3. Pelabelan Data Target (*Target Labeling*)
+Variabel target, `prediksi_prestasi`, diberi label secara otomatis berdasarkan serangkaian aturan bisnis (*business rules*) yang telah ditentukan sebelumnya. Aturan ini berfungsi sebagai *proxy* untuk performa akademik yang diharapkan, memungkinkan pelatihan model secara terawasi (*supervised learning*).
+```python
+# Contoh logika pelabelan
+if rata_rata_nilai >= 80 and persentase_kehadiran >= 80:
+    prestasi = 'Tinggi'
+elif rata_rata_nilai >= 70 and persentase_kehadiran >= 75:
+    prestasi = 'Sedang'
+else:
+    prestasi = 'Rendah'
+```
+
+#### 2.4.4. Pelatihan dan Pensisihan Model
+Model pohon keputusan dilatih menggunakan kelas `DecisionTreeClassifier` dari `scikit-learn`. Kami memilih kriteria `entropy` untuk pemisahan simpul (*node splitting*), yang secara konseptual paling mendekati metrik *Information Gain Ratio* yang digunakan oleh algoritma C4.5 asli.
+
+Setelah model dilatih pada set data historis, model tersebut disimpan (*persisted*) ke dalam sebuah file menggunakan *library* `joblib`.
+```python
+import joblib
+from sklearn.tree import DecisionTreeClassifier
+
+# Asumsikan X_train dan y_train telah disiapkan
+model = DecisionTreeClassifier(criterion='entropy', random_state=42)
+model.fit(X_train, y_train)
+
+# Simpan model yang telah dilatih
+joblib.dump(model, 'c45_model.joblib')
+```
+Penyimpanan model ini adalah langkah krusial yang memungkinkan API untuk membuat prediksi secara cepat tanpa perlu melatih ulang model pada setiap permintaan.
+
+#### 2.4.5. Implementasi Endpoint Prediksi
+Sebuah *endpoint* API khusus (`/api/prediksi/{siswa_id}`) dibuat untuk mengekspos fungsionalitas model. Ketika *endpoint* ini dipanggil:
+1.  API memuat model C4.5 yang telah disimpan dari file.
+2.  Data terbaru untuk siswa yang ditentukan diambil dari basis data.
+3.  Data tersebut diproses melalui langkah rekayasa fitur yang sama yang digunakan selama pelatihan.
+4.  Fitur yang dihasilkan kemudian dimasukkan ke dalam model untuk menghasilkan prediksi ('Tinggi', 'Sedang', atau 'Rendah').
+5.  Model juga menghasilkan probabilitas untuk setiap kelas, yang kami sajikan sebagai "skor kepercayaan" (*confidence score*).
+6.  Hasil prediksi, skor kepercayaan, dan *timestamp* disimpan kembali ke dalam tabel `prestasi` untuk tujuan pelacakan dan analisis historis.
+
+Dengan pendekatan ini, model *machine learning* terintegrasi secara mulus ke dalam arsitektur aplikasi sebagai layanan prediksi yang dapat diakses secara *real-time*.
+
 ## 3. Hasil dan Pembahasan
 
 Tahapan implementasi menghasilkan sistem fungsional yang divalidasi melalui pengujian ekstensif dan analisis kinerja.

@@ -190,7 +190,7 @@ sequenceDiagram
         A->>A: Write DataFrame to Excel with openpyxl engine
         A->>A: Set proper headers for file download
         
-        A-->>F: StreamingResponse with Excel file<br/>Content-Disposition: attachment;<br/>filename=Data_Nilai_Raport.xlsx
+        A-->>F: StreamingResponse with Excel file<br/>Content-Disposition: attachment<br/>filename: Data_Nilai_Raport.xlsx
         
         F->>F: Trigger browser download
         F-->>U: File downloaded successfully

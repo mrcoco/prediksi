@@ -2,10 +2,10 @@ graph TB
     %% Actors
     User["👤 User<br/>(Guru/Admin)"]
     Auth["🔐 Authentication<br/>System"]
-    
+
     %% System Boundary
     subgraph System["💰 Sistem Manajemen Penghasilan Orang Tua"]
-        
+
         %% Core CRUD Operations
         subgraph CRUD["🔄 CRUD Operations"]
             UC1["➕ Tambah Data Penghasilan<br/>(Create)"]
@@ -14,42 +14,42 @@ graph TB
             UC4["✏️ Edit Data Penghasilan<br/>(Update)"]
             UC5["🗑️ Hapus Data Penghasilan<br/>(Delete)"]
         end
-        
+
         %% Search & Filter Operations
         subgraph Search["🔍 Search & Filter"]
             UC6["🔎 Cari Penghasilan<br/>(Search)"]
             UC7["📊 Filter Penghasilan<br/>(Filter)"]
             UC8["📄 Pagination<br/>(Paging)"]
         end
-        
+
         %% Data Management Operations
         subgraph DataMgmt["📁 Data Management"]
             UC9["📥 Export Excel<br/>(Export)"]
             UC10["🔢 Hitung Total Data<br/>(Count)"]
             UC11["📝 Dropdown Siswa<br/>(Dropdown)"]
         end
-        
+
         %% Business Logic Operations
         subgraph BusinessLogic["💼 Business Logic"]
             UC12["🧮 Hitung Total Penghasilan<br/>(Calculate Total)"]
             UC13["📊 Tentukan Kategori<br/>(Categorize)"]
             UC14["💱 Format Currency<br/>(Format)"]
         end
-        
+
         %% Validation Operations
         subgraph Validation["✅ Validation"]
             UC15["🆔 Validasi Siswa<br/>(Student Validation)"]
             UC16["📋 Validasi Data<br/>(Data Validation)"]
             UC17["🔍 Cek Duplikasi<br/>(Duplicate Check)"]
         end
-        
+
         %% Authentication Operations
         subgraph Authentication["🔐 Authentication"]
             UC18["🔑 Login<br/>(Authentication)"]
             UC19["🛡️ Autorisasi<br/>(Authorization)"]
             UC20["🔒 Validasi Token<br/>(Token Validation)"]
         end
-        
+
         %% Notification Operations
         subgraph Notification["🔔 Notification"]
             UC21["✅ Notifikasi Sukses<br/>(Success Notification)"]
@@ -57,7 +57,7 @@ graph TB
             UC23["ℹ️ Notifikasi Info<br/>(Info Notification)"]
         end
     end
-    
+
     %% User Relationships
     User --> UC1
     User --> UC2
@@ -70,12 +70,12 @@ graph TB
     User --> UC9
     User --> UC10
     User --> UC11
-    
+
     %% Authentication System Relationships
     Auth --> UC18
     Auth --> UC19
     Auth --> UC20
-    
+
     %% Include Relationships (shown as dependencies)
     UC1 -.-> UC15
     UC1 -.-> UC16
@@ -83,32 +83,32 @@ graph TB
     UC1 -.-> UC12
     UC1 -.-> UC13
     UC1 -.-> UC20
-    
+
     UC2 -.-> UC20
     UC2 -.-> UC6
     UC2 -.-> UC7
     UC2 -.-> UC8
     UC2 -.-> UC14
-    
+
     UC3 -.-> UC20
     UC3 -.-> UC16
     UC3 -.-> UC14
-    
+
     UC4 -.-> UC20
     UC4 -.-> UC15
     UC4 -.-> UC16
     UC4 -.-> UC12
     UC4 -.-> UC13
-    
+
     UC5 -.-> UC20
     UC5 -.-> UC16
-    
+
     UC9 -.-> UC20
     UC9 -.-> UC14
-    
+
     UC10 -.-> UC20
     UC11 -.-> UC20
-    
+
     %% Extend Relationships (shown as optional connections)
     UC1 -.- UC21
     UC1 -.- UC22
@@ -124,14 +124,14 @@ graph TB
     UC15 -.- UC22
     UC16 -.- UC22
     UC17 -.- UC22
-    
+
     %% Styling
     classDef userStyle fill:#A23B72,stroke:#2E86AB,stroke-width:2px,color:#fff
     classDef authStyle fill:#2E86AB,stroke:#A23B72,stroke-width:2px,color:#fff
     classDef usecaseStyle fill:#F18F01,stroke:#C73E1D,stroke-width:2px,color:#000
     classDef systemStyle fill:#E8F4FD,stroke:#2E86AB,stroke-width:3px
     classDef packageStyle fill:#FFF5E6,stroke:#F18F01,stroke-width:2px
-    
+
     class User userStyle
     class Auth authStyle
-    class UC1,UC2,UC3,UC4,UC5,UC6,UC7,UC8,UC9,UC10,UC11,UC12,UC13,UC14,UC15,UC16,UC17,UC18,UC19,UC20,UC21,UC22,UC23 usecaseStyle 
+    class UC1,UC2,UC3,UC4,UC5,UC6,UC7,UC8,UC9,UC10,UC11,UC12,UC13,UC14,UC15,UC16,UC17,UC18,UC19,UC20,UC21,UC22,UC23 usecaseStyle

@@ -5,6 +5,25 @@ skinparam sequenceArrowThickness 2
 skinparam roundcorner 10
 skinparam maxmessagesize 60
 
+' Font configuration to avoid Times font warnings
+skinparam defaultFontName "Arial"
+skinparam defaultFontSize 11
+skinparam titleFontName "Arial"
+skinparam titleFontSize 14
+skinparam titleFontStyle bold
+
+' Sequence diagram specific font settings
+skinparam sequenceParticipantFontName "Arial"
+skinparam sequenceParticipantFontSize 11
+skinparam sequenceActorFontName "Arial"
+skinparam sequenceActorFontSize 11
+skinparam sequenceBoxFontName "Arial"
+skinparam sequenceBoxFontSize 10
+skinparam sequenceMessageFontName "Arial"
+skinparam sequenceMessageFontSize 10
+skinparam noteFontName "Arial"
+skinparam noteFontSize 10
+
 title Sequence Diagram - Manajemen Penghasilan Orang Tua\nSistem EduPro
 
 participant "User" as U

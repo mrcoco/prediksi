@@ -1,12 +1,18 @@
 @startuml Class_Diagram_Manajemen_Siswa_EduPro
 !theme plain
 skinparam backgroundColor #FFFFFF
-skinparam classBorderColor #2E86AB
-skinparam classBackgroundColor #F8F9FA
+skinparam classBorderColor #CCCCCC
+skinparam classBackgroundColor #FAFAFA
+skinparam classFontColor #333333
 skinparam packageBorderColor #A23B72
-skinparam packageBackgroundColor #F18F01
+skinparam packageBackgroundColor #FFFFFF
+skinparam packageFontColor #333333
+skinparam arrowColor #666666
+skinparam noteBorderColor #F18F01
+skinparam noteBackgroundColor #FFF8DC
+skinparam noteFontColor #333333
 
-title Class Diagram - Manajemen Siswa\\nSistem EduPro
+title Class Diagram - Manajemen Siswa\\\\nSistem EduPro
 
 package "📱 Presentation Layer" {
     class SiswaGrid {
@@ -219,19 +225,23 @@ package "🔗 Related Entities" {
     }
 }
 
-' Relationships
+' ========== RELATIONSHIPS ==========
+' Presentation Layer Relationships
 SiswaGrid --> SiswaForm : uses
 SiswaGrid --> SiswaModal : uses
 SiswaForm --> SiswaValidator : validates
 
+' API Layer Relationships
 SiswaRouter --> SiswaController : delegates
 SiswaController --> SiswaService : calls
 SiswaController --> SiswaValidator : validates
 
+' Business Logic Layer Relationships
 SiswaService --> SiswaRepository : uses
 SiswaService --> SiswaValidator : validates
 SiswaValidator --> SiswaRepository : checks
 
+' Data Layer Relationships
 SiswaRepository --> Siswa : manages
 SiswaRepository --> DatabaseSession : uses
 Siswa --> NilaiRaport : 1..*
@@ -239,6 +249,7 @@ Siswa --> PenghasilanOrtu : 1..1
 Siswa --> Presensi : 1..*
 Siswa --> Prestasi : 1..*
 
+' Schema Layer Relationships
 SiswaCreate --> SiswaBase : extends
 SiswaUpdate --> SiswaBase : extends
 SiswaResponse --> SiswaBase : extends

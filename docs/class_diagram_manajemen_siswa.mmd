@@ -1,0 +1,234 @@
+classDiagram
+    %% ========== PRESENTATION LAYER ==========
+    class SiswaGrid {
+        +KendoGrid grid
+        +DataSource dataSource
+        +initGrid()
+        +refreshGrid()
+        +handleCRUD()
+        +handleSearch()
+        +handleExport()
+    }
+    
+    class SiswaForm {
+        +FormElement form
+        +ValidationRules rules
+        +submitForm()
+        +validateData()
+        +resetForm()
+    }
+    
+    class SiswaModal {
+        +ModalElement modal
+        +showModal()
+        +hideModal()
+        +loadData()
+        +saveData()
+    }
+    
+    %% ========== API LAYER ==========
+    class SiswaRouter {
+        +APIRouter router
+        +create_siswa()
+        +get_all_siswa()
+        +get_siswa()
+        +update_siswa()
+        +delete_siswa()
+        +upload_excel()
+        +export_excel()
+        +get_count()
+        +get_dropdown()
+    }
+    
+    class SiswaController {
+        +handleCreate()
+        +handleRead()
+        +handleUpdate()
+        +handleDelete()
+        +handleUpload()
+        +handleExport()
+        +validateRequest()
+        +formatResponse()
+    }
+    
+    %% ========== BUSINESS LOGIC LAYER ==========
+    class SiswaService {
+        +createSiswa()
+        +getAllSiswa()
+        +getSiswaById()
+        +updateSiswa()
+        +deleteSiswa()
+        +searchSiswa()
+        +validateSiswa()
+        +processExcelUpload()
+        +generateExcelExport()
+    }
+    
+    class SiswaValidator {
+        +validateNIS()
+        +validateNama()
+        +validateJenisKelamin()
+        +validateKelas()
+        +validateTanggalLahir()
+        +validateAlamat()
+        +checkDuplicateNIS()
+        +validateExcelData()
+    }
+    
+    class SiswaRepository {
+        +create()
+        +findAll()
+        +findById()
+        +findByNIS()
+        +update()
+        +delete()
+        +search()
+        +count()
+        +getDropdownData()
+    }
+    
+    %% ========== DATA LAYER ==========
+    class Siswa {
+        +Integer id
+        +String nama
+        +String nis
+        +String jenis_kelamin
+        +String kelas
+        +DateTime tanggal_lahir
+        +String alamat
+        +DateTime created_at
+        +DateTime updated_at
+        +getNilaiRaport()
+        +getPenghasilanOrtu()
+        +getPresensi()
+        +getPrestasi()
+    }
+    
+    class DatabaseSession {
+        +Session session
+        +connect()
+        +disconnect()
+        +commit()
+        +rollback()
+        +close()
+    }
+    
+    %% ========== SCHEMA LAYER ==========
+    class SiswaBase {
+        +String nama
+        +String nis
+        +String jenis_kelamin
+        +String kelas
+        +DateTime tanggal_lahir
+        +String alamat
+    }
+    
+    class SiswaCreate {
+        +inherit SiswaBase
+    }
+    
+    class SiswaUpdate {
+        +Optional~String~ nama
+        +Optional~String~ nis
+        +Optional~String~ jenis_kelamin
+        +Optional~String~ kelas
+        +Optional~DateTime~ tanggal_lahir
+        +Optional~String~ alamat
+    }
+    
+    class SiswaResponse {
+        +Integer id
+        +String nama
+        +String nis
+        +String jenis_kelamin
+        +String kelas
+        +DateTime tanggal_lahir
+        +String alamat
+        +DateTime created_at
+        +DateTime updated_at
+    }
+    
+    %% ========== RELATED ENTITIES ==========
+    class NilaiRaport {
+        +Integer id
+        +Integer siswa_id
+        +String semester
+        +String tahun_ajaran
+        +Float matematika
+        +Float bahasa_indonesia
+        +Float bahasa_inggris
+        +Float ipa
+        +Float rata_rata
+        +DateTime created_at
+        +DateTime updated_at
+    }
+    
+    class PenghasilanOrtu {
+        +Integer id
+        +Integer siswa_id
+        +Float penghasilan_ayah
+        +Float penghasilan_ibu
+        +String pekerjaan_ayah
+        +String pekerjaan_ibu
+        +String pendidikan_ayah
+        +String pendidikan_ibu
+        +Float total_penghasilan
+        +String kategori_penghasilan
+        +DateTime created_at
+        +DateTime updated_at
+    }
+    
+    class Presensi {
+        +Integer id
+        +Integer siswa_id
+        +String semester
+        +String tahun_ajaran
+        +Integer jumlah_hadir
+        +Integer jumlah_sakit
+        +Integer jumlah_izin
+        +Integer jumlah_alpa
+        +Float persentase_kehadiran
+        +String kategori_kehadiran
+        +DateTime created_at
+        +DateTime updated_at
+    }
+    
+    class Prestasi {
+        +Integer id
+        +Integer siswa_id
+        +String semester
+        +String tahun_ajaran
+        +String prediksi_prestasi
+        +Float confidence
+        +DateTime created_at
+        +DateTime updated_at
+    }
+    
+    %% ========== RELATIONSHIPS ==========
+    %% Presentation Layer Relationships
+    SiswaGrid --> SiswaForm : uses
+    SiswaGrid --> SiswaModal : uses
+    SiswaForm --> SiswaValidator : validates
+    
+    %% API Layer Relationships
+    SiswaRouter --> SiswaController : delegates
+    SiswaController --> SiswaService : calls
+    SiswaController --> SiswaValidator : validates
+    
+    %% Business Logic Layer Relationships
+    SiswaService --> SiswaRepository : uses
+    SiswaService --> SiswaValidator : validates
+    SiswaValidator --> SiswaRepository : checks
+    
+    %% Data Layer Relationships
+    SiswaRepository --> Siswa : manages
+    SiswaRepository --> DatabaseSession : uses
+    Siswa --> NilaiRaport : 1..*
+    Siswa --> PenghasilanOrtu : 1..1
+    Siswa --> Presensi : 1..*
+    Siswa --> Prestasi : 1..*
+    
+    %% Schema Layer Relationships
+    SiswaCreate --> SiswaBase : extends
+    SiswaUpdate --> SiswaBase : extends
+    SiswaResponse --> SiswaBase : extends 

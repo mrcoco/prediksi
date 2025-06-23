@@ -259,7 +259,7 @@ sequenceDiagram
         Note over A: Excel Generation
         A->>A: Create pandas DataFrame with columns:<br/>- NIS, Nama Siswa, Kelas<br/>- Semester, Tahun Ajaran<br/>- Prediksi Prestasi, Confidence<br/>- Tanggal Prediksi
         A->>A: Generate Excel file in memory (BytesIO)
-        A->>A: Set proper headers:<br/>Content-Type: application/vnd.openxmlformats<br/>Content-Disposition: attachment; filename="Riwayat_Prediksi.xlsx"
+        A->>A: Set proper headers:<br/>Content-Type: application/vnd.openxmlformats<br/>Content-Disposition: attachment filename="Riwayat_Prediksi.xlsx"
         
         A-->>F: StreamingResponse with Excel file
         F->>F: Trigger browser download

@@ -1,0 +1,75 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'background': '#ffffff', 'primaryColor': '#ffffff', 'primaryTextColor': '#000000', 'primaryBorderColor': '#2E86AB', 'lineColor': '#000000', 'secondaryColor': '#ffffff', 'tertiaryColor': '#ffffff'}}}%%
+graph TB
+    %% Actors
+    User["👤 User<br/>(Guru/Admin)"]
+    Auth["🔐 Authentication<br/>System"]
+
+    %% System Boundary
+    subgraph System["📚 Sistem Manajemen Siswa"]
+
+        %% Core CRUD Operations
+        subgraph CRUD["🔄 CRUD Operations"]
+            UC1["➕ Tambah Data Siswa<br/>(Create)"]
+            UC2["📋 Lihat Daftar Siswa<br/>(Read All)"]
+            UC3["👤 Lihat Detail Siswa<br/>(Read Single)"]
+            UC4["✏️ Edit Data Siswa<br/>(Update)"]
+            UC5["🗑️ Hapus Data Siswa<br/>(Delete)"]
+        end
+
+        %% Authentication Operations
+        subgraph Authentication["🔐 Authentication"]
+            UC6["🔑 Login<br/>(Authentication)"]
+            UC7["🛡️ Autorisasi<br/>(Authorization)"]
+            UC8["🔒 Validasi Token<br/>(Token Validation)"]
+        end
+
+        %% Notification Operations
+        subgraph Notification["🔔 Notification"]
+            UC9["✅ Notifikasi Sukses<br/>(Success Notification)"]
+            UC10["❌ Notifikasi Error<br/>(Error Notification)"]
+        end
+    end
+
+    %% User Relationships
+    User --> UC1
+    User --> UC2
+    User --> UC3
+    User --> UC4
+    User --> UC5
+
+    %% Authentication System Relationships
+    Auth --> UC6
+    Auth --> UC7
+    Auth --> UC8
+
+    %% Include Relationships (dependencies)
+    UC1 -.-> UC8
+    UC2 -.-> UC8
+    UC3 -.-> UC8
+    UC4 -.-> UC8
+    UC5 -.-> UC8
+
+    %% Extend Relationships (optional)
+    UC1 -.- UC9
+    UC1 -.- UC10
+    UC2 -.- UC9
+    UC2 -.- UC10
+    UC3 -.- UC10
+    UC4 -.- UC9
+    UC4 -.- UC10
+    UC5 -.- UC9
+    UC5 -.- UC10
+
+    %% Styling
+    classDef userStyle fill:#A23B72,stroke:#2E86AB,stroke-width:2px,color:#fff
+    classDef authStyle fill:#2E86AB,stroke:#A23B72,stroke-width:2px,color:#fff
+    classDef usecaseStyle fill:#F18F01,stroke:#C73E1D,stroke-width:2px,color:#000
+    classDef systemStyle fill:#ffffff,stroke:#2E86AB,stroke-width:3px
+    classDef packageStyle fill:#ffffff,stroke:#F18F01,stroke-width:2px
+
+    class User userStyle
+    class Auth authStyle
+    class UC1,UC2,UC3,UC4,UC5,UC6,UC7,UC8,UC9,UC10 usecaseStyle
+    class System systemStyle
+    class CRUD,Authentication,Notification packageStyle
+

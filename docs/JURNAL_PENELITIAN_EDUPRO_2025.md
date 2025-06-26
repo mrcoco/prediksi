@@ -86,15 +86,369 @@ Pendekatan ini secara efektif mengisolasi setiap layanan, menyederhanakan proses
 *Backend* dikembangkan menggunakan FastAPI, sebuah *framework* web Python modern yang dikenal karena kinerjanya yang tinggi dan dukungan bawaan untuk *asynchronous programming*. Arsitekturnya dirancang agar sangat modular untuk kemudahan pemeliharaan dan skalabilitas.
 
 #### 2.2.1. Arsitektur Modular dan Routing
-Aplikasi utama (`main.py`) berfungsi sebagai titik masuk yang mendaftarkan beberapa *router* dari modul terpisah. Setiap fitur utama seperti `siswa`, `nilai`, `prediksi`, dan `auth` memiliki file *router*-nya sendiri di dalam direktori `routes/`. Pendekatan ini, yang menggunakan `app.include_router()`, memungkinkan pemisahan tanggung jawab (*separation of concerns*) yang bersih dan menjaga basis kode tetap terorganisir.
+
+Arsitektur backend EduPro dirancang menggunakan prinsip *modular architecture* dengan *layered pattern* untuk memastikan maintainability dan scalability yang optimal. Aplikasi utama (`main.py`) berfungsi sebagai titik masuk yang mengimplementasikan *application factory pattern*, mendaftarkan beberapa *router* dari modul terpisah berdasarkan domain fungsional.
+
+**Struktur Modular:**
+```python
+from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi.middleware.cors import CORSMiddleware
+from routes import siswa_router, nilai_router, presensi_router, 
+                  penghasilan_router, prediksi_router, auth_router
+
+# Comprehensive API metadata untuk dokumentasi OpenAPI
+app = FastAPI(
+    title="🎓 EduPro - Sistem Prediksi Prestasi Siswa API",
+    description="API komprehensif untuk sistem prediksi prestasi siswa menggunakan algoritma C4.5 Decision Tree",
+    version="2.0.0",
+    openapi_tags=tags_metadata,
+    docs_url="/docs",
+    redoc_url="/redoc",
+    contact={
+        "name": "EduPro Development Team",
+        "email": "spydersonics@gmail.com"
+    },
+    license_info={
+        "name": "MIT License",
+        "url": "https://opensource.org/licenses/MIT"
+    }
+)
+
+# Router registration dengan tags dan prefix yang konsisten
+app.include_router(siswa_router.router, prefix="/api/siswa", tags=["Siswa"])
+app.include_router(nilai_router.router, prefix="/api/nilai", tags=["Nilai Raport"])
+app.include_router(presensi_router.router, prefix="/api/presensi", tags=["Presensi"])
+app.include_router(penghasilan_router.router, prefix="/api/penghasilan", tags=["Penghasilan Ortu"])
+app.include_router(prediksi_router.router, prefix="/api/prediksi", tags=["Prediksi Prestasi"])
+app.include_router(auth_router.router, prefix="/api/auth", tags=["Authentication"])
+```
+
+Setiap router memiliki tanggung jawab spesifik: `siswa_router` mengelola operasi CRUD siswa, `nilai_router` untuk manajemen nilai akademik, `presensi_router` untuk data kehadiran, `penghasilan_router` untuk data ekonomi keluarga, `prediksi_router` untuk layanan machine learning, dan `auth_router` untuk otentikasi dan otorisasi. Pendekatan ini mengimplementasikan *separation of concerns* yang bersih, memungkinkan pengembangan parallel oleh tim, dan memfasilitasi unit testing yang terisolasi.
+
+**Middleware Stack:**
+Aplikasi mengintegrasikan *middleware stack* untuk *cross-cutting concerns*:
+```python
+# Konfigurasi CORS untuk cross-origin requests
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Dalam produksi, ganti dengan domain yang diizinkan
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Health check dan monitoring endpoints
+@app.get("/health", tags=["Health"])
+async def health_check():
+    return {
+        "status": "✅ healthy", 
+        "message": "API berjalan dengan baik",
+        "version": "2.0.0",
+        "services": {
+            "api": "✅ running",
+            "database": "✅ connected", 
+            "ml_model": "✅ ready"
+        }
+    }
+```
 
 #### 2.2.2. Desain API dan Validasi Data
-API dirancang mengikuti prinsip-prinsip RESTful. Pydantic digunakan secara ekstensif untuk mendefinisikan skema data. Ini memberikan keuntungan ganda: validasi data *runtime* yang kuat dan generasi otomatis dokumentasi API OpenAPI (Swagger UI). Setiap *endpoint* memiliki model Pydantic untuk permintaan (*request*) dan respons (*response*), memastikan bahwa data yang masuk dan keluar dari API selalu terstruktur dengan baik. Dokumentasi API yang kaya, termasuk deskripsi dan contoh, dibuat langsung dari *docstring* dan metadata di dalam kode.
+
+API dirancang mengikuti prinsip-prinsip RESTful architecture dengan implementasi comprehensive untuk *data validation*, *serialization*, dan *documentation generation*. Pydantic digunakan sebagai backbone untuk type safety dan automatic validation, memberikan dual benefits: runtime data validation yang robust dan automatic OpenAPI (Swagger UI) documentation generation.
+
+**Schema Design Pattern:**
+```python
+from pydantic import BaseModel, Field
+from typing import Optional
+from datetime import datetime
+
+# Schema hierarki untuk Siswa dengan inheritance pattern
+class SiswaBase(BaseModel):
+    nama: str
+    nis: str
+    jenis_kelamin: str
+    kelas: str
+    tanggal_lahir: datetime
+    alamat: Optional[str] = None
+
+class SiswaCreate(SiswaBase):
+    pass
+
+class SiswaUpdate(BaseModel):
+    nama: Optional[str] = None
+    nis: Optional[str] = None
+    jenis_kelamin: Optional[str] = None
+    kelas: Optional[str] = None
+    tanggal_lahir: Optional[datetime] = None
+    alamat: Optional[str] = None
+
+class SiswaResponse(SiswaBase):
+    id: int
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
+    
+    class Config:
+        orm_mode = True
+
+# Schema untuk NilaiRaport dengan 11 mata pelajaran
+class NilaiRaportBase(BaseModel):
+    siswa_id: int
+    semester: str
+    tahun_ajaran: str
+    matematika: float
+    bahasa_indonesia: float
+    bahasa_inggris: float
+    ipa: float
+    bahasa_jawa: float
+    agama: float
+    pjok: float
+    pkn: float
+    sejarah: float
+    seni: float
+    dasar_kejuruan: float
+    rata_rata: float  # Auto-calculated field
+```
+
+**RESTful Endpoint Implementation:**
+Setiap endpoint mengimplementasikan HTTP methods yang appropriate dengan status codes yang semantic dan comprehensive error handling:
+```python
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.orm import Session
+from database import get_db, Siswa
+from schemas import SiswaCreate, SiswaResponse
+
+router = APIRouter()
+
+@router.post("/", response_model=SiswaResponse, status_code=status.HTTP_201_CREATED,
+             summary="Create New Student", description="Membuat data siswa baru dengan validasi NIS unik")
+async def create_siswa(siswa: SiswaCreate, db: Session = Depends(get_db)):
+    # Business rule validation: NIS harus unik
+    existing = db.query(Siswa).filter(Siswa.nis == siswa.nis).first()
+    if existing:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, 
+            detail="NIS sudah terdaftar dalam sistem"
+        )
+    
+    # Database operation dengan error handling
+    try:
+        db_siswa = Siswa(**siswa.dict())
+        db.add(db_siswa)
+        db.commit()
+        db.refresh(db_siswa)
+        return db_siswa
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Gagal menyimpan data siswa: {str(e)}"
+        )
+
+@router.get("/", response_model=List[SiswaResponse])
+async def get_all_siswa(
+    skip: int = 0, 
+    limit: int = 100, 
+    db: Session = Depends(get_db)
+):
+    """Mendapatkan daftar siswa dengan pagination"""
+    siswa = db.query(Siswa).offset(skip).limit(limit).all()
+    return siswa
+```
+
+**API Documentation Strategy:**
+Dokumentasi API comprehensive dibuat otomatis melalui OpenAPI specification dengan rich descriptions, examples, dan interactive testing capability. Metadata dan docstrings dalam kode berkontribusi langsung pada dokumentasi yang dapat diakses di `/docs` dan `/redoc` endpoints.
 
 #### 2.2.3. Interaksi Database dan Keamanan
-Interaksi dengan *database* PostgreSQL dikelola melalui SQLAlchemy ORM. Pola *dependency injection* dari FastAPI digunakan untuk mengelola sesi *database* per permintaan.
 
-Untuk keamanan, sistem otentikasi berbasis JWT (*JSON Web Token*) diimplementasikan. Sebuah *router* otentikasi (`/api/auth`) menangani proses login dan pembuatan token. *Endpoint* yang memerlukan otorisasi kemudian dilindungi, dan skema keamanan "BearerAuth" secara otomatis ditambahkan ke dokumentasi OpenAPI untuk memudahkan pengujian interaktif.
+Manajemen database menggunakan SQLAlchemy ORM dengan PostgreSQL sebagai database engine, mengimplementasikan connection pooling, session management, dan transaction handling yang optimal untuk production environment.
+
+**Database Configuration:**
+```python
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+import os
+
+# Environment-based database URL dengan fallback
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@db:5432/prestasi_siswa")
+
+# Engine configuration untuk production environment
+engine = create_engine(DATABASE_URL)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base = declarative_base()
+
+def get_db():
+    """Dependency injection untuk database session management"""
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+def init_db():
+    """Initialize database tables"""
+    Base.metadata.create_all(bind=engine)
+```
+
+**Data Model Relationships:**
+Model database dirancang dengan comprehensive relationships menggunakan SQLAlchemy declarative models:
+```python
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, Boolean, Text
+from sqlalchemy.orm import relationship
+from datetime import datetime
+
+class Siswa(Base):
+    __tablename__ = "siswa"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    nama = Column(String, index=True)
+    nis = Column(String, unique=True, index=True)
+    jenis_kelamin = Column(String)
+    kelas = Column(String)
+    tanggal_lahir = Column(DateTime)
+    alamat = Column(Text)
+    created_at = Column(DateTime, default=datetime.now, nullable=False)
+    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now, nullable=False)
+    
+    # One-to-many relationships dengan cascade delete
+    nilai_raport = relationship("NilaiRaport", back_populates="siswa")
+    penghasilan_ortu = relationship("PenghasilanOrtu", back_populates="siswa")
+    presensi = relationship("Presensi", back_populates="siswa")
+    prestasi = relationship("Prestasi", back_populates="siswa")
+
+class NilaiRaport(Base):
+    __tablename__ = "nilai_raport"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    siswa_id = Column(Integer, ForeignKey("siswa.id"))
+    semester = Column(String)
+    tahun_ajaran = Column(String)
+    # 11 mata pelajaran
+    matematika = Column(Float)
+    bahasa_indonesia = Column(Float)
+    bahasa_inggris = Column(Float)
+    bahasa_jawa = Column(Float)
+    ipa = Column(Float)
+    agama = Column(Float)
+    pjok = Column(Float)
+    pkn = Column(Float)
+    sejarah = Column(Float)
+    seni = Column(Float)
+    dasar_kejuruan = Column(Float)
+    rata_rata = Column(Float)  # Auto-calculated field
+    
+    # Foreign key relationship
+    siswa = relationship("Siswa", back_populates="nilai_raport")
+```
+
+**Security Implementation:**
+Sistem keamanan mengimplementasikan multi-layer protection dengan JWT-based authentication dan comprehensive error handling:
+
+```python
+from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from datetime import datetime, timedelta
+from jose import JWTError, jwt
+from passlib.context import CryptContext
+from models.user import User
+
+# JWT Configuration
+SECRET_KEY = "wfdrmGsTH4oRbZKe8gGNNnIjziDJZgsH"
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 120
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+def verify_password(plain_password, hashed_password):
+    return pwd_context.verify(plain_password, hashed_password)
+
+def get_password_hash(password):
+    return pwd_context.hash(password)
+
+def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
+    to_encode = data.copy()
+    if expires_delta:
+        expire = datetime.utcnow() + expires_delta
+    else:
+        expire = datetime.utcnow() + timedelta(minutes=15)
+    to_encode.update({"exp": expire})
+    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+
+async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+    """Dependency untuk validasi JWT dan mendapatkan current user"""
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        username: str = payload.get("sub")
+        if username is None:
+            raise credentials_exception
+    except JWTError:
+        raise credentials_exception
+        
+    user = db.query(User).filter(User.username == username).first()
+    if user is None:
+        raise credentials_exception
+    return user
+
+@router.post("/token", response_model=LoginResponse)
+async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    """Login endpoint dengan OAuth2 password flow"""
+    user = db.query(User).filter(User.username == form_data.username).first()
+    if not user or not verify_password(form_data.password, user.hashed_password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(
+        data={"sub": user.username}, expires_delta=access_token_expires
+    )
+    return {
+        "access_token": access_token, 
+        "token_type": "bearer",
+        "user": user
+    }
+```
+
+**Token Refresh Implementation:**
+```python
+@router.post("/refresh", response_model=Token)
+async def refresh_token(current_user: User = Depends(get_current_user)):
+    """
+    Refresh token untuk memperpanjang masa berlaku
+    """
+    try:
+        # Create new access token
+        access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token = create_access_token(
+            data={"sub": current_user.username}, 
+            expires_delta=access_token_expires
+        )
+        
+        return {
+            "access_token": access_token,
+            "token_type": "bearer"
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Gagal refresh token: {str(e)}"
+        )
+
+@router.get("/me", response_model=UserResponse)
+async def get_current_user_profile(current_user: User = Depends(get_current_user)):
+    """Mendapatkan data user yang sedang login"""
+    return current_user
+```
+
+Router authentication (`/api/auth`) menangani comprehensive authentication flow termasuk login, token refresh, dan user management. Protected endpoints menggunakan `get_current_user` dependency untuk authorization dengan OAuth2PasswordBearer scheme yang secara otomatis terintegrasi dalam OpenAPI documentation untuk interactive testing capability. Sistem mendukung token refresh untuk session management yang optimal.
 
 ### 2.3. Implementasi Frontend
 

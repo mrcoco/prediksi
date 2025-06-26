@@ -450,6 +450,595 @@ async def get_current_user_profile(current_user: User = Depends(get_current_user
 
 Router authentication (`/api/auth`) menangani comprehensive authentication flow termasuk login, token refresh, dan user management. Protected endpoints menggunakan `get_current_user` dependency untuk authorization dengan OAuth2PasswordBearer scheme yang secara otomatis terintegrasi dalam OpenAPI documentation untuk interactive testing capability. Sistem mendukung token refresh untuk session management yang optimal.
 
+#### 2.2.4. Implementasi Router Modules dan Business Logic
+
+Setiap router module mengimplementasikan domain-specific business logic dengan pattern yang konsisten untuk maintainability dan code reusability. Implementasi menggunakan dependency injection pattern untuk database session management dan authentication.
+
+**Siswa Router Implementation:**
+```python
+from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File
+from sqlalchemy.orm import Session
+from typing import List
+import pandas as pd
+from io import BytesIO
+
+router = APIRouter()
+
+@router.post("/upload/excel", summary="Upload Excel Data Siswa")
+async def upload_excel_siswa(
+    file: UploadFile = File(...),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Upload data siswa dalam format Excel dengan batch processing"""
+    if not file.filename.endswith(('.xlsx', '.xls')):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="File harus berformat Excel (.xlsx atau .xls)"
+        )
+    
+    try:
+        # Read Excel file
+        contents = await file.read()
+        df = pd.read_excel(BytesIO(contents))
+        
+        # Validate required columns
+        required_columns = ['nama', 'nis', 'jenis_kelamin', 'kelas', 'tanggal_lahir']
+        missing_columns = [col for col in required_columns if col not in df.columns]
+        if missing_columns:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Kolom yang hilang: {', '.join(missing_columns)}"
+            )
+        
+        # Batch insert dengan error handling per row
+        success_count = 0
+        error_rows = []
+        
+        for index, row in df.iterrows():
+            try:
+                # Check for duplicate NIS
+                existing = db.query(Siswa).filter(Siswa.nis == row['nis']).first()
+                if existing:
+                    error_rows.append(f"Baris {index + 2}: NIS {row['nis']} sudah ada")
+                    continue
+                
+                # Create siswa object
+                siswa = Siswa(
+                    nama=row['nama'],
+                    nis=row['nis'],
+                    jenis_kelamin=row['jenis_kelamin'],
+                    kelas=row['kelas'],
+                    tanggal_lahir=pd.to_datetime(row['tanggal_lahir']),
+                    alamat=row.get('alamat', '')
+                )
+                
+                db.add(siswa)
+                success_count += 1
+                
+            except Exception as e:
+                error_rows.append(f"Baris {index + 2}: {str(e)}")
+        
+        db.commit()
+        
+        return {
+            "message": "Upload selesai",
+            "success_count": success_count,
+            "total_rows": len(df),
+            "errors": error_rows
+        }
+        
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Gagal memproses file Excel: {str(e)}"
+        )
+
+@router.get("/export/excel")
+async def export_excel_siswa(db: Session = Depends(get_db)):
+    """Export data siswa ke format Excel"""
+    try:
+        siswa_list = db.query(Siswa).all()
+        
+        # Convert to DataFrame
+        data = []
+        for siswa in siswa_list:
+            data.append({
+                'ID': siswa.id,
+                'Nama': siswa.nama,
+                'NIS': siswa.nis,
+                'Jenis Kelamin': siswa.jenis_kelamin,
+                'Kelas': siswa.kelas,
+                'Tanggal Lahir': siswa.tanggal_lahir.strftime('%Y-%m-%d'),
+                'Alamat': siswa.alamat,
+                'Created At': siswa.created_at.strftime('%Y-%m-%d %H:%M:%S')
+            })
+        
+        df = pd.DataFrame(data)
+        
+        # Create Excel file in memory
+        output = BytesIO()
+        with pd.ExcelWriter(output, engine='openpyxl') as writer:
+            df.to_excel(writer, sheet_name='Data Siswa', index=False)
+        
+        output.seek(0)
+        
+        return StreamingResponse(
+            BytesIO(output.read()),
+            media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            headers={"Content-Disposition": "attachment; filename=Data_Siswa.xlsx"}
+        )
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Gagal export data: {str(e)}"
+        )
+```
+
+**Nilai Router dengan Auto-Calculation:**
+```python
+@router.post("/", response_model=NilaiRaportResponse)
+async def create_nilai_raport(
+    nilai: NilaiRaportCreate, 
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Create nilai raport dengan auto-calculation rata-rata"""
+    
+    # Validate siswa exists
+    siswa = db.query(Siswa).filter(Siswa.id == nilai.siswa_id).first()
+    if not siswa:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Siswa tidak ditemukan"
+        )
+    
+    # Check for duplicate (one record per siswa per semester)
+    existing = db.query(NilaiRaport).filter(
+        NilaiRaport.siswa_id == nilai.siswa_id,
+        NilaiRaport.semester == nilai.semester,
+        NilaiRaport.tahun_ajaran == nilai.tahun_ajaran
+    ).first()
+    
+    if existing:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Data nilai untuk siswa ini di semester yang sama sudah ada"
+        )
+    
+    # Auto-calculate rata-rata from 11 subjects
+    subjects = [
+        nilai.matematika, nilai.bahasa_indonesia, nilai.bahasa_inggris,
+        nilai.bahasa_jawa, nilai.ipa, nilai.agama, nilai.pjok,
+        nilai.pkn, nilai.sejarah, nilai.seni, nilai.dasar_kejuruan
+    ]
+    rata_rata = sum(subjects) / len(subjects)
+    
+    try:
+        db_nilai = NilaiRaport(
+            **nilai.dict(),
+            rata_rata=round(rata_rata, 2)
+        )
+        
+        db.add(db_nilai)
+        db.commit()
+        db.refresh(db_nilai)
+        
+        return db_nilai
+        
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Gagal menyimpan nilai raport: {str(e)}"
+        )
+```
+
+#### 2.2.5. Machine Learning Integration dan Prediksi Service
+
+Implementasi machine learning menggunakan algoritma C4.5 Decision Tree dengan integrasi seamless ke dalam API backend. Service ini menangani training model, prediksi individual, batch processing, dan model persistence.
+
+**ML Service Implementation:**
+```python
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+import joblib
+import numpy as np
+from typing import Dict, List, Tuple
+
+class MLService:
+    def __init__(self):
+        self.model = None
+        self.feature_names = ['rata_rata', 'kategori_penghasilan', 'kategori_kehadiran']
+        self.model_path = 'models/c45_model.joblib'
+    
+    def prepare_training_data(self, db: Session) -> Tuple[np.ndarray, np.ndarray]:
+        """Prepare training data dari database dengan feature engineering"""
+        
+        # Complex JOIN query untuk mengambil data dari multiple tables
+        query = """
+        SELECT 
+            s.id as siswa_id,
+            s.nama,
+            nr.rata_rata,
+            po.kategori_penghasilan,
+            p.kategori_kehadiran,
+            CASE 
+                WHEN nr.rata_rata >= 80 AND p.persentase_kehadiran >= 80 THEN 'Tinggi'
+                WHEN nr.rata_rata >= 70 AND p.persentase_kehadiran >= 75 THEN 'Sedang'
+                ELSE 'Rendah'
+            END as target_prestasi
+        FROM siswa s
+        JOIN nilai_raport nr ON s.id = nr.siswa_id
+        JOIN penghasilan_ortu po ON s.id = po.siswa_id
+        JOIN presensi p ON s.id = p.siswa_id
+        WHERE nr.rata_rata IS NOT NULL 
+        AND po.kategori_penghasilan IS NOT NULL 
+        AND p.kategori_kehadiran IS NOT NULL
+        """
+        
+        result = db.execute(query).fetchall()
+        
+        if len(result) < 10:
+            raise ValueError("Data training minimal 10 record untuk model yang reliable")
+        
+        # Feature engineering
+        features = []
+        targets = []
+        
+        for row in result:
+            # Numerical feature: rata_rata (0-100)
+            rata_rata = float(row.rata_rata)
+            
+            # Categorical features: one-hot encoding
+            # Kategori penghasilan: Rendah=0, Menengah=1, Tinggi=2
+            penghasilan_map = {'Rendah': 0, 'Menengah': 1, 'Tinggi': 2}
+            penghasilan_encoded = penghasilan_map.get(row.kategori_penghasilan, 0)
+            
+            # Kategori kehadiran: Rendah=0, Sedang=1, Tinggi=2
+            kehadiran_map = {'Rendah': 0, 'Sedang': 1, 'Tinggi': 2}
+            kehadiran_encoded = kehadiran_map.get(row.kategori_kehadiran, 0)
+            
+            features.append([rata_rata, penghasilan_encoded, kehadiran_encoded])
+            targets.append(row.target_prestasi)
+        
+        return np.array(features), np.array(targets)
+    
+    def train_model(self, db: Session) -> Dict:
+        """Train C4.5 Decision Tree model dengan evaluation metrics"""
+        
+        try:
+            # Prepare data
+            X, y = self.prepare_training_data(db)
+            
+            # Split data for training dan testing
+            X_train, X_test, y_train, y_test = train_test_split(
+                X, y, test_size=0.2, random_state=42, stratify=y
+            )
+            
+            # Initialize C4.5 (Decision Tree dengan entropy criterion)
+            self.model = DecisionTreeClassifier(
+                criterion='entropy',  # Information Gain (C4.5 characteristic)
+                max_depth=10,         # Prevent overfitting
+                min_samples_split=5,  # Minimum samples untuk split
+                min_samples_leaf=3,   # Minimum samples di leaf node
+                random_state=42
+            )
+            
+            # Train model
+            self.model.fit(X_train, y_train)
+            
+            # Evaluate model
+            y_pred = self.model.predict(X_test)
+            accuracy = accuracy_score(y_test, y_pred)
+            
+            # Detailed evaluation metrics
+            report = classification_report(y_test, y_pred, output_dict=True)
+            conf_matrix = confusion_matrix(y_test, y_pred)
+            
+            # Feature importance
+            feature_importance = dict(zip(
+                self.feature_names, 
+                self.model.feature_importances_
+            ))
+            
+            # Save model
+            joblib.dump(self.model, self.model_path)
+            
+            return {
+                "status": "success",
+                "accuracy": round(accuracy, 4),
+                "training_samples": len(X_train),
+                "test_samples": len(X_test),
+                "feature_importance": feature_importance,
+                "classification_report": report,
+                "confusion_matrix": conf_matrix.tolist(),
+                "model_saved": self.model_path
+            }
+            
+        except Exception as e:
+            return {
+                "status": "error",
+                "message": str(e)
+            }
+    
+    def predict_single(self, siswa_id: int, db: Session) -> Dict:
+        """Prediksi individual untuk satu siswa"""
+        
+        # Load model jika belum ada
+        if self.model is None:
+            try:
+                self.model = joblib.load(self.model_path)
+            except FileNotFoundError:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="Model belum dilatih. Silakan train model terlebih dahulu."
+                )
+        
+        # Get siswa data dengan JOIN
+        query = """
+        SELECT 
+            s.id, s.nama,
+            nr.rata_rata,
+            po.kategori_penghasilan,
+            p.kategori_kehadiran,
+            p.persentase_kehadiran
+        FROM siswa s
+        LEFT JOIN nilai_raport nr ON s.id = nr.siswa_id
+        LEFT JOIN penghasilan_ortu po ON s.id = po.siswa_id  
+        LEFT JOIN presensi p ON s.id = p.siswa_id
+        WHERE s.id = :siswa_id
+        """
+        
+        result = db.execute(query, {"siswa_id": siswa_id}).fetchone()
+        
+        if not result:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Data siswa tidak ditemukan"
+            )
+        
+        # Validate data completeness
+        if not all([result.rata_rata, result.kategori_penghasilan, result.kategori_kehadiran]):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Data siswa tidak lengkap untuk prediksi (nilai, penghasilan, atau presensi kosong)"
+            )
+        
+        # Prepare features (same encoding as training)
+        penghasilan_map = {'Rendah': 0, 'Menengah': 1, 'Tinggi': 2}
+        kehadiran_map = {'Rendah': 0, 'Sedang': 1, 'Tinggi': 2}
+        
+        features = np.array([[
+            float(result.rata_rata),
+            penghasilan_map.get(result.kategori_penghasilan, 0),
+            kehadiran_map.get(result.kategori_kehadiran, 0)
+        ]])
+        
+        # Make prediction
+        prediction = self.model.predict(features)[0]
+        confidence = max(self.model.predict_proba(features)[0])
+        
+        # Save prediction result
+        prestasi_record = Prestasi(
+            siswa_id=siswa_id,
+            semester="Ganjil",  # Default, bisa disesuaikan
+            tahun_ajaran="2024/2025",
+            prediksi_prestasi=prediction,
+            confidence=round(confidence, 4)
+        )
+        
+        db.add(prestasi_record)
+        db.commit()
+        
+        return {
+            "siswa_id": siswa_id,
+            "nama_siswa": result.nama,
+            "prediksi_prestasi": prediction,
+            "confidence": round(confidence, 4),
+            "detail_faktor": {
+                "rata_rata": result.rata_rata,
+                "kategori_penghasilan": result.kategori_penghasilan,
+                "kategori_kehadiran": result.kategori_kehadiran,
+                "persentase_kehadiran": result.persentase_kehadiran
+            }
+        }
+
+# Prediksi Router Implementation
+@router.post("/train", summary="Train ML Model")
+async def train_model(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Train C4.5 Decision Tree model untuk prediksi prestasi"""
+    ml_service = MLService()
+    result = ml_service.train_model(db)
+    return result
+
+@router.post("/predict/{siswa_id}", summary="Prediksi Individual")
+async def predict_prestasi(
+    siswa_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Prediksi prestasi untuk siswa individual"""
+    ml_service = MLService()
+    result = ml_service.predict_single(siswa_id, db)
+    return result
+```
+
+#### 2.2.6. Error Handling dan Logging Strategy
+
+Implementasi comprehensive error handling dan logging untuk monitoring, debugging, dan audit trail dalam production environment.
+
+**Global Exception Handler:**
+```python
+from fastapi import Request
+from fastapi.responses import JSONResponse
+import logging
+import traceback
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('logs/app.log'),
+        logging.StreamHandler()
+    ]
+)
+
+logger = logging.getLogger(__name__)
+
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request: Request, exc: HTTPException):
+    """Handle HTTP exceptions dengan logging"""
+    logger.warning(f"HTTP {exc.status_code}: {exc.detail} - {request.url}")
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "error": True,
+            "message": exc.detail,
+            "status_code": exc.status_code,
+            "path": str(request.url)
+        }
+    )
+
+@app.exception_handler(Exception)
+async def general_exception_handler(request: Request, exc: Exception):
+    """Handle general exceptions dengan full traceback logging"""
+    logger.error(f"Unhandled exception: {str(exc)}")
+    logger.error(f"Traceback: {traceback.format_exc()}")
+    
+    return JSONResponse(
+        status_code=500,
+        content={
+            "error": True,
+            "message": "Internal server error",
+            "status_code": 500,
+            "path": str(request.url)
+        }
+    )
+
+# Request/Response logging middleware
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    """Log all HTTP requests dan responses"""
+    start_time = time.time()
+    
+    # Log request
+    logger.info(f"Request: {request.method} {request.url}")
+    
+    # Process request
+    response = await call_next(request)
+    
+    # Log response
+    process_time = time.time() - start_time
+    logger.info(f"Response: {response.status_code} - {process_time:.4f}s")
+    
+    return response
+```
+
+#### 2.2.7. Performance Optimization dan Caching
+
+Implementasi optimization techniques untuk meningkatkan performance API dalam production environment dengan high concurrent users.
+
+**Database Query Optimization:**
+```python
+from sqlalchemy import Index
+from functools import lru_cache
+import redis
+import json
+
+# Database indexes untuk performance
+# Ditambahkan di model definitions
+class Siswa(Base):
+    # ... existing fields ...
+    
+    __table_args__ = (
+        Index('idx_siswa_nis', 'nis'),
+        Index('idx_siswa_nama', 'nama'),
+        Index('idx_siswa_kelas', 'kelas'),
+    )
+
+class NilaiRaport(Base):
+    # ... existing fields ...
+    
+    __table_args__ = (
+        Index('idx_nilai_siswa_semester', 'siswa_id', 'semester', 'tahun_ajaran'),
+        Index('idx_nilai_rata_rata', 'rata_rata'),
+    )
+
+# Redis caching untuk frequently accessed data
+redis_client = redis.Redis(host='localhost', port=6379, db=0)
+
+@lru_cache(maxsize=100)
+def get_siswa_cache(siswa_id: int, db: Session):
+    """Cache siswa data dengan LRU eviction"""
+    cache_key = f"siswa:{siswa_id}"
+    
+    # Try get from Redis
+    cached_data = redis_client.get(cache_key)
+    if cached_data:
+        return json.loads(cached_data)
+    
+    # Get from database
+    siswa = db.query(Siswa).filter(Siswa.id == siswa_id).first()
+    if siswa:
+        siswa_data = {
+            "id": siswa.id,
+            "nama": siswa.nama,
+            "nis": siswa.nis,
+            "kelas": siswa.kelas
+        }
+        
+        # Cache for 5 minutes
+        redis_client.setex(cache_key, 300, json.dumps(siswa_data))
+        return siswa_data
+    
+    return None
+
+# Bulk operations untuk efficiency
+@router.post("/bulk/create", summary="Bulk Create Siswa")
+async def bulk_create_siswa(
+    siswa_list: List[SiswaCreate],
+    db: Session = Depends(get_db)
+):
+    """Bulk insert siswa dengan batch processing"""
+    
+    if len(siswa_list) > 1000:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Maksimal 1000 records per batch"
+        )
+    
+    try:
+        # Batch insert untuk performance
+        siswa_objects = []
+        for siswa_data in siswa_list:
+            siswa_objects.append(Siswa(**siswa_data.dict()))
+        
+        db.bulk_save_objects(siswa_objects)
+        db.commit()
+        
+        return {
+            "message": f"Berhasil insert {len(siswa_objects)} siswa",
+            "count": len(siswa_objects)
+        }
+        
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Bulk insert gagal: {str(e)}"
+        )
+```
+
+Implementasi backend EduPro menunjukkan arsitektur production-ready dengan comprehensive error handling, performance optimization, dan maintainable code structure yang mendukung scalability untuk educational analytics platform.
+
 ### 2.3. Implementasi Frontend
 
 Antarmuka pengguna sistem EduPro dibangun menggunakan pendekatan pragmatis yang berfokus pada komponen antarmuka (UI) yang kaya fitur tanpa memerlukan *overhead* dari *framework* JavaScript modern. Implementasi ini memanfaatkan *library* **Kendo UI for jQuery**, yang diintegrasikan ke dalam arsitektur web statis tradisional dan disajikan secara efisien oleh Nginx.

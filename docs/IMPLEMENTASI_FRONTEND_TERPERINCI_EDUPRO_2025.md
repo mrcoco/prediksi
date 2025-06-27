@@ -1,4 +1,4 @@
-# Implementasi Frontend Sistem EduPro: Arsitektur Web Pragmatis dengan Komponen Enterprise
+i# Implementasi Frontend Sistem EduPro: Arsitektur Web Pragmatis dengan Komponen Enterprise
 
 **Penulis**: Tim Riset EduPro AI  
 **Afiliasi**: Departemen Inovasi Teknologi Pendidikan, EduPro Institute  

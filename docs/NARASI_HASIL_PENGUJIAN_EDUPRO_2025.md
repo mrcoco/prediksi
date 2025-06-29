@@ -7,22 +7,28 @@ Sistem EduPro menunjukkan performa yang sangat baik dalam serangkaian pengujian 
 ## 📊 VISUALISASI PERFORMA SISTEM
 
 ```mermaid
-graph TD
-    A[Performa Sistem ] --> B[User Experience]
-    A --> C[System Capacity]
-    A --> D[Infrastructure]
+flowchart TB
+    subgraph User_Experience
+        B1[Response Time<br/>45ms rata-rata]
+        B2[Reliability<br/>99.999%]
+        B3[Error Rate<br/>0.01%]
+    end
     
-    B --> B1[Response: 45ms avg]
-    B --> B2[Reliability: 99.999%]
-    B --> B3[Error Rate: 0.01%]
+    subgraph System_Capacity
+        C1[Concurrent Users<br/>500 aktif]
+        C2[Throughput<br/>4,850 req/min]
+        C3[Processing<br/>290K req/hour]
+    end
     
-    C --> C1[Concurrent: 500 users]
-    C --> C2[Throughput: 4,850 req/min]
-    C --> C3[Processing: 290K req/hour]
+    subgraph Infrastructure
+        D1[CPU Usage<br/>62%]
+        D2[Memory Efficiency<br/>85%]
+        D3[System Uptime<br/>720h MTBF]
+    end
     
-    D --> D1[Resource: 62% CPU]
-    D --> D2[Memory: 85% efficiency]
-    D --> D3[Uptime: 720h MTBF]
+    A[Performa Sistem] --> User_Experience
+    A --> System_Capacity
+    A --> Infrastructure
 ```
 
 ## 📈 DETAIL PERFORMA PER FASE

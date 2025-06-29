@@ -1,120 +1,231 @@
-# 📚 EduPro System Documentation Index
+# DOKUMENTASI SISTEM EDUPRO 2025
 
-## 🎯 **Class Diagram Documentation**
+## 📋 DAFTAR ISI
 
-### **📖 Dokumentasi Utama**
-- **[CLASS_DIAGRAM_EDUPRO_2025.md](CLASS_DIAGRAM_EDUPRO_2025.md)** - Dokumentasi lengkap class diagram sistem EduPro
-- **[README_CLASS_DIAGRAM.md](README_CLASS_DIAGRAM.md)** - Panduan penggunaan dan tools untuk class diagram
+### 1. [Performa Sistem](NARASI_HASIL_PENGUJIAN_EDUPRO_2025.md)
+- Hasil Pengujian Performa
+- Detail Pencapaian per Fase
+- Karakteristik Performa
+- Monitoring dan Maintenance
+- Kesimpulan
 
-### **🎨 File Diagram**
-- **[class_diagram_edupro.mmd](class_diagram_edupro.mmd)** - Class diagram dalam format Mermaid
-- **[class_diagram_edupro.puml](class_diagram_edupro.puml)** - Class diagram dalam format PlantUML
+### 2. [Optimasi Database](OPTIMASI_DATABASE_EDUPRO_2025.md)
+- Query Performance
+- Indexing Strategy
+- Data Management
+- Monitoring dan Maintenance
+- Risks dan Mitigasi
 
----
+### 3. [Implementasi SQLAlchemy](OPTIMASI_DATABASE_SQLALCHEMY_EDUPRO_2025.md)
+- Model Definition & Relationships
+- Query Optimization
+- Session Management
+- Batch Processing
+- Performance Monitoring
+- Best Practices
 
-## 🏗️ **Arsitektur Sistem EduPro**
+## 🎯 QUICK LINKS
 
-### **Layer Architecture (6 Layers)**
-1. **Entity Layer** - Database models dan entities
-2. **Machine Learning Layer** - C4.5 Decision Tree model
-3. **Service Layer** - API routers dan business logic
-4. **Application Layer** - FastAPI main application
-5. **Frontend Layer** - UI components dan services
-6. **Database Layer** - Session management
+### Performance Testing
+- [Test Results Dashboard](test_results/README.md)
+- [JMeter Test Plans](test_plans/README.md)
+- [Performance Metrics](docs/NARASI_HASIL_PENGUJIAN_EDUPRO_2025.md#metrics)
 
-### **Total Classes: 17**
-- **Entity Models**: 6 classes
-- **ML Components**: 1 class
-- **API Services**: 6 classes
-- **Application**: 1 class
-- **Frontend**: 4 classes
-- **Database**: 1 class
+### Database
+- [Schema Documentation](docs/OPTIMASI_DATABASE_EDUPRO_2025.md#schema)
+- [Query Optimization](docs/OPTIMASI_DATABASE_EDUPRO_2025.md#optimization)
+- [Maintenance Guide](docs/OPTIMASI_DATABASE_EDUPRO_2025.md#maintenance)
 
----
+### Development
+- [API Documentation](backend/README.md)
+- [Frontend Guide](frontend/README.md)
+- [Deployment Guide](docs/deployment.md)
 
-## 🔗 **Quick Links**
+## 🚀 GETTING STARTED
 
-### **Visualization Tools**
-- **[Mermaid Live Editor](https://mermaid.live/)** - Render Mermaid diagrams online
-- **[PlantUML Server](http://www.plantuml.com/plantuml/uml/)** - Render PlantUML diagrams online
-- **GitHub** - Automatic rendering of .mmd files
-
-### **Development Resources**
-- **Backend**: FastAPI + PostgreSQL + SQLAlchemy
-- **Frontend**: HTML5 + JavaScript + Kendo UI + D3.js
-- **ML**: Scikit-learn + C4.5 Decision Tree
-- **Auth**: JWT Bearer Token
-- **Deploy**: Docker Compose
-
----
-
-## 📊 **System Overview**
-
-### **Core Features**
-✅ **Student Management** - CRUD operations untuk data siswa  
-✅ **Academic Tracking** - Nilai raport, presensi, penghasilan orang tua  
-✅ **ML Predictions** - Prediksi prestasi menggunakan C4.5 algorithm  
-✅ **Data Visualization** - Interactive charts dan decision tree  
-✅ **Excel Integration** - Import/export data dalam format Excel  
-✅ **Authentication** - JWT-based dengan role management  
-✅ **Responsive UI** - Mobile-friendly interface  
-
-### **Key Relationships**
-- **Siswa** 1:N **NilaiRaport** (Satu siswa memiliki banyak nilai)
-- **Siswa** 1:N **PenghasilanOrtu** (Satu siswa memiliki data penghasilan)
-- **Siswa** 1:N **Presensi** (Satu siswa memiliki data kehadiran)
-- **Siswa** 1:N **Prestasi** (Satu siswa memiliki prediksi prestasi)
-
----
-
-## 🛠️ **How to Use**
-
-### **1. View Documentation**
+### Prerequisites
 ```bash
-# Baca dokumentasi lengkap
-cat docs/CLASS_DIAGRAM_EDUPRO_2025.md
+# Environment Setup
+./create-env.sh
 
-# Buka dengan editor
-code docs/CLASS_DIAGRAM_EDUPRO_2025.md
+# Development Setup
+./setup-env.sh
 ```
 
-### **2. Render Diagrams**
-```bash
-# Mermaid diagram
-cat docs/class_diagram_edupro.mmd
+### Database Setup
+```sql
+-- Initialize Database
+psql -U postgres -f backup.dump
 
-# PlantUML diagram  
-cat docs/class_diagram_edupro.puml
+-- Update Data
+psql -U postgres -f update_rata_rata_nilai_raport.sql
 ```
 
-### **3. Generate Images**
+### Running the Application
 ```bash
-# Install Mermaid CLI
-npm install -g @mermaid-js/mermaid-cli
+# Start Services
+docker-compose up -d
 
-# Generate PNG from Mermaid
-mmdc -i docs/class_diagram_edupro.mmd -o docs/class_diagram_edupro.png
-
-# Generate SVG from Mermaid
-mmdc -i docs/class_diagram_edupro.mmd -o docs/class_diagram_edupro.svg
+# Monitor Logs
+docker-compose logs -f
 ```
 
----
+## 📊 SYSTEM ARCHITECTURE
 
-## 📅 **Version History**
+```mermaid
+graph TB
+    subgraph Frontend
+        UI[User Interface]
+        React[React Components]
+        Redux[State Management]
+    end
+    
+    subgraph Backend
+        API[FastAPI Service]
+        Cache[Redis Cache]
+        ML[ML Service]
+    end
+    
+    subgraph Database
+        PG[PostgreSQL]
+        Backup[Backup Service]
+        Monitor[DB Monitor]
+    end
+    
+    UI --> API
+    API --> Cache
+    API --> ML
+    API --> PG
+    PG --> Backup
+    PG --> Monitor
+```
 
-- **v2.0.0** (2025-06-19) - Complete class diagram dengan 17 classes
-- **v1.0.0** (2025-06-01) - Initial system architecture
+## 💡 KEY FEATURES
 
----
+### 1. Prediksi Prestasi
+- Machine Learning Model
+- Real-time Processing
+- Cached Results
+- Batch Processing
 
-## 📞 **Contact & Support**
+### 2. Data Management
+- Automated Backups
+- Data Validation
+- Audit Logging
+- Version Control
 
-**Developer**: EduPro Development Team  
-**Email**: spydersonics@gmail.com  
-**Repository**: GitHub - prestasi-siswa  
-**Documentation**: docs/ folder  
+### 3. Performance
+- Response Time < 50ms
+- 99.999% Uptime
+- Scalable Architecture
+- Load Balancing
 
----
+## ⚙️ CONFIGURATION
 
-**© 2025 EduPro System - Class Diagram Documentation**
+### Environment Variables
+```bash
+# Database
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=edupro
+DB_USER=postgres
+DB_PASS=secret
+
+# Cache
+REDIS_HOST=localhost
+REDIS_PORT=6379
+
+# API
+API_PORT=8000
+API_DEBUG=false
+```
+
+### Docker Configuration
+```yaml
+# Key Services
+services:
+  api:
+    image: edupro/api
+    ports: ["8000:8000"]
+  
+  db:
+    image: postgres:13
+    volumes: ["pgdata:/var/lib/postgresql/data"]
+  
+  cache:
+    image: redis:alpine
+    ports: ["6379:6379"]
+```
+
+## 📈 MONITORING
+
+### Key Metrics
+- Response Time
+- Error Rate
+- Cache Hit Ratio
+- Database Load
+- Memory Usage
+- CPU Utilization
+
+### Alerts
+- System Health
+- Performance Degradation
+- Error Thresholds
+- Resource Limits
+- Security Events
+
+## 🛠️ MAINTENANCE
+
+### Regular Tasks
+- Database Backup
+- Log Rotation
+- Cache Cleanup
+- Index Optimization
+- Performance Analysis
+
+### Emergency Procedures
+- System Recovery
+- Data Restoration
+- Error Resolution
+- Performance Recovery
+
+## 📚 ADDITIONAL RESOURCES
+
+### Documentation
+- [API Reference](backend/README.md)
+- [Database Schema](docs/schema.md)
+- [Testing Guide](docs/testing.md)
+- [Deployment Guide](docs/deployment.md)
+
+### Support
+- [Issue Tracker](https://github.com/org/edupro/issues)
+- [Change Log](CHANGELOG.md)
+- [Contributing Guide](docs/CONTRIBUTING.md)
+- [Code of Conduct](docs/CODE_OF_CONDUCT.md)
+
+## 🔄 VERSION HISTORY
+
+### Current Version: 2.0.0
+- Enhanced Performance
+- Improved Reliability
+- Extended Features
+- Better Documentation
+
+### Previous Versions
+- 1.2.0: Cache Implementation
+- 1.1.0: Database Optimization
+- 1.0.0: Initial Release
+
+## 👥 TEAM
+
+### Development
+- Backend Team
+- Frontend Team
+- DevOps Team
+- QA Team
+
+### Support
+- System Administrators
+- Database Administrators
+- Security Team
+- User Support

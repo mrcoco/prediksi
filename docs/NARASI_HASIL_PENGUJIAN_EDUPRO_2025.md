@@ -8,7 +8,7 @@ Sistem EduPro menunjukkan performa yang sangat baik dalam serangkaian pengujian 
 
 ```mermaid
 graph TD
-    A[Performa Sistem EduPro] --> B[User Experience]
+    A[Performa Sistem ] --> B[User Experience]
     A --> C[System Capacity]
     A --> D[Infrastructure]
     

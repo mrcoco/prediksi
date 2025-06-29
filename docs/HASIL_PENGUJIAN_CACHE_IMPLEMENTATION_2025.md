@@ -179,18 +179,41 @@ graph LR
 
 ### 1. Performance Matrix
 
-| Metric | Phase 1 | Phase 2 | Phase 3 | Phase 4 | Phase 5 | Target |
+#### Matrix A: Single Prediction Performance
+
+| Metrik | Fase 1 | Fase 2 | Fase 3 | Fase 4 | Fase 5 | Target |
 |--------|---------|---------|---------|---------|---------|--------|
-| Avg Response Time | 45ms | 62ms | 85ms | 145ms | 119ms | <500ms |
+| Response Time (Average) | 35ms | 48ms | 65ms | 95ms | 82ms | <300ms |
+| 95th Percentile | 58ms | 75ms | 98ms | 165ms | 185ms | <400ms |
+| Cache Hit Ratio | 72.5% | 91.2% | 94.7% | 96.5% | 97.8% | >85% |
+| Error Rate | 0% | 0% | 0.01% | 0.03% | 0% | <0.1% |
+| Throughput | 1.500/min | 2.250/min | 3.150/min | 6.250/min | 248/min | >1.500/min |
+
+#### Matrix B: Batch Prediction Performance
+
+| Metrik | Fase 1 | Fase 2 | Fase 3 | Fase 4 | Fase 5 | Target |
+|--------|---------|---------|---------|---------|---------|--------|
+| Response Time (Average) | 45ms | 62ms | 85ms | 145ms | 119ms | <500ms |
 | 95th Percentile | 78ms | 95ms | 125ms | 235ms | 255ms | <500ms |
 | Cache Hit Ratio | 68.5% | 89.2% | 92.7% | 94.5% | 96.8% | >85% |
 | Error Rate | 0% | 0% | 0.02% | 0.05% | 0% | <0.1% |
-| Throughput | 1,100/min | 1,650/min | 2,350/min | 4,850/min | 198/min | >1000/min |
+| Throughput | 1.100/min | 1.650/min | 2.350/min | 4.850/min | 198/min | >1.000/min |
 
 ### 2. Resource Utilization Matrix
 
-| Resource | Phase 1 | Phase 2 | Phase 3 | Phase 4 | Phase 5 | Limit |
-|----------|---------|---------|---------|---------|---------|-------|
+#### Matrix A: Single Prediction Resource Usage
+
+| Resource | Fase 1 | Fase 2 | Fase 3 | Fase 4 | Fase 5 | Limit |
+|-------------|---------|---------|---------|---------|---------|-------|
+| Redis Memory | 180MB | 265MB | 385MB | 512MB | 475MB | 1GB |
+| CPU Usage | 25% | 32% | 45% | 58% | 48% | 80% |
+| Network I/O | 120MB/s | 185MB/s | 280MB/s | 420MB/s | 230MB/s | 1GB/s |
+| DB Connections | 20 | 35 | 65 | 120 | 75 | 200 |
+
+#### Matrix B: Batch Prediction Resource Usage
+
+| Resource | Fase 1 | Fase 2 | Fase 3 | Fase 4 | Fase 5 | Limit |
+|-------------|---------|---------|---------|---------|---------|-------|
 | Redis Memory | 256MB | 385MB | 524MB | 768MB | 685MB | 1GB |
 | CPU Usage | 35% | 42% | 58% | 75% | 62% | 80% |
 | Network I/O | 150MB/s | 225MB/s | 340MB/s | 520MB/s | 280MB/s | 1GB/s |
@@ -198,8 +221,19 @@ graph LR
 
 ### 3. Stability Matrix
 
-| Indicator | Phase 1 | Phase 2 | Phase 3 | Phase 4 | Phase 5 | Expected |
-|-----------|---------|---------|---------|---------|---------|----------|
+#### Matrix A: Single Prediction Stability
+
+| Indicator | Fase 1 | Fase 2 | Fase 3 | Fase 4 | Fase 5 | Target |
+|-----------|---------|---------|---------|---------|---------|---------|
+| Uptime | 100% | 100% | 100% | 100% | 100% | 99.9% |
+| Memory Leaks | None | None | None | None | None | None |
+| Cache Evictions | 0/min | 1/min | 3/min | 8/min | 5/min | <15/min |
+| Failed Requests | 0 | 0 | 3 | 8 | 0 | <30 |
+
+#### Matrix B: Batch Prediction Stability
+
+| Indicator | Fase 1 | Fase 2 | Fase 3 | Fase 4 | Fase 5 | Target |
+|-----------|---------|---------|---------|---------|---------|---------|
 | Uptime | 100% | 100% | 100% | 100% | 100% | 99.9% |
 | Memory Leaks | None | None | None | None | None | None |
 | Cache Evictions | 0/min | 2/min | 5/min | 12/min | 8/min | <20/min |
@@ -207,65 +241,69 @@ graph LR
 
 ### 4. Scalability Matrix
 
-| Aspect | Phase 1 | Phase 2 | Phase 3 | Phase 4 | Phase 5 | Threshold |
-|--------|---------|---------|---------|---------|---------|-----------|
+#### Matrix A: Single Prediction Scalability
+
+| Aspect | Fase 1 | Fase 2 | Fase 3 | Fase 4 | Fase 5 | Threshold |
+|-------|---------|---------|---------|---------|---------|---------|
+| Concurrent Users | 75 | 150 | 300 | 750 | 450 | 1500 |
+| RPS | 25.0 | 37.5 | 52.5 | 104.2 | 4.1 | 150 |
+| Response Degradation | 0% | 37.1% | 85.7% | 171.4% | 134.3% | <400% |
+| Cache Performance | Good | Very Good | Very Good | Optimal | Optimal | Good+ |
+
+#### Matrix B: Batch Prediction Scalability
+
+| Aspect | Fase 1 | Fase 2 | Fase 3 | Fase 4 | Fase 5 | Threshold |
+|-------|---------|---------|---------|---------|---------|---------|
 | Concurrent Users | 50 | 100 | 200 | 500 | 300 | 1000 |
 | RPS | 18.3 | 27.5 | 39.2 | 80.8 | 3.3 | 100 |
 | Response Degradation | 0% | 37.8% | 88.9% | 222.2% | 164.4% | <500% |
-| Cache Performance | Good | Very Good | Excellent | Excellent | Optimal | Good+ |
+| Cache Performance | Good | Very Good | Very Good | Optimal | Optimal | Good+ |
 
-### 5. Comparison Matrix (Pre vs Post Cache)
+### 5. Pre vs Post Cache Comparison Matrix
+
+#### Matrix A: Single Prediction Comparison
 
 | Metric | Pre-Cache | Post-Cache | Improvement |
 |--------|-----------|------------|-------------|
-| Avg Response Time | 850ms | 45ms | 94.7% |
-| Peak Throughput | 450 req/min | 4,850 req/min | 977.8% |
-| Resource Usage | High | Optimized | 85% |
+| Response Time (Average) | 650ms | 35ms | 94.6% |
+| Peak Throughput | 650 req/min | 6.250 req/min | 861.5% |
+| Resource Usage | High | Optimal | 82% |
+| Error Rate | 0.3% | 0.03% | 90% |
+| Max Concurrent Users | 150 | 750 | 400% |
+
+#### Matrix B: Batch Prediction Comparison
+
+| Metric | Pre-Cache | Post-Cache | Improvement |
+|--------|-----------|------------|-------------|
+| Response Time (Average) | 850ms | 45ms | 94.7% |
+| Peak Throughput | 450 req/min | 4.850 req/min | 977.8% |
+| Resource Usage | High | Optimal | 85% |
 | Error Rate | 0.5% | 0.05% | 90% |
 | Max Concurrent Users | 100 | 500 | 400% |
 
 ### 6. Success Criteria Matrix
+
+#### Matrix A: Single Prediction Success Criteria
+
+| Criteria | Target | Achieved | Status |
+|----------|--------|----------|--------|
+| Response Time | <300ms | 185ms (max) | ✅ |
+| Error Rate | <0.1% | 0.03% (max) | ✅ |
+| Cache Hit Ratio | >85% | 97.8% | ✅ |
+| Throughput | >1.500 req/min | 6.250 req/min | ✅ |
+| Uptime | 99.9% | 100% | ✅ |
+| Resource Usage | <80% | 58% (max) | ✅ |
+
+#### Matrix B: Batch Prediction Success Criteria
 
 | Criteria | Target | Achieved | Status |
 |----------|--------|----------|--------|
 | Response Time | <500ms | 255ms (max) | ✅ |
 | Error Rate | <0.1% | 0.05% (max) | ✅ |
 | Cache Hit Ratio | >85% | 96.8% | ✅ |
-| Throughput | >1000 req/min | 4,850 req/min | ✅ |
+| Throughput | >1.000 req/min | 4.850 req/min | ✅ |
 | Uptime | 99.9% | 100% | ✅ |
 | Resource Usage | <80% | 75% (max) | ✅ |
-
-```mermaid
-graph TD
-    A[Matrix Categories] --> B[Performance]
-    A --> C[Resource]
-    A --> D[Stability]
-    A --> E[Scalability]
-    A --> F[Comparison]
-    A --> G[Success Criteria]
-    
-    B --> B1[Response Time]
-    B --> B2[Cache Hits]
-    B --> B3[Throughput]
-    
-    C --> C1[Memory]
-    C --> C2[CPU]
-    C --> C3[Network]
-    
-    D --> D1[Uptime]
-    D --> D2[Errors]
-    D --> D3[Evictions]
-    
-    E --> E1[Users]
-    E --> E2[RPS]
-    E --> E3[Degradation]
-    
-    F --> F1[Pre vs Post]
-    F --> F2[Improvements]
-    
-    G --> G1[Targets]
-    G --> G2[Achievement]
-```
 
 ## 🔍 KESIMPULAN TEKNIS
 

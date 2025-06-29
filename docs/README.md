@@ -1,152 +1,134 @@
-# 📚 Dokumentasi EduPro
+# 📚 DOKUMENTASI SISTEM EDUPRO
 
-Selamat datang di dokumentasi lengkap aplikasi EduPro (Sistem Prestasi Siswa). Dokumentasi ini berisi panduan, tutorial, dan referensi untuk pengembangan, deployment, dan maintenance aplikasi.
+## 🎯 Overview
 
-## 📁 Struktur Dokumentasi
+EduPro adalah sistem prediksi prestasi siswa yang menggunakan algoritma C4.5 (Decision Tree) untuk membantu institusi pendidikan dalam mengidentifikasi dan mendukung siswa secara proaktif. Sistem ini mengintegrasikan data akademik, kehadiran, dan sosial-ekonomi untuk memberikan prediksi akurat tentang prestasi siswa.
 
-### 🐳 **Docker & Deployment**
-- [`docker/DOCKER-COMPOSE-REVIEW.md`](docker/DOCKER-COMPOSE-REVIEW.md) - Review teknis perubahan docker-compose.yml
-- [`docker/DOCKER-COMPOSE-CHANGES-SUMMARY.md`](docker/DOCKER-COMPOSE-CHANGES-SUMMARY.md) - Ringkasan lengkap perubahan Docker Compose
+## 📂 Struktur Dokumentasi
 
-### 🌍 **Environment & Configuration**
-- [`environment/ENVIRONMENT-SETUP.md`](environment/ENVIRONMENT-SETUP.md) - Panduan setup environment variables
-- [`environment/IMPLEMENTASI_ENVIRONMENT_VARIABLES_2025-01-16.md`](environment/IMPLEMENTASI_ENVIRONMENT_VARIABLES_2025-01-16.md) - Implementasi environment variables
+### 1. Algoritma & Machine Learning
+- [Implementasi C4.5 Detail](IMPLEMENTASI_C45_DETAIL_EDUPRO_2025.md)
+- [Implementasi C4.5 Detail Bagian 2](IMPLEMENTASI_C45_DETAIL_BAGIAN2_2025-06-16.md)
+- [Implementasi C4.5 Detail Bagian 3](IMPLEMENTASI_C45_DETAIL_BAGIAN3_2025-06-16.md)
+- [Ringkasan Implementasi C4.5](RINGKASAN_IMPLEMENTASI_C45_EDUPRO_2025-06-16.md)
 
-### 🎨 **Frontend**
-- [`frontend/README-DOCKER-CONFIG.md`](frontend/README-DOCKER-CONFIG.md) - Konfigurasi Docker untuk frontend
+### 2. Database & Optimasi
+- [Optimasi Database](OPTIMASI_DATABASE_EDUPRO_2025.md)
+- [Optimasi SQLAlchemy](OPTIMASI_DATABASE_SQLALCHEMY_EDUPRO_2025.md)
+- [Event Table System](EVENT_TABLE_SISTEM_INFORMASI_EDUPRO_2025.md)
+- [Event Table Visualisasi](EVENT_TABLE_VISUALISASI_SISTEM_EDUPRO_2025.md)
 
-### 🤖 **Machine Learning & Algoritma**
-- [`ALGORITMA_C45_DOKUMENTASI_LENGKAP_2025-06-16.md`](ALGORITMA_C45_DOKUMENTASI_LENGKAP_2025-06-16.md) - Dokumentasi lengkap algoritma C4.5 dari konsep hingga implementasi
-- [`IMPLEMENTASI_C45_EDUPRO_2025-06-16.md`](IMPLEMENTASI_C45_EDUPRO_2025-06-16.md) - Implementasi spesifik C4.5 dalam aplikasi EduPro
-- [`IMPLEMENTASI_C45_DETAIL_EDUPRO_2025-06-16.md`](IMPLEMENTASI_C45_DETAIL_EDUPRO_2025-06-16.md) - Detail implementasi: Input data, preprocessing, dan struktur database
-- [`IMPLEMENTASI_C45_DETAIL_BAGIAN2_2025-06-16.md`](IMPLEMENTASI_C45_DETAIL_BAGIAN2_2025-06-16.md) - Detail implementasi: Konsep matematika, Gain Ratio, dan algoritma lengkap
-- [`IMPLEMENTASI_C45_DETAIL_BAGIAN3_2025-06-16.md`](IMPLEMENTASI_C45_DETAIL_BAGIAN3_2025-06-16.md) - Detail implementasi: Training model, visualisasi, dan integrasi sistem
-- [`RINGKASAN_IMPLEMENTASI_C45_EDUPRO_2025-06-16.md`](RINGKASAN_IMPLEMENTASI_C45_EDUPRO_2025-06-16.md) - Ringkasan lengkap implementasi C4.5 dalam EduPro
-- [`CHAT_HISTORY_DOKUMENTASI_C45_2025-06-16.md`](CHAT_HISTORY_DOKUMENTASI_C45_2025-06-16.md) - Riwayat percakapan pembuatan dokumentasi C4.5
+### 3. Arsitektur & Deployment
+- [Class Diagram](CLASS_DIAGRAM_EDUPRO_2025.md)
+- [Activity Diagram](ACTIVITY_DIAGRAM_DOCUMENTATION.md)
+- [Tahapan Deployment](TAHAPAN_DEPLOYMENT_WATERFALL_DIPERBAIKI_EDUPRO_2025.md)
+- [Ringkasan Deployment](RINGKASAN_TAHAPAN_DEPLOYMENT_WATERFALL_DIPERBAIKI_EDUPRO_2025.md)
 
-### 🔧 **Backend & API**
-- [`DOKUMENTASI_DETAIL_BACKEND.md`](DOKUMENTASI_DETAIL_BACKEND.md) - Dokumentasi detail backend API
-- [`RINGKASAN_DOKUMENTASI_BACKEND.md`](RINGKASAN_DOKUMENTASI_BACKEND.md) - Ringkasan dokumentasi backend
-- [`DOKUMENTASI_FUNCTION.md`](DOKUMENTASI_FUNCTION.md) - Dokumentasi fungsi-fungsi backend
+### 4. Frontend & User Interface
+- [Dokumentasi Backend Detail](IMPLEMENTASI_BACKEND_DETAIL_JURNAL_EDUPRO_2025.md)
+- [User Guide System](USER_GUIDE_SISTEM_PREDIKSI_2025-06-19.md)
+- [About Page](DOKUMENTASI_ABOUT_PAGE_2025-06-19.md)
 
-### 🎯 **Use Case & Design**
-- [`USE_CASE_DIAGRAM.md`](USE_CASE_DIAGRAM.md) - Diagram dan dokumentasi use case
-- [`use-case.png`](use-case.png) - Diagram use case (PNG)
-- [`use-case.svg`](use-case.svg) - Diagram use case (SVG)
+### 5. Performance & Testing
+- [Narasi Hasil Pengujian](NARASI_HASIL_PENGUJIAN_EDUPRO_2025.md)
+- [JMeter Test Documentation](DOKUMENTASI_JMETER_TEST_2025.md)
+- [Performance Metrics](PERFORMANCE_METRICS_2025.md)
 
-### 📊 **Features & Enhancements**
-- [`DOKUMENTASI_SIDEBAR_COLLAPSE.md`](DOKUMENTASI_SIDEBAR_COLLAPSE.md) - Implementasi sidebar collapse
-- [`README_TRAINING_DATA.md`](README_TRAINING_DATA.md) - Dokumentasi training data
-- [`ENHANCEMENT_PRESENSI_CREATE.md`](ENHANCEMENT_PRESENSI_CREATE.md) - Enhancement form presensi
-- [`ENHANCEMENT_PENGHASILAN_CREATE.md`](ENHANCEMENT_PENGHASILAN_CREATE.md) - Enhancement form penghasilan
-
-### 🔐 **Authentication & Security**
-- [`DOKUMENTASI_BEARER_TOKEN_SEMUA_ENDPOINT.md`](DOKUMENTASI_BEARER_TOKEN_SEMUA_ENDPOINT.md) - Implementasi Bearer Token
-- [`RINGKASAN_FINAL_BEARER_TOKEN.md`](RINGKASAN_FINAL_BEARER_TOKEN.md) - Ringkasan implementasi Bearer Token
-- [`DOKUMENTASI_BEARER_TOKEN_CONFUSION_MATRIX.md`](DOKUMENTASI_BEARER_TOKEN_CONFUSION_MATRIX.md) - Bearer Token untuk Confusion Matrix
-
-### 📈 **Analytics & Metrics**
-- [`RINGKASAN_CONFUSION_MATRIX_METRICS.md`](RINGKASAN_CONFUSION_MATRIX_METRICS.md) - Ringkasan Confusion Matrix & Metrics
-- [`DOKUMENTASI_CONFUSION_MATRIX_METRICS.md`](DOKUMENTASI_CONFUSION_MATRIX_METRICS.md) - Dokumentasi Confusion Matrix & Metrics
-
-### 🐛 **Bug Fixes & Improvements**
-- [`BUGFIX_TIMESTAMP_VALIDATION.md`](BUGFIX_TIMESTAMP_VALIDATION.md) - Perbaikan validasi timestamp
-- [`DOKUMENTASI_PERBAIKAN_ERROR_FOREACH.md`](DOKUMENTASI_PERBAIKAN_ERROR_FOREACH.md) - Perbaikan error forEach
-- [`DOKUMENTASI_PERBAIKAN_PAGINATION_GRID.md`](DOKUMENTASI_PERBAIKAN_PAGINATION_GRID.md) - Perbaikan pagination grid
-
-### 📋 **Layout & UI Improvements**
-- [`LAYOUT_2_COLUMN_UPDATE.md`](LAYOUT_2_COLUMN_UPDATE.md) - Update layout 2 kolom
-- [`PERBAIKAN_LAYOUT_GRID_NILAI_2025-01-16.md`](PERBAIKAN_LAYOUT_GRID_NILAI_2025-01-16.md) - Perbaikan layout grid nilai
-- [`PERBAIKAN_LAYOUT_GRID_SISWA_2025-01-16.md`](PERBAIKAN_LAYOUT_GRID_SISWA_2025-01-16.md) - Perbaikan layout grid siswa
-
-### 📝 **Change Logs & Summaries**
-- [`DOKUMENTASI_PERUBAHAN_2025-01-16.md`](DOKUMENTASI_PERUBAHAN_2025-01-16.md) - Dokumentasi perubahan 16 Januari 2025
-- [`EXECUTIVE_SUMMARY_2025-01-16.md`](EXECUTIVE_SUMMARY_2025-01-16.md) - Executive summary perubahan
-- [`TECHNICAL_SUMMARY_2025-01-16.md`](TECHNICAL_SUMMARY_2025-01-16.md) - Technical summary perubahan
-
-## 🚀 **Quick Start**
-
-### **Development Setup**
-1. Clone repository
-2. Setup environment variables: `./setup-env.sh`
-3. Run dengan Docker: `docker-compose up --build`
-4. Test konfigurasi: http://localhost/test-config.html
-
-### **Production Deployment**
-1. Set production environment variables
-2. Build dan deploy dengan Docker
-3. Verifikasi konfigurasi dan konektivitas
-
-## 📖 **Panduan Berdasarkan Role**
-
-### **👨‍💻 Developer**
-- [Environment Setup](environment/ENVIRONMENT-SETUP.md)
-- [Frontend Docker Config](frontend/README-DOCKER-CONFIG.md)
-- [Backend Documentation](DOKUMENTASI_DETAIL_BACKEND.md)
-- [Algoritma C4.5 Lengkap](ALGORITMA_C45_DOKUMENTASI_LENGKAP_2025-06-16.md)
-- [Implementasi C4.5 EduPro](IMPLEMENTASI_C45_EDUPRO_2025-06-16.md)
-- [Detail Implementasi C4.5](RINGKASAN_IMPLEMENTASI_C45_EDUPRO_2025-06-16.md)
-
-### **🚀 DevOps/Deployment**
-- [Docker Compose Review](docker/DOCKER-COMPOSE-REVIEW.md)
-- [Docker Changes Summary](docker/DOCKER-COMPOSE-CHANGES-SUMMARY.md)
-- [Environment Variables](environment/IMPLEMENTASI_ENVIRONMENT_VARIABLES_2025-01-16.md)
-
-### **📊 Product Manager**
-- [Use Case Diagram](USE_CASE_DIAGRAM.md)
-- [Executive Summary](EXECUTIVE_SUMMARY_2025-01-16.md)
-- [Features Documentation](DOKUMENTASI_SIDEBAR_COLLAPSE.md)
-
-### **🔧 System Administrator**
+### 6. Environment & Configuration
 - [Environment Setup](environment/ENVIRONMENT-SETUP.md)
 - [Docker Configuration](docker/DOCKER-COMPOSE-REVIEW.md)
-- [Security Implementation](DOKUMENTASI_BEARER_TOKEN_SEMUA_ENDPOINT.md)
+- [Frontend Configuration](frontend/README.md)
 
-## 🔍 **Search & Navigation**
+## 🔧 Quick Setup Guide
 
-### **By Topic:**
-- **Docker**: `docs/docker/`
-- **Environment**: `docs/environment/`
-- **Frontend**: `docs/frontend/`
-- **Machine Learning**: Search "C45" atau "ALGORITMA"
-- **Authentication**: Search "BEARER_TOKEN"
-- **UI/Layout**: Search "LAYOUT" atau "PERBAIKAN"
-- **Bug Fixes**: Search "BUGFIX" atau "PERBAIKAN"
+1. Clone repository
+2. Setup environment variables menggunakan `create-env.sh`
+3. Build dan jalankan containers:
+   ```bash
+   docker-compose up -d --build
+   ```
+4. Akses aplikasi di http://localhost:8000
 
-### **By Date:**
-- **2025-06-16**: Dokumentasi algoritma C4.5 dan reorganisasi dokumentasi
-- **2025-01-16**: Perubahan terbaru environment variables dan Docker
-- **Historical**: Dokumentasi fitur dan perbaikan sebelumnya
+## 📊 Key Features
 
-## 📞 **Support & Contribution**
+- Prediksi prestasi siswa menggunakan algoritma C4.5
+- Dashboard analitik dengan visualisasi D3.js
+- Real-time monitoring dan alerts
+- Export data ke format Excel
+- Role-based access control (Admin/Guru/Staf)
+- Comprehensive audit trail
 
-### **Reporting Issues**
-Jika menemukan masalah atau memerlukan klarifikasi dokumentasi, silakan:
-1. Cek dokumentasi terkait terlebih dahulu
-2. Gunakan test page untuk debugging: http://localhost/test-config.html
-3. Cek logs container: `docker-compose logs`
+## 🛠️ Dokumentasi Perbaikan
 
-### **Contributing Documentation**
-1. Ikuti struktur dokumentasi yang ada
-2. Gunakan format Markdown yang konsisten
-3. Sertakan contoh code dan screenshot jika diperlukan
-4. Update README.md ini jika menambah dokumentasi baru
+### Database Optimization
+- Implementasi query optimization menggunakan CTEs → [Detail Optimasi Query](OPTIMASI_DATABASE_EDUPRO_2025.md)
+- Penambahan composite indexes untuk peningkatan performa → [Implementasi Index](OPTIMASI_DATABASE_SQLALCHEMY_EDUPRO_2025.md)
+- Implementasi table partitioning untuk data historis → [Dokumentasi Partitioning](EVENT_TABLE_SISTEM_INFORMASI_EDUPRO_2025.md)
+- Penggunaan materialized views untuk reporting → [Optimasi View](EVENT_TABLE_VISUALISASI_SISTEM_EDUPRO_2025.md)
+- Optimasi connection pooling dan caching → [Cache Implementation](DOKUMENTASI_JMETER_TEST_2025.md)
 
-## 🏷️ **Tags & Labels**
+### Performance Improvements
+- Implementasi caching layer untuk mengurangi database load → [Cache Layer Documentation](NARASI_HASIL_PENGUJIAN_EDUPRO_2025.md#caching)
+- Batch processing untuk prediksi massal → [Batch Processing Guide](IMPLEMENTASI_C45_DETAIL_EDUPRO_2025.md#batch)
+- Optimasi response time API endpoints → [API Optimization](IMPLEMENTASI_BACKEND_DETAIL_JURNAL_EDUPRO_2025.md)
+- Peningkatan concurrent user handling → [Concurrency Management](PERFORMANCE_METRICS_2025.md#concurrent-users)
+- Memory usage optimization → [Memory Optimization](PERFORMANCE_METRICS_2025.md#memory)
 
-- `#docker` - Dokumentasi terkait Docker dan containerization
-- `#environment` - Konfigurasi environment variables
-- `#frontend` - Dokumentasi frontend dan UI
-- `#backend` - Dokumentasi backend dan API
-- `#security` - Implementasi keamanan dan authentication
-- `#bugfix` - Perbaikan bug dan issues
-- `#enhancement` - Peningkatan fitur dan performa
-- `#layout` - Perbaikan tampilan dan UI/UX
-- `#ml` - Machine Learning dan algoritma
-- `#c45` - Algoritma C4.5 dan decision tree
+### Security Enhancements
+- Implementasi role-based access control (RBAC) → [RBAC Documentation](USER_GUIDE_SISTEM_PREDIKSI_2025-06-19.md#rbac)
+- Penambahan JWT authentication → [Auth Implementation](DOKUMENTASI_BEARER_TOKEN_SEMUA_ENDPOINT.md)
+- API rate limiting → [Rate Limit Guide](DOKUMENTASI_BEARER_TOKEN_CONFUSION_MATRIX.md)
+- Input validation dan sanitization → [Data Validation](IMPLEMENTASI_C45_DETAIL_BAGIAN2_2025-06-16.md#validation)
+- Security headers implementation → [Security Headers](IMPLEMENTASI_C45_DETAIL_BAGIAN3_2025-06-16.md#security)
 
----
+### UI/UX Updates
+- Responsive design improvements → [Responsive Design Guide](CLASS_DIAGRAM_EDUPRO_2025.md#responsive)
+- Dashboard performance optimization → [Dashboard Optimization](ACTIVITY_DIAGRAM_DOCUMENTATION.md#dashboard)
+- Real-time data updates → [Real-time Implementation](TAHAPAN_DEPLOYMENT_WATERFALL_DIPERBAIKI_EDUPRO_2025.md#realtime)
+- Enhanced error handling dan feedback → [Error Handling](RINGKASAN_TAHAPAN_DEPLOYMENT_WATERFALL_DIPERBAIKI_EDUPRO_2025.md#errors)
+- Accessibility improvements → [Accessibility Guide](DOKUMENTASI_ABOUT_PAGE_2025-06-19.md#accessibility)
 
-**Last Updated**: 16 Juni 2025  
-**Version**: 1.0.0  
-**Maintainer**: EduPro Development Team 
+### Bug Fixes
+- Perbaikan validasi timestamp pada input data → [Timestamp Fix](BUGFIX_TIMESTAMP_VALIDATION.md)
+- Resolusi masalah pagination pada data grid → [Pagination Update](DOKUMENTASI_PERBAIKAN_PAGINATION_GRID.md)
+- Perbaikan kalkulasi rata-rata nilai → [Grade Calculation Fix](PERBAIKAN_LAYOUT_GRID_NILAI_2025-01-16.md)
+- Optimasi memory leak pada prediksi batch → [Memory Leak Fix](DOKUMENTASI_PERUBAHAN_2025-01-16.md#memory-leak)
+- Perbaikan concurrent access issues → [Concurrency Fix](TECHNICAL_SUMMARY_2025-01-16.md#concurrent-access)
+
+### System Maintenance
+- Automated backup system → [Backup Documentation](environment/ENVIRONMENT-SETUP.md#backup)
+- Log rotation dan management → [Log Management](docker/DOCKER-COMPOSE-REVIEW.md#logging)
+- Monitoring alerts setup → [Alert System](frontend/README.md#monitoring)
+- Resource usage optimization → [Resource Management](EXECUTIVE_SUMMARY_2025-01-16.md#resources)
+- Regular security updates → [Security Updates](DOKUMENTASI_BEARER_TOKEN_SEMUA_ENDPOINT.md#updates)
+
+## 🔍 Monitoring & Maintenance
+
+### Performance Metrics
+- Response time < 100ms untuk API calls
+- Prediction latency < 500ms
+- Database queries < 50ms
+- Concurrent users support: 500+
+
+### Regular Maintenance Tasks
+- Database backup (daily)
+- Log rotation (weekly)
+- Performance monitoring (real-time)
+- Security updates (monthly)
+
+## 📞 Support & Contact
+
+Untuk technical support atau pertanyaan:
+- Email: support@edupro.id
+- Technical Documentation: http://docs.edupro.id
+- Issue Tracking: http://github.com/edupro/issues
+
+## 📅 Version History
+
+- v2.0 (Current) - Enhanced ML pipeline, optimized database
+- v1.5 - Added batch prediction
+- v1.0 - Initial release with basic prediction
+
+## 📝 License
+
+Copyright © 2025 EduPro. All rights reserved. 

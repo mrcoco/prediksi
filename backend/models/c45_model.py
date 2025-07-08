@@ -8,10 +8,14 @@ import pydotplus
 import graphviz
 import os
 import json
-from io import StringIO
+from io import StringIO, BytesIO
+import logging
+import base64
 
 # Import model database
 from database import Siswa, NilaiRaport, PenghasilanOrtu, Presensi, Prestasi
+
+logger = logging.getLogger(__name__)
 
 class C45Model:
     def __init__(self):
@@ -24,168 +28,194 @@ class C45Model:
         self.model_metrics = None
         self.class_labels = ['Rendah', 'Sedang', 'Tinggi']
         self.last_trained = None
+        
+        # Mapping untuk konversi kategori
+        self.penghasilan_map = {'Rendah': 0, 'Menengah': 1, 'Tinggi': 2}
+        self.kehadiran_map = {'Rendah': 0, 'Sedang': 1, 'Tinggi': 2}
     
     def prepare_data(self, db: Session):
-        """Menyiapkan data dari database untuk pelatihan model"""
-        # Mengambil data siswa beserta nilai, presensi, dan penghasilan
-        siswa_data = db.query(Siswa).all()
-        
-        data_list = []
-        for siswa in siswa_data:
-            # Ambil data nilai raport terbaru
-            nilai = db.query(NilaiRaport).filter(NilaiRaport.siswa_id == siswa.id).order_by(NilaiRaport.updated_at.desc()).first()
-            # Ambil data presensi terbaru
-            presensi = db.query(Presensi).filter(Presensi.siswa_id == siswa.id).order_by(Presensi.updated_at.desc()).first()
-            # Ambil data penghasilan terbaru
-            penghasilan = db.query(PenghasilanOrtu).filter(PenghasilanOrtu.siswa_id == siswa.id).order_by(PenghasilanOrtu.updated_at.desc()).first()
-            # Ambil data prestasi terbaru (jika ada)
-            prestasi = db.query(Prestasi).filter(Prestasi.siswa_id == siswa.id).order_by(Prestasi.updated_at.desc()).first()
+        """Menyiapkan data untuk training dan prediksi"""
+        try:
+            # Query semua data siswa (berlabel dan tidak berlabel)
+            all_data = db.query(
+                Siswa.id.label('siswa_id'),
+                NilaiRaport.rata_rata,
+                PenghasilanOrtu.kategori_penghasilan,
+                Presensi.kategori_kehadiran
+            ).join(NilaiRaport).join(PenghasilanOrtu).join(Presensi).all()
             
-            # Pastikan semua data tersedia
-            if nilai and presensi and penghasilan:
-                data_entry = {
-                    'siswa_id': siswa.id,
-                    'nama': siswa.nama,
-                    'rata_rata': nilai.rata_rata,
-                    'kategori_penghasilan': penghasilan.kategori_penghasilan,
-                    'kategori_kehadiran': presensi.kategori_kehadiran,
-                    'prediksi_prestasi': prestasi.prediksi_prestasi if prestasi else self.generate_label(nilai.rata_rata, penghasilan.kategori_penghasilan, presensi.kategori_kehadiran)
-                }
-                data_list.append(data_entry)
-        
-        # Buat DataFrame
-        df = pd.DataFrame(data_list)
-        
-        # Filter data yang sudah memiliki label prestasi
-        df_labeled = df[df['prediksi_prestasi'].notna()]
-        
-        return df, df_labeled
+            if not all_data:
+                raise ValueError("Tidak ada data yang ditemukan")
+            
+            # Convert ke DataFrame untuk semua data
+            df = pd.DataFrame([{
+                'siswa_id': row.siswa_id,
+                'rata_rata': row.rata_rata,
+                'kategori_penghasilan': row.kategori_penghasilan,
+                'kategori_kehadiran': row.kategori_kehadiran
+            } for row in all_data])
+            
+            # Query data siswa yang sudah memiliki label prestasi
+            labeled_data = db.query(
+                Siswa.id.label('siswa_id'),
+                NilaiRaport.rata_rata,
+                PenghasilanOrtu.kategori_penghasilan,
+                Presensi.kategori_kehadiran,
+                Prestasi.prediksi_prestasi
+            ).join(NilaiRaport).join(PenghasilanOrtu).join(Presensi).join(
+                Prestasi,
+                (Prestasi.siswa_id == Siswa.id) &
+                (Prestasi.semester == NilaiRaport.semester) &
+                (Prestasi.tahun_ajaran == NilaiRaport.tahun_ajaran)
+            ).filter(
+                Prestasi.prediksi_prestasi.isnot(None)
+            ).all()
+            
+            # Convert ke DataFrame untuk data berlabel
+            df_labeled = pd.DataFrame([{
+                'siswa_id': row.siswa_id,
+                'rata_rata': row.rata_rata,
+                'kategori_penghasilan': row.kategori_penghasilan,
+                'kategori_kehadiran': row.kategori_kehadiran,
+                'prediksi_prestasi': row.prediksi_prestasi
+            } for row in labeled_data]) if labeled_data else pd.DataFrame(columns=[
+                'siswa_id', 'rata_rata', 'kategori_penghasilan', 
+                'kategori_kehadiran', 'prediksi_prestasi'
+            ])
+            
+            logger.info(f"Berhasil mempersiapkan {len(df)} data total dan {len(df_labeled)} data berlabel")
+            return df, df_labeled
+            
+        except Exception as e:
+            logger.error(f"Error preparing data: {str(e)}")
+            raise ValueError(f"Gagal mempersiapkan data: {str(e)}")
     
     def train(self, db: Session):
         """Melatih model C4.5 dengan data dari database"""
-        _, df_labeled = self.prepare_data(db)
-        
-        # Jika data berlabel kurang dari 10, tidak bisa melatih model
-        if len(df_labeled) < 10:
-            raise ValueError("Data berlabel tidak cukup untuk melatih model (minimal 10 data)")
-        
-        # Siapkan fitur dan target
-        # Convert categorical variables to numerical
-        df_labeled['kategori_penghasilan'] = df_labeled['kategori_penghasilan'].map({'Rendah': 0, 'Menengah': 1, 'Tinggi': 2})
-        df_labeled['kategori_kehadiran'] = df_labeled['kategori_kehadiran'].map({'Rendah': 0, 'Sedang': 1, 'Tinggi': 2})
-        
-        X = df_labeled[self.features]
-        y = df_labeled[self.target]
-        
-        # Bagi data menjadi training dan testing
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-        
-        # Latih model
-        self.model.fit(X_train, y_train)
-        
-        # Evaluasi model
-        y_pred = self.model.predict(X_test)
-        accuracy = accuracy_score(y_test, y_pred)
-        report = classification_report(y_test, y_pred, output_dict=True)
-        
-        # Hitung confusion matrix dan metrics
-        cm = confusion_matrix(y_test, y_pred, labels=self.class_labels)
-        precision = precision_score(y_test, y_pred, average='weighted', zero_division=0)
-        recall = recall_score(y_test, y_pred, average='weighted', zero_division=0)
-        f1 = f1_score(y_test, y_pred, average='weighted', zero_division=0)
-        
-        # Simpan confusion matrix dan metrics
-        self.confusion_matrix = cm.tolist()
-        self.model_metrics = {
-            'accuracy': accuracy,
-            'precision': precision,
-            'recall': recall,
-            'f1_score': f1
-        }
-        self.last_trained = pd.Timestamp.now().isoformat()
-        
-        # Buat visualisasi pohon keputusan
         try:
-            dot_data = StringIO()
-            export_graphviz(self.model, out_file=dot_data, feature_names=self.features,
-                            class_names=['Rendah', 'Sedang', 'Tinggi'], filled=True, rounded=True,
-                            special_characters=True)
+            logger.info("Starting model training...")
+            _, df_labeled = self.prepare_data(db)
             
-            # Pastikan dot_data tidak kosong
-            dot_string = dot_data.getvalue()
-            if not dot_string.strip():
-                raise ValueError("DOT data is empty")
+            # Jika data berlabel kurang dari 10, tidak bisa melatih model
+            if len(df_labeled) < 10:
+                raise ValueError("Data berlabel tidak cukup untuk melatih model (minimal 10 data)")
             
-            # Buat graph dari dot data
-            graph = pydotplus.graph_from_dot_data(dot_string)
+            logger.info(f"Training with {len(df_labeled)} labeled samples")
             
-            # Pastikan graph adalah objek yang valid, bukan list
-            if isinstance(graph, list):
-                if len(graph) > 0:
-                    graph = graph[0]  # Ambil graph pertama jika berupa list
-                else:
-                    raise ValueError("Graph list is empty")
+            # Siapkan fitur dan target
+            # Convert categorical variables to numerical
+            df_labeled['kategori_penghasilan'] = df_labeled['kategori_penghasilan'].map(self.penghasilan_map)
+            df_labeled['kategori_kehadiran'] = df_labeled['kategori_kehadiran'].map(self.kehadiran_map)
             
-            # Pastikan graph memiliki method write_png
-            if not hasattr(graph, 'write_png'):
-                raise ValueError("Graph object does not have write_png method")
+            # Handle missing values
+            if df_labeled[self.features].isnull().any().any():
+                raise ValueError("Data memiliki nilai yang hilang (null)")
             
-            self.tree_visualization = graph
+            X = df_labeled[self.features]
+            y = df_labeled[self.target]
             
-            # Simpan visualisasi ke file
-            if not os.path.exists('static'):
-                os.makedirs('static')
-                
-            graph.write_png('static/decision_tree.png')
+            # Bagi data menjadi training dan testing
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+            
+            logger.info("Training model...")
+            
+            # Reset model state
+            self.model = DecisionTreeClassifier(criterion='entropy')
+            
+            # Latih model
+            self.model.fit(X_train, y_train)
+            
+            # Evaluasi model
+            y_pred = self.model.predict(X_test)
+            accuracy = accuracy_score(y_test, y_pred)
+            report = classification_report(y_test, y_pred, output_dict=True)
+            
+            # Hitung confusion matrix dan metrics
+            cm = confusion_matrix(y_test, y_pred, labels=self.class_labels)
+            precision = precision_score(y_test, y_pred, average='weighted', zero_division=0)
+            recall = recall_score(y_test, y_pred, average='weighted', zero_division=0)
+            f1 = f1_score(y_test, y_pred, average='weighted', zero_division=0)
+            
+            # Simpan confusion matrix dan metrics
+            self.confusion_matrix = cm.tolist()
+            self.model_metrics = {
+                'accuracy': accuracy,
+                'precision': precision,
+                'recall': recall,
+                'f1_score': f1,
+                'class_report': report
+            }
+            self.last_trained = pd.Timestamp.now().isoformat()
+            self.trained = True
+            
+            logger.info(f"Model training completed. Accuracy: {accuracy:.2f}")
+            
+            return {
+                'status': 'success',
+                'message': 'Model berhasil dilatih',
+                'metrics': self.model_metrics
+            }
             
         except Exception as e:
-            print(f"Warning: Failed to create tree visualization: {str(e)}")
-            # Set visualization to None if failed
-            self.tree_visualization = None
-        
-        self.trained = True
-        
-        return {
-            'accuracy': accuracy,
-            'report': report,
-            'samples': len(df_labeled)
-        }
+            logger.error(f"Error training model: {str(e)}")
+            self.trained = False
+            raise ValueError(f"Gagal melatih model: {str(e)}")
     
     def predict(self, data):
         """Melakukan prediksi dengan model yang sudah dilatih"""
-        if not self.trained:
-            raise ValueError("Model belum dilatih")
-        
-        # Pastikan data memiliki semua fitur yang diperlukan
-        for feature in self.features:
-            if feature not in data:
-                raise ValueError(f"Data tidak memiliki fitur {feature}")
-        
-        # Konversi nilai kategori ke format numerik
-        data_copy = data.copy()
-        if 'kategori_penghasilan' in data_copy:
-            data_copy['kategori_penghasilan'] = {'Rendah': 0, 'Menengah': 1, 'Tinggi': 2}.get(data_copy['kategori_penghasilan'], 0)
-        if 'kategori_kehadiran' in data_copy:
-            data_copy['kategori_kehadiran'] = {'Rendah': 0, 'Sedang': 1, 'Tinggi': 2}.get(data_copy['kategori_kehadiran'], 0)
-        
-        # Siapkan data untuk prediksi
-        X_pred = pd.DataFrame([data_copy])[self.features]
-        
-        # Lakukan prediksi
-        prediction = self.model.predict(X_pred)[0]
-        
-        # Hitung confidence (probabilitas kelas yang diprediksi)
-        probabilities = self.model.predict_proba(X_pred)[0]
-        confidence = max(probabilities)
-        
-        # Dapatkan faktor-faktor yang mempengaruhi prediksi
-        feature_importances = dict(zip(self.features, self.model.feature_importances_))
-        
-        return {
-            'prediksi': prediction,
-            'confidence': confidence,
-            'feature_importances': feature_importances
-        }
+        try:
+            if not self.trained:
+                raise ValueError("Model belum dilatih")
+            
+            # Pastikan data memiliki semua fitur yang diperlukan
+            missing_features = [f for f in self.features if f not in data]
+            if missing_features:
+                raise ValueError(f"Data tidak memiliki fitur: {', '.join(missing_features)}")
+            
+            # Konversi nilai kategori ke format numerik
+            data_copy = data.copy()
+            
+            # Konversi kategori penghasilan
+            if data_copy['kategori_penghasilan'] not in self.penghasilan_map:
+                raise ValueError(f"Kategori penghasilan tidak valid: {data_copy['kategori_penghasilan']}")
+            data_copy['kategori_penghasilan'] = self.penghasilan_map[data_copy['kategori_penghasilan']]
+            
+            # Konversi kategori kehadiran
+            if data_copy['kategori_kehadiran'] not in self.kehadiran_map:
+                raise ValueError(f"Kategori kehadiran tidak valid: {data_copy['kategori_kehadiran']}")
+            data_copy['kategori_kehadiran'] = self.kehadiran_map[data_copy['kategori_kehadiran']]
+            
+            # Validasi nilai rata-rata
+            if not isinstance(data_copy['rata_rata'], (int, float)):
+                raise ValueError("Nilai rata-rata harus berupa angka")
+            if data_copy['rata_rata'] < 0 or data_copy['rata_rata'] > 100:
+                raise ValueError("Nilai rata-rata harus antara 0 dan 100")
+            
+            # Siapkan data untuk prediksi
+            X_pred = pd.DataFrame([data_copy])[self.features]
+            
+            # Lakukan prediksi
+            prediction = self.model.predict(X_pred)[0]
+            
+            # Hitung confidence (probabilitas kelas yang diprediksi)
+            probabilities = self.model.predict_proba(X_pred)[0]
+            confidence = max(probabilities)
+            
+            # Dapatkan faktor-faktor yang mempengaruhi prediksi
+            feature_importances = dict(zip(self.features, self.model.feature_importances_))
+            
+            logger.info(f"Prediction: {prediction}, Confidence: {confidence:.2f}")
+            
+            return {
+                'prediksi': prediction,
+                'confidence': confidence,
+                'feature_importances': feature_importances,
+                'probabilities': dict(zip(self.class_labels, probabilities.tolist()))
+            }
+            
+        except Exception as e:
+            logger.error(f"Error making prediction: {str(e)}")
+            raise ValueError(f"Gagal melakukan prediksi: {str(e)}")
     
     def get_rules(self):
         """Mendapatkan aturan-aturan dari pohon keputusan"""
@@ -196,7 +226,7 @@ class C45Model:
         # (Ini adalah implementasi sederhana, bisa dikembangkan lebih lanjut)
         tree = self.model.tree_
         feature_names = self.features
-        class_names = ['Rendah', 'Sedang', 'Tinggi']
+        class_names = self.class_labels
         
         rules = []
         
@@ -254,7 +284,7 @@ class C45Model:
             raise ValueError("Confusion matrix tidak tersedia")
         
         return {
-            'confusion_matrix': self.confusion_matrix,
+            'matrix': self.confusion_matrix,
             'labels': self.class_labels
         }
     
@@ -270,44 +300,55 @@ class C45Model:
             'metrics': self.model_metrics,
             'last_trained': self.last_trained
         }
-        
+    
     def visualize(self):
-        """Generate visualization of decision tree and return as base64"""
+        """Membuat visualisasi pohon keputusan dalam format base64"""
         if not self.trained:
-            raise ValueError("Model must be trained first")
-            
-        if not self.tree_visualization:
-            raise ValueError("No tree visualization available")
+            raise ValueError("Model belum dilatih")
+        
+        if not hasattr(self, 'model') or not hasattr(self, 'features'):
+            raise ValueError("Model atau features tidak tersedia")
             
         try:
-        # Generate PNG data in memory
-            import io
-            import base64
-        
-            # Pastikan tree_visualization adalah objek yang valid
-            graph = self.tree_visualization
+            # Buat file DOT sementara
+            dot_data = StringIO()
+            export_graphviz(
+                self.model,
+                out_file=dot_data,
+                feature_names=self.features,
+                class_names=self.class_labels,
+                filled=True,
+                rounded=True,
+                special_characters=True,
+                proportion=True
+            )
+            
+            # Convert DOT ke PNG menggunakan pydotplus
+            graph = pydotplus.graph_from_dot_data(dot_data.getvalue())
+            
+            # Handle jika graph adalah list
             if isinstance(graph, list):
                 if len(graph) > 0:
                     graph = graph[0]
                 else:
-                    raise ValueError("Graph list is empty")
+                    raise ValueError("Gagal membuat visualisasi: graph kosong")
             
-            # Pastikan graph memiliki method write_png
+            # Validasi graph memiliki method write_png
             if not hasattr(graph, 'write_png'):
-                raise ValueError("Graph object does not have write_png method")
-            
-            png_data = io.BytesIO()
+                raise ValueError("Gagal membuat visualisasi: graph tidak valid")
+                
+            # Convert ke PNG dalam memory
+            png_data = BytesIO()
             graph.write_png(png_data)
             png_data.seek(0)
             
-            # Convert to base64
-            base64_image = base64.b64encode(png_data.read()).decode('utf-8')
-            
-            return f"data:image/png;base64,{base64_image}"
+            # Convert PNG ke base64
+            base64_encoded = base64.b64encode(png_data.read()).decode('utf-8')
+            return base64_encoded
             
         except Exception as e:
-            print(f"Error generating visualization: {str(e)}")
-            raise ValueError(f"Failed to generate tree visualization: {str(e)}")
+            logger.error(f"Error saat membuat visualisasi: {str(e)}")
+            raise ValueError(f"Gagal membuat visualisasi: {str(e)}")
 
 # Inisialisasi model global
 c45_model = C45Model()

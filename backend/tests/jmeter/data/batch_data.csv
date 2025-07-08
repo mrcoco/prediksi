@@ -1,0 +1,11 @@
+nis,nama,jenis_kelamin,matematika_1,bahasa_indonesia_1,bahasa_inggris_1,ipa_1,ips_1,matematika_2,bahasa_indonesia_2,bahasa_inggris_2,ipa_2,ips_2,kehadiran,ekstrakurikuler,prestasi,perilaku
+12345,Student 1,L,85,88,90,87,89,87,85,92,88,86,95,"Pramuka,PMR","Juara 2 Olimpiade Matematika",A
+12346,Student 2,P,90,85,88,89,86,92,87,89,90,88,98,"OSIS,PMR","Juara 1 Lomba Bahasa Inggris",A
+12347,Student 3,L,78,82,85,80,83,80,85,87,82,85,90,"Pramuka","",B
+12348,Student 4,P,95,92,94,93,90,94,95,93,92,91,97,"OSIS,Paskibra","Juara 3 OSN IPA",A
+12349,Student 5,L,88,85,87,86,84,89,88,86,87,85,93,"Basket","",B
+12350,Student 6,P,82,85,80,83,85,84,86,82,85,87,91,"PMR,Pramuka","",B
+12351,Student 7,L,93,90,92,91,89,94,92,93,90,88,96,"OSIS","Juara 2 Lomba Karya Ilmiah",A
+12352,Student 8,P,87,89,86,88,90,89,87,88,89,91,94,"Paskibra,PMR","",A
+12353,Student 9,L,79,83,81,80,82,81,84,83,82,85,89,"Basket","",B
+12354,Student 10,P,91,88,90,89,87,93,90,91,88,86,95,"OSIS,Pramuka","Juara 1 Lomba Debat",A 

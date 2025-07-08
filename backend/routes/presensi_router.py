@@ -9,6 +9,13 @@ from routes.auth_router import get_current_user
 from models.user import User
 import pandas as pd
 from io import BytesIO
+import logging
+
+# Cache imports
+from cache_config import invalidate_student_cache, cache_health_check
+
+# Model accuracy management
+from model_accuracy_manager import model_accuracy_manager
 
 router = APIRouter()
 
@@ -195,12 +202,51 @@ def update_presensi(
     for key, value in update_data.items():
         setattr(db_presensi, key, value)
     
+    # Store old kategori_kehadiran for model accuracy validation
+    old_kategori = db_presensi.kategori_kehadiran
+    
     # Update timestamp
     db_presensi.updated_at = datetime.now()
     
     # Simpan perubahan
     db.commit()
     db.refresh(db_presensi)
+    
+    # Model accuracy validation untuk perubahan presensi
+    try:
+        validation_result = model_accuracy_manager.validate_data_change(
+            siswa_id=db_presensi.siswa_id,
+            change_type="presensi",
+            old_value=old_kategori,
+            new_value=db_presensi.kategori_kehadiran
+        )
+        
+        # Log validation result
+        logging.info(f"📊 Presensi change validation - siswa_id={db_presensi.siswa_id}, significant={validation_result.get('is_significant')}, needs_retraining={validation_result.get('needs_retraining')}")
+        
+        # Trigger model retraining jika diperlukan
+        if validation_result.get('needs_retraining'):
+            logging.info(f"🔄 Triggering model retraining due to significant presensi changes")
+            try:
+                retraining_result = model_accuracy_manager.retrain_model_if_needed(db)
+                logging.info(f"🎯 Model retraining result: {retraining_result.get('message')}")
+            except Exception as e:
+                logging.warning(f"⚠️ Model retraining failed: {str(e)}")
+        
+    except Exception as e:
+        logging.warning(f"⚠️ Failed to validate data change for presensi: {str(e)}")
+    
+    # Invalidate cache for this student since presensi affects prediction
+    if cache_health_check():
+        try:
+            invalidate_student_cache(
+                db_presensi.siswa_id, 
+                db_presensi.semester, 
+                db_presensi.tahun_ajaran
+            )
+            logging.info(f"🔄 Cache invalidated for updated presensi siswa_id={db_presensi.siswa_id}")
+        except Exception as e:
+            logging.warning(f"⚠️ Failed to invalidate cache for presensi siswa_id={db_presensi.siswa_id}: {str(e)}")
     
     return db_presensi
 
@@ -217,6 +263,19 @@ def delete_presensi(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Presensi dengan ID {presensi_id} tidak ditemukan"
         )
+    
+    # Store data for cache invalidation before deletion
+    siswa_id = db_presensi.siswa_id
+    semester = db_presensi.semester
+    tahun_ajaran = db_presensi.tahun_ajaran
+    
+    # Invalidate cache before deletion since presensi affects prediction
+    if cache_health_check():
+        try:
+            invalidate_student_cache(siswa_id, semester, tahun_ajaran)
+            logging.info(f"🔄 Cache invalidated for deleted presensi siswa_id={siswa_id}")
+        except Exception as e:
+            logging.warning(f"⚠️ Failed to invalidate cache for presensi siswa_id={siswa_id}: {str(e)}")
     
     # Hapus presensi
     db.delete(db_presensi)

@@ -1,0 +1,629 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1751032089854,207,Login Request,200,OK,Authentication Tests 1-1,text,true,,512,222,1,4,http://localhost/api/auth/token,206,0,9
+1751032089868,360,Login for Single Prediction,200,OK,Single Prediction Tests 2-1,text,true,,512,222,2,5,http://localhost/api/auth/token,360,0,0
+1751032093243,193,Login Request,200,OK,Authentication Tests 1-2,text,true,,484,226,3,10,http://localhost/api/auth/token,193,0,1
+1751032093583,171,Login Request,200,OK,Authentication Tests 1-1,text,true,,484,226,3,10,http://localhost/api/auth/token,170,0,2
+1751032094274,195,Login for Single Prediction,200,OK,Single Prediction Tests 2-2,text,true,,478,222,4,9,http://localhost/api/auth/token,195,0,2
+1751032094639,200,Login Request,200,OK,Authentication Tests 1-3,text,true,,512,222,2,10,http://localhost/api/auth/token,200,0,1
+1751032094893,172,Login for Batch Prediction,200,OK,Batch Prediction Tests 3-1,text,true,,484,226,3,10,http://localhost/api/auth/token,171,0,2
+1751032095671,183,Login for Single Prediction,200,OK,Single Prediction Tests 2-3,text,true,,512,222,5,11,http://localhost/api/auth/token,183,0,2
+1751032096374,187,Login Request,200,OK,Authentication Tests 1-2,text,true,,478,222,3,13,http://localhost/api/auth/token,186,0,1
+1751032096761,201,Login for Batch Prediction,200,OK,Batch Prediction Tests 3-2,text,true,,478,222,4,12,http://localhost/api/auth/token,201,0,2
+1751032097298,8,Valid Single Prediction,404,Not Found,Single Prediction Tests 2-3,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[404]]]
+
+****** comparison: [[[200]]]
+
+/",252,394,6,13,http://localhost/api/prediksi/,8,0,1
+1751032097920,191,Login for Single Prediction,200,OK,Single Prediction Tests 2-5,text,true,,512,222,6,13,http://localhost/api/auth/token,190,0,2
+1751032097963,160,Valid Single Prediction,200,OK,Single Prediction Tests 2-1,text,true,,488,395,6,13,http://localhost/api/prediksi/,159,0,1
+1751032098302,201,Login Request,200,OK,Authentication Tests 1-3,text,true,,484,226,3,14,http://localhost/api/auth/token,201,0,1
+1751032098357,312,Login for Single Prediction,200,OK,Single Prediction Tests 2-4,text,true,,478,222,7,13,http://localhost/api/auth/token,312,0,1
+1751032098764,174,Login Request,200,OK,Authentication Tests 1-4,text,true,,478,222,2,13,http://localhost/api/auth/token,173,0,1
+1751032098809,130,Invalid Single Prediction - Missing siswa_id,422,Unprocessable Entity,Single Prediction Tests 2-3,text,false,"Test failed: code expected to equal /
+
+****** received  : 4[[[22]]]
+
+****** comparison: 4[[[00]]]
+
+/",254,376,7,13,http://localhost/api/prediksi/,130,0,1
+1751032098944,208,Login Request,200,OK,Authentication Tests 1-5,text,true,,478,222,2,14,http://localhost/api/auth/token,208,0,1
+1751032099098,181,Login Request,200,OK,Authentication Tests 1-4,text,true,,484,226,2,14,http://localhost/api/auth/token,181,0,1
+1751032099311,210,Login for Batch Prediction,200,OK,Batch Prediction Tests 3-4,text,true,,512,222,5,13,http://localhost/api/auth/token,209,0,1
+1751032099631,5,Invalid Single Prediction - Missing siswa_id,422,Unprocessable Entity,Single Prediction Tests 2-1,text,false,"Test failed: code expected to equal /
+
+****** received  : 4[[[22]]]
+
+****** comparison: 4[[[00]]]
+
+/",254,377,7,13,http://localhost/api/prediksi/,5,0,2
+1751032100197,176,Login for Single Prediction,200,OK,Single Prediction Tests 2-6,text,true,,484,226,8,14,http://localhost/api/auth/token,176,0,1
+1751032100339,200,Login for Single Prediction,200,OK,Single Prediction Tests 2-7,text,true,,512,222,8,14,http://localhost/api/auth/token,200,0,0
+1751032101619,218,Login Request,200,OK,Authentication Tests 1-5,text,true,,512,222,1,14,http://localhost/api/auth/token,218,0,2
+1751032101662,177,Valid Single Prediction,404,Not Found,Single Prediction Tests 2-5,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[404]]]
+
+****** comparison: [[[200]]]
+
+/",253,395,8,13,http://localhost/api/prediksi/,177,0,2
+1751032102088,6,Valid Batch Prediction,500,Internal Server Error,Batch Prediction Tests 3-1,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[5]]]00
+
+****** comparison: [[[2]]]00
+
+/",225,406,5,13,http://localhost/api/prediksi/batch,6,0,2
+1751032103080,7,Valid Single Prediction,404,Not Found,Single Prediction Tests 2-2,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[404]]]
+
+****** comparison: [[[200]]]
+
+/",253,395,8,13,http://localhost/api/prediksi/,7,0,2
+1751032103349,4,Valid Single Prediction,404,Not Found,Single Prediction Tests 2-4,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[404]]]
+
+****** comparison: [[[200]]]
+
+/",252,394,8,13,http://localhost/api/prediksi/,4,0,0
+1751032103763,8,Valid Single Prediction,404,Not Found,Single Prediction Tests 2-6,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[404]]]
+
+****** comparison: [[[200]]]
+
+/",252,397,8,13,http://localhost/api/prediksi/,8,0,2
+1751032103888,209,Login for Single Prediction,200,OK,Single Prediction Tests 2-8,text,true,,484,226,8,13,http://localhost/api/auth/token,209,0,1
+1751032104281,171,Login for Batch Prediction,200,OK,Batch Prediction Tests 3-5,text,true,,478,222,5,13,http://localhost/api/auth/token,171,0,1
+1751032104649,6,Invalid Single Prediction - Invalid siswa_id,404,Not Found,Single Prediction Tests 2-1,text,false,,202,399,8,13,http://localhost/api/prediksi/,5,0,1
+1751032104786,213,Login for Batch Prediction,200,OK,Batch Prediction Tests 3-3,text,true,,484,226,5,13,http://localhost/api/auth/token,213,0,1
+1751032105781,9,Valid Single Prediction,404,Not Found,Single Prediction Tests 2-7,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[404]]]
+
+****** comparison: [[[200]]]
+
+/",252,394,8,13,http://localhost/api/prediksi/,9,0,2
+1751032106264,32,Valid Batch Prediction,200,OK,Batch Prediction Tests 3-2,text,false,No results for path: $['hasil_prediksi'],626,404,5,13,http://localhost/api/prediksi/batch,32,0,1
+1751032107114,5,Invalid Single Prediction - Missing siswa_id,422,Unprocessable Entity,Single Prediction Tests 2-5,text,false,"Test failed: code expected to equal /
+
+****** received  : 4[[[22]]]
+
+****** comparison: 4[[[00]]]
+
+/",254,377,8,13,http://localhost/api/prediksi/,4,0,2
+1751032107246,14,Invalid Single Prediction - Missing siswa_id,422,Unprocessable Entity,Single Prediction Tests 2-4,text,false,"Test failed: code expected to equal /
+
+****** received  : 4[[[22]]]
+
+****** comparison: 4[[[00]]]
+
+/",254,376,8,13,http://localhost/api/prediksi/,13,0,1
+1751032107772,5,Invalid Single Prediction - Missing siswa_id,422,Unprocessable Entity,Single Prediction Tests 2-2,text,false,"Test failed: code expected to equal /
+
+****** received  : 4[[[22]]]
+
+****** comparison: 4[[[00]]]
+
+/",254,377,8,13,http://localhost/api/prediksi/,4,0,1
+1751032108066,4,Invalid Single Prediction - Invalid siswa_id,404,Not Found,Single Prediction Tests 2-3,text,false,,202,398,8,13,http://localhost/api/prediksi/,4,0,1
+1751032108289,14,Invalid Single Prediction - Missing siswa_id,422,Unprocessable Entity,Single Prediction Tests 2-6,text,false,"Test failed: code expected to equal /
+
+****** received  : 4[[[22]]]
+
+****** comparison: 4[[[00]]]
+
+/",254,379,8,13,http://localhost/api/prediksi/,14,0,2
+1751032108459,11,Valid Batch Prediction,200,OK,Batch Prediction Tests 3-3,text,false,No results for path: $['hasil_prediksi'],626,407,5,13,http://localhost/api/prediksi/batch,11,0,1
+1751032108717,5,Valid Single Prediction,404,Not Found,Single Prediction Tests 2-8,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[404]]]
+
+****** comparison: [[[200]]]
+
+/",253,398,8,13,http://localhost/api/prediksi/,5,0,2
+1751032109611,23,Valid Batch Prediction,200,OK,Batch Prediction Tests 3-4,text,false,No results for path: $['hasil_prediksi'],626,404,5,13,http://localhost/api/prediksi/batch,23,0,2
+1751032110009,4,Invalid Single Prediction - Invalid siswa_id,404,Not Found,Single Prediction Tests 2-5,text,false,,202,399,8,13,http://localhost/api/prediksi/,4,0,1
+1751032110123,7,Invalid Single Prediction - Invalid siswa_id,404,Not Found,Single Prediction Tests 2-4,text,false,,202,398,8,13,http://localhost/api/prediksi/,7,0,1
+1751032110869,17,Invalid Single Prediction - Invalid siswa_id,404,Not Found,Single Prediction Tests 2-2,text,false,,202,399,8,13,http://localhost/api/prediksi/,17,0,2
+1751032110955,7,Invalid Single Prediction - Missing siswa_id,422,Unprocessable Entity,Single Prediction Tests 2-7,text,false,"Test failed: code expected to equal /
+
+****** received  : 4[[[22]]]
+
+****** comparison: 4[[[00]]]
+
+/",254,376,8,13,http://localhost/api/prediksi/,7,0,1
+1751032111468,11,Unauthorized Single Prediction,401,Unauthorized,Single Prediction Tests 2-1,text,false,,223,284,8,13,http://localhost/api/prediksi/,11,0,2
+1751032111713,5,Unauthorized Single Prediction,401,Unauthorized,Single Prediction Tests 2-3,text,false,,223,283,8,13,http://localhost/api/prediksi/,5,0,2
+1751032111860,15,Invalid Single Prediction - Missing siswa_id,422,Unprocessable Entity,Single Prediction Tests 2-8,text,false,"Test failed: code expected to equal /
+
+****** received  : 4[[[22]]]
+
+****** comparison: 4[[[00]]]
+
+/",254,380,8,13,http://localhost/api/prediksi/,14,0,2
+1751032112258,7,Invalid Batch Prediction - Missing Fields,500,Internal Server Error,Batch Prediction Tests 3-1,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[5]]]00
+
+****** comparison: [[[4]]]00
+
+/",225,384,5,13,http://localhost/api/prediksi/batch,7,0,1
+1751032113492,34,Valid Batch Prediction,200,OK,Batch Prediction Tests 3-5,text,false,No results for path: $['hasil_prediksi'],626,404,5,13,http://localhost/api/prediksi/batch,33,0,2
+1751032113623,6,Invalid Single Prediction - Invalid siswa_id,404,Not Found,Single Prediction Tests 2-6,text,false,,202,401,8,13,http://localhost/api/prediksi/,6,0,2
+1751032113832,205,Login for Single Prediction,200,OK,Single Prediction Tests 2-3,text,true,,512,222,8,13,http://localhost/api/auth/token,204,0,2
+1751032113918,125,Invalid Batch Prediction - Missing Fields,200,OK,Batch Prediction Tests 3-2,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[2]]]00
+
+****** comparison: [[[4]]]00
+
+/",626,382,5,13,http://localhost/api/prediksi/batch,125,0,2
+1751032114101,10,Invalid Batch Prediction - Missing Fields,200,OK,Batch Prediction Tests 3-3,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[2]]]00
+
+****** comparison: [[[4]]]00
+
+/",626,385,5,13,http://localhost/api/prediksi/batch,9,0,2
+1751032114122,45,Invalid Single Prediction - Invalid siswa_id,404,Not Found,Single Prediction Tests 2-7,text,false,,202,398,8,13,http://localhost/api/prediksi/,45,0,1
+1751032114224,2,Unauthorized Single Prediction,401,Unauthorized,Single Prediction Tests 2-2,text,false,,223,284,8,13,http://localhost/api/prediksi/,2,0,1
+1751032115352,11,Unauthorized Single Prediction,401,Unauthorized,Single Prediction Tests 2-5,text,false,,223,284,8,13,http://localhost/api/prediksi/,11,0,2
+1751032115848,4,Unauthorized Single Prediction,401,Unauthorized,Single Prediction Tests 2-4,text,false,,223,283,8,13,http://localhost/api/prediksi/,4,0,2
+1751032117268,7,Invalid Single Prediction - Invalid siswa_id,404,Not Found,Single Prediction Tests 2-8,text,false,,202,402,8,13,http://localhost/api/prediksi/,7,0,1
+1751032117840,6,Unauthorized Single Prediction,401,Unauthorized,Single Prediction Tests 2-6,text,false,,223,283,8,13,http://localhost/api/prediksi/,6,0,1
+1751032117896,32,Invalid Batch Prediction - Missing Fields,200,OK,Batch Prediction Tests 3-4,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[2]]]00
+
+****** comparison: [[[4]]]00
+
+/",626,382,5,13,http://localhost/api/prediksi/batch,32,0,1
+1751032118630,211,Login for Single Prediction,200,OK,Single Prediction Tests 2-1,text,true,,478,222,8,13,http://localhost/api/auth/token,211,0,2
+1751032119071,5,Valid Single Prediction,404,Not Found,Single Prediction Tests 2-3,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[404]]]
+
+****** comparison: [[[200]]]
+
+/",254,396,8,13,http://localhost/api/prediksi/,5,0,1
+1751032119530,204,Login for Single Prediction,200,OK,Single Prediction Tests 2-2,text,true,,484,226,8,13,http://localhost/api/auth/token,203,0,0
+1751032120177,11,Invalid Batch Prediction - Missing Fields,200,OK,Batch Prediction Tests 3-5,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[2]]]00
+
+****** comparison: [[[4]]]00
+
+/",626,382,5,13,http://localhost/api/prediksi/batch,11,0,1
+1751032120220,46,Unauthorized Single Prediction,401,Unauthorized,Single Prediction Tests 2-7,text,false,,223,283,8,13,http://localhost/api/prediksi/,46,0,1
+1751032120400,222,Invalid Batch Prediction - Invalid Kelas,200,OK,Batch Prediction Tests 3-2,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[200]]]
+
+****** comparison: [[[404]]]
+
+/",626,412,5,13,http://localhost/api/prediksi/batch,222,0,2
+1751032120417,205,Login for Single Prediction,200,OK,Single Prediction Tests 2-5,text,true,,478,222,8,13,http://localhost/api/auth/token,205,0,2
+1751032121062,210,Login for Single Prediction,200,OK,Single Prediction Tests 2-4,text,true,,512,222,8,13,http://localhost/api/auth/token,210,0,1
+1751032121083,195,Invalid Batch Prediction - Invalid Kelas,200,OK,Batch Prediction Tests 3-4,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[200]]]
+
+****** comparison: [[[404]]]
+
+/",626,412,5,13,http://localhost/api/prediksi/batch,195,0,0
+1751032121589,9,Unauthorized Single Prediction,401,Unauthorized,Single Prediction Tests 2-8,text,false,,223,284,8,13,http://localhost/api/prediksi/,9,0,2
+1751032121756,10,Invalid Batch Prediction - Invalid Kelas,200,OK,Batch Prediction Tests 3-3,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[200]]]
+
+****** comparison: [[[404]]]
+
+/",626,415,5,13,http://localhost/api/prediksi/batch,10,0,1
+1751032122109,5,Valid Single Prediction,404,Not Found,Single Prediction Tests 2-1,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[404]]]
+
+****** comparison: [[[200]]]
+
+/",252,394,8,13,http://localhost/api/prediksi/,5,0,1
+1751032122358,8,Invalid Batch Prediction - Invalid Kelas,500,Internal Server Error,Batch Prediction Tests 3-1,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[500]]]
+
+****** comparison: [[[404]]]
+
+/",225,414,5,13,http://localhost/api/prediksi/batch,8,0,1
+1751032122723,5,Invalid Single Prediction - Missing siswa_id,422,Unprocessable Entity,Single Prediction Tests 2-3,text,false,"Test failed: code expected to equal /
+
+****** received  : 4[[[22]]]
+
+****** comparison: 4[[[00]]]
+
+/",254,378,8,13,http://localhost/api/prediksi/,5,0,2
+1751032122893,212,Login for Single Prediction,200,OK,Single Prediction Tests 2-7,text,true,,478,222,8,13,http://localhost/api/auth/token,212,0,2
+1751032122902,203,Unauthorized Batch Prediction,401,Unauthorized,Batch Prediction Tests 3-2,text,false,,223,293,5,13,http://localhost/api/prediksi/batch,203,0,1
+1751032123580,17,Valid Single Prediction,404,Not Found,Single Prediction Tests 2-5,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[404]]]
+
+****** comparison: [[[200]]]
+
+/",252,394,8,13,http://localhost/api/prediksi/,17,0,2
+1751032124542,211,Login for Single Prediction,200,OK,Single Prediction Tests 2-6,text,true,,484,226,8,13,http://localhost/api/auth/token,211,0,3
+1751032124905,169,Login for Single Prediction,200,OK,Single Prediction Tests 2-8,text,true,,512,222,8,13,http://localhost/api/auth/token,168,0,0
+1751032125291,9,Valid Single Prediction,200,OK,Single Prediction Tests 2-2,text,true,,488,398,8,13,http://localhost/api/prediksi/,9,0,0
+1751032125745,18,Valid Single Prediction,404,Not Found,Single Prediction Tests 2-4,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[404]]]
+
+****** comparison: [[[200]]]
+
+/",253,395,8,13,http://localhost/api/prediksi/,18,0,2
+1751032126036,25,Invalid Batch Prediction - Invalid Kelas,200,OK,Batch Prediction Tests 3-5,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[200]]]
+
+****** comparison: [[[404]]]
+
+/",626,412,5,13,http://localhost/api/prediksi/batch,24,0,0
+1751032126251,8,Invalid Single Prediction - Invalid siswa_id,404,Not Found,Single Prediction Tests 2-3,text,false,,202,400,8,13,http://localhost/api/prediksi/,8,0,1
+1751032126476,4,Invalid Single Prediction - Missing siswa_id,422,Unprocessable Entity,Single Prediction Tests 2-1,text,false,"Test failed: code expected to equal /
+
+****** received  : 4[[[22]]]
+
+****** comparison: 4[[[00]]]
+
+/",254,376,8,13,http://localhost/api/prediksi/,4,0,1
+1751032126608,10,Unauthorized Batch Prediction,401,Unauthorized,Batch Prediction Tests 3-3,text,false,,223,293,5,13,http://localhost/api/prediksi/batch,10,0,2
+1751032127253,16,Valid Single Prediction,404,Not Found,Single Prediction Tests 2-7,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[404]]]
+
+****** comparison: [[[200]]]
+
+/",254,396,8,13,http://localhost/api/prediksi/,16,0,1
+1751032128415,5,Invalid Single Prediction - Missing siswa_id,422,Unprocessable Entity,Single Prediction Tests 2-5,text,false,"Test failed: code expected to equal /
+
+****** received  : 4[[[22]]]
+
+****** comparison: 4[[[00]]]
+
+/",254,376,8,13,http://localhost/api/prediksi/,4,0,1
+1751032128910,29,RBAC Test - Staff Access,200,OK,Batch Prediction Tests 3-2,text,true,,626,404,5,13,http://localhost/api/prediksi/batch,29,0,2
+1751032129002,21,Valid Single Prediction,404,Not Found,Single Prediction Tests 2-6,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[404]]]
+
+****** comparison: [[[200]]]
+
+/",252,397,8,13,http://localhost/api/prediksi/,20,0,2
+1751032129141,14,Valid Single Prediction,200,OK,Single Prediction Tests 2-8,text,true,,488,395,8,13,http://localhost/api/prediksi/,14,0,2
+1751032129610,11,Unauthorized Batch Prediction,401,Unauthorized,Batch Prediction Tests 3-4,text,false,,223,293,5,13,http://localhost/api/prediksi/batch,11,0,2
+1751032129845,14,Invalid Single Prediction - Missing siswa_id,422,Unprocessable Entity,Single Prediction Tests 2-4,text,false,"Test failed: code expected to equal /
+
+****** received  : 4[[[22]]]
+
+****** comparison: 4[[[00]]]
+
+/",254,377,8,13,http://localhost/api/prediksi/,13,0,2
+1751032129956,10,Unauthorized Batch Prediction,401,Unauthorized,Batch Prediction Tests 3-1,text,false,,223,292,5,13,http://localhost/api/prediksi/batch,9,0,1
+1751032131042,5,Unauthorized Single Prediction,401,Unauthorized,Single Prediction Tests 2-3,text,false,,223,285,8,13,http://localhost/api/prediksi/,5,0,3
+1751032131266,11,Invalid Single Prediction - Missing siswa_id,422,Unprocessable Entity,Single Prediction Tests 2-2,text,false,"Test failed: code expected to equal /
+
+****** received  : 4[[[22]]]
+
+****** comparison: 4[[[00]]]
+
+/",254,380,8,13,http://localhost/api/prediksi/,11,0,1
+1751032131450,10,Invalid Single Prediction - Missing siswa_id,422,Unprocessable Entity,Single Prediction Tests 2-7,text,false,"Test failed: code expected to equal /
+
+****** received  : 4[[[22]]]
+
+****** comparison: 4[[[00]]]
+
+/",254,378,8,13,http://localhost/api/prediksi/,10,0,2
+1751032132122,17,Invalid Single Prediction - Invalid siswa_id,404,Not Found,Single Prediction Tests 2-5,text,false,,202,398,8,13,http://localhost/api/prediksi/,16,0,2
+1751032132501,15,Invalid Single Prediction - Missing siswa_id,422,Unprocessable Entity,Single Prediction Tests 2-8,text,false,"Test failed: code expected to equal /
+
+****** received  : 4[[[22]]]
+
+****** comparison: 4[[[00]]]
+
+/",254,377,8,13,http://localhost/api/prediksi/,14,0,2
+1751032132727,7,Invalid Single Prediction - Missing siswa_id,422,Unprocessable Entity,Single Prediction Tests 2-6,text,false,"Test failed: code expected to equal /
+
+****** received  : 4[[[22]]]
+
+****** comparison: 4[[[00]]]
+
+/",254,379,8,13,http://localhost/api/prediksi/,7,0,1
+1751032132842,17,Invalid Single Prediction - Invalid siswa_id,404,Not Found,Single Prediction Tests 2-1,text,false,,202,398,8,13,http://localhost/api/prediksi/,16,0,2
+1751032134429,215,Login for Single Prediction,200,OK,Single Prediction Tests 2-3,text,true,,478,222,8,13,http://localhost/api/auth/token,215,0,3
+1751032135973,16,Invalid Single Prediction - Invalid siswa_id,404,Not Found,Single Prediction Tests 2-2,text,false,,202,402,8,13,http://localhost/api/prediksi/,16,0,2
+1751032136408,17,Invalid Single Prediction - Invalid siswa_id,404,Not Found,Single Prediction Tests 2-7,text,false,,202,400,8,13,http://localhost/api/prediksi/,17,0,1
+1751032136427,54,RBAC Test - Staff Access,500,Internal Server Error,Batch Prediction Tests 3-1,text,false,"Test failed: code expected something using /
+
+****** received  : [[[5]]]00
+
+****** comparison: [[[2]]]00
+
+/	Test failed: code expected something using /
+
+****** received  : [[[500]]]
+
+****** comparison: [[[403]]]
+
+/	",225,406,5,13,http://localhost/api/prediksi/batch,54,0,1
+1751032136498,46,Invalid Single Prediction - Invalid siswa_id,404,Not Found,Single Prediction Tests 2-8,text,false,,202,399,8,13,http://localhost/api/prediksi/,46,0,1
+1751032136626,6,Unauthorized Single Prediction,401,Unauthorized,Single Prediction Tests 2-1,text,false,,223,283,8,13,http://localhost/api/prediksi/,6,0,1
+1751032136672,8,Unauthorized Batch Prediction,401,Unauthorized,Batch Prediction Tests 3-5,text,false,,223,293,5,13,http://localhost/api/prediksi/batch,8,0,1
+1751032136679,250,Login for Batch Prediction,200,OK,Batch Prediction Tests 3-2,text,true,,484,226,5,13,http://localhost/api/auth/token,250,0,1
+1751032137143,13,RBAC Test - Staff Access,200,OK,Batch Prediction Tests 3-4,text,true,,626,404,5,13,http://localhost/api/prediksi/batch,13,0,2
+1751032137317,10,Unauthorized Single Prediction,401,Unauthorized,Single Prediction Tests 2-5,text,false,,223,283,8,13,http://localhost/api/prediksi/,10,0,2
+1751032137441,6,Valid Single Prediction,404,Not Found,Single Prediction Tests 2-3,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[404]]]
+
+****** comparison: [[[200]]]
+
+/",253,395,8,13,http://localhost/api/prediksi/,6,0,2
+1751032137539,10,Invalid Single Prediction - Invalid siswa_id,404,Not Found,Single Prediction Tests 2-4,text,false,,202,399,8,13,http://localhost/api/prediksi/,10,0,1
+1751032137840,27,RBAC Test - Staff Access,200,OK,Batch Prediction Tests 3-3,text,true,,626,407,5,13,http://localhost/api/prediksi/batch,27,0,2
+1751032138080,4,Unauthorized Single Prediction,401,Unauthorized,Single Prediction Tests 2-2,text,false,,223,284,8,13,http://localhost/api/prediksi/,4,0,2
+1751032138651,8,Invalid Single Prediction - Invalid siswa_id,404,Not Found,Single Prediction Tests 2-6,text,false,,202,401,8,13,http://localhost/api/prediksi/,8,0,2
+1751032141030,3,Unauthorized Single Prediction,401,Unauthorized,Single Prediction Tests 2-8,text,false,,223,284,8,13,http://localhost/api/prediksi/,3,0,1
+1751032141503,12,Unauthorized Single Prediction,401,Unauthorized,Single Prediction Tests 2-7,text,false,,223,285,8,13,http://localhost/api/prediksi/,11,0,2
+1751032142030,10,Invalid Single Prediction - Missing siswa_id,422,Unprocessable Entity,Single Prediction Tests 2-3,text,false,"Test failed: code expected to equal /
+
+****** received  : 4[[[22]]]
+
+****** comparison: 4[[[00]]]
+
+/",254,377,8,13,http://localhost/api/prediksi/,10,0,2
+1751032142343,197,Login for Batch Prediction,200,OK,Batch Prediction Tests 3-1,text,true,,512,222,5,13,http://localhost/api/auth/token,197,0,1
+1751032142496,210,Login for Single Prediction,200,OK,Single Prediction Tests 2-1,text,true,,484,226,8,13,http://localhost/api/auth/token,209,0,0
+1751032142705,208,Login for Batch Prediction,200,OK,Batch Prediction Tests 3-4,text,true,,478,222,5,13,http://localhost/api/auth/token,208,0,1
+1751032142826,213,Login for Single Prediction,200,OK,Single Prediction Tests 2-2,text,true,,478,222,8,13,http://localhost/api/auth/token,213,0,1
+1751032142927,318,Login for Single Prediction,200,OK,Single Prediction Tests 2-5,text,true,,512,222,8,13,http://localhost/api/auth/token,318,0,0
+1751032143016,355,Login for Batch Prediction,200,OK,Batch Prediction Tests 3-3,text,true,,484,226,5,13,http://localhost/api/auth/token,355,0,2
+1751032143086,286,Unauthorized Single Prediction,401,Unauthorized,Single Prediction Tests 2-4,text,false,,223,284,8,13,http://localhost/api/prediksi/,286,0,2
+1751032143822,16,Valid Batch Prediction,500,Internal Server Error,Batch Prediction Tests 3-2,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[5]]]00
+
+****** comparison: [[[2]]]00
+
+/",225,406,5,13,http://localhost/api/prediksi/batch,15,0,2
+1751032143966,33,RBAC Test - Staff Access,200,OK,Batch Prediction Tests 3-5,text,true,,626,404,5,13,http://localhost/api/prediksi/batch,33,0,1
+1751032144569,210,Login for Single Prediction,200,OK,Single Prediction Tests 2-7,text,true,,484,226,8,13,http://localhost/api/auth/token,210,0,2
+1751032144632,147,Unauthorized Single Prediction,401,Unauthorized,Single Prediction Tests 2-6,text,false,,223,283,8,13,http://localhost/api/prediksi/,147,0,1
+1751032145594,6,Valid Single Prediction,404,Not Found,Single Prediction Tests 2-2,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[404]]]
+
+****** comparison: [[[200]]]
+
+/",252,394,8,13,http://localhost/api/prediksi/,6,0,2
+1751032146137,208,Login for Single Prediction,200,OK,Single Prediction Tests 2-6,text,true,,484,226,8,13,http://localhost/api/auth/token,208,0,0
+1751032146179,170,Valid Single Prediction,404,Not Found,Single Prediction Tests 2-1,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[404]]]
+
+****** comparison: [[[200]]]
+
+/",254,399,8,13,http://localhost/api/prediksi/,169,0,1
+1751032146216,133,Invalid Single Prediction - Invalid siswa_id,404,Not Found,Single Prediction Tests 2-3,text,false,,202,399,8,13,http://localhost/api/prediksi/,133,0,0
+1751032146207,142,Valid Single Prediction,404,Not Found,Single Prediction Tests 2-5,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[404]]]
+
+****** comparison: [[[200]]]
+
+/",252,394,8,13,http://localhost/api/prediksi/,142,0,0
+1751032146394,172,Login for Single Prediction,200,OK,Single Prediction Tests 2-8,text,true,,512,222,8,13,http://localhost/api/auth/token,172,0,1
+1751032146859,176,Login for Single Prediction,200,OK,Single Prediction Tests 2-4,text,true,,478,222,8,13,http://localhost/api/auth/token,176,0,2
+1751032147346,213,Login for Batch Prediction,200,OK,Batch Prediction Tests 3-5,text,true,,512,222,5,13,http://localhost/api/auth/token,213,0,3
+1751032148243,34,Valid Single Prediction,200,OK,Single Prediction Tests 2-7,text,true,,488,398,8,13,http://localhost/api/prediksi/,34,0,1
+1751032148887,16,Valid Batch Prediction,500,Internal Server Error,Batch Prediction Tests 3-1,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[5]]]00
+
+****** comparison: [[[2]]]00
+
+/",225,404,5,13,http://localhost/api/prediksi/batch,16,0,1
+1751032149105,18,Valid Batch Prediction,200,OK,Batch Prediction Tests 3-4,text,false,No results for path: $['hasil_prediksi'],626,404,5,13,http://localhost/api/prediksi/batch,18,0,2
+1751032149226,16,Valid Single Prediction,404,Not Found,Single Prediction Tests 2-4,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[404]]]
+
+****** comparison: [[[200]]]
+
+/",252,394,8,13,http://localhost/api/prediksi/,16,0,1
+1751032149496,20,Valid Batch Prediction,200,OK,Batch Prediction Tests 3-3,text,false,No results for path: $['hasil_prediksi'],626,408,5,13,http://localhost/api/prediksi/batch,20,0,0
+1751032149917,18,Valid Single Prediction,404,Not Found,Single Prediction Tests 2-8,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[404]]]
+
+****** comparison: [[[200]]]
+
+/",254,396,8,13,http://localhost/api/prediksi/,18,0,1
+1751032150456,4,Invalid Single Prediction - Missing siswa_id,422,Unprocessable Entity,Single Prediction Tests 2-1,text,false,"Test failed: code expected to equal /
+
+****** received  : 4[[[22]]]
+
+****** comparison: 4[[[00]]]
+
+/",254,381,8,13,http://localhost/api/prediksi/,4,0,0
+1751032150842,19,Invalid Batch Prediction - Missing Fields,500,Internal Server Error,Batch Prediction Tests 3-2,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[5]]]00
+
+****** comparison: [[[4]]]00
+
+/",225,384,5,13,http://localhost/api/prediksi/batch,19,0,2
+1751032150897,16,Invalid Single Prediction - Missing siswa_id,422,Unprocessable Entity,Single Prediction Tests 2-5,text,false,"Test failed: code expected to equal /
+
+****** received  : 4[[[22]]]
+
+****** comparison: 4[[[00]]]
+
+/",254,376,8,13,http://localhost/api/prediksi/,15,0,2
+1751032151159,5,Unauthorized Single Prediction,401,Unauthorized,Single Prediction Tests 2-3,text,false,,223,284,8,13,http://localhost/api/prediksi/,5,0,0
+1751032151224,11,Invalid Single Prediction - Missing siswa_id,422,Unprocessable Entity,Single Prediction Tests 2-2,text,false,"Test failed: code expected to equal /
+
+****** received  : 4[[[22]]]
+
+****** comparison: 4[[[00]]]
+
+/",254,376,7,12,http://localhost/api/prediksi/,11,0,0
+1751032151491,22,Invalid Single Prediction - Missing siswa_id,422,Unprocessable Entity,Single Prediction Tests 2-4,text,false,"Test failed: code expected to equal /
+
+****** received  : 4[[[22]]]
+
+****** comparison: 4[[[00]]]
+
+/",254,376,7,12,http://localhost/api/prediksi/,22,0,2
+1751032151494,34,Valid Batch Prediction,200,OK,Batch Prediction Tests 3-5,text,false,No results for path: $['hasil_prediksi'],626,405,5,12,http://localhost/api/prediksi/batch,34,0,1
+1751032152095,17,Valid Single Prediction,404,Not Found,Single Prediction Tests 2-6,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[404]]]
+
+****** comparison: [[[200]]]
+
+/",252,397,7,12,http://localhost/api/prediksi/,17,0,2
+1751032153092,13,Invalid Single Prediction - Missing siswa_id,422,Unprocessable Entity,Single Prediction Tests 2-8,text,false,"Test failed: code expected to equal /
+
+****** received  : 4[[[22]]]
+
+****** comparison: 4[[[00]]]
+
+/",254,378,7,12,http://localhost/api/prediksi/,13,0,2
+1751032154231,5,Invalid Single Prediction - Invalid siswa_id,404,Not Found,Single Prediction Tests 2-1,text,false,,202,403,7,12,http://localhost/api/prediksi/,5,0,2
+1751032154279,5,Invalid Single Prediction - Missing siswa_id,422,Unprocessable Entity,Single Prediction Tests 2-7,text,false,"Test failed: code expected to equal /
+
+****** received  : 4[[[22]]]
+
+****** comparison: 4[[[00]]]
+
+/",254,380,7,12,http://localhost/api/prediksi/,5,0,2
+1751032154450,16,Invalid Single Prediction - Missing siswa_id,422,Unprocessable Entity,Single Prediction Tests 2-6,text,false,"Test failed: code expected to equal /
+
+****** received  : 4[[[22]]]
+
+****** comparison: 4[[[00]]]
+
+/",254,379,7,12,http://localhost/api/prediksi/,16,0,2
+1751032154501,10,Invalid Batch Prediction - Missing Fields,200,OK,Batch Prediction Tests 3-4,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[2]]]00
+
+****** comparison: [[[4]]]00
+
+/",626,382,5,12,http://localhost/api/prediksi/batch,10,0,1
+1751032155054,17,Invalid Single Prediction - Invalid siswa_id,404,Not Found,Single Prediction Tests 2-8,text,false,,202,400,7,12,http://localhost/api/prediksi/,17,0,1
+1751032156031,20,Invalid Batch Prediction - Missing Fields,500,Internal Server Error,Batch Prediction Tests 3-1,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[5]]]00
+
+****** comparison: [[[4]]]00
+
+/",225,381,5,12,http://localhost/api/prediksi/batch,20,0,1
+1751032156393,8,Invalid Single Prediction - Invalid siswa_id,404,Not Found,Single Prediction Tests 2-4,text,false,,202,398,7,12,http://localhost/api/prediksi/,8,0,2
+1751032156495,5,Invalid Single Prediction - Invalid siswa_id,404,Not Found,Single Prediction Tests 2-2,text,false,,202,398,7,12,http://localhost/api/prediksi/,5,0,1
+1751032156712,9,Invalid Single Prediction - Invalid siswa_id,404,Not Found,Single Prediction Tests 2-5,text,false,,202,398,7,12,http://localhost/api/prediksi/,9,0,1
+1751032157105,10,Invalid Batch Prediction - Missing Fields,200,OK,Batch Prediction Tests 3-5,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[2]]]00
+
+****** comparison: [[[4]]]00
+
+/",626,382,5,12,http://localhost/api/prediksi/batch,10,0,0
+1751032157593,17,Invalid Single Prediction - Invalid siswa_id,404,Not Found,Single Prediction Tests 2-7,text,false,,202,402,7,12,http://localhost/api/prediksi/,16,0,2
+1751032157717,5,Unauthorized Single Prediction,401,Unauthorized,Single Prediction Tests 2-8,text,false,,223,285,7,12,http://localhost/api/prediksi/,4,0,2
+1751032159023,4,Unauthorized Single Prediction,401,Unauthorized,Single Prediction Tests 2-1,text,false,,223,285,6,11,http://localhost/api/prediksi/,4,0,1
+1751032159050,46,Invalid Batch Prediction - Invalid Kelas,500,Internal Server Error,Batch Prediction Tests 3-2,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[500]]]
+
+****** comparison: [[[404]]]
+
+/",225,414,5,10,http://localhost/api/prediksi/batch,46,0,1
+1751032159405,5,Invalid Single Prediction - Invalid siswa_id,404,Not Found,Single Prediction Tests 2-6,text,false,,202,401,5,10,http://localhost/api/prediksi/,5,0,1
+1751032160095,5,Unauthorized Single Prediction,401,Unauthorized,Single Prediction Tests 2-4,text,false,,223,283,5,10,http://localhost/api/prediksi/,5,0,2
+1751032160401,3,Unauthorized Single Prediction,401,Unauthorized,Single Prediction Tests 2-2,text,false,,223,283,4,9,http://localhost/api/prediksi/,3,0,1
+1751032160505,6,Invalid Batch Prediction - Invalid Kelas,500,Internal Server Error,Batch Prediction Tests 3-1,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[500]]]
+
+****** comparison: [[[404]]]
+
+/",225,411,5,8,http://localhost/api/prediksi/batch,6,0,1
+1751032160777,26,Invalid Batch Prediction - Missing Fields,200,OK,Batch Prediction Tests 3-3,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[2]]]00
+
+****** comparison: [[[4]]]00
+
+/",626,385,5,8,http://localhost/api/prediksi/batch,25,0,1
+1751032160802,45,Unauthorized Single Prediction,401,Unauthorized,Single Prediction Tests 2-7,text,false,,223,284,3,8,http://localhost/api/prediksi/,45,0,1
+1751032160848,66,Invalid Batch Prediction - Invalid Kelas,200,OK,Batch Prediction Tests 3-4,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[200]]]
+
+****** comparison: [[[404]]]
+
+/",626,412,5,7,http://localhost/api/prediksi/batch,66,0,1
+1751032161451,10,Unauthorized Single Prediction,401,Unauthorized,Single Prediction Tests 2-5,text,false,,223,283,2,7,http://localhost/api/prediksi/,10,0,2
+1751032162913,5,Unauthorized Batch Prediction,401,Unauthorized,Batch Prediction Tests 3-2,text,false,,223,292,5,6,http://localhost/api/prediksi/batch,5,0,1
+1751032164413,34,Invalid Batch Prediction - Invalid Kelas,200,OK,Batch Prediction Tests 3-5,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[200]]]
+
+****** comparison: [[[404]]]
+
+/",626,412,5,6,http://localhost/api/prediksi/batch,33,0,2
+1751032164438,9,Unauthorized Batch Prediction,401,Unauthorized,Batch Prediction Tests 3-1,text,false,,223,293,5,6,http://localhost/api/prediksi/batch,8,0,2
+1751032164847,5,Unauthorized Single Prediction,401,Unauthorized,Single Prediction Tests 2-6,text,false,,223,283,1,6,http://localhost/api/prediksi/,5,0,1
+1751032167473,3,Unauthorized Batch Prediction,401,Unauthorized,Batch Prediction Tests 3-4,text,false,,223,293,5,5,http://localhost/api/prediksi/batch,3,0,1
+1751032168067,19,Invalid Batch Prediction - Invalid Kelas,200,OK,Batch Prediction Tests 3-3,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[200]]]
+
+****** comparison: [[[404]]]
+
+/",626,415,5,5,http://localhost/api/prediksi/batch,19,0,2
+1751032168786,6,RBAC Test - Staff Access,500,Internal Server Error,Batch Prediction Tests 3-2,text,false,"Test failed: code expected something using /
+
+****** received  : [[[5]]]00
+
+****** comparison: [[[2]]]00
+
+/	Test failed: code expected something using /
+
+****** received  : [[[500]]]
+
+****** comparison: [[[403]]]
+
+/	",225,406,5,5,http://localhost/api/prediksi/batch,5,0,2
+1751032169396,7,RBAC Test - Staff Access,500,Internal Server Error,Batch Prediction Tests 3-1,text,false,"Test failed: code expected something using /
+
+****** received  : [[[5]]]00
+
+****** comparison: [[[2]]]00
+
+/	Test failed: code expected something using /
+
+****** received  : [[[500]]]
+
+****** comparison: [[[403]]]
+
+/	",225,404,4,4,http://localhost/api/prediksi/batch,7,0,2
+1751032171081,4,Unauthorized Batch Prediction,401,Unauthorized,Batch Prediction Tests 3-5,text,false,,223,294,3,3,http://localhost/api/prediksi/batch,4,0,2
+1751032174278,29,RBAC Test - Staff Access,200,OK,Batch Prediction Tests 3-4,text,true,,626,404,3,3,http://localhost/api/prediksi/batch,29,0,1
+1751032174969,3,Unauthorized Batch Prediction,401,Unauthorized,Batch Prediction Tests 3-3,text,false,,223,294,2,2,http://localhost/api/prediksi/batch,3,0,1
+1751032176606,10,RBAC Test - Staff Access,200,OK,Batch Prediction Tests 3-5,text,true,,626,405,2,2,http://localhost/api/prediksi/batch,10,0,1
+1751032180099,12,RBAC Test - Staff Access,200,OK,Batch Prediction Tests 3-3,text,true,,626,408,1,1,http://localhost/api/prediksi/batch,12,0,1

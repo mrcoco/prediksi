@@ -1,0 +1,106 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1751031359316,194,Login Request,200,OK,Authentication Tests 1-1,text,true,,512,222,1,1,http://localhost/api/auth/token,193,0,2
+1751031359510,208,Login Request,200,OK,Authentication Tests 1-1,text,true,,484,226,2,2,http://localhost/api/auth/token,208,0,1
+1751031359713,171,Login Request,200,OK,Authentication Tests 1-2,text,true,,478,222,1,1,http://localhost/api/auth/token,171,0,2
+1751031359885,209,Login Request,200,OK,Authentication Tests 1-2,text,true,,512,222,1,1,http://localhost/api/auth/token,209,0,2
+1751031360110,211,Login Request,200,OK,Authentication Tests 1-3,text,true,,484,226,1,1,http://localhost/api/auth/token,211,0,2
+1751031360324,211,Login Request,200,OK,Authentication Tests 1-3,text,true,,478,222,2,2,http://localhost/api/auth/token,211,0,1
+1751031360514,173,Login Request,200,OK,Authentication Tests 1-4,text,true,,512,222,1,1,http://localhost/api/auth/token,173,0,3
+1751031360688,207,Login Request,200,OK,Authentication Tests 1-4,text,true,,484,226,1,1,http://localhost/api/auth/token,207,0,1
+1751031360914,214,Login Request,200,OK,Authentication Tests 1-5,text,true,,478,222,1,1,http://localhost/api/auth/token,214,0,2
+1751031361129,213,Login Request,200,OK,Authentication Tests 1-5,text,true,,512,222,1,1,http://localhost/api/auth/token,213,0,1
+1751036325229,238,Login Request,200,OK,Thread Group 1-1,text,true,,493,227,2,2,http://localhost/api/auth/token,235,0,9
+1751036325401,232,Login Request,200,OK,Thread Group 1-2,text,true,,493,227,2,2,http://localhost/api/auth/token,232,0,1
+1751036325598,209,Login Request,200,OK,Thread Group 1-3,text,true,,493,227,2,2,http://localhost/api/auth/token,209,0,0
+1751036325796,185,Login Request,200,OK,Thread Group 1-4,text,true,,493,227,1,1,http://localhost/api/auth/token,185,0,1
+1751036326003,214,Login Request,200,OK,Thread Group 1-5,text,true,,493,227,1,1,http://localhost/api/auth/token,214,0,1
+1751036428058,238,Login Request,200,OK,Thread Group 1-1,text,true,,493,227,2,2,http://localhost/api/auth/token,235,0,8
+1751036428224,241,Login Request,200,OK,Thread Group 1-2,text,true,,493,227,3,3,http://localhost/api/auth/token,241,0,0
+1751036428310,156,Single Prediction Request,404,Not Found,Thread Group 1-1,text,false,,154,399,3,3,http://localhost/api/prediksi/,156,0,0
+1751036428465,43,Single Prediction Request,404,Not Found,Thread Group 1-2,text,false,,154,399,2,2,http://localhost/api/prediksi/,43,0,0
+1751036428426,212,Login Request,200,OK,Thread Group 1-3,text,true,,493,227,2,2,http://localhost/api/auth/token,212,0,1
+1751036428627,183,Login Request,200,OK,Thread Group 1-4,text,true,,493,227,2,2,http://localhost/api/auth/token,183,0,1
+1751036428639,171,Single Prediction Request,404,Not Found,Thread Group 1-3,text,false,,154,399,2,2,http://localhost/api/prediksi/,171,0,0
+1751036428810,43,Single Prediction Request,404,Not Found,Thread Group 1-4,text,false,,154,399,2,2,http://localhost/api/prediksi/,43,0,0
+1751036428828,216,Login Request,200,OK,Thread Group 1-5,text,true,,493,227,1,1,http://localhost/api/auth/token,216,0,1
+1751036429045,1,Single Prediction Request,404,Not Found,Thread Group 1-5,text,false,,154,399,1,1,http://localhost/api/prediksi/,1,0,0
+1751036605382,214,Login Request,200,OK,Thread Group 1-1,text,true,,493,227,2,2,http://localhost/api/auth/token,210,0,7
+1751036605553,210,Login Request,200,OK,Thread Group 1-2,text,true,,493,227,3,3,http://localhost/api/auth/token,210,0,0
+1751036605606,158,Single Prediction Request,404,Not Found,Thread Group 1-1,text,false,,154,399,3,3,http://localhost/api/prediksi/,158,0,0
+1751036605763,43,Single Prediction Request,404,Not Found,Thread Group 1-2,text,false,,154,399,2,2,http://localhost/api/prediksi/,43,0,0
+1751036605752,185,Login Request,200,OK,Thread Group 1-3,text,true,,493,227,1,1,http://localhost/api/auth/token,185,0,1
+1751036605937,1,Single Prediction Request,404,Not Found,Thread Group 1-3,text,false,,154,399,1,1,http://localhost/api/prediksi/,1,0,0
+1751036605954,210,Login Request,200,OK,Thread Group 1-4,text,true,,493,227,2,2,http://localhost/api/auth/token,210,0,1
+1751036606156,173,Login Request,200,OK,Thread Group 1-5,text,true,,493,227,2,2,http://localhost/api/auth/token,173,0,2
+1751036606164,165,Single Prediction Request,404,Not Found,Thread Group 1-4,text,false,,154,399,2,2,http://localhost/api/prediksi/,165,0,0
+1751036606329,42,Single Prediction Request,404,Not Found,Thread Group 1-5,text,false,,154,399,1,1,http://localhost/api/prediksi/,42,0,0
+1751036700758,14,Login Request,401,Unauthorized,Thread Group 1-1,text,false,,170,227,1,1,http://localhost/api/auth/token,12,0,7
+1751036700781,1,Single Prediction Request,401,Unauthorized,Thread Group 1-1,text,false,,170,275,1,1,http://localhost/api/prediksi/,1,0,0
+1751036700936,2,Login Request,401,Unauthorized,Thread Group 1-2,text,false,,170,227,1,1,http://localhost/api/auth/token,2,0,0
+1751036700939,0,Single Prediction Request,401,Unauthorized,Thread Group 1-2,text,false,,170,275,1,1,http://localhost/api/prediksi/,0,0,0
+1751036701135,2,Login Request,401,Unauthorized,Thread Group 1-3,text,false,,170,227,1,1,http://localhost/api/auth/token,2,0,0
+1751036701137,1,Single Prediction Request,401,Unauthorized,Thread Group 1-3,text,false,,170,275,1,1,http://localhost/api/prediksi/,1,0,0
+1751036701334,3,Login Request,401,Unauthorized,Thread Group 1-4,text,false,,170,227,1,1,http://localhost/api/auth/token,3,0,2
+1751036701338,2,Single Prediction Request,401,Unauthorized,Thread Group 1-4,text,false,,170,275,1,1,http://localhost/api/prediksi/,2,0,0
+1751036701534,2,Login Request,401,Unauthorized,Thread Group 1-5,text,false,,170,227,1,1,http://localhost/api/auth/token,2,0,0
+1751036701536,1,Single Prediction Request,401,Unauthorized,Thread Group 1-5,text,false,,170,275,1,1,http://localhost/api/prediksi/,1,0,0
+1751036943763,14,Login Request,502,Bad Gateway,Thread Group 1-1,text,false,,137,227,1,1,http://localhost/api/auth/token,12,0,8
+1751036943786,2,Single Prediction Request,500,Internal Server Error,Thread Group 1-1,,false,,94,275,1,1,http://localhost/api/prediksi/,2,0,0
+1751036943935,3,Login Request,502,Bad Gateway,Thread Group 1-2,text,false,,137,227,1,1,http://localhost/api/auth/token,3,0,0
+1751036943938,3,Single Prediction Request,500,Internal Server Error,Thread Group 1-2,,false,,94,275,1,1,http://localhost/api/prediksi/,3,0,0
+1751036944132,3,Login Request,502,Bad Gateway,Thread Group 1-3,text,false,,137,227,1,1,http://localhost/api/auth/token,3,0,1
+1751036944135,3,Single Prediction Request,500,Internal Server Error,Thread Group 1-3,,false,,94,275,1,1,http://localhost/api/prediksi/,3,0,0
+1751036944334,2,Login Request,502,Bad Gateway,Thread Group 1-4,text,false,,137,227,1,1,http://localhost/api/auth/token,2,0,1
+1751036944336,1,Single Prediction Request,500,Internal Server Error,Thread Group 1-4,,false,,94,275,1,1,http://localhost/api/prediksi/,1,0,0
+1751036944536,5,Login Request,502,Bad Gateway,Thread Group 1-5,text,false,,137,227,1,1,http://localhost/api/auth/token,5,0,1
+1751036944542,3,Single Prediction Request,500,Internal Server Error,Thread Group 1-5,,false,,94,275,1,1,http://localhost/api/prediksi/,3,0,0
+1751037069515,21,Login Request,502,Bad Gateway,Thread Group 1-1,text,false,,137,227,1,1,http://localhost/api/auth/token,19,0,7
+1751037069545,5,Single Prediction Request,500,Internal Server Error,Thread Group 1-1,,false,,94,275,1,1,http://localhost/api/prediksi/,5,0,0
+1751037069689,2,Login Request,502,Bad Gateway,Thread Group 1-2,text,false,,137,227,1,1,http://localhost/api/auth/token,2,0,0
+1751037069691,1,Single Prediction Request,500,Internal Server Error,Thread Group 1-2,,false,,94,275,1,1,http://localhost/api/prediksi/,1,0,0
+1751037069889,4,Login Request,502,Bad Gateway,Thread Group 1-3,text,false,,137,227,1,1,http://localhost/api/auth/token,4,0,1
+1751037069893,3,Single Prediction Request,500,Internal Server Error,Thread Group 1-3,,false,,94,275,1,1,http://localhost/api/prediksi/,3,0,0
+1751037070089,2,Login Request,502,Bad Gateway,Thread Group 1-4,text,false,,137,227,1,1,http://localhost/api/auth/token,2,0,0
+1751037070092,2,Single Prediction Request,500,Internal Server Error,Thread Group 1-4,,false,,94,275,1,1,http://localhost/api/prediksi/,2,0,0
+1751037070290,4,Login Request,502,Bad Gateway,Thread Group 1-5,text,false,,137,227,1,1,http://localhost/api/auth/token,4,0,1
+1751037070295,2,Single Prediction Request,500,Internal Server Error,Thread Group 1-5,,false,,94,275,1,1,http://localhost/api/prediksi/,2,0,0
+1751037117153,217,Login Request,200,OK,Thread Group 1-1,text,true,,493,227,2,2,http://localhost/api/auth/token,214,0,8
+1751037117323,216,Login Request,200,OK,Thread Group 1-2,text,true,,493,227,3,3,http://localhost/api/auth/token,216,0,0
+1751037117380,161,Single Prediction Request,401,Unauthorized,Thread Group 1-1,text,false,,187,399,3,3,http://localhost/api/prediksi/,161,0,0
+1751037117539,3,Single Prediction Request,401,Unauthorized,Thread Group 1-2,text,false,,187,399,3,3,http://localhost/api/prediksi/,3,0,0
+1751037117523,196,Login Request,200,OK,Thread Group 1-3,text,true,,493,227,2,2,http://localhost/api/auth/token,196,0,0
+1751037117720,1,Single Prediction Request,401,Unauthorized,Thread Group 1-3,text,false,,187,399,2,2,http://localhost/api/prediksi/,1,0,0
+1751037117720,214,Login Request,200,OK,Thread Group 1-4,text,true,,493,227,2,2,http://localhost/api/auth/token,214,0,0
+1751037117919,177,Login Request,200,OK,Thread Group 1-5,text,true,,493,227,2,2,http://localhost/api/auth/token,177,0,1
+1751037117935,162,Single Prediction Request,401,Unauthorized,Thread Group 1-4,text,false,,187,399,2,2,http://localhost/api/prediksi/,162,0,0
+1751037118096,43,Single Prediction Request,401,Unauthorized,Thread Group 1-5,text,false,,187,399,1,1,http://localhost/api/prediksi/,43,0,0
+1751037188693,215,Login Request,200,OK,Thread Group 1-1,text,true,,493,227,2,2,http://localhost/api/auth/token,212,0,8
+1751037188865,218,Login Request,200,OK,Thread Group 1-2,text,true,,493,227,3,3,http://localhost/api/auth/token,218,0,0
+1751037188918,167,Verify Token Request,401,Unauthorized,Thread Group 1-1,text,false,,187,274,3,3,http://localhost/api/auth/verify,167,0,0
+1751037189065,198,Login Request,200,OK,Thread Group 1-3,text,true,,493,227,4,4,http://localhost/api/auth/token,198,0,0
+1751037189085,180,Single Prediction Request,401,Unauthorized,Thread Group 1-1,text,false,,187,399,4,4,http://localhost/api/prediksi/,180,0,0
+1751037189084,220,Verify Token Request,401,Unauthorized,Thread Group 1-2,text,false,,187,274,3,3,http://localhost/api/auth/verify,220,0,0
+1751037189264,43,Verify Token Request,401,Unauthorized,Thread Group 1-3,text,false,,187,274,3,3,http://localhost/api/auth/verify,43,0,0
+1751037189304,176,Single Prediction Request,401,Unauthorized,Thread Group 1-2,text,false,,187,399,4,4,http://localhost/api/prediksi/,176,0,0
+1751037189264,216,Login Request,200,OK,Thread Group 1-4,text,true,,493,227,4,4,http://localhost/api/auth/token,216,0,0
+1751037189307,174,Single Prediction Request,401,Unauthorized,Thread Group 1-3,text,false,,187,399,3,3,http://localhost/api/prediksi/,174,0,0
+1751037189461,177,Login Request,200,OK,Thread Group 1-5,text,true,,493,227,2,2,http://localhost/api/auth/token,177,0,1
+1751037189638,1,Verify Token Request,401,Unauthorized,Thread Group 1-5,text,false,,187,274,2,2,http://localhost/api/auth/verify,1,0,0
+1751037189480,200,Verify Token Request,401,Unauthorized,Thread Group 1-4,text,false,,187,274,2,2,http://localhost/api/auth/verify,200,0,0
+1751037189640,41,Single Prediction Request,401,Unauthorized,Thread Group 1-5,text,false,,187,399,2,2,http://localhost/api/prediksi/,41,0,0
+1751037189680,43,Single Prediction Request,401,Unauthorized,Thread Group 1-4,text,false,,187,399,1,1,http://localhost/api/prediksi/,43,0,0
+1751037339406,223,Login Request,200,OK,Thread Group 1-1,text,true,,493,227,2,2,http://localhost/api/auth/token,220,0,7
+1751037339579,215,Login Request,200,OK,Thread Group 1-2,text,true,,493,227,3,3,http://localhost/api/auth/token,215,0,0
+1751037339640,156,Verify Token Request,401,Unauthorized,Thread Group 1-1,text,false,,187,274,3,3,http://localhost/api/auth/verify,156,0,0
+1751037339778,186,Login Request,200,OK,Thread Group 1-3,text,true,,493,227,3,3,http://localhost/api/auth/token,186,0,0
+1751037339796,169,Single Prediction Request,401,Unauthorized,Thread Group 1-1,text,false,,187,399,3,3,http://localhost/api/prediksi/,169,0,0
+1751037339965,41,Verify Token Request,401,Unauthorized,Thread Group 1-3,text,false,,187,274,3,3,http://localhost/api/auth/verify,41,0,0
+1751037339795,211,Verify Token Request,401,Unauthorized,Thread Group 1-2,text,false,,187,274,3,3,http://localhost/api/auth/verify,211,0,0
+1751037340006,183,Single Prediction Request,401,Unauthorized,Thread Group 1-2,text,false,,187,399,4,4,http://localhost/api/prediksi/,183,0,0
+1751037340006,183,Single Prediction Request,401,Unauthorized,Thread Group 1-3,text,false,,187,399,4,4,http://localhost/api/prediksi/,183,0,0
+1751037339978,211,Login Request,200,OK,Thread Group 1-4,text,true,,493,227,4,4,http://localhost/api/auth/token,211,0,0
+1751037340179,170,Login Request,200,OK,Thread Group 1-5,text,true,,493,227,2,2,http://localhost/api/auth/token,170,0,0
+1751037340350,2,Verify Token Request,401,Unauthorized,Thread Group 1-5,text,false,,187,274,2,2,http://localhost/api/auth/verify,2,0,0
+1751037340190,202,Verify Token Request,401,Unauthorized,Thread Group 1-4,text,false,,187,274,2,2,http://localhost/api/auth/verify,202,0,0
+1751037340353,43,Single Prediction Request,401,Unauthorized,Thread Group 1-5,text,false,,187,399,2,2,http://localhost/api/prediksi/,43,0,0
+1751037340392,44,Single Prediction Request,401,Unauthorized,Thread Group 1-4,text,false,,187,399,1,1,http://localhost/api/prediksi/,44,0,0

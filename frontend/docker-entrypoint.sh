@@ -8,7 +8,7 @@ set -e
 echo "Starting EduPro Frontend Docker Container..."
 
 # Default values jika environment variables tidak di-set
-EDUPRO_API_URL=${EDUPRO_API_URL:-"http://localhost:8000/api"}
+EDUPRO_API_URL=${EDUPRO_API_URL:-"http://localhost/api"}
 EDUPRO_APP_NAME=${EDUPRO_APP_NAME:-"EduPro"}
 EDUPRO_APP_VERSION=${EDUPRO_APP_VERSION:-"1.0.0"}
 EDUPRO_DEBUG=${EDUPRO_DEBUG:-"false"}

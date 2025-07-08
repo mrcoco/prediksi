@@ -1,0 +1,161 @@
+<!DOCTYPE HTML><html xmlns:jmeter="http://jmeter.apache.org/">
+   <title>Schematic view of Test Plan</title>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <style>
+ul.tree, ul.tree ul {
+    list-style-type: none;
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAKAQMAAABPHKYJAAAAA1BMVEWIiIhYZW6zAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH1ggGExMZBky19AAAAAtJREFUCNdjYMAEAAAUAAHlhrBKAAAAAElFTkSuQmCC') repeat-y;
+    margin: 0;
+    padding: 0;
+}
+ul.tree ul {
+    margin-left: 10px;
+}
+ul.tree li {
+    margin: 0;
+    padding: 0 12px;
+    line-height: 20px;
+    background:  url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAUAQMAAACK1e4oAAAABlBMVEUAAwCIiIgd2JB2AAAAAXRSTlMAQObYZgAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9YIBhQIJYVaFGwAAAARSURBVAjXY2hgQIf/GTDFGgDSkwqATqpCHAAAAABJRU5ErkJggg==') no-repeat;
+    color: #369;
+}
+ul.tree li:last-child {
+    background: #fff url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAUAQMAAACK1e4oAAAABlBMVEUAAwCIiIgd2JB2AAAAAXRSTlMAQObYZgAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9YIBhQIIhs+gc8AAAAQSURBVAjXY2hgQIf/GbAAAKCTBYBUjWvCAAAAAElFTkSuQmCC') no-repeat;
+}
+</style>
+   </head>
+   <body>
+      <ul class="tree" id="tree">
+         <li><b>load test </b>
+            "EduPro Prediction System Test Plan V3" 
+            (globalVars:[
+            "host"
+            =
+            "localhost"
+            ,
+            "port"
+            =
+            "80"
+            ,
+            "protocol"
+            =
+            "http"
+            ],
+            executeTearDownThreadsOnShutdown: true)
+            <br>
+            &nbsp;&nbsp;&nbsp;Comments: <i style="color:green">Lightweight test plan for troubleshooting</i></li>
+         <li>
+            <ul>
+               <li><b>http defaults</b>
+                  "HTTP Request Defaults" 
+                  (protocol: "${protocol}",
+                  domain: "${host}",
+                  port: "${port}",
+                  path: "",
+                  connectTimeout: ""ms,
+                  responseTimeout: ""ms
+                  )
+                  </li>
+               <li><b>run</b>
+                  "Basic Flow Test" 
+                  (
+                  threads: "",
+                  loops: "2",
+                  ramp-up: ""
+                  )
+                  </li>
+               <li>
+                  <ul>
+                     <li><b>http request</b>
+                        "Login Request" 
+                        (method: "POST",
+                        url: "
+                        ://://api/auth/token",
+                        
+                        body: [
+                        
+                        "username"=
+                        "admin"
+                        ,
+                        "password"=
+                        "admin123"
+                        
+                        ]
+                        ,
+                        upload-files: [
+                        
+                        ]
+                        )
+                        </li>
+                     <li>
+                        <ul>
+                           <li><b>add headers</b>
+                              "HTTP Headers" 
+                              (headers:[
+                              
+                              {"Content-Type"=
+                              "application/x-www-form-urlencoded"
+                              ])
+                              </li>
+                           <li><b>extract-jsonpath </b>
+                              "JSON Extractor" <b>using response body</b>
+                              (exportedVar: "access_token",
+                              jsonPaths: "$.access_token",
+                              default: "",
+                              matchNr: "")
+                              </li>
+                        </ul>
+                     </li>
+                     <li><b>flow control</b>
+                        "Think Time" <b>
+                           pause for 2000ms
+                           
+                           current thread
+                           </b></li>
+                     <li><b>http request</b>
+                        "Single Prediction Request" 
+                        (method: "POST",
+                        url: "
+                        ://://api/prediksi/",
+                        
+                        body: [
+                        
+                        "nilai_rata_rata"=
+                        "85.5"
+                        ,
+                        "jumlah_ekstrakurikuler"=
+                        "2"
+                        
+                        ]
+                        ,
+                        upload-files: [
+                        
+                        ]
+                        )
+                        </li>
+                     <li>
+                        <ul>
+                           <li><b>add headers</b>
+                              "HTTP Headers" 
+                              (headers:[
+                              
+                              {"Authorization"=
+                              "Bearer ${access_token}"
+                              ,
+                              {"Content-Type"=
+                              "application/json"
+                              ])
+                              </li>
+                        </ul>
+                     </li>
+                     <li><b>DebugSampler</b>
+                        "Debug Token" </li>
+                  </ul>
+               </li>
+               <li><b>write samples</b>
+                  "View Results Tree" </li>
+            </ul>
+         </li>
+      </ul>
+   </body>
+</html>

@@ -9,6 +9,13 @@ from routes.auth_router import get_current_user
 from models.user import User
 import pandas as pd
 from io import BytesIO
+import logging
+
+# Cache imports
+from cache_config import invalidate_student_cache, cache_health_check
+
+# Model accuracy management
+from model_accuracy_manager import model_accuracy_manager
 
 router = APIRouter()
 
@@ -171,12 +178,47 @@ def update_penghasilan(
     for key, value in update_data.items():
         setattr(db_penghasilan, key, value)
     
+    # Store old kategori_penghasilan for model accuracy validation
+    old_kategori = db_penghasilan.kategori_penghasilan
+    
     # Update timestamp
     db_penghasilan.updated_at = datetime.now()
     
     # Simpan perubahan
     db.commit()
     db.refresh(db_penghasilan)
+    
+    # Model accuracy validation untuk perubahan penghasilan
+    try:
+        validation_result = model_accuracy_manager.validate_data_change(
+            siswa_id=db_penghasilan.siswa_id,
+            change_type="penghasilan",
+            old_value=old_kategori,
+            new_value=db_penghasilan.kategori_penghasilan
+        )
+        
+        # Log validation result
+        logging.info(f"📊 Penghasilan change validation - siswa_id={db_penghasilan.siswa_id}, significant={validation_result.get('is_significant')}, needs_retraining={validation_result.get('needs_retraining')}")
+        
+        # Trigger model retraining jika diperlukan
+        if validation_result.get('needs_retraining'):
+            logging.info(f"🔄 Triggering model retraining due to significant penghasilan changes")
+            try:
+                retraining_result = model_accuracy_manager.retrain_model_if_needed(db)
+                logging.info(f"🎯 Model retraining result: {retraining_result.get('message')}")
+            except Exception as e:
+                logging.warning(f"⚠️ Model retraining failed: {str(e)}")
+        
+    except Exception as e:
+        logging.warning(f"⚠️ Failed to validate data change for penghasilan: {str(e)}")
+    
+    # Invalidate cache for this student since penghasilan affects prediction
+    if cache_health_check():
+        try:
+            invalidate_student_cache(db_penghasilan.siswa_id)
+            logging.info(f"🔄 Cache invalidated for updated penghasilan siswa_id={db_penghasilan.siswa_id}")
+        except Exception as e:
+            logging.warning(f"⚠️ Failed to invalidate cache for penghasilan siswa_id={db_penghasilan.siswa_id}: {str(e)}")
     
     return db_penghasilan
 
@@ -193,6 +235,17 @@ def delete_penghasilan(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Data penghasilan dengan ID {penghasilan_id} tidak ditemukan"
         )
+    
+    # Store data for cache invalidation before deletion
+    siswa_id = db_penghasilan.siswa_id
+    
+    # Invalidate cache before deletion since penghasilan affects prediction
+    if cache_health_check():
+        try:
+            invalidate_student_cache(siswa_id)
+            logging.info(f"🔄 Cache invalidated for deleted penghasilan siswa_id={siswa_id}")
+        except Exception as e:
+            logging.warning(f"⚠️ Failed to invalidate cache for penghasilan siswa_id={siswa_id}: {str(e)}")
     
     # Hapus penghasilan
     db.delete(db_penghasilan)

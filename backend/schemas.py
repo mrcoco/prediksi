@@ -185,9 +185,17 @@ class PrediksiRequest(BaseModel):
     tahun_ajaran: str
 
 # Schema untuk response prediksi
+class SemesterPrediksi(BaseModel):
+    data_dari_semester: str
+    data_dari_tahun_ajaran: str
+    prediksi_untuk_semester: str
+    prediksi_untuk_tahun_ajaran: str
+    keterangan: str
+
 class PrediksiResponse(BaseModel):
     siswa_id: int
     nama_siswa: str
     prediksi_prestasi: str
     confidence: float
+    semester_prediksi: SemesterPrediksi
     detail_faktor: dict

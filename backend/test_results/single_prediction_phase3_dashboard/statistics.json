@@ -1,0 +1,34 @@
+{
+  "Total" : {
+    "transaction" : "Total",
+    "sampleCount" : 100,
+    "errorCount" : 0,
+    "errorPct" : 0.0,
+    "meanResTime" : 36.72999999999999,
+    "medianResTime" : 43.0,
+    "minResTime" : 1.0,
+    "maxResTime" : 48.0,
+    "pct1ResTime" : 45.0,
+    "pct2ResTime" : 46.0,
+    "pct3ResTime" : 47.989999999999995,
+    "throughput" : 47.080979284369114,
+    "receivedKBytesPerSec" : 7.5403130885122405,
+    "sentKBytesPerSec" : 20.763447504708097
+  },
+  "Single Prediction Request" : {
+    "transaction" : "Single Prediction Request",
+    "sampleCount" : 100,
+    "errorCount" : 0,
+    "errorPct" : 0.0,
+    "meanResTime" : 36.72999999999999,
+    "medianResTime" : 43.0,
+    "minResTime" : 1.0,
+    "maxResTime" : 48.0,
+    "pct1ResTime" : 45.0,
+    "pct2ResTime" : 46.0,
+    "pct3ResTime" : 47.989999999999995,
+    "throughput" : 47.080979284369114,
+    "receivedKBytesPerSec" : 7.5403130885122405,
+    "sentKBytesPerSec" : 20.763447504708097
+  }
+}

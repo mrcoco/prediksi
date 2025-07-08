@@ -1,0 +1,26 @@
+{
+    "algorithm": "c45",
+    "parameters": {
+        "min_samples_split": 2,
+        "min_samples_leaf": 1,
+        "max_depth": 5,
+        "criterion": "entropy"
+    },
+    "features": [
+        "matematika_1",
+        "bahasa_indonesia_1",
+        "bahasa_inggris_1",
+        "ipa_1",
+        "ips_1",
+        "matematika_2",
+        "bahasa_indonesia_2",
+        "bahasa_inggris_2",
+        "ipa_2",
+        "ips_2",
+        "kehadiran",
+        "perilaku"
+    ],
+    "target": "prestasi_akademik",
+    "test_size": 0.2,
+    "random_state": 42
+} 

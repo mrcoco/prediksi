@@ -1,0 +1,3694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+        function logout() {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user_data');
+            window.location.href = 'login.html';
+        }
+        
+        // Check if user is authenticated
+        if (!localStorage.getItem('access_token')) {
+            window.location.href = 'login.html';
+        }
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPPAS - Sistem Prediksi Prestasi Akademik Siswa)</title>
+    
+    <!-- Kendo UI CSS -->
+    <link rel="stylesheet" href="styles/kendo.common-bootstrap.min.css">
+    <link rel="stylesheet" href="styles/kendo.bootstrap-v4.min.css">
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    
+    D3.js
+    <!-- <script src="https://d3js.org/d3.v7.min.js"></script> -->
+    
+    
+    <!-- Custom CSS -->
+    <!-- <link rel="stylesheet" href="styles/custom.css"> -->
+    <script>
+        var timestamp = Math.floor(Date.now() / 1000);
+        document.write('<link rel="stylesheet" href="styles/custom.css?v=' + timestamp + '">');
+    </script>
+    
+    <style>
+        #toast-container {
+            position: fixed;
+            z-index: 10000;
+            top: 20px;
+            right: 20px;
+        }
+        
+        /* Enhanced main-content fixes */
+        .main-content {
+            position: relative !important;
+            top: 0 !important;
+            padding-top: 20px;
+            box-sizing: border-box !important;
+        }
+        
+        /* Ensure wrapper behaves correctly */
+        .wrapper {
+            width: 100% !important;
+            max-width: 100% !important;
+            overflow-x: hidden !important;
+            box-sizing: border-box;
+        }
+        
+        /* Force proper sizing for all content elements */
+        .main-content .card,
+        .main-content .row,
+        .main-content .col-md-3,
+        .main-content .col-md-4,
+        .main-content .col-md-5,
+        .main-content .col-md-6,
+        .main-content .col-md-7,
+        .main-content .col-md-8,
+        .main-content .col-md-9,
+        .main-content .col-md-12 {
+            max-width: 100% !important;
+            box-sizing: border-box !important;
+        }
+        
+        /* Prevent horizontal overflow */
+        .main-content * {
+            box-sizing: border-box;
+        }
+        
+        /* Enhanced responsive behavior */
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+        }
+        
+        /* Debug helper - remove in production */
+        .debug-info {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 5px 10px;
+            font-size: 12px;
+            border-radius: 4px;
+            z-index: 9999;
+            display: none; /* Hidden by default */
+        }
+        
+        /* Dual Tree Visualization Styling */
+        .dual-tree-container {
+            min-height: 500px;
+            position: relative;
+        }
+        
+        #static-tree-container, #visualization-container {
+            min-height: 450px;
+            position: relative;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            background: #f8f9fa;
+            overflow: hidden;
+        }
+        
+        #static-tree-container img {
+            max-width: 100%;
+            height: auto;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        #static-tree-container img:hover {
+            transform: scale(1.05);
+        }
+        
+        .loading-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 200px;
+            color: #6c757d;
+        }
+        
+        .tree-comparison-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 0;
+        }
+        
+        .tree-comparison-header h5 {
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        .version-badge {
+            font-size: 0.75rem;
+            padding: 4px 8px;
+        }
+        
+        /* Enhanced card styling for tree visualization */
+        .tree-card {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: none;
+            transition: all 0.3s ease;
+        }
+        
+        .tree-card:hover {
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .tree-card .card-header {
+            border-bottom: 2px solid #dee2e6;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+        
+        /* Static tree specific styling */
+        .static-tree-wrapper {
+            position: relative;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .static-tree-overlay {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            z-index: 10;
+        }
+        
+        /* Interactive tree specific styling */
+        .interactive-tree-controls {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 100;
+            display: flex;
+            gap: 5px;
+        }
+        
+        .tree-control-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 5px 8px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .tree-control-btn:hover {
+            background: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+                 /* Responsive adjustments */
+         @media (max-width: 768px) {
+             .dual-tree-container {
+                 min-height: 300px;
+             }
+             
+             #static-tree-container, #visualization-container {
+                 min-height: 250px;
+                 margin-bottom: 20px;
+             }
+         }
+         
+         /* Feature Statistics Styling */
+         .feature-statistics-table {
+             width: 100%;
+             border-collapse: collapse;
+             margin-top: 15px;
+             background: white;
+             border-radius: 8px;
+             overflow: hidden;
+             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+         }
+         
+         .feature-statistics-table th {
+             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+             color: white;
+             padding: 12px 15px;
+             text-align: left;
+             font-weight: 600;
+             font-size: 14px;
+             border: none;
+         }
+         
+         .feature-statistics-table td {
+             padding: 10px 15px;
+             border-bottom: 1px solid #e9ecef;
+             font-size: 13px;
+             vertical-align: middle;
+         }
+         
+         .feature-statistics-table tbody tr:hover {
+             background-color: #f8f9fa;
+         }
+         
+         .feature-statistics-table tbody tr:last-child td {
+             border-bottom: none;
+         }
+         
+         .feature-label {
+             font-weight: 600;
+             color: #495057;
+             min-width: 180px;
+         }
+         
+         .stat-value {
+             text-align: right;
+             font-family: 'Courier New', monospace;
+             font-weight: 500;
+         }
+         
+         .stat-value.currency {
+             color: #28a745;
+         }
+         
+         .stat-value.percentage {
+             color: #007bff;
+         }
+         
+         .stat-value.score {
+             color: #6f42c1;
+         }
+         
+         .stat-value.count {
+             color: #fd7e14;
+         }
+         
+         .statistics-tabs {
+             display: flex;
+             margin-bottom: 20px;
+             border-bottom: 2px solid #e9ecef;
+         }
+         
+         .statistics-tab {
+             padding: 10px 20px;
+             background: none;
+             border: none;
+             border-bottom: 3px solid transparent;
+             cursor: pointer;
+             font-weight: 500;
+             color: #6c757d;
+             transition: all 0.3s ease;
+         }
+         
+         .statistics-tab.active {
+             color: #007bff;
+             border-bottom-color: #007bff;
+             background: rgba(0, 123, 255, 0.05);
+         }
+         
+         .statistics-tab:hover {
+             color: #007bff;
+             background: rgba(0, 123, 255, 0.05);
+         }
+         
+         .statistics-content {
+             display: none;
+         }
+         
+         .statistics-content.active {
+             display: block;
+         }
+         
+         .category-distribution {
+             display: flex;
+             flex-wrap: wrap;
+             gap: 15px;
+             margin-top: 15px;
+         }
+         
+         .category-item {
+             background: #f8f9fa;
+             border: 1px solid #dee2e6;
+             border-radius: 8px;
+             padding: 15px;
+             min-width: 150px;
+             text-align: center;
+             transition: all 0.3s ease;
+         }
+         
+         .category-item:hover {
+             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+             transform: translateY(-2px);
+         }
+         
+         .category-label {
+             font-size: 12px;
+             color: #6c757d;
+             margin-bottom: 5px;
+             text-transform: uppercase;
+             font-weight: 600;
+         }
+         
+         .category-value {
+             font-size: 24px;
+             font-weight: 700;
+             color: #495057;
+         }
+         
+         .category-percentage {
+             font-size: 11px;
+             color: #6c757d;
+             margin-top: 3px;
+         }
+         
+         /* Responsive table */
+         @media (max-width: 768px) {
+             .feature-statistics-table {
+                 font-size: 12px;
+             }
+             
+             .feature-statistics-table th,
+             .feature-statistics-table td {
+                 padding: 8px 10px;
+             }
+             
+             .statistics-tabs {
+                 flex-wrap: wrap;
+             }
+             
+             .statistics-tab {
+                 padding: 8px 15px;
+                 font-size: 14px;
+             }
+             
+             .category-distribution {
+                 justify-content: center;
+             }
+             
+             .category-item {
+                 min-width: 120px;
+                 padding: 12px;
+             }
+         }
+        
+        /* Token Countdown Styling */
+        .token-countdown {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 12px;
+            border-radius: 20px;
+            margin-right: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .token-countdown:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .token-countdown i {
+            margin-right: 8px;
+            font-size: 14px;
+        }
+        
+        .countdown-text {
+            color: white;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        
+        .countdown-timer-warning {
+            color: #ffc107 !important;
+            animation: pulse 1s infinite;
+        }
+        
+        .countdown-timer-danger {
+            color: #dc3545 !important;
+            animation: pulse 0.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        /* Enhanced User Form Template Styling */
+        .k-edit-form-container {
+            max-width: 1100px !important;
+            width: 90% !important;
+            margin: 0 auto;
+            padding: 30px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+            min-height: 600px;
+            box-sizing: border-box;
+        }
+        
+        /* Form Header Styling */
+        .k-edit-form-container .form-header {
+            padding: 20px 0;
+            border-bottom: 2px solid #f1f5f9;
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        .k-edit-form-container .form-header h4 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+        
+        .k-edit-form-container .form-header .form-title {
+            position: relative;
+        }
+        
+        .k-edit-form-container .form-header p {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 0;
+        }
+        
+        .k-edit-form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #007bff 0%, #6c5ce7 50%, #00cec9 100%);
+            border-radius: 12px 12px 0 0;
+        }
+        
+        .k-edit-form-container .row {
+            margin-bottom: 20px;
+            margin-left: -10px;
+            margin-right: -10px;
+        }
+        
+        .k-edit-form-container .row .col-md-6,
+        .k-edit-form-container .row .col-md-8,
+        .k-edit-form-container .row .col-md-4,
+        .k-edit-form-container .row .col-md-12 {
+            padding-left: 10px;
+            padding-right: 10px;
+            box-sizing: border-box;
+        }
+        
+        /* Ensure columns don't break */
+        .k-edit-form-container .form-main-content .row {
+            margin-left: -5px;
+            margin-right: -5px;
+        }
+        
+        .k-edit-form-container .form-main-content .col-md-6 {
+            padding-left: 5px;
+            padding-right: 5px;
+            flex: 0 0 50%;
+            max-width: 50%;
+        }
+        
+        .k-edit-form-container .k-edit-label {
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 14px;
+            display: block;
+        }
+        
+        .k-edit-form-container .k-edit-field {
+            margin-bottom: 15px;
+            position: relative;
+        }
+        
+        /* Form Section Headers */
+        .k-edit-form-container h6,
+        .k-edit-form-container .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e2e8f0;
+            position: relative;
+        }
+        
+        .k-edit-form-container h6::after,
+        .k-edit-form-container .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background: #007bff;
+        }
+        
+        /* Main Form Layout */
+        .k-edit-form-container .form-main-content {
+            margin-bottom: 30px;
+        }
+        
+        .k-edit-form-container .form-column-content {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 25px;
+            height: 100%;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+            margin: 0 5px;
+            box-sizing: border-box;
+        }
+        
+        .k-edit-form-container .form-column-content:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border-color: #cbd5e0;
+        }
+        
+        .k-edit-form-container .form-section {
+            margin-bottom: 0;
+        }
+        
+        .k-edit-form-container .form-section-full {
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 25px;
+            margin-left: 5px;
+            margin-right: 5px;
+            position: relative;
+            box-sizing: border-box;
+        }
+        
+        .k-edit-form-container .form-section-full::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #10b981 0%, #3b82f6 50%, #8b5cf6 100%);
+            border-radius: 12px 12px 0 0;
+        }
+        
+        /* Status Check Enhancement */
+        .k-edit-form-container .status-check {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border: 2px solid #10b981;
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-top: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .k-edit-form-container .status-check:hover {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+        
+        .k-edit-form-container .text-danger {
+            color: #e53e3e !important;
+            font-weight: 500;
+        }
+        
+        .k-edit-form-container .text-primary {
+            color: #3182ce !important;
+        }
+        
+        .k-edit-form-container .form-text {
+            font-size: 12px;
+            color: #718096;
+            margin-top: 4px;
+            font-style: italic;
+        }
+        
+        /* Enhanced Alert Styling */
+        .k-edit-form-container .alert {
+            border-radius: 8px;
+            border: none;
+            padding: 15px 20px;
+            margin-top: 25px;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .k-edit-form-container .alert-info {
+            color: #065f46;
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border-left: 4px solid #10b981;
+        }
+        
+        .k-edit-form-container .alert i {
+            color: #10b981;
+            margin-right: 8px;
+        }
+        
+        .k-edit-form-container .alert .alert-icon {
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        
+        .k-edit-form-container .alert .alert-icon i {
+            color: #10b981;
+            opacity: 0.8;
+        }
+        
+        .k-edit-form-container .alert .alert-content {
+            flex: 1;
+        }
+        
+        .k-edit-form-container .alert .alert-heading {
+            font-size: 14px;
+            font-weight: 600;
+            color: #047857;
+            margin-bottom: 8px;
+        }
+        
+        .k-edit-form-container .alert ul {
+            padding-left: 18px;
+            line-height: 1.6;
+        }
+        
+        .k-edit-form-container .alert li {
+            color: #065f46;
+            margin-bottom: 3px;
+        }
+        
+        .k-edit-form-container .alert li:last-child {
+            margin-bottom: 0;
+        }
+        
+        /* Enhanced HR Styling */
+        .k-edit-form-container hr {
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, #e2e8f0 50%, transparent 100%);
+            margin: 30px 0;
+            position: relative;
+        }
+        
+        .k-edit-form-container hr::after {
+            content: '👤';
+            position: absolute;
+            left: 50%;
+            top: -12px;
+            transform: translateX(-50%);
+            background: white;
+            padding: 0 10px;
+            font-size: 16px;
+        }
+        
+        /* Enhanced Form Controls */
+        .k-edit-form-container .form-check {
+            display: flex;
+            align-items: center;
+            margin-top: 8px;
+            padding: 12px 16px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s ease;
+        }
+        
+        .k-edit-form-container .form-check:hover {
+            background: #edf2f7;
+            border-color: #cbd5e0;
+        }
+        
+        .k-edit-form-container .form-check-input {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+        }
+        
+        .k-edit-form-container .form-check-label {
+            margin-bottom: 0;
+            font-weight: 500;
+            color: #4a5568;
+            cursor: pointer;
+        }
+        
+        /* Enhanced Input Styling */
+        .k-edit-form-container .k-textbox,
+        .k-edit-form-container .k-dropdown,
+        .k-edit-form-container textarea {
+            width: 100% !important;
+            border-radius: 8px !important;
+            border: 2px solid #e2e8f0 !important;
+            padding: 12px 16px !important;
+            font-size: 14px !important;
+            transition: all 0.3s ease !important;
+            background: #ffffff !important;
+        }
+        
+        .k-edit-form-container .k-textbox:focus,
+        .k-edit-form-container .k-dropdown:focus,
+        .k-edit-form-container textarea:focus {
+            border-color: #3182ce !important;
+            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1) !important;
+            outline: none !important;
+        }
+        
+        .k-edit-form-container .k-textbox:hover,
+        .k-edit-form-container .k-dropdown:hover,
+        .k-edit-form-container textarea:hover {
+            border-color: #cbd5e0 !important;
+        }
+        
+        /* Enhanced Validation Styling */
+        .k-edit-form-container .k-invalid {
+            border-color: #e53e3e !important;
+            background-color: #fef5f5 !important;
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        .k-edit-form-container .k-invalid-msg {
+            color: #e53e3e;
+            font-size: 12px;
+            display: block;
+            margin-top: 6px;
+            padding: 6px 12px;
+            background: #fef5f5;
+            border-radius: 6px;
+            border-left: 3px solid #e53e3e;
+            font-weight: 500;
+        }
+        
+        /* Form Field Icons */
+        .k-edit-form-container .k-edit-field.with-icon {
+            position: relative;
+        }
+        
+        .k-edit-form-container .k-edit-field.with-icon::before {
+            content: '';
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            background-size: contain;
+            opacity: 0.5;
+            z-index: 2;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .k-edit-form-container {
+                padding: 20px;
+                margin: 10px;
+                max-width: calc(100% - 20px);
+            }
+            
+            .k-edit-form-container .row {
+                margin-left: -5px;
+                margin-right: -5px;
+            }
+            
+            .k-edit-form-container .row .col-md-6,
+            .k-edit-form-container .row .col-md-8,
+            .k-edit-form-container .row .col-md-4,
+            .k-edit-form-container .row .col-md-12 {
+                padding-left: 5px;
+                padding-right: 5px;
+                margin-bottom: 15px;
+            }
+            
+            /* Mobile: Stack columns vertically */
+            .k-edit-form-container .form-main-content .col-md-6 {
+                margin-bottom: 20px;
+            }
+            
+            .k-edit-form-container .form-column-content {
+                padding: 20px;
+                margin-bottom: 15px;
+            }
+            
+            .k-edit-form-container .form-section-full {
+                padding: 20px;
+                margin-top: 15px;
+            }
+            
+            /* Mobile: Adjust form header */
+            .k-edit-form-container .form-header {
+                padding: 15px 0;
+                margin-bottom: 20px;
+            }
+            
+            .k-edit-form-container .form-header h4 {
+                font-size: 20px;
+            }
+            
+            /* Mobile: Status check adjustment */
+            .k-edit-form-container .status-check {
+                padding: 12px 15px;
+                margin-top: 10px;
+            }
+        }
+        
+        /* Medium screens (tablets) */
+        @media (min-width: 768px) and (max-width: 991px) {
+            .k-edit-form-container {
+                max-width: 95%;
+                width: 95% !important;
+                padding: 20px;
+            }
+            
+            .k-edit-form-container .form-column-content {
+                padding: 20px;
+                margin: 0 3px;
+            }
+            
+            .k-edit-form-container .form-section-full {
+                padding: 20px;
+                margin-left: 3px;
+                margin-right: 3px;
+            }
+            
+            .k-edit-form-container .form-main-content .row {
+                margin-left: -3px;
+                margin-right: -3px;
+            }
+            
+            .k-edit-form-container .form-main-content .col-md-6 {
+                padding-left: 3px;
+                padding-right: 3px;
+            }
+        }
+        
+        /* Ensure 2-column layout on medium and larger screens */
+        @media (min-width: 768px) {
+            .k-edit-form-container .form-main-content .col-md-6 {
+                flex: 0 0 50% !important;
+                max-width: 50% !important;
+            }
+        }
+        
+        /* Large screens optimization */
+        @media (min-width: 1200px) {
+            .k-edit-form-container {
+                max-width: 1300px !important;
+                width: 95% !important;
+                padding: 30px;
+            }
+            
+            .k-edit-form-container .form-column-content {
+                padding: 25px;
+                margin: 0 8px;
+            }
+            
+            .k-edit-form-container .form-section-full {
+                padding: 30px;
+                margin-left: 8px;
+                margin-right: 8px;
+            }
+            
+            .k-edit-form-container .row {
+                margin-left: -12px;
+                margin-right: -12px;
+            }
+            
+            .k-edit-form-container .row .col-md-6,
+            .k-edit-form-container .row .col-md-8,
+            .k-edit-form-container .row .col-md-4,
+            .k-edit-form-container .row .col-md-12 {
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+            
+            .k-edit-form-container .form-main-content .row {
+                margin-left: -8px;
+                margin-right: -8px;
+            }
+            
+            .k-edit-form-container .form-main-content .col-md-6 {
+                padding-left: 8px;
+                padding-right: 8px;
+            }
+        }
+        
+        /* Animation for validation */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        /* Fix for readonly field styling */
+        .k-edit-form-container .readonly-field {
+            background-color: #f8f9fa !important;
+            color: #6c757d !important;
+        }
+        
+        /* Delete Confirmation Dialog Styling */
+        .delete-confirmation {
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .delete-confirmation .icon-container {
+            margin-bottom: 20px;
+        }
+        
+        .delete-confirmation .icon-container i {
+            font-size: 48px;
+            color: #f39c12;
+        }
+        
+        .delete-confirmation .message {
+            margin-bottom: 25px;
+        }
+        
+        .delete-confirmation .message h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .delete-confirmation .message p {
+            margin-bottom: 8px;
+            text-align: left;
+        }
+        
+        .delete-confirmation .message p strong {
+            color: #34495e;
+            font-weight: 600;
+        }
+        
+        .delete-confirmation .message hr {
+            margin: 15px 0;
+            border-color: #ecf0f1;
+        }
+        
+        .delete-confirmation .message .text-danger {
+            color: #e74c3c !important;
+            font-weight: 500;
+            text-align: center;
+            margin-top: 10px;
+        }
+        
+        .delete-confirmation .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .delete-confirmation .button-container button {
+            min-width: 120px;
+            padding: 10px 20px;
+            font-weight: 500;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        
+        .delete-confirmation .button-container .k-button-solid-base {
+            background-color: #95a5a6;
+            border-color: #95a5a6;
+            color: white;
+        }
+        
+        .delete-confirmation .button-container .k-button-solid-base:hover {
+            background-color: #7f8c8d;
+            border-color: #7f8c8d;
+            transform: translateY(-1px);
+        }
+        
+        .delete-confirmation .button-container .k-button-solid-error {
+            background-color: #e74c3c;
+            border-color: #e74c3c;
+            color: white;
+        }
+        
+        .delete-confirmation .button-container .k-button-solid-error:hover {
+            background-color: #c0392b;
+            border-color: #c0392b;
+            transform: translateY(-1px);
+        }
+        
+        /* Badge styling in delete confirmation */
+        .delete-confirmation .badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .delete-confirmation .badge-success {
+            background-color: #27ae60;
+            color: white;
+        }
+        
+        .delete-confirmation .badge-warning {
+            background-color: #f39c12;
+            color: white;
+        }
+        
+        .delete-confirmation .badge-danger {
+            background-color: #e74c3c;
+            color: white;
+        }
+    </style>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+</head>
+<body>
+    <!-- <header>
+        <div id="header-content">OKEKE</div>
+        <button id="sidebar-toggle" class="btn btn-sm btn-secondary"><i class="k-icon k-i-menu"></i></button>
+    </header> -->
+    <script>
+        // Add logout functionality
+        function logout() {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user_data');
+            window.location.href = 'login.html';
+        }
+    </script>
+    <div id="toast-container"></div>
+    
+    <!-- Debug info (remove in production) -->
+    <div class="debug-info" id="debugInfo">
+        Sidebar: <span id="sidebarWidth">250px</span> | 
+        Main: <span id="mainWidth">calc(100% - 250px)</span> | 
+        Window: <span id="windowWidth">0px</span>
+    </div>
+    
+    <!-- Header -->
+    <header class="main-header">
+        <nav class="navbar">
+            <div id="sidebar-toggle" class="d-flex align-items-center">
+                <button class="sidebar-toggle-btn me-3" id="toggleSidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h5 class="mb-0 text-white">SPPAS</h5>
+            </div>
+            <div class="ms-auto d-flex align-items-center">
+                
+                <div class="token-countdown" id="tokenCountdown">
+                    <i class="fas fa-clock text-warning"></i>
+                    <span class="countdown-text">Token: <span id="countdown-timer">--:--</span></span>
+                    <span id="token-status-indicator" class="token-valid" title="Status Token"></span>
+                    <button class="btn btn-sm btn-outline-light ms-2" onclick="showTokenInfoDialog()" title="Cek Status Token" data-toggle="tooltip">
+                        <i class="fas fa-info-circle"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-success ms-1" id="btn-refresh-token" onclick="manualRefreshToken()" title="Refresh Token" data-toggle="tooltip">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+                <span class="text-white me-3" id="user-info">
+                    <i class="fas fa-user me-1"></i>
+                    <span id="current-username">Loading...</span>
+                    <span class="badge badge-secondary ms-1" id="current-role">-</span>
+                </span>
+                <!-- <button class="btn btn-outline-light btn-sm" onclick="showUserProfile()">
+                    <i class="fas fa-user-circle me-1"></i>Profile
+                </button>
+                <button class="btn btn-outline-light btn-sm ms-2" onclick="logout()">
+                    <i class="fas fa-sign-out-alt me-1"></i>Logout
+                </button> -->
+            </div>
+        </nav>
+        <div class="header-right">
+            <div class="user-menu">
+                <a href="#" class="nav-link" data-page="profile" title="Profile User" data-toggle="tooltip" data-placement="bottom">
+                    <i class="fas fa-user-circle"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <h5>Sistem Prediksi Prestasi Akademik Siswa</h5>
+            </div>
+            <div class="sidebar-menu">
+                <a href="#" class="sidebar-link active" data-page="dashboard" data-tooltip="Dashboard">
+                    <i class="sidebar-icon fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="sidebar-link" data-page="siswa" data-tooltip="Data Siswa">
+                    <i class="sidebar-icon fas fa-user-graduate"></i>
+                    <span>Data Siswa</span>
+                </a>
+                <a href="#" class="sidebar-link" data-page="nilai" data-tooltip="Nilai Raport">
+                    <i class="sidebar-icon fas fa-book"></i>
+                    <span>Nilai Raport</span>
+                </a>
+                
+                <a href="#" class="sidebar-link" data-page="presensi" data-tooltip="Presensi">
+                    <i class="sidebar-icon fas fa-calendar-check"></i>
+                    <span>Presensi</span>
+                </a>
+                <a href="#" class="sidebar-link" data-page="penghasilan" data-tooltip="Penghasilan Ortu">
+                    <i class="sidebar-icon fas fa-money-bill-wave"></i>
+                    <span>Penghasilan Ortu</span>
+                </a>
+                <a href="#" class="sidebar-link" data-page="prediksi" data-tooltip="Prediksi Prestasi">
+                    <i class="sidebar-icon fas fa-chart-line"></i>
+                    <span>Prediksi Prestasi</span>
+                </a>
+                <a href="#" class="sidebar-link" data-page="users" data-tooltip="Manajemen User">
+                    <i class="sidebar-icon fas fa-users"></i>
+                    <span>Manajemen User</span>
+                </a>
+                <a href="#" class="sidebar-link" data-page="user-guide" data-tooltip="User Guide">
+                    <i class="sidebar-icon fas fa-book-open"></i>
+                    <span>User Guide</span>
+                </a>
+                <a href="#profile" class="sidebar-link" data-page="profile" data-tooltip="Profile">
+                    <i class="sidebar-icon fas fa-user-circle"></i>
+                    <span>Profile</span>
+                </a>
+                <a href="#" class="sidebar-link" data-page="about" data-tooltip="About SPPAS">
+                    <i class="sidebar-icon fas fa-info-circle"></i>
+                    <span>About</span>
+                </a>
+                
+                <a href="#" class="sidebar-link" onclick="logout()" data-tooltip="Logout">
+                    <i class="sidebar-icon fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </nav>
+        
+        <!-- Main Content -->
+        <div class="main-content" id="mainContent">
+            <!-- Content Container -->
+            <div class="content-container">
+                <!-- Dashboard Content -->
+                <div class="content-section" id="dashboard-content">
+                    <!-- Dashboard Page -->
+                    <div class="page" id="dashboard-page">
+                        <h2 class="page-title">Dashboard</h2>
+                        
+                        <!-- System Production Intro Section -->
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <div class="card dashboard-intro-card">
+                                    <div class="card-body">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-8">
+                                                <div class="intro-content">
+                                                    <div class="intro-header">
+                                                        <h4 class="intro-title">
+                                                            <i class="fas fa-graduation-cap text-primary mr-2"></i>
+                                                            SPPAS - Sistem Prediksi Prestasi Akademik Siswa
+                                                        </h4>
+                                                        <p class="intro-subtitle text-muted mb-3">
+                                                            Dashboard Sistem Informasi untuk Prediksi dan Analisis Prestasi Akademik Siswa
+                                                        </p>
+                                                    </div>
+                                                    <div class="intro-description">
+                                                        <p class="mb-2">
+                                                            <strong>SPPAS</strong> adalah platform prediksi prestasi siswa yang menggunakan 
+                                                            <span class="badge badge-primary">algoritma C4.5 Decision Tree</span> untuk 
+                                                            menganalisis dan memprediksi performa akademik berdasarkan data historis siswa.
+                                                        </p>
+                                                        <div class="intro-features">
+                                                            <span class="feature-badge">
+                                                                <i class="fas fa-brain mr-1"></i>
+                                                                Machine Learning
+                                                            </span>
+                                                            <span class="feature-badge">
+                                                                <i class="fas fa-chart-line mr-1"></i>
+                                                                Real-time Analytics
+                                                            </span>
+                                                            <span class="feature-badge">
+                                                                <i class="fas fa-users mr-1"></i>
+                                                                Multi-user System
+                                                            </span>
+                                                            <span class="feature-badge">
+                                                                <i class="fas fa-shield-alt mr-1"></i>
+                                                                Secure & Reliable
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- <div class="col-md-4">
+                                                <div class="intro-stats">
+                                                    <div class="row">
+                                                        <div class="col-6">
+                                                            <div class="stat-item">
+                                                                <div class="stat-icon">
+                                                                    <i class="fas fa-cog text-info"></i>
+                                                                </div>
+                                                                <div class="stat-content">
+                                                                    <div class="stat-value" id="system-status-intro">Online</div>
+                                                                    <div class="stat-label">Status</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <div class="stat-item">
+                                                                <div class="stat-icon">
+                                                                    <i class="fas fa-code-branch text-success"></i>
+                                                                </div>
+                                                                <div class="stat-content">
+                                                                    <div class="stat-value">v2.0.1</div>
+                                                                    <div class="stat-label">Version</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <div class="stat-item">
+                                                                <div class="stat-icon">
+                                                                    <i class="fas fa-clock text-warning"></i>
+                                                                </div>
+                                                                <div class="stat-content">
+                                                                    <div class="stat-value">< 2s</div>
+                                                                    <div class="stat-label">Response</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <div class="stat-item">
+                                                                <div class="stat-icon">
+                                                                    <i class="fas fa-bullseye text-danger"></i>
+                                                                </div>
+                                                                <div class="stat-content">
+                                                                    <div class="stat-value">> 85%</div>
+                                                                    <div class="stat-label">Accuracy</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> -->
+                                        </div>
+                                        <div class="intro-footer">
+                                            <div class="row align-items-center">
+                                                <div class="col-md-8">
+                                                </div>
+                                                <div class="col-md-4 text-right">
+                                                    <div class="intro-actions">
+                                                        <button class="btn btn-outline-primary btn-sm" onclick="showSystemInfoModal()">
+                                                            <i class="fas fa-info-circle mr-1"></i>
+                                                            Detail Sistem
+                                                        </button>
+                                                        <a href="#" class="btn btn-outline-secondary btn-sm" data-page="user-guide">
+                                                            <i class="fas fa-book mr-1"></i>
+                                                            User Guide
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="card dashboard-card bg-primary text-white">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-user-graduate card-icon"></i>
+                                        <h5 class="card-title">Total Siswa</h5>
+                                        <h3 class="card-text" id="total-siswa">0</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card dashboard-card bg-success text-white">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-chart-line card-icon"></i>
+                                        <h5 class="card-title">Prestasi Tinggi</h5>
+                                        <h3 class="card-text" id="prestasi-tinggi">0</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card dashboard-card bg-warning text-white">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-chart-bar card-icon"></i>
+                                        <h5 class="card-title">Prestasi Sedang</h5>
+                                        <h3 class="card-text" id="prestasi-sedang">0</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card dashboard-card bg-danger text-white">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-chart-area card-icon"></i>
+                                        <h5 class="card-title">Prestasi Rendah</h5>
+                                        <h3 class="card-text" id="prestasi-rendah">0</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- System Information Section -->
+                        
+                        
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="card dashboard-card">
+                                    <div class="card-header bg-light">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-chart-pie mr-2 text-primary"></i>
+                                            Distribusi Prestasi
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="chart-prestasi" style="height: 300px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card dashboard-card">
+                                    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-chart-bar mr-2 text-success"></i>
+                                            Bar Chart Kategori
+                                        </h5>
+                                        <span class="badge badge-success">D3.js</span>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="dashboard-barchart-container">
+                                            <div class="dashboard-barchart-controls mb-3">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <select id="dashboard-chart-type" class="form-control form-control-sm" onchange="updateDashboardBarChart()">
+                                                            <option value="penghasilan">Penghasilan Orang Tua</option>
+                                                            <option value="kehadiran">Kehadiran Siswa</option>
+                                                            <option value="nilai-raport">Nilai Raport</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <select id="dashboard-chart-mode" class="form-control form-control-sm" onchange="updateDashboardBarChart()">
+                                                            <option value="count">Jumlah</option>
+                                                            <option value="percentage">Persentase</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="dashboard-barchart" style="height: 250px; display: flex; align-items: center; justify-content: center;">
+                                                <div class="text-center">
+                                                    <i class="fas fa-spinner fa-spin fa-2x text-muted mb-3"></i>
+                                                    <p class="text-muted">Memuat bar chart...</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Feature Statistics Section -->
+                        <div class="row mt-4">
+                            <div class="col-md-12">
+                                <div class="card dashboard-card">
+                                    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-chart-bar mr-2 text-info"></i>
+                                            Statistik Distribusi Fitur
+                                        </h5>
+                                        <button class="btn btn-sm btn-outline-primary" onclick="refreshFeatureStatistics()">
+                                            <i class="fas fa-sync-alt mr-1"></i>
+                                            Refresh
+                                        </button>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="feature-statistics-container">
+                                            <div class="text-center p-4">
+                                                <i class="fas fa-spinner fa-spin fa-2x text-muted mb-3"></i>
+                                                <p class="text-muted">Memuat statistik fitur...</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Dual Tree Visualization Section -->
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="card dashboard-card tree-card">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-image mr-2 text-primary"></i>
+                                            Pohon Keputusan C4.5 (Static)
+                                        </h5>
+                                        <span class="badge badge-secondary version-badge">Versi Lama</span>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div id="static-tree-container" class="dual-tree-container">
+                                            <div class="loading-placeholder">
+                                                <i class="fas fa-spinner fa-spin fa-2x text-muted mb-3"></i>
+                                                <p class="text-muted">Memuat visualisasi static...</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card dashboard-card tree-card">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-project-diagram mr-2 text-success"></i>
+                                            Pohon Keputusan C4.5 (Interactive)
+                                        </h5>
+                                        <span class="badge badge-success version-badge">D3.js</span>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div id="visualization-container" class="dual-tree-container">
+                                            <div class="loading-placeholder">
+                                                <i class="fas fa-spinner fa-spin fa-2x text-muted mb-3"></i>
+                                                <p class="text-muted">Memuat visualisasi interaktif...</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                        
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="card dashboard-card">
+                                    <div class="card-header bg-light">
+                                        <h5 class="mb-0">Confusion Matrix C4.5</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="confusion-matrix-container" class="text-center">
+                                            <p>Confusion matrix akan ditampilkan di sini setelah model dilatih.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card dashboard-card">
+                                    <div class="card-header bg-light">
+                                        <h5 class="mb-0">Metrik Evaluasi Model</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="model-metrics-container">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div class="metric-item">
+                                                        <h6 class="metric-label">Akurasi</h6>
+                                                        <h4 class="metric-value text-primary" id="accuracy-value">-</h4>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="metric-item">
+                                                        <h6 class="metric-label">Precision</h6>
+                                                        <h4 class="metric-value text-success" id="precision-value">-</h4>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="metric-item">
+                                                        <h6 class="metric-label">Recall</h6>
+                                                        <h4 class="metric-value text-warning" id="recall-value">-</h4>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="metric-item">
+                                                        <h6 class="metric-label">F1-Score</h6>
+                                                        <h4 class="metric-value text-info" id="f1-score-value">-</h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mt-3">
+                                                <small class="text-muted">Model terakhir dilatih: <span id="last-trained">Belum pernah</span></small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Content -->
+                <div class="page" id="profile-page" style="display: none;">
+                    <div class="content-header">
+                        <h2 class="page-title">Profile</h2>
+                    </div>
+                    <div class="content-body">
+                        <div class="card">
+                            <div class="card-body">
+                                <form id="profile-form">
+                                    <!-- <div class="form-group">
+                                        <label>Email</label>
+                                        <input type="email" class="form-control" name="email" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>NIP</label>
+                                        <input type="text" class="form-control" name="profile[nip]">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Nama Lengkap</label>
+                                        <input type="text" class="form-control" name="profile[nama_lengkap]" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Jabatan</label>
+                                        <input type="text" class="form-control" name="profile[jabatan]" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>No. HP</label>
+                                        <input type="text" class="form-control" name="profile[no_hp]">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Alamat</label>
+                                        <textarea class="form-control" name="profile[alamat]" rows="3"></textarea>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <button type="submit" class="btn btn-primary">Update Profile</button>
+                                        <button type="button" class="btn btn-danger" onclick="logout()">Logout</button>
+                                    </div> -->
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- About Page -->
+                <div class="page" id="about-page" style="display: none;">
+                    <div class="content-header">
+                        <h2 class="page-title">
+                            <i class="fas fa-info-circle mr-2 text-info"></i>
+                            Tentang SPPAS
+                        </h2>
+                    </div>
+                    <div class="content-body">
+                        <!-- Hero Section -->
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <div class="card border-0 shadow-lg">
+                                    <div class="card-body text-center py-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 0.5rem;">
+                                        <i class="fas fa-graduation-cap fa-4x mb-3"></i>
+                                        <h1 class="display-4 font-weight-bold">SPPAS</h1>
+                                        <p class="lead mb-0">Sistem Prediksi Prestasi Akademik Siswa</p>
+                                        <p class="h5 font-weight-normal">Sistem Prediksi Prestasi Akademik Siswa Berbasis Machine Learning</p>
+                                        <div class="mt-4">
+                                            <span class="badge badge-light badge-pill px-3 py-2 mr-2">
+                                                <i class="fas fa-code mr-1"></i> Version 1.0
+                                            </span>
+                                            <span class="badge badge-light badge-pill px-3 py-2">
+                                                <i class="fas fa-calendar mr-1"></i> 2025
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- System Overview -->
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header bg-primary text-white">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-bullseye mr-2"></i>
+                                            Tentang Sistem
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="lead text-justify">
+                                            SPPAS adalah sistem prediksi prestasi siswa yang menggunakan algoritma <strong>C4.5 Decision Tree</strong> 
+                                            untuk membantu institusi pendidikan dalam menganalisis dan memprediksi prestasi akademik siswa 
+                                            berdasarkan data historis nilai raport, kondisi sosial ekonomi keluarga, dan tingkat kehadiran siswa.
+                                        </p>
+                                        
+                                        <div class="row mt-4">
+                                            <div class="col-md-4 text-center">
+                                                <div class="feature-highlight p-3">
+                                                    <i class="fas fa-brain fa-3x text-primary mb-3"></i>
+                                                    <h6 class="font-weight-bold">Machine Learning</h6>
+                                                    <p class="text-muted small">Algoritma C4.5 Decision Tree untuk prediksi akurat</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 text-center">
+                                                <div class="feature-highlight p-3">
+                                                    <i class="fas fa-chart-line fa-3x text-success mb-3"></i>
+                                                    <h6 class="font-weight-bold">Data Analytics</h6>
+                                                    <p class="text-muted small">Analisis mendalam dengan visualisasi interaktif</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 text-center">
+                                                <div class="feature-highlight p-3">
+                                                    <i class="fas fa-users fa-3x text-info mb-3"></i>
+                                                    <h6 class="font-weight-bold">User Friendly</h6>
+                                                    <p class="text-muted small">Interface yang mudah digunakan untuk semua pengguna</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Key Features -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="card h-100">
+                                    <div class="card-header bg-success text-white">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-star mr-2"></i>
+                                            Fitur Utama
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="list-unstyled">
+                                            <li class="mb-3">
+                                                <i class="fas fa-check-circle text-success mr-2"></i>
+                                                <strong>Prediksi Individual:</strong> Analisis prestasi per siswa dengan tingkat confidence
+                                            </li>
+                                            <li class="mb-3">
+                                                <i class="fas fa-check-circle text-success mr-2"></i>
+                                                <strong>Prediksi Batch:</strong> Evaluasi massal untuk seluruh kelas atau angkatan
+                                            </li>
+                                            <li class="mb-3">
+                                                <i class="fas fa-check-circle text-success mr-2"></i>
+                                                <strong>Visualisasi Data:</strong> Pohon keputusan, heatmap korelasi, dan bar chart interaktif
+                                            </li>
+                                            <li class="mb-3">
+                                                <i class="fas fa-check-circle text-success mr-2"></i>
+                                                <strong>Statistik Komprehensif:</strong> Analisis distribusi fitur dan korelasi variabel
+                                            </li>
+                                            <li class="mb-3">
+                                                <i class="fas fa-check-circle text-success mr-2"></i>
+                                                <strong>Export Data:</strong> Kemampuan ekspor hasil ke format Excel untuk reporting
+                                            </li>
+                                            <li class="mb-3">
+                                                <i class="fas fa-check-circle text-success mr-2"></i>
+                                                <strong>Riwayat Prediksi:</strong> Tracking dan monitoring hasil prediksi sebelumnya
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card h-100">
+                                    <div class="card-header bg-warning text-dark">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-database mr-2"></i>
+                                            Data Input
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-4">
+                                            <h6 class="font-weight-bold text-primary">
+                                                <i class="fas fa-book mr-1"></i> Nilai Raport
+                                            </h6>
+                                            <p class="text-muted small mb-2">4 mata pelajaran utama:</p>
+                                            <ul class="small text-muted">
+                                                <li>Matematika</li>
+                                                <li>Bahasa Indonesia</li>
+                                                <li>Bahasa Inggris</li>
+                                                <li>Ilmu Pengetahuan Alam (IPA)</li>
+                                            </ul>
+                                        </div>
+                                        
+                                        <div class="mb-4">
+                                            <h6 class="font-weight-bold text-success">
+                                                <i class="fas fa-money-bill-wave mr-1"></i> Penghasilan Orang Tua
+                                            </h6>
+                                            <ul class="small text-muted">
+                                                <li>Penghasilan Ayah</li>
+                                                <li>Penghasilan Ibu</li>
+                                                <li>Total & Kategori Penghasilan</li>
+                                            </ul>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <h6 class="font-weight-bold text-info">
+                                                <i class="fas fa-calendar-check mr-1"></i> Kehadiran Siswa
+                                            </h6>
+                                            <ul class="small text-muted">
+                                                <li>Jumlah Hadir, Sakit, Izin, Alpa</li>
+                                                <li>Persentase & Kategori Kehadiran</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Technical Specifications -->
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header bg-dark text-white">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-cogs mr-2"></i>
+                                            Spesifikasi Teknis
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <h6 class="font-weight-bold text-primary">Backend Technology</h6>
+                                                <ul class="list-unstyled small">
+                                                    <li><i class="fab fa-python mr-2 text-warning"></i> Python 3.8+</li>
+                                                    <li><i class="fas fa-server mr-2 text-info"></i> FastAPI Framework</li>
+                                                    <li><i class="fas fa-database mr-2 text-success"></i> PostgreSQL Database</li>
+                                                    <li><i class="fas fa-brain mr-2 text-danger"></i> Scikit-learn ML Library</li>
+                                                    <li><i class="fas fa-chart-bar mr-2 text-warning"></i> Pandas Data Analysis</li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <h6 class="font-weight-bold text-success">Frontend Technology</h6>
+                                                <ul class="list-unstyled small">
+                                                    <li><i class="fab fa-html5 mr-2 text-danger"></i> HTML5 & CSS3</li>
+                                                    <li><i class="fab fa-js-square mr-2 text-warning"></i> JavaScript ES6+</li>
+                                                    <li><i class="fab fa-bootstrap mr-2 text-primary"></i> Bootstrap 4.6</li>
+                                                    <li><i class="fas fa-table mr-2 text-info"></i> Kendo UI Components</li>
+                                                    <li><i class="fas fa-chart-line mr-2 text-success"></i> D3.js Visualization</li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <h6 class="font-weight-bold text-info">Infrastructure</h6>
+                                                <ul class="list-unstyled small">
+                                                    <li><i class="fab fa-docker mr-2 text-primary"></i> Docker Containerization</li>
+                                                    <li><i class="fas fa-network-wired mr-2 text-success"></i> Nginx Reverse Proxy</li>
+                                                    <li><i class="fas fa-tools mr-2 text-warning"></i> pgAdmin Database Management</li>
+                                                    <li><i class="fas fa-shield-alt mr-2 text-danger"></i> JWT Authentication</li>
+                                                    <li><i class="fas fa-cloud mr-2 text-info"></i> RESTful API Architecture</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Algorithm Details -->
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header bg-info text-white">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-sitemap mr-2"></i>
+                                            Algoritma C4.5 Decision Tree
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <p class="text-justify">
+                                                    Algoritma C4.5 adalah pengembangan dari algoritma ID3 yang menggunakan konsep 
+                                                    <strong>Information Gain</strong> dan <strong>Gain Ratio</strong> untuk membangun pohon keputusan. 
+                                                    Algoritma ini dipilih karena kemampuannya dalam menangani data kategorikal dan numerik, 
+                                                    serta dapat mengatasi missing values.
+                                                </p>
+                                                
+                                                <h6 class="font-weight-bold text-primary mt-3">Keunggulan C4.5:</h6>
+                                                <ul class="small">
+                                                    <li>Dapat menangani atribut numerik dan kategorikal</li>
+                                                    <li>Menggunakan Gain Ratio untuk mengurangi bias</li>
+                                                    <li>Dapat menangani missing values</li>
+                                                    <li>Melakukan pruning untuk menghindari overfitting</li>
+                                                    <li>Menghasilkan rules yang mudah dipahami</li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="bg-light p-3 rounded">
+                                                    <h6 class="font-weight-bold text-center">Metrik Evaluasi</h6>
+                                                    <div class="text-center">
+                                                        <div class="mb-2">
+                                                            <span class="badge badge-primary">Akurasi</span>
+                                                            <small class="d-block text-muted">Overall correctness</small>
+                                                        </div>
+                                                        <div class="mb-2">
+                                                            <span class="badge badge-success">Precision</span>
+                                                            <small class="d-block text-muted">Positive prediction accuracy</small>
+                                                        </div>
+                                                        <div class="mb-2">
+                                                            <span class="badge badge-warning">Recall</span>
+                                                            <small class="d-block text-muted">Sensitivity measure</small>
+                                                        </div>
+                                                        <div class="mb-2">
+                                                            <span class="badge badge-info">F1-Score</span>
+                                                            <small class="d-block text-muted">Harmonic mean</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- System Benefits -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="card border-success h-100">
+                                    <div class="card-header bg-success text-white">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-thumbs-up mr-2"></i>
+                                            Manfaat Sistem
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <h6 class="font-weight-bold text-primary">Untuk Guru & Pendidik:</h6>
+                                            <ul class="small">
+                                                <li>Identifikasi dini siswa berisiko</li>
+                                                <li>Program remedial yang lebih targeted</li>
+                                                <li>Efisiensi waktu dalam evaluasi</li>
+                                                <li>Data-driven decision making</li>
+                                            </ul>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <h6 class="font-weight-bold text-success">Untuk Administrasi Sekolah:</h6>
+                                            <ul class="small">
+                                                <li>Laporan analytics yang komprehensif</li>
+                                                <li>Monitoring prestasi secara real-time</li>
+                                                <li>Alokasi sumber daya yang optimal</li>
+                                                <li>Peningkatan kualitas pendidikan</li>
+                                            </ul>
+                                        </div>
+                                        
+                                        <div>
+                                            <h6 class="font-weight-bold text-info">Untuk Siswa & Orang Tua:</h6>
+                                            <ul class="small">
+                                                <li>Feedback prestasi yang objektif</li>
+                                                <li>Rekomendasi program pengembangan</li>
+                                                <li>Transparansi evaluasi akademik</li>
+                                                <li>Motivasi peningkatan prestasi</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card border-warning h-100">
+                                    <div class="card-header bg-warning text-dark">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-chart-line mr-2"></i>
+                                            Hasil yang Diharapkan
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-4">
+                                            <h6 class="font-weight-bold text-primary">
+                                                <i class="fas fa-clock mr-1"></i> Jangka Pendek (1-3 bulan)
+                                            </h6>
+                                            <ul class="small text-success">
+                                                <li>✅ Identifikasi siswa berisiko 50% lebih cepat</li>
+                                                <li>✅ Program remedial lebih efektif</li>
+                                                <li>✅ Efisiensi waktu guru meningkat 50%</li>
+                                                <li>✅ Implementasi data-driven decisions</li>
+                                            </ul>
+                                        </div>
+                                        
+                                        <div>
+                                            <h6 class="font-weight-bold text-success">
+                                                <i class="fas fa-trophy mr-1"></i> Jangka Panjang (6-12 bulan)
+                                            </h6>
+                                            <ul class="small text-primary">
+                                                <li>📈 Peningkatan rata-rata nilai 10-15%</li>
+                                                <li>📈 Penurunan siswa remedial 20%</li>
+                                                <li>📈 Peningkatan kehadiran siswa 5%</li>
+                                                <li>📈 Kepuasan stakeholder meningkat</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Contact & Support -->
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <div class="card border-primary">
+                                    <div class="card-header bg-primary text-white">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-headset mr-2"></i>
+                                            Dukungan & Kontak
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-4 text-center">
+                                                <i class="fas fa-envelope fa-2x text-primary mb-2"></i>
+                                                <h6 class="font-weight-bold">Email Support</h6>
+                                                <p class="small text-muted">support@SPPAS.com</p>
+                                                <p class="small">Response time: &lt; 4 jam</p>
+                                            </div>
+                                            <div class="col-md-4 text-center">
+                                                <i class="fab fa-whatsapp fa-2x text-success mb-2"></i>
+                                                <h6 class="font-weight-bold">WhatsApp</h6>
+                                                <p class="small text-muted">+62-xxx-xxxx-xxxx</p>
+                                                <p class="small">Senin-Jumat: 08:00-17:00 WIB</p>
+                                            </div>
+                                            <div class="col-md-4 text-center">
+                                                <i class="fas fa-book fa-2x text-info mb-2"></i>
+                                                <h6 class="font-weight-bold">User Guide</h6>
+                                                <p class="small text-muted">Dokumentasi lengkap</p>
+                                                <button class="btn btn-sm btn-outline-info" onclick="alert('User Guide akan dibuka di tab baru')">
+                                                    <i class="fas fa-external-link-alt mr-1"></i> Buka Guide
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card bg-dark text-white">
+                                    <div class="card-body text-center py-4">
+                                        <h5 class="mb-3">
+                                            <i class="fas fa-graduation-cap mr-2"></i>
+                                            SPPAS - Sistem Prediksi Prestasi Akademik Siswa
+                                        </h5>
+                                        <p class="mb-2">Sistem Prediksi Prestasi Siswa Berbasis Machine Learning</p>
+                                        <div class="mb-3">
+                                            <span class="badge badge-light mr-2">
+                                                <i class="fas fa-code mr-1"></i> Version 1.0
+                                            </span>
+                                            <span class="badge badge-light mr-2">
+                                                <i class="fas fa-calendar mr-1"></i> 2025
+                                            </span>
+                                            <span class="badge badge-light">
+                                                <i class="fas fa-shield-alt mr-1"></i> Production Ready
+                                            </span>
+                                        </div>
+                                        <hr class="bg-light">
+                                        <p class="small mb-0">
+                                            © 2025 SPPAS. Dikembangkan untuk kemajuan pendidikan Indonesia.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Guide Page -->
+                <div class="page" id="user-guide-page" style="display: none;">
+                    <div class="content-header">
+                        <h2 class="page-title">
+                            <i class="fas fa-book-open mr-2 text-primary"></i>
+                            User Guide - Panduan Penggunaan SPPAS
+                        </h2>
+                    </div>
+                    <div class="content-body">
+                        <!-- Quick Navigation -->
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <div class="card border-primary">
+                                    <div class="card-header bg-primary text-white">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-compass mr-2"></i>
+                                            Navigasi Cepat
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-3 col-sm-6 mb-3">
+                                                <button class="btn btn-outline-primary btn-block guide-nav-btn" data-target="getting-started">
+                                                    <i class="fas fa-play-circle mr-2"></i>
+                                                    Memulai
+                                                </button>
+                                            </div>
+                                            <div class="col-md-3 col-sm-6 mb-3">
+                                                <button class="btn btn-outline-success btn-block guide-nav-btn" data-target="data-management">
+                                                    <i class="fas fa-database mr-2"></i>
+                                                    Kelola Data
+                                                </button>
+                                            </div>
+                                            <div class="col-md-3 col-sm-6 mb-3">
+                                                <button class="btn btn-outline-info btn-block guide-nav-btn" data-target="prediction">
+                                                    <i class="fas fa-chart-line mr-2"></i>
+                                                    Prediksi
+                                                </button>
+                                            </div>
+                                            <div class="col-md-3 col-sm-6 mb-3">
+                                                <button class="btn btn-outline-warning btn-block guide-nav-btn" data-target="troubleshooting">
+                                                    <i class="fas fa-tools mr-2"></i>
+                                                    Troubleshooting
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Getting Started Section -->
+                        <div class="guide-section" id="getting-started">
+                            <div class="row mb-4">
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="card-header bg-primary text-white">
+                                            <h5 class="mb-0">
+                                                <i class="fas fa-play-circle mr-2"></i>
+                                                1. Memulai dengan SPPAS
+                                            </h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <h6 class="font-weight-bold text-primary">
+                                                        <i class="fas fa-sign-in-alt mr-1"></i> Login ke Sistem
+                                                    </h6>
+                                                    <ol class="small">
+                                                        <li>Buka aplikasi SPPAS di browser</li>
+                                                        <li>Masukkan username dan password</li>
+                                                        <li>Klik tombol "Login"</li>
+                                                        <li>Sistem akan mengarahkan ke Dashboard</li>
+                                                    </ol>
+                                                    
+                                                    <h6 class="font-weight-bold text-success mt-3">
+                                                        <i class="fas fa-tachometer-alt mr-1"></i> Mengenal Dashboard
+                                                    </h6>
+                                                    <ul class="small">
+                                                        <li><strong>Kartu Statistik:</strong> Total siswa, prestasi tinggi/sedang/rendah</li>
+                                                        <li><strong>Distribusi Prestasi:</strong> Pie chart kategori prestasi</li>
+                                                        <li><strong>Bar Chart Kategori:</strong> Analisis penghasilan, kehadiran, nilai</li>
+                                                        <li><strong>Statistik Fitur:</strong> Distribusi data numerik dan kategorikal</li>
+                                                        <li><strong>Pohon Keputusan:</strong> Visualisasi model C4.5</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="alert alert-info">
+                                                        <h6 class="font-weight-bold">
+                                                            <i class="fas fa-lightbulb mr-1"></i> Tips Pertama Kali
+                                                        </h6>
+                                                        <ul class="small mb-0">
+                                                            <li>Pastikan data siswa sudah tersedia minimal 30+ siswa</li>
+                                                            <li>Lengkapi data nilai, presensi, dan penghasilan orang tua</li>
+                                                            <li>Latih model terlebih dahulu sebelum melakukan prediksi</li>
+                                                            <li>Gunakan fitur export untuk backup data</li>
+                                                        </ul>
+                                                    </div>
+                                                    
+                                                    <div class="bg-light p-3 rounded">
+                                                        <h6 class="font-weight-bold text-dark">
+                                                            <i class="fas fa-users mr-1"></i> Role & Akses
+                                                        </h6>
+                                                        <ul class="small mb-0">
+                                                            <li><span class="badge badge-danger">Admin</span> - Akses penuh semua fitur</li>
+                                                            <li><span class="badge badge-success">Guru</span> - Kelola data & prediksi</li>
+                                                            <li><span class="badge badge-info">Staf</span> - Input data & lihat laporan</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Data Management Section -->
+                        <div class="guide-section" id="data-management" style="display: none;">
+                            <div class="row mb-4">
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="card-header bg-success text-white">
+                                            <h5 class="mb-0">
+                                                <i class="fas fa-database mr-2"></i>
+                                                2. Pengelolaan Data
+                                            </h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <h6 class="font-weight-bold text-primary">
+                                                        <i class="fas fa-user-graduate mr-1"></i> Data Siswa
+                                                    </h6>
+                                                    <ol class="small">
+                                                        <li>Klik menu "Data Siswa" di sidebar</li>
+                                                        <li>Klik tombol "Tambah" untuk input siswa baru</li>
+                                                        <li>Isi form: Nama, NIS, Jenis Kelamin, Kelas, Tanggal Lahir, Alamat</li>
+                                                        <li>Klik "Simpan" untuk menyimpan data</li>
+                                                        <li>Gunakan tombol "Edit" untuk mengubah data</li>
+                                                        <li>Gunakan tombol "Hapus" untuk menghapus data</li>
+                                                    </ol>
+                                                    
+                                                    <h6 class="font-weight-bold text-success mt-3">
+                                                        <i class="fas fa-book mr-1"></i> Data Nilai Raport
+                                                    </h6>
+                                                    <ol class="small">
+                                                        <li>Klik menu "Nilai Raport" di sidebar</li>
+                                                        <li>Pilih siswa dari dropdown</li>
+                                                        <li>Isi semester dan tahun ajaran</li>
+                                                        <li>Input nilai: Matematika, B.Indonesia, B.Inggris, IPA</li>
+                                                        <li>Rata-rata akan dihitung otomatis</li>
+                                                        <li>Klik "Simpan" untuk menyimpan nilai</li>
+                                                    </ol>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <h6 class="font-weight-bold text-info">
+                                                        <i class="fas fa-calendar-check mr-1"></i> Data Presensi
+                                                    </h6>
+                                                    <ol class="small">
+                                                        <li>Klik menu "Presensi" di sidebar</li>
+                                                        <li>Pilih siswa dari dropdown</li>
+                                                        <li>Isi semester dan tahun ajaran</li>
+                                                        <li>Input jumlah: Hadir, Sakit, Izin, Alpa</li>
+                                                        <li>Persentase kehadiran dihitung otomatis</li>
+                                                        <li>Kategori kehadiran ditentukan sistem</li>
+                                                    </ol>
+                                                    
+                                                    <h6 class="font-weight-bold text-warning mt-3">
+                                                        <i class="fas fa-money-bill-wave mr-1"></i> Penghasilan Orang Tua
+                                                    </h6>
+                                                    <ol class="small">
+                                                        <li>Klik menu "Penghasilan Ortu" di sidebar</li>
+                                                        <li>Pilih siswa dari dropdown</li>
+                                                        <li>Input penghasilan ayah dan ibu</li>
+                                                        <li>Total penghasilan dihitung otomatis</li>
+                                                        <li>Kategori penghasilan ditentukan sistem</li>
+                                                        <li>Simpan data penghasilan</li>
+                                                    </ol>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="alert alert-warning mt-3">
+                                                <h6 class="font-weight-bold">
+                                                    <i class="fas fa-exclamation-triangle mr-1"></i> Penting untuk Diperhatikan
+                                                </h6>
+                                                <ul class="small mb-0">
+                                                    <li>Pastikan data siswa sudah ada sebelum input nilai, presensi, atau penghasilan</li>
+                                                    <li>Gunakan format yang konsisten untuk semester (contoh: "Ganjil", "Genap")</li>
+                                                    <li>Tahun ajaran gunakan format "2023/2024"</li>
+                                                    <li>Backup data secara berkala menggunakan fitur export</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Prediction Section -->
+                        <div class="guide-section" id="prediction" style="display: none;">
+                            <div class="row mb-4">
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="card-header bg-info text-white">
+                                            <h5 class="mb-0">
+                                                <i class="fas fa-chart-line mr-2"></i>
+                                                3. Sistem Prediksi Prestasi
+                                            </h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <h6 class="font-weight-bold text-primary">
+                                                        <i class="fas fa-cogs mr-1"></i> Langkah 1: Training Model
+                                                    </h6>
+                                                    <ol class="small">
+                                                        <li>Klik menu "Prediksi Prestasi" di sidebar</li>
+                                                        <li>Klik tombol "Latih Model"</li>
+                                                        <li>Tunggu proses training selesai (±15 detik)</li>
+                                                        <li>Sistem akan menampilkan akurasi model</li>
+                                                        <li>Model siap digunakan untuk prediksi</li>
+                                                    </ol>
+                                                    
+                                                    <h6 class="font-weight-bold text-success mt-3">
+                                                        <i class="fas fa-user mr-1"></i> Langkah 2: Prediksi Individual
+                                                    </h6>
+                                                    <ol class="small">
+                                                        <li>Pilih siswa dari dropdown</li>
+                                                        <li>Isi semester dan tahun ajaran</li>
+                                                        <li>Klik tombol "Prediksi"</li>
+                                                        <li>Hasil prediksi akan ditampilkan:</li>
+                                                        <ul>
+                                                            <li>Kategori: RENDAH/SEDANG/TINGGI</li>
+                                                            <li>Confidence level (%)</li>
+                                                            <li>Rekomendasi tindak lanjut</li>
+                                                        </ul>
+                                                    </ol>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <h6 class="font-weight-bold text-warning">
+                                                        <i class="fas fa-users mr-1"></i> Langkah 3: Prediksi Batch
+                                                    </h6>
+                                                    <ol class="small">
+                                                        <li>Scroll ke section "Prediksi Data Keseluruhan"</li>
+                                                        <li>Isi semester dan tahun ajaran</li>
+                                                        <li>Klik "Prediksi Semua Siswa"</li>
+                                                        <li>Tunggu proses selesai</li>
+                                                        <li>Review hasil di grid:</li>
+                                                        <ul>
+                                                            <li>Nama siswa dan kelas</li>
+                                                            <li>Prediksi dengan badge warna</li>
+                                                            <li>Confidence percentage</li>
+                                                            <li>Data pendukung</li>
+                                                        </ul>
+                                                        <li>Export hasil ke Excel jika diperlukan</li>
+                                                    </ol>
+                                                    
+                                                    <div class="bg-light p-3 rounded mt-3">
+                                                        <h6 class="font-weight-bold text-dark">
+                                                            <i class="fas fa-chart-bar mr-1"></i> Interpretasi Hasil
+                                                        </h6>
+                                                        <ul class="small mb-0">
+                                                            <li><span class="badge badge-danger">RENDAH</span> - Perlu remedial intensif</li>
+                                                            <li><span class="badge badge-warning">SEDANG</span> - Program pengayaan</li>
+                                                            <li><span class="badge badge-success">TINGGI</span> - Program akselerasi</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Troubleshooting Section -->
+                        <div class="guide-section" id="troubleshooting" style="display: none;">
+                            <div class="row mb-4">
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="card-header bg-warning text-dark">
+                                            <h5 class="mb-0">
+                                                <i class="fas fa-tools mr-2"></i>
+                                                4. Troubleshooting & FAQ
+                                            </h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <h6 class="font-weight-bold text-danger">
+                                                        <i class="fas fa-exclamation-circle mr-1"></i> Masalah Umum
+                                                    </h6>
+                                                    
+                                                    <div class="mb-3">
+                                                        <strong class="text-primary">Q: Model tidak bisa dilatih?</strong>
+                                                        <p class="small mb-1">A: Pastikan data siswa minimal 30+ dengan data lengkap (nilai, presensi, penghasilan).</p>
+                                                    </div>
+                                                    
+                                                    <div class="mb-3">
+                                                        <strong class="text-primary">Q: Prediksi tidak akurat?</strong>
+                                                        <p class="small mb-1">A: Tambahkan lebih banyak data training dan pastikan kualitas data input.</p>
+                                                    </div>
+                                                    
+                                                    <div class="mb-3">
+                                                        <strong class="text-primary">Q: Grid tidak tampil data?</strong>
+                                                        <p class="small mb-1">A: Refresh halaman atau cek koneksi internet. Pastikan token belum expired.</p>
+                                                    </div>
+                                                    
+                                                    <div class="mb-3">
+                                                        <strong class="text-primary">Q: Export Excel error?</strong>
+                                                        <p class="small mb-1">A: Pastikan browser mengizinkan download dan ada data untuk di-export.</p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <h6 class="font-weight-bold text-success">
+                                                        <i class="fas fa-check-circle mr-1"></i> Best Practices
+                                                    </h6>
+                                                    
+                                                    <ul class="small">
+                                                        <li><strong>Data Quality:</strong> Pastikan data lengkap dan konsisten</li>
+                                                        <li><strong>Regular Training:</strong> Latih ulang model setiap ada data baru</li>
+                                                        <li><strong>Backup Data:</strong> Export data secara berkala</li>
+                                                        <li><strong>Monitor Performance:</strong> Cek akurasi model secara rutin</li>
+                                                        <li><strong>User Management:</strong> Kelola akses user sesuai role</li>
+                                                    </ul>
+                                                    
+                                                    <div class="alert alert-info mt-3">
+                                                        <h6 class="font-weight-bold">
+                                                            <i class="fas fa-phone mr-1"></i> Butuh Bantuan?
+                                                        </h6>
+                                                        <ul class="small mb-0">
+                                                            <li><strong>Email:</strong> support@SPPAS.com</li>
+                                                            <li><strong>WhatsApp:</strong> +62-xxx-xxxx-xxxx</li>
+                                                            <li><strong>Jam Kerja:</strong> Senin-Jumat 08:00-17:00</li>
+                                                            <li><strong>Response Time:</strong> < 4 jam</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Advanced Features Section -->
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <div class="card border-info">
+                                    <div class="card-header bg-info text-white">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-star mr-2"></i>
+                                            Fitur Lanjutan
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <h6 class="font-weight-bold text-primary">
+                                                    <i class="fas fa-chart-bar mr-1"></i> Statistik Fitur
+                                                </h6>
+                                                <ul class="small">
+                                                    <li>Statistik Numerik: Mean, median, std deviation</li>
+                                                    <li>Statistik Kategorikal: Distribusi frekuensi</li>
+                                                    <li>Korelasi Fitur: Heatmap dan tabel korelasi</li>
+                                                    <li>Bar Chart Analisis: Status sosial, penghasilan, nilai</li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <h6 class="font-weight-bold text-success">
+                                                    <i class="fas fa-sitemap mr-1"></i> Visualisasi Model
+                                                </h6>
+                                                <ul class="small">
+                                                    <li>Pohon Keputusan C4.5: Static dan interactive</li>
+                                                    <li>Confusion Matrix: Evaluasi akurasi model</li>
+                                                    <li>Model Metrics: Precision, recall, F1-score</li>
+                                                    <li>Feature Importance: Kontribusi setiap fitur</li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <h6 class="font-weight-bold text-warning">
+                                                    <i class="fas fa-download mr-1"></i> Export & Reporting
+                                                </h6>
+                                                <ul class="small">
+                                                    <li>Export Excel: Semua data dan hasil prediksi</li>
+                                                    <li>Riwayat Prediksi: Tracking hasil sebelumnya</li>
+                                                    <li>Dashboard Analytics: Real-time insights</li>
+                                                    <li>Custom Reports: Filter berdasarkan kriteria</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Reference Card -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card bg-dark text-white">
+                                    <div class="card-header">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-bookmark mr-2"></i>
+                                            Quick Reference
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <h6 class="text-primary">Keyboard Shortcuts</h6>
+                                                <ul class="small list-unstyled">
+                                                    <li><kbd>Ctrl</kbd> + <kbd>S</kbd> - Simpan form</li>
+                                                    <li><kbd>Esc</kbd> - Tutup modal</li>
+                                                    <li><kbd>F5</kbd> - Refresh grid</li>
+                                                    <li><kbd>Ctrl</kbd> + <kbd>E</kbd> - Export Excel</li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <h6 class="text-success">Data Requirements</h6>
+                                                <ul class="small list-unstyled">
+                                                    <li>Min. 30+ siswa untuk training</li>
+                                                    <li>Data lengkap: nilai, presensi, penghasilan</li>
+                                                    <li>Format konsisten semester & tahun</li>
+                                                    <li>Akurasi target: >80%</li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <h6 class="text-warning">Performance Tips</h6>
+                                                <ul class="small list-unstyled">
+                                                    <li>Training time: <15 detik</li>
+                                                    <li>Batch prediction: <10 detik</li>
+                                                    <li>Grid loading: <3 detik</li>
+                                                    <li>Export Excel: <5 detik</li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <h6 class="text-info">System Status</h6>
+                                                <ul class="small list-unstyled">
+                                                    <li>Version: 1.0 Production</li>
+                                                    <li>Database: PostgreSQL</li>
+                                                    <li>ML Engine: Scikit-learn</li>
+                                                    <li>Token: JWT Authentication</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Siswa Page -->
+                <div class="page" id="siswa-page" style="display: none;">
+                    <h2 class="page-title">Data Siswa</h2>
+                    <div id="siswa-grid"></div>
+                </div>
+                
+                <!-- Nilai Page -->
+                <div class="page" id="nilai-page" style="display: none;">
+                    <h2 class="page-title">Data Nilai Raport</h2>
+                    <div id="nilai-grid"></div>
+                </div>
+                
+                <!-- Presensi Page -->
+                <div class="page" id="presensi-page" style="display: none;">
+                    <h2 class="page-title">Data Presensi</h2>
+                    <div id="presensi-grid"></div>
+                </div>
+                <div class="page" id="users-page" style="display: none;">
+                    <h2 class="page-title">Manajemen User</h2>
+                    <div id="users-grid"></div>
+                </div>
+                
+                <!-- Penghasilan Page -->
+                <div class="page" id="penghasilan-page" style="display: none;">
+                    <h2 class="page-title">Data Penghasilan Orang Tua</h2>
+                    <div id="penghasilan-grid"></div>
+                </div>
+                
+                <!-- Generate Dummy Data Page -->
+                <div class="page" id="generate-dummy-page" style="display: none;">
+                    <h2 class="page-title">Generate Data Dummy</h2>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <form id="generate-dummy-form">
+                                <div class="form-group">
+                                    <label>Metode Generate:</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="generateMethod" id="byName" value="byName" checked>
+                                        <label class="form-check-label" for="byName">Berdasarkan Nama Siswa</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="generateMethod" id="byCount" value="byCount">
+                                        <label class="form-check-label" for="byCount">Berdasarkan Jumlah Data</label>
+                                    </div>
+                                </div>
+                                
+                                <div id="nameBasedSection">
+                                    <div class="form-group">
+                                        <label for="nama-siswa-dummy">Nama Siswa:</label>
+                                        <input id="nama-siswa-dummy" class="form-control" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="tahun-ajaran-dummy">Tahun Ajaran:</label>
+                                        <input id="tahun-ajaran-dummy" class="form-control" placeholder="Contoh: 2023/2024" />
+                                    </div>
+                                </div>
+                                
+                                <div id="countBasedSection" style="display: none;">
+                                    <div class="form-group">
+                                        <label for="jumlah-data">Jumlah Data:</label>
+                                        <input type="number" id="jumlah-data" class="form-control" min="1" />
+                                    </div>
+                                </div>
+                                
+                                <button type="button" id="btn-generate-dummy" class="btn btn-info btn-block">
+                                    <i class="fas fa-database mr-2"></i> Buat Data Dummy
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Prediksi Page -->
+                <div class="page" id="prediksi-page" style="display: none;">
+                    <h2 class="page-title">Prediksi Prestasi Siswa</h2>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    <h5 class="mb-0">Form Prediksi</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="prediksi-form">
+                                        <div class="form-group">
+                                            <label for="siswa-dropdown">Pilih Siswa:</label>
+                                            <input id="siswa-dropdown" style="width: 100%;" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="semester-input">Semester:</label>
+                                            <input id="semester-input" class="form-control" placeholder="Contoh: Ganjil" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="tahun-ajaran-input">Tahun Ajaran:</label>
+                                            <input id="tahun-ajaran-input" class="form-control" placeholder="Contoh: 2023/2024" />
+                                        </div>
+                                        <button type="button" id="btn-prediksi" class="btn btn-primary btn-block">
+                                            <i class="fas fa-chart-line mr-2"></i> Prediksi
+                                        </button>
+                                        <button type="button" id="btn-train" class="btn btn-success btn-block mt-2">
+                                            <i class="fas fa-cogs mr-2"></i> Latih Model
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="card dashboard-card">
+                                <div class="card-header bg-light">
+                                    <h5 class="mb-0">Hasil Prediksi</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="hasil-prediksi">
+                                        <p class="text-center text-muted">Hasil prediksi akan ditampilkan di sini.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                        </div>
+                    </div>
+                    
+                    <!-- Prediksi Batch Section -->
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div class="card border-info">
+                                <div class="card-header bg-info text-white">
+                                    <h5 class="mb-0">
+                                        <i class="fas fa-users mr-2"></i> Prediksi Data Keseluruhan Siswa
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <form id="batch-prediksi-form">
+                                                <div class="form-group">
+                                                    <label for="batch-semester-input">Semester:</label>
+                                                    <input id="batch-semester-input" class="form-control" placeholder="Contoh: Ganjil" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="batch-tahun-ajaran-input">Tahun Ajaran:</label>
+                                                    <input id="batch-tahun-ajaran-input" class="form-control" placeholder="Contoh: 2023/2024" />
+                                                </div>
+                                                <button type="button" id="btn-prediksi-batch" class="btn btn-info btn-block">
+                                                    <i class="fas fa-users mr-2"></i> Prediksi Semua Siswa
+                                                </button>
+                                            </form>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div id="batch-summary" class="d-none">
+                                                <h6 class="text-info">Ringkasan Prediksi Batch</h6>
+                                                <div id="batch-summary-content"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Grid Hasil Prediksi Batch -->
+                                    <div class="mt-3">
+                                        <div id="batch-results-grid" style="display: none;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card dashboard-card mt-3">
+                                <div class="card-header bg-light">
+                                    <h5 class="mb-0">Riwayat Prediksi</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="riwayat-grid"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Templates -->
+    <script id="siswa-template" type="text/x-kendo-template">
+        
+        <div class="k-edit-label">
+            <label for="nama">Nama:</label>
+        </div>
+        <div class="k-edit-field">
+            <input type="text" class="k-textbox" name="nama" required validationMessage="Nama harus diisi" />
+        </div>
+        <div class="k-edit-label">
+            <label for="nis">NIS:</label>
+        </div>
+        <div class="k-edit-field">
+            <input type="text" class="k-textbox" name="nis" required validationMessage="NIS harus diisi" />
+        </div>
+        <div class="k-edit-label">
+            <label for="jenis_kelamin">Jenis Kelamin:</label>
+        </div>
+        <div class="k-edit-field">
+            <select name="jenis_kelamin" required validationMessage="Jenis kelamin harus dipilih">
+                <option value="Laki-laki">Laki-laki</option>
+                <option value="Perempuan">Perempuan</option>
+            </select>
+        </div>
+        <div class="k-edit-label">
+            <label for="kelas">Kelas:</label>
+        </div>
+        <div class="k-edit-field">
+            <input type="text" class="k-textbox" name="kelas" required validationMessage="Kelas harus diisi" />
+        </div>
+        <div class="k-edit-label">
+            <label for="tanggal_lahir">Tanggal Lahir:</label>
+        </div>
+        <div class="k-edit-field">
+            <input name="tanggal_lahir" required validationMessage="Tanggal lahir harus diisi" />
+        </div>
+        <div class="k-edit-label">
+            <label for="alamat">Alamat:</label>
+        </div>
+        <div class="k-edit-field">
+            <textarea name="alamat" class="k-textbox" style="width: 100%; height: 80px;"></textarea>
+        </div>
+        
+    </script>
+
+    <script id="nilai-template" type="text/x-kendo-template">
+        
+        <div class="form-header text-center mb-4">
+            <h4 class="text-primary mb-2">
+                <i class="fas fa-book mr-2"></i>
+                <span class="form-title">Formulir Nilai Raport</span>
+            </h4>
+            <p class="text-muted">Lengkapi data nilai raport siswa dengan benar</p>
+        </div>
+        
+        <!-- Basic Information - Full Width -->
+        <div class="form-section-full">
+            <h6 class="section-title">
+                <i class="fas fa-info-circle mr-2"></i>Informasi Dasar
+            </h6>
+            
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="k-edit-label">
+                        <label for="siswa_id">
+                            <i class="fas fa-user-graduate mr-1 text-primary"></i>
+                            Siswa <span class="text-danger">*</span>
+                        </label>
+                    </div>
+                    <div class="k-edit-field">
+                        <input name="siswa_id" required validationMessage="Siswa harus dipilih" style="width: 100%;" />
+                        <span class="k-invalid-msg" data-for="siswa_id"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="k-edit-label">
+                        <label for="semester">
+                            <i class="fas fa-calendar-alt mr-1 text-primary"></i>
+                            Semester <span class="text-danger">*</span>
+                        </label>
+                    </div>
+                    <div class="k-edit-field">
+                        <input type="text" class="k-textbox" name="semester" required 
+                                placeholder="Contoh: Ganjil, Genap"
+                                validationMessage="Semester harus diisi" />
+                        <span class="k-invalid-msg" data-for="semester"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="k-edit-label">
+                        <label for="tahun_ajaran">
+                            <i class="fas fa-calendar mr-1 text-primary"></i>
+                            Tahun Ajaran <span class="text-danger">*</span>
+                        </label>
+                    </div>
+                    <div class="k-edit-field">
+                        <input type="text" class="k-textbox" name="tahun_ajaran" required 
+                                placeholder="Contoh: 2023/2024"
+                                validationMessage="Tahun ajaran harus diisi" />
+                        <span class="k-invalid-msg" data-for="tahun_ajaran"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Subject Grades in 2 Columns -->
+        <div class="row form-main-content">
+            <!-- Left Column -->
+            <div class="col-md-6">
+                <div class="form-column-content">
+                    <div class="form-section">
+                        <h6 class="section-title">
+                            <i class="fas fa-calculator mr-2"></i>Mata Pelajaran Utama
+                        </h6>
+                        
+                        <div class="k-edit-label">
+                            <label for="matematika">
+                                <i class="fas fa-square-root-alt mr-1 text-primary"></i>
+                                Matematika <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="number" class="k-textbox" name="matematika" required 
+                                    placeholder="0-100" min="0" max="100"
+                                    validationMessage="Nilai matematika harus diisi (0-100)" />
+                            <span class="k-invalid-msg" data-for="matematika"></span>
+                        </div>
+                        
+                        <div class="k-edit-label">
+                            <label for="bahasa_indonesia">
+                                <i class="fas fa-language mr-1 text-primary"></i>
+                                Bahasa Indonesia <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="number" class="k-textbox" name="bahasa_indonesia" required 
+                                    placeholder="0-100" min="0" max="100"
+                                    validationMessage="Nilai bahasa Indonesia harus diisi (0-100)" />
+                            <span class="k-invalid-msg" data-for="bahasa_indonesia"></span>
+                        </div>
+                        
+                        <div class="k-edit-label">
+                            <label for="bahasa_inggris">
+                                <i class="fas fa-globe mr-1 text-primary"></i>
+                                Bahasa Inggris <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="number" class="k-textbox" name="bahasa_inggris" required 
+                                    placeholder="0-100" min="0" max="100"
+                                    validationMessage="Nilai bahasa Inggris harus diisi (0-100)" />
+                            <span class="k-invalid-msg" data-for="bahasa_inggris"></span>
+                        </div>
+                        
+                        <div class="k-edit-label">
+                            <label for="ipa">
+                                <i class="fas fa-flask mr-1 text-primary"></i>
+                                IPA <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="number" class="k-textbox" name="ipa" required 
+                                    placeholder="0-100" min="0" max="100"
+                                    validationMessage="Nilai IPA harus diisi (0-100)" />
+                            <span class="k-invalid-msg" data-for="ipa"></span>
+                        </div>
+                        
+                        <div class="k-edit-label">
+                            <label for="bahasa_jawa">
+                                <i class="fas fa-map mr-1 text-primary"></i>
+                                Bahasa Jawa <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="number" class="k-textbox" name="bahasa_jawa" required 
+                                    placeholder="0-100" min="0" max="100"
+                                    validationMessage="Nilai bahasa Jawa harus diisi (0-100)" />
+                            <span class="k-invalid-msg" data-for="bahasa_jawa"></span>
+                        </div>
+                        
+                        <div class="k-edit-label">
+                            <label for="pkn">
+                                <i class="fas fa-flag mr-1 text-primary"></i>
+                                PKN <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="number" class="k-textbox" name="pkn" required 
+                                    placeholder="0-100" min="0" max="100"
+                                    validationMessage="Nilai PKN harus diisi (0-100)" />
+                            <span class="k-invalid-msg" data-for="pkn"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Column -->
+            <div class="col-md-6">
+                <div class="form-column-content">
+                    <div class="form-section">
+                        <h6 class="section-title">
+                            <i class="fas fa-palette mr-2"></i>Mata Pelajaran Penunjang
+                        </h6>
+                        
+                        <div class="k-edit-label">
+                            <label for="seni">
+                                <i class="fas fa-paint-brush mr-1 text-secondary"></i>
+                                Seni <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="number" class="k-textbox" name="seni" required 
+                                    placeholder="0-100" min="0" max="100"
+                                    validationMessage="Nilai seni harus diisi (0-100)" />
+                            <span class="k-invalid-msg" data-for="seni"></span>
+                        </div>
+                        
+                        <div class="k-edit-label">
+                            <label for="sejarah">
+                                <i class="fas fa-landmark mr-1 text-secondary"></i>
+                                Sejarah <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="number" class="k-textbox" name="sejarah" required 
+                                    placeholder="0-100" min="0" max="100"
+                                    validationMessage="Nilai sejarah harus diisi (0-100)" />
+                            <span class="k-invalid-msg" data-for="sejarah"></span>
+                        </div>
+                        
+                        <div class="k-edit-label">
+                            <label for="agama">
+                                <i class="fas fa-praying-hands mr-1 text-secondary"></i>
+                                Agama <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="number" class="k-textbox" name="agama" required 
+                                    placeholder="0-100" min="0" max="100"
+                                    validationMessage="Nilai agama harus diisi (0-100)" />
+                            <span class="k-invalid-msg" data-for="agama"></span>
+                        </div>
+                        
+                        <div class="k-edit-label">
+                            <label for="pjok">
+                                <i class="fas fa-running mr-1 text-secondary"></i>
+                                PJOK <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="number" class="k-textbox" name="pjok" required 
+                                    placeholder="0-100" min="0" max="100"
+                                    validationMessage="Nilai PJOK harus diisi (0-100)" />
+                            <span class="k-invalid-msg" data-for="pjok"></span>
+                        </div>
+                        
+                        <div class="k-edit-label">
+                            <label for="dasar_kejuruan">
+                                <i class="fas fa-tools mr-1 text-secondary"></i>
+                                Dasar Kejuruan <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="number" class="k-textbox" name="dasar_kejuruan" required 
+                                    placeholder="0-100" min="0" max="100"
+                                    validationMessage="Nilai dasar kejuruan harus diisi (0-100)" />
+                            <span class="k-invalid-msg" data-for="dasar_kejuruan"></span>
+                        </div>
+                        
+                        <!-- Auto-calculated field -->
+                        <div class="k-edit-label">
+                            <label for="rata_rata">
+                                <i class="fas fa-chart-line mr-1 text-success"></i>
+                                Rata-rata (Otomatis)
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="number" class="k-textbox" name="rata_rata" readonly 
+                                    placeholder="Dihitung otomatis" 
+                                    class="readonly-field" />
+                            <small class="form-text text-muted">
+                                <i class="fas fa-info-circle mr-1"></i>Nilai rata-rata dihitung otomatis dari semua mata pelajaran
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tips Section -->
+        <div class="alert alert-info mt-4">
+            <div class="d-flex align-items-start">
+                <div class="alert-icon mr-3">
+                    <i class="fas fa-lightbulb fa-lg"></i>
+                </div>
+                <div class="alert-content">
+                    <h6 class="alert-heading mb-2">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        Tips Pengisian Nilai
+                    </h6>
+                    <ul class="mb-0 small">
+                        <li>Semua field nilai wajib diisi dengan rentang 0-100</li>
+                        <li>Pastikan nama siswa, semester, dan tahun ajaran sudah benar</li>
+                        <li>Nilai rata-rata akan dihitung otomatis</li>
+                        <li>Gunakan format tahun ajaran: 2023/2024</li>
+                        <li>Semester: Ganjil atau Genap</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </script>
+    
+    <script id="users-template" type="text/x-kendo-template">
+        
+        <div class="form-header text-center mb-4">
+            <h4 class="text-primary mb-2">
+                <i class="fas fa-user-plus mr-2"></i>
+                <span class="form-title">Formulir User</span>
+            </h4>
+            <p class="text-muted">Lengkapi informasi user dan profile dengan benar</p>
+        </div>
+        
+                        <!-- Main Form Content in 2 Columns -->
+        <div class="row form-main-content">
+            <!-- Left Column -->
+            <div class="col-md-6">
+                <div class="form-column-content">
+                    <!-- Account Information Section -->
+                    <div class="form-section">
+                        <h6 class="section-title">
+                            <i class="fas fa-key mr-2"></i>Informasi Akun
+                        </h6>
+                        
+                        <div class="k-edit-label">
+                            <label for="username">
+                                <i class="fas fa-user mr-1 text-primary"></i>
+                                Username <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="text" class="k-textbox" name="username" required 
+                                placeholder="Masukkan username (3-20 karakter)"
+                                validationMessage="Username harus diisi (3-20 karakter, huruf dan angka saja)"
+                                pattern="^[a-zA-Z0-9]+$" minlength="3" maxlength="20" />
+                            <span class="k-invalid-msg" data-for="username"></span>
+                        </div>
+                        
+                        <div class="k-edit-label">
+                            <label for="password">
+                                <i class="fas fa-lock mr-1 text-primary"></i>
+                                Password <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="password" class="k-textbox" name="password" required 
+                                placeholder="Masukkan password (min. 6 karakter)"
+                                validationMessage="Password harus diisi (minimal 6 karakter)" 
+                                minlength="6" maxlength="50" />
+                            <span class="k-invalid-msg" data-for="password"></span>
+                            <small class="form-text text-muted">
+                                <i class="fas fa-info-circle mr-1"></i>Kombinasi huruf dan angka
+                            </small>
+                        </div>
+                        
+                        <div class="k-edit-label">
+                            <label for="role">
+                                <i class="fas fa-user-tag mr-1 text-primary"></i>
+                                Role <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <select name="role" required validationMessage="Role harus dipilih" class="k-dropdown">
+                                <option value="">-- Pilih Role --</option>
+                                <option value="admin">👑 Admin</option>
+                                <option value="guru">📚 Guru</option>
+                                <option value="staf">👨‍💼 Staf</option>
+                            </select>
+                            <span class="k-invalid-msg" data-for="role"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Column -->
+            <div class="col-md-6">
+                <div class="form-column-content">
+                    <!-- Profile Information Section -->
+                    <div class="form-section">
+                        <h6 class="section-title">
+                            <i class="fas fa-user-circle mr-2"></i>Informasi Profile
+                        </h6>
+                        
+                        <div class="k-edit-label">
+                            <label for="email">
+                                <i class="fas fa-envelope mr-1 text-primary"></i>
+                                Email <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="email" class="k-textbox" name="email" required 
+                                placeholder="Masukkan alamat email"
+                                validationMessage="Email harus diisi dengan format yang benar" />
+                            <span class="k-invalid-msg" data-for="email"></span>
+                        </div>
+                        
+                        <div class="k-edit-label">
+                            <label for="profile.nama_lengkap">
+                                <i class="fas fa-signature mr-1 text-primary"></i>
+                                Nama Lengkap <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="text" class="k-textbox" name="profile.nama_lengkap" required
+                                placeholder="Masukkan nama lengkap"
+                                validationMessage="Nama lengkap harus diisi" />
+                            <span class="k-invalid-msg" data-for="profile.nama_lengkap"></span>
+                        </div>
+                        
+                        <div class="k-edit-label">
+                            <label for="profile.jabatan">
+                                <i class="fas fa-briefcase mr-1 text-primary"></i>
+                                Jabatan <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="text" class="k-textbox" name="profile.jabatan" required
+                                placeholder="Contoh: Guru Matematika, Kepala Sekolah"
+                                validationMessage="Jabatan harus diisi" />
+                            <span class="k-invalid-msg" data-for="profile.jabatan"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Additional Information - Full Width -->
+        <div class="form-section-full">
+            <h6 class="section-title">
+                <i class="fas fa-info-circle mr-2"></i>Informasi Tambahan
+            </h6>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="k-edit-label">
+                        <label for="profile.nip">
+                            <i class="fas fa-id-card mr-1 text-secondary"></i>
+                            NIP
+                        </label>
+                    </div>
+                    <div class="k-edit-field">
+                        <input type="text" class="k-textbox" name="profile.nip" 
+                            placeholder="Nomor Induk Pegawai (opsional)" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="k-edit-label">
+                        <label for="profile.no_hp">
+                            <i class="fas fa-phone mr-1 text-secondary"></i>
+                            No. HP
+                        </label>
+                    </div>
+                    <div class="k-edit-field">
+                        <input type="text" class="k-textbox" name="profile.no_hp" 
+                            placeholder="Contoh: 08123456789" />
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="k-edit-label">
+                        <label for="profile.alamat">
+                            <i class="fas fa-map-marker-alt mr-1 text-secondary"></i>
+                            Alamat Lengkap
+                        </label>
+                    </div>
+                    <div class="k-edit-field">
+                        <textarea name="profile.alamat" class="k-textbox" style="width: 100%; height: 80px;" 
+                                placeholder="Masukkan alamat lengkap (opsional)"></textarea>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="k-edit-label">
+                        <label for="is_active">
+                            <i class="fas fa-toggle-on mr-1 text-success"></i>
+                            Status Akun
+                        </label>
+                    </div>
+                    <div class="k-edit-field">
+                        <div class="form-check status-check">
+                            <input type="checkbox" name="is_active" id="is_active" class="form-check-input" />
+                            <label class="form-check-label" for="is_active">
+                                <i class="fas fa-check-circle mr-1 text-success"></i>
+                                User Aktif
+                            </label>
+                        </div>
+                        <small class="form-text text-muted mt-2">
+                            <i class="fas fa-info-circle mr-1"></i>
+                            Centang untuk mengaktifkan user
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+                        <div class="alert alert-info mt-4">
+            <div class="d-flex align-items-start">
+                <div class="alert-icon mr-3">
+                    <i class="fas fa-lightbulb fa-lg"></i>
+                </div>
+                <div class="alert-content">
+                    <h6 class="alert-heading mb-2">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        Tips Pengisian Form
+                    </h6>
+                    <ul class="mb-0 small">
+                        <li>Field yang bertanda <span class="text-danger">*</span> wajib diisi</li>
+                        <li>Password minimal 6 karakter (kombinasi huruf dan angka)</li>
+                        <li>Username hanya boleh huruf dan angka (3-20 karakter)</li>
+                        <li>Saat edit user, kosongkan password jika tidak ingin mengubah</li>
+                        <li>Pastikan email menggunakan format yang benar</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </script>
+
+    <script id="presensi-template" type="text/x-kendo-template">
+        <div class="form-header text-center mb-4">
+            <h4 class="text-primary mb-2">
+                <i class="fas fa-calendar-check mr-2"></i>
+                <span class="form-title">Formulir Data Presensi</span>
+            </h4>
+            <p class="text-muted">Lengkapi data presensi siswa dengan benar</p>
+        </div>
+        
+        <!-- Basic Information - Full Width -->
+        <div class="form-section-full">
+            <h6 class="section-title">
+                <i class="fas fa-info-circle mr-2"></i>Informasi Dasar
+            </h6>
+            
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="k-edit-label">
+                        <label for="siswa_id">
+                            <i class="fas fa-user-graduate mr-1 text-primary"></i>
+                            Siswa <span class="text-danger">*</span>
+                        </label>
+                    </div>
+                    <div class="k-edit-field">
+                        <input name="siswa_id" required validationMessage="Siswa harus dipilih" style="width: 100%;" />
+                        <span class="k-invalid-msg" data-for="siswa_id"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="k-edit-label">
+                        <label for="semester">
+                            <i class="fas fa-calendar-alt mr-1 text-primary"></i>
+                            Semester <span class="text-danger">*</span>
+                        </label>
+                    </div>
+                    <div class="k-edit-field">
+                        <input type="text" class="k-textbox" name="semester" required 
+                                placeholder="Contoh: Ganjil, Genap"
+                                validationMessage="Semester harus diisi" />
+                        <span class="k-invalid-msg" data-for="semester"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="k-edit-label">
+                        <label for="tahun_ajaran">
+                            <i class="fas fa-calendar mr-1 text-primary"></i>
+                            Tahun Ajaran <span class="text-danger">*</span>
+                        </label>
+                    </div>
+                    <div class="k-edit-field">
+                        <input type="text" class="k-textbox" name="tahun_ajaran" required 
+                                placeholder="Contoh: 2023/2024"
+                                validationMessage="Tahun ajaran harus diisi" />
+                        <span class="k-invalid-msg" data-for="tahun_ajaran"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Attendance Data in 2 Columns -->
+        <div class="row form-main-content">
+            <!-- Left Column -->
+            <div class="col-md-6">
+                <div class="form-column-content">
+                    <div class="form-section">
+                        <h6 class="section-title">
+                            <i class="fas fa-check-circle mr-2"></i>Data Kehadiran
+                        </h6>
+                        
+                        <div class="k-edit-label">
+                            <label for="jumlah_hadir">
+                                <i class="fas fa-check mr-1 text-success"></i>
+                                Jumlah Hadir <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="number" class="k-textbox" name="jumlah_hadir" required 
+                                    placeholder="Masukkan jumlah hari hadir" min="0"
+                                    validationMessage="Jumlah hadir harus diisi (minimal 0)" />
+                            <span class="k-invalid-msg" data-for="jumlah_hadir"></span>
+                        </div>
+                        <br>
+
+                        <h6 class="section-title">
+                            <i class="fas fa-exclamation-triangle mr-2"></i>Data Ketidakhadiran
+                        </h6>
+                        
+                        <div class="k-edit-label">
+                            <label for="jumlah_izin">
+                                <i class="fas fa-file-alt mr-1 text-info"></i>
+                                Jumlah Izin <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="number" class="k-textbox" name="jumlah_izin" required 
+                                    placeholder="Masukkan jumlah hari izin" min="0"
+                                    validationMessage="Jumlah izin harus diisi (minimal 0)" />
+                            <span class="k-invalid-msg" data-for="jumlah_izin"></span>
+                        </div>
+                        
+                        <div class="k-edit-label">
+                            <label for="jumlah_alpa">
+                                <i class="fas fa-times-circle mr-1 text-danger"></i>
+                                Jumlah Alpa <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="number" class="k-textbox" name="jumlah_alpa" required 
+                                    placeholder="Masukkan jumlah hari alpa" min="0"
+                                    validationMessage="Jumlah alpa harus diisi (minimal 0)" />
+                            <span class="k-invalid-msg" data-for="jumlah_alpa"></span>
+                        </div>
+                        
+                        <div class="k-edit-label">
+                            <label for="jumlah_sakit">
+                                <i class="fas fa-thermometer-half mr-1 text-warning"></i>
+                                Jumlah Sakit <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="number" class="k-textbox" name="jumlah_sakit" required 
+                                    placeholder="Masukkan jumlah hari sakit" min="0"
+                                    validationMessage="Jumlah sakit harus diisi (minimal 0)" />
+                            <span class="k-invalid-msg" data-for="jumlah_sakit"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Column -->
+            <div class="col-md-6">
+                <div class="form-column-content">
+                    <div class="form-section">
+                        
+                        
+                        <!-- Auto-calculated fields -->
+                        <div class="k-edit-label">
+                            <label for="persentase_kehadiran">
+                                <i class="fas fa-percentage mr-1 text-success"></i>
+                                Persentase Kehadiran (Otomatis)
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="number" class="k-textbox" name="persentase_kehadiran" readonly 
+                                    placeholder="Dihitung otomatis" 
+                                    class="readonly-field" />
+                            <small class="form-text text-muted">
+                                <i class="fas fa-info-circle mr-1"></i>Persentase dihitung otomatis dari total kehadiran
+                            </small>
+                        </div>
+                        
+                        <div class="k-edit-label">
+                            <label for="kategori_kehadiran">
+                                <i class="fas fa-tags mr-1 text-primary"></i>
+                                Kategori Kehadiran (Otomatis)
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="text" class="k-textbox" name="kategori_kehadiran" readonly 
+                                    placeholder="Ditentukan otomatis" 
+                                    class="readonly-field" />
+                            <small class="form-text text-muted">
+                                <i class="fas fa-info-circle mr-1"></i>Kategori ditentukan berdasarkan persentase kehadiran
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tips Section -->
+        <div class="alert alert-info mt-4">
+            <div class="d-flex align-items-start">
+                <div class="alert-icon mr-3">
+                    <i class="fas fa-lightbulb fa-lg"></i>
+                </div>
+                <div class="alert-content">
+                    <h6 class="alert-heading mb-2">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        Tips Pengisian Data Presensi
+                    </h6>
+                    <ul class="mb-0 small">
+                        <li>Semua field jumlah kehadiran wajib diisi dengan angka minimal 0</li>
+                        <li>Pastikan nama siswa, semester, dan tahun ajaran sudah benar</li>
+                        <li>Persentase kehadiran akan dihitung otomatis</li>
+                        <li>Kategori kehadiran: Tinggi (≥80%), Sedang (75-79%), Rendah (<75%)</li>
+                        <li>Gunakan format tahun ajaran: 2023/2024</li>
+                        <li>Semester: Ganjil atau Genap</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </script>
+
+    <script id="penghasilan-template" type="text/x-kendo-template">
+        <div class="form-header text-center mb-4">
+            <h4 class="text-primary mb-2">
+                <i class="fas fa-money-bill-wave mr-2"></i>
+                <span class="form-title">Formulir Data Penghasilan Orang Tua</span>
+            </h4>
+            <p class="text-muted">Lengkapi data penghasilan orang tua siswa dengan benar</p>
+        </div>
+        
+        <!-- Basic Information - Full Width -->
+        <div class="form-section-full">
+            <h6 class="section-title">
+                <i class="fas fa-info-circle mr-2"></i>Informasi Dasar
+            </h6>
+            
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="k-edit-label">
+                        <label for="siswa_id">
+                            <i class="fas fa-user-graduate mr-1 text-primary"></i>
+                            Siswa <span class="text-danger">*</span>
+                        </label>
+                    </div>
+                    <div class="k-edit-field">
+                        <input name="siswa_id" required validationMessage="Siswa harus dipilih" style="width: 100%;" />
+                        <span class="k-invalid-msg" data-for="siswa_id"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Parent Income Data in 2 Columns -->
+        <div class="row form-main-content">
+            <!-- Left Column -->
+            <div class="col-md-6">
+                <div class="form-column-content">
+                    <div class="form-section">
+                        <h6 class="section-title">
+                            <i class="fas fa-male mr-2"></i>Data Ayah
+                        </h6>
+                        
+                        <div class="k-edit-label">
+                            <label for="penghasilan_ayah">
+                                <i class="fas fa-dollar-sign mr-1 text-success"></i>
+                                Penghasilan Ayah <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="number" class="k-textbox" name="penghasilan_ayah" required 
+                                    placeholder="Masukkan penghasilan ayah" min="0"
+                                    validationMessage="Penghasilan ayah harus diisi (minimal 0)" />
+                            <span class="k-invalid-msg" data-for="penghasilan_ayah"></span>
+                            <small class="form-text text-muted">
+                                <i class="fas fa-info-circle mr-1"></i>Dalam rupiah per bulan
+                            </small>
+                        </div>
+                        
+                        <div class="k-edit-label">
+                            <label for="pekerjaan_ayah">
+                                <i class="fas fa-briefcase mr-1 text-primary"></i>
+                                Pekerjaan Ayah <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="text" class="k-textbox" name="pekerjaan_ayah" required 
+                                    placeholder="Contoh: PNS, Swasta, Wiraswasta"
+                                    validationMessage="Pekerjaan ayah harus diisi" />
+                            <span class="k-invalid-msg" data-for="pekerjaan_ayah"></span>
+                        </div>
+                        
+                        <div class="k-edit-label">
+                            <label for="pendidikan_ayah">
+                                <i class="fas fa-graduation-cap mr-1 text-info"></i>
+                                Pendidikan Ayah <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="text" class="k-textbox" name="pendidikan_ayah" required 
+                                    placeholder="Contoh: SD, SMP, SMA, D3, S1, S2"
+                                    validationMessage="Pendidikan ayah harus diisi" />
+                            <span class="k-invalid-msg" data-for="pendidikan_ayah"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Column -->
+            <div class="col-md-6">
+                <div class="form-column-content">
+                    <div class="form-section">
+                        <h6 class="section-title">
+                            <i class="fas fa-female mr-2"></i>Data Ibu
+                        </h6>
+                        
+                        <div class="k-edit-label">
+                            <label for="penghasilan_ibu">
+                                <i class="fas fa-dollar-sign mr-1 text-success"></i>
+                                Penghasilan Ibu <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="number" class="k-textbox" name="penghasilan_ibu" required 
+                                    placeholder="Masukkan penghasilan ibu" min="0"
+                                    validationMessage="Penghasilan ibu harus diisi (minimal 0)" />
+                            <span class="k-invalid-msg" data-for="penghasilan_ibu"></span>
+                            <small class="form-text text-muted">
+                                <i class="fas fa-info-circle mr-1"></i>Dalam rupiah per bulan
+                            </small>
+                        </div>
+                        
+                        <div class="k-edit-label">
+                            <label for="pekerjaan_ibu">
+                                <i class="fas fa-briefcase mr-1 text-primary"></i>
+                                Pekerjaan Ibu <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="text" class="k-textbox" name="pekerjaan_ibu" required 
+                                    placeholder="Contoh: PNS, Swasta, IRT, Wiraswasta"
+                                    validationMessage="Pekerjaan ibu harus diisi" />
+                            <span class="k-invalid-msg" data-for="pekerjaan_ibu"></span>
+                        </div>
+                        
+                        <div class="k-edit-label">
+                            <label for="pendidikan_ibu">
+                                <i class="fas fa-graduation-cap mr-1 text-info"></i>
+                                Pendidikan Ibu <span class="text-danger">*</span>
+                            </label>
+                        </div>
+                        <div class="k-edit-field">
+                            <input type="text" class="k-textbox" name="pendidikan_ibu" required 
+                                    placeholder="Contoh: SD, SMP, SMA, D3, S1, S2"
+                                    validationMessage="Pendidikan ibu harus diisi" />
+                            <span class="k-invalid-msg" data-for="pendidikan_ibu"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Summary Section - Full Width -->
+        <div class="form-section-full">
+            <h6 class="section-title">
+                <i class="fas fa-calculator mr-2"></i>Ringkasan Penghasilan
+            </h6>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="k-edit-label">
+                        <label for="total_penghasilan">
+                            <i class="fas fa-chart-line mr-1 text-success"></i>
+                            Total Penghasilan (Otomatis)
+                        </label>
+                    </div>
+                    <div class="k-edit-field">
+                        <input type="number" class="k-textbox" name="total_penghasilan" readonly 
+                                placeholder="Dihitung otomatis" 
+                                class="readonly-field" />
+                        <small class="form-text text-muted">
+                            <i class="fas fa-info-circle mr-1"></i>Total penghasilan ayah + ibu per bulan
+                        </small>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="k-edit-label">
+                        <label for="kategori_penghasilan">
+                            <i class="fas fa-tags mr-1 text-primary"></i>
+                            Kategori Penghasilan (Otomatis)
+                        </label>
+                    </div>
+                    <div class="k-edit-field">
+                        <input type="text" class="k-textbox" name="kategori_penghasilan" readonly 
+                                placeholder="Ditentukan otomatis" 
+                                class="readonly-field" />
+                        <small class="form-text text-muted">
+                            <i class="fas fa-info-circle mr-1"></i>Kategori berdasarkan total penghasilan
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tips Section -->
+        <div class="alert alert-info mt-4">
+            <div class="d-flex align-items-start">
+                <div class="alert-icon mr-3">
+                    <i class="fas fa-lightbulb fa-lg"></i>
+                </div>
+                <div class="alert-content">
+                    <h6 class="alert-heading mb-2">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        Tips Pengisian Data Penghasilan
+                    </h6>
+                    <ul class="mb-0 small">
+                        <li>Semua field wajib diisi dengan data yang akurat</li>
+                        <li>Penghasilan diisi dalam rupiah per bulan (tanpa titik atau koma)</li>
+                        <li>Jika tidak bekerja, isi penghasilan dengan 0</li>
+                        <li>Total penghasilan akan dihitung otomatis</li>
+                        <li>Kategori penghasilan: Tinggi (>5jt), Sedang (2-5jt), Rendah (<2jt)</li>
+                        <li>Pastikan data sesuai dengan kondisi sebenarnya</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </script>
+    
+    
+    <!-- D3.js -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    
+    <!-- D3 Decision Tree -->
+    <script src="js/d3-tree.js"></script>
+    
+    <!-- jQuery, Bootstrap, and Kendo UI JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/kendo.all.min.js"></script>
+    
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    
+    <!-- Configuration JS -->
+    <!-- <script src="js/config.js"></script> -->
+    
+    <!-- Custom JS -->
+    <!-- <script src="js/app.js?v=" + Date.now() + '"></script>'); -->
+    <script>
+        var timestamp = Math.floor(Date.now() / 1000);
+        document.write('<script src="js/config.js?v=' + timestamp + '"><\/script>');
+        document.write('<script src="js/app.js?v=' + timestamp + '"><\/script>');
+        document.write('<script src="js/barchart-helper.js?v=' + timestamp + '"><\/script>');
+    </script>
+    
+    <!-- Force reload with new timestamp -->
+    <script>
+        // Clear any cached errors
+        if (typeof console !== 'undefined' && console.clear) {
+            console.clear();
+        }
+    </script>
+    
+    <!-- Debug script (remove in production) -->
+    <!-- <script>
+        // Debug function to show sizing info
+        function updateDebugInfo() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const debugInfo = document.getElementById('debugInfo');
+            
+            if (debugInfo && window.location.search.includes('debug=1')) {
+                debugInfo.style.display = 'block';
+                document.getElementById('sidebarWidth').textContent = 
+                    sidebar.classList.contains('collapsed') ? '60px' : '250px';
+                document.getElementById('mainWidth').textContent = 
+                    mainContent.style.width || 'auto';
+                document.getElementById('windowWidth').textContent = 
+                    window.innerWidth + 'px';
+            }
+        }
+        
+        // Update debug info periodically if debug mode is on
+        if (window.location.search.includes('debug=1')) {
+            setInterval(updateDebugInfo, 1000);
+        }
+    </script> -->
+</body>
+</html>

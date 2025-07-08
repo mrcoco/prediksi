@@ -10,6 +10,10 @@ from models.user import User
 import pandas as pd
 from io import BytesIO
 from sqlalchemy.exc import IntegrityError
+import logging
+
+# Cache imports
+from cache_config import invalidate_student_cache, cache_health_check
 
 router = APIRouter()
 
@@ -377,6 +381,14 @@ def update_siswa(
     db.commit()
     db.refresh(db_siswa)
     
+    # Invalidate cache for this student
+    if cache_health_check():
+        try:
+            invalidate_student_cache(siswa_id)
+            logging.info(f"🔄 Cache invalidated for updated student {siswa_id}")
+        except Exception as e:
+            logging.warning(f"⚠️ Failed to invalidate cache for student {siswa_id}: {str(e)}")
+    
     return db_siswa
 
 @router.delete(
@@ -411,6 +423,14 @@ def delete_siswa(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Siswa dengan ID {siswa_id} tidak ditemukan"
         )
+    
+    # Invalidate cache before deletion
+    if cache_health_check():
+        try:
+            invalidate_student_cache(siswa_id)
+            logging.info(f"🔄 Cache invalidated for deleted student {siswa_id}")
+        except Exception as e:
+            logging.warning(f"⚠️ Failed to invalidate cache for student {siswa_id}: {str(e)}")
     
     # Hapus siswa
     db.delete(db_siswa)

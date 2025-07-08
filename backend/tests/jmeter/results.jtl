@@ -1,0 +1,1851 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1751018286220,224,Login Request,200,OK,Prediction System Tests 1-1,text,true,,493,232,1,1,http://localhost:8000/api/auth/token,224,0,9
+1751018286688,17,Login Request,401,Unauthorized,Prediction System Tests 1-2,text,false,,204,237,2,2,http://localhost:8000/api/auth/token,17,0,1
+1751018286707,2,Train Model Request,401,Unauthorized,Prediction System Tests 1-2,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,2,0,0
+1751018286710,5,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-2,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,4,0,0
+1751018286718,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-2,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018286720,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-2,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018286722,4,Login Request,401,Unauthorized,Prediction System Tests 1-2,text,false,,204,237,2,2,http://localhost:8000/api/auth/token,4,0,0
+1751018286726,2,Train Model Request,401,Unauthorized,Prediction System Tests 1-2,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,2,0,0
+1751018286729,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-2,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,1,0,0
+1751018286730,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-2,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018286731,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-2,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018286733,1,Login Request,401,Unauthorized,Prediction System Tests 1-2,text,false,,204,234,2,2,http://localhost:8000/api/auth/token,1,0,0
+1751018286734,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-2,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,1,0,0
+1751018286736,0,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-2,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,0,0,0
+1751018286737,0,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-2,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,0,0,0
+1751018286738,0,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-2,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,0,0,0
+1751018286740,171,Login Request,200,OK,Prediction System Tests 1-2,text,true,,493,232,2,2,http://localhost:8000/api/auth/token,171,0,0
+1751018286462,449,Train Model Request,200,OK,Prediction System Tests 1-1,text,true,,776,334,2,2,http://localhost:8000/api/prediksi/train,449,0,0
+1751018286912,23,Single Prediction Request,200,OK,Prediction System Tests 1-1,text,true,,469,409,2,2,http://localhost:8000/api/prediksi/,23,0,0
+1751018286937,8,Batch Prediction Request,200,OK,Prediction System Tests 1-1,text,true,,607,395,2,2,http://localhost:8000/api/prediksi/batch,8,0,0
+1751018286946,2,Get Model Metrics,200,OK,Prediction System Tests 1-1,text,true,,322,290,2,2,http://localhost:8000/api/prediksi/model-metrics,2,0,0
+1751018286949,2,Login Request,401,Unauthorized,Prediction System Tests 1-1,text,false,,204,237,2,2,http://localhost:8000/api/auth/token,2,0,0
+1751018286952,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-1,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,1,0,0
+1751018286954,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-1,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,1,0,0
+1751018286956,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-1,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018286958,2,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-1,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,2,0,0
+1751018286961,2,Login Request,401,Unauthorized,Prediction System Tests 1-1,text,false,,204,237,2,2,http://localhost:8000/api/auth/token,2,0,0
+1751018286964,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-1,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,1,0,0
+1751018286966,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-1,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,1,0,0
+1751018286967,2,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-1,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,2,0,0
+1751018286970,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-1,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018286971,2,Login Request,401,Unauthorized,Prediction System Tests 1-1,text,false,,204,234,2,2,http://localhost:8000/api/auth/token,2,0,0
+1751018286974,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-1,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,1,0,0
+1751018286976,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-1,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,1,0,0
+1751018286978,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-1,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018286980,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-1,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018286981,193,Login Request,200,OK,Prediction System Tests 1-1,text,true,,493,232,2,2,http://localhost:8000/api/auth/token,193,0,0
+1751018287189,5,Login Request,401,Unauthorized,Prediction System Tests 1-3,text,false,,204,237,3,3,http://localhost:8000/api/auth/token,5,0,1
+1751018287194,2,Train Model Request,401,Unauthorized,Prediction System Tests 1-3,text,false,,204,219,3,3,http://localhost:8000/api/prediksi/train,2,0,0
+1751018287197,2,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-3,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,3,3,http://localhost:8000/api/prediksi/,2,0,0
+1751018287200,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-3,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,3,3,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018287202,2,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-3,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,3,3,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018287204,2,Login Request,401,Unauthorized,Prediction System Tests 1-3,text,false,,204,237,3,3,http://localhost:8000/api/auth/token,2,0,0
+1751018287206,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-3,text,false,,204,219,3,3,http://localhost:8000/api/prediksi/train,1,0,0
+1751018287207,2,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-3,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,3,3,http://localhost:8000/api/prediksi/,2,0,0
+1751018287209,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-3,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,3,3,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018287210,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-3,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,3,3,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018287211,2,Login Request,401,Unauthorized,Prediction System Tests 1-3,text,false,,204,234,3,3,http://localhost:8000/api/auth/token,2,0,0
+1751018287214,2,Train Model Request,401,Unauthorized,Prediction System Tests 1-3,text,false,,204,219,3,3,http://localhost:8000/api/prediksi/train,2,0,0
+1751018287216,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-3,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,3,3,http://localhost:8000/api/prediksi/,1,0,0
+1751018287217,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-3,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,3,3,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018287218,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-3,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,3,3,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018286912,526,Train Model Request,200,OK,Prediction System Tests 1-2,text,true,,715,334,3,3,http://localhost:8000/api/prediksi/train,526,0,0
+1751018287220,217,Login Request,200,OK,Prediction System Tests 1-3,text,true,,493,232,3,3,http://localhost:8000/api/auth/token,217,0,0
+1751018287438,15,Single Prediction Request,200,OK,Prediction System Tests 1-2,text,true,,469,409,3,3,http://localhost:8000/api/prediksi/,15,0,0
+1751018287454,10,Batch Prediction Request,200,OK,Prediction System Tests 1-2,text,true,,607,395,3,3,http://localhost:8000/api/prediksi/batch,10,0,0
+1751018287465,2,Get Model Metrics,200,OK,Prediction System Tests 1-2,text,true,,323,290,3,3,http://localhost:8000/api/prediksi/model-metrics,2,0,0
+1751018287467,3,Login Request,401,Unauthorized,Prediction System Tests 1-2,text,false,,204,237,3,3,http://localhost:8000/api/auth/token,3,0,0
+1751018287470,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-2,text,false,,204,219,3,3,http://localhost:8000/api/prediksi/train,1,0,0
+1751018287471,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-2,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,3,3,http://localhost:8000/api/prediksi/,1,0,0
+1751018287473,2,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-2,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,3,3,http://localhost:8000/api/prediksi/batch,2,0,0
+1751018287476,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-2,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,3,3,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018287175,365,Train Model Request,200,OK,Prediction System Tests 1-1,text,true,,777,334,2,2,http://localhost:8000/api/prediksi/train,365,0,0
+1751018287541,15,Single Prediction Request,200,OK,Prediction System Tests 1-1,text,true,,469,409,2,2,http://localhost:8000/api/prediksi/,15,0,0
+1751018287557,102,Batch Prediction Request,200,OK,Prediction System Tests 1-1,text,true,,607,395,2,2,http://localhost:8000/api/prediksi/batch,102,0,0
+1751018287660,9,Get Model Metrics,200,OK,Prediction System Tests 1-1,text,true,,325,290,2,2,http://localhost:8000/api/prediksi/model-metrics,9,0,0
+1751018287688,4,Login Request,401,Unauthorized,Prediction System Tests 1-4,text,false,,204,237,2,2,http://localhost:8000/api/auth/token,4,0,1
+1751018287693,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-4,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,1,0,0
+1751018287695,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-4,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,1,0,0
+1751018287696,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-4,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018287697,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-4,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018287699,1,Login Request,401,Unauthorized,Prediction System Tests 1-4,text,false,,204,234,2,2,http://localhost:8000/api/auth/token,1,0,0
+1751018287701,2,Train Model Request,401,Unauthorized,Prediction System Tests 1-4,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,2,0,0
+1751018287703,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-4,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,1,0,0
+1751018287705,0,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-4,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,0,0,0
+1751018287706,0,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-4,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,0,0,0
+1751018287707,171,Login Request,200,OK,Prediction System Tests 1-4,text,true,,493,232,2,2,http://localhost:8000/api/auth/token,171,0,0
+1751018287438,441,Train Model Request,200,OK,Prediction System Tests 1-3,text,true,,780,334,2,2,http://localhost:8000/api/prediksi/train,441,0,0
+1751018287879,11,Single Prediction Request,200,OK,Prediction System Tests 1-3,text,true,,469,409,2,2,http://localhost:8000/api/prediksi/,11,0,0
+1751018287891,6,Batch Prediction Request,200,OK,Prediction System Tests 1-3,text,true,,607,395,2,2,http://localhost:8000/api/prediksi/batch,6,0,0
+1751018287898,2,Get Model Metrics,200,OK,Prediction System Tests 1-3,text,true,,325,290,2,2,http://localhost:8000/api/prediksi/model-metrics,2,0,0
+1751018287900,2,Login Request,401,Unauthorized,Prediction System Tests 1-3,text,false,,204,237,2,2,http://localhost:8000/api/auth/token,1,0,0
+1751018287902,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-3,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,1,0,0
+1751018287903,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-3,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,1,0,0
+1751018287904,2,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-3,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,2,0,0
+1751018287906,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-3,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018288186,5,Login Request,401,Unauthorized,Prediction System Tests 1-5,text,false,,204,237,2,2,http://localhost:8000/api/auth/token,5,0,1
+1751018288191,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-5,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,1,0,0
+1751018288193,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-5,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,1,0,0
+1751018288194,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-5,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018288195,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-5,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018288197,1,Login Request,401,Unauthorized,Prediction System Tests 1-5,text,false,,204,234,2,2,http://localhost:8000/api/auth/token,1,0,0
+1751018288198,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-5,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,1,0,0
+1751018288199,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-5,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,1,0,0
+1751018288200,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-5,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018288201,0,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-5,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,0,0,0
+1751018287879,491,Train Model Request,200,OK,Prediction System Tests 1-4,text,true,,780,334,2,2,http://localhost:8000/api/prediksi/train,490,0,0
+1751018288202,167,Login Request,200,OK,Prediction System Tests 1-5,text,true,,493,232,2,2,http://localhost:8000/api/auth/token,167,0,0
+1751018288370,14,Single Prediction Request,200,OK,Prediction System Tests 1-4,text,true,,469,409,2,2,http://localhost:8000/api/prediksi/,14,0,0
+1751018288385,7,Batch Prediction Request,200,OK,Prediction System Tests 1-4,text,true,,607,395,2,2,http://localhost:8000/api/prediksi/batch,7,0,0
+1751018288393,2,Get Model Metrics,200,OK,Prediction System Tests 1-4,text,true,,325,290,2,2,http://localhost:8000/api/prediksi/model-metrics,2,0,0
+1751018288395,2,Login Request,401,Unauthorized,Prediction System Tests 1-4,text,false,,204,237,2,2,http://localhost:8000/api/auth/token,2,0,0
+1751018288398,2,Train Model Request,401,Unauthorized,Prediction System Tests 1-4,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,1,0,0
+1751018288401,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-4,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,1,0,0
+1751018288403,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-4,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018288404,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-4,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018288406,1,Login Request,401,Unauthorized,Prediction System Tests 1-4,text,false,,204,237,2,2,http://localhost:8000/api/auth/token,1,0,0
+1751018288407,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-4,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,1,0,0
+1751018288408,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-4,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,1,0,0
+1751018288410,2,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-4,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,2,0,0
+1751018288412,2,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-4,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,2,0,0
+1751018288686,4,Login Request,401,Unauthorized,Prediction System Tests 1-6,text,false,,204,234,2,2,http://localhost:8000/api/auth/token,4,0,0
+1751018288690,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-6,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,1,0,0
+1751018288692,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-6,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,1,0,0
+1751018288694,0,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-6,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,0,0,0
+1751018288695,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-6,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018288696,167,Login Request,200,OK,Prediction System Tests 1-6,text,true,,493,232,2,2,http://localhost:8000/api/auth/token,167,0,0
+1751018288370,494,Train Model Request,200,OK,Prediction System Tests 1-5,text,true,,780,334,2,2,http://localhost:8000/api/prediksi/train,494,0,0
+1751018288865,10,Single Prediction Request,200,OK,Prediction System Tests 1-5,text,true,,469,409,2,2,http://localhost:8000/api/prediksi/,10,0,0
+1751018288876,7,Batch Prediction Request,200,OK,Prediction System Tests 1-5,text,true,,607,395,2,2,http://localhost:8000/api/prediksi/batch,7,0,0
+1751018288884,3,Get Model Metrics,200,OK,Prediction System Tests 1-5,text,true,,325,290,2,2,http://localhost:8000/api/prediksi/model-metrics,3,0,0
+1751018288887,2,Login Request,401,Unauthorized,Prediction System Tests 1-5,text,false,,204,237,2,2,http://localhost:8000/api/auth/token,2,0,0
+1751018288890,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-5,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,1,0,0
+1751018288891,2,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-5,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,2,0,0
+1751018288893,2,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-5,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,2,0,0
+1751018288896,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-5,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018288898,3,Login Request,401,Unauthorized,Prediction System Tests 1-5,text,false,,204,237,2,2,http://localhost:8000/api/auth/token,3,0,0
+1751018288902,2,Train Model Request,401,Unauthorized,Prediction System Tests 1-5,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,1,0,0
+1751018288904,3,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-5,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,3,0,0
+1751018288908,2,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-5,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,2,0,0
+1751018288910,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-5,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018288865,323,Train Model Request,200,OK,Prediction System Tests 1-6,text,true,,780,334,2,2,http://localhost:8000/api/prediksi/train,323,0,0
+1751018289188,4,Login Request,401,Unauthorized,Prediction System Tests 1-7,text,false,,204,234,2,2,http://localhost:8000/api/auth/token,4,0,1
+1751018289193,3,Train Model Request,401,Unauthorized,Prediction System Tests 1-7,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,3,0,0
+1751018289196,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-7,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,1,0,0
+1751018289188,11,Single Prediction Request,200,OK,Prediction System Tests 1-6,text,true,,469,409,2,2,http://localhost:8000/api/prediksi/,11,0,0
+1751018289198,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-7,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018289200,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-7,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018289200,168,Batch Prediction Request,200,OK,Prediction System Tests 1-6,text,true,,607,395,2,2,http://localhost:8000/api/prediksi/batch,168,0,0
+1751018289202,166,Login Request,200,OK,Prediction System Tests 1-7,text,true,,493,232,2,2,http://localhost:8000/api/auth/token,166,0,0
+1751018289369,4,Get Model Metrics,200,OK,Prediction System Tests 1-6,text,true,,325,290,2,2,http://localhost:8000/api/prediksi/model-metrics,4,0,0
+1751018289373,3,Login Request,401,Unauthorized,Prediction System Tests 1-6,text,false,,204,237,2,2,http://localhost:8000/api/auth/token,3,0,0
+1751018289376,2,Train Model Request,401,Unauthorized,Prediction System Tests 1-6,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,2,0,0
+1751018289379,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-6,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,1,0,0
+1751018289381,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-6,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018289383,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-6,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018289385,2,Login Request,401,Unauthorized,Prediction System Tests 1-6,text,false,,204,237,2,2,http://localhost:8000/api/auth/token,2,0,0
+1751018289387,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-6,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,1,0,0
+1751018289389,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-6,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,1,0,0
+1751018289391,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-6,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018289392,3,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-6,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,2,0,0
+1751018289395,2,Login Request,401,Unauthorized,Prediction System Tests 1-6,text,false,,204,234,2,2,http://localhost:8000/api/auth/token,2,0,0
+1751018289397,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-6,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,1,0,0
+1751018289399,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-6,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,1,0,0
+1751018289400,2,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-6,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,2,0,0
+1751018289402,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-6,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018289686,186,Login Request,200,OK,Prediction System Tests 1-8,text,true,,493,232,2,2,http://localhost:8000/api/auth/token,186,0,1
+1751018289369,504,Train Model Request,200,OK,Prediction System Tests 1-7,text,true,,777,334,2,2,http://localhost:8000/api/prediksi/train,504,0,0
+1751018289873,14,Single Prediction Request,200,OK,Prediction System Tests 1-7,text,true,,469,409,2,2,http://localhost:8000/api/prediksi/,14,0,0
+1751018289888,8,Batch Prediction Request,200,OK,Prediction System Tests 1-7,text,true,,607,395,2,2,http://localhost:8000/api/prediksi/batch,8,0,0
+1751018289897,2,Get Model Metrics,200,OK,Prediction System Tests 1-7,text,true,,323,290,2,2,http://localhost:8000/api/prediksi/model-metrics,2,0,0
+1751018289899,3,Login Request,401,Unauthorized,Prediction System Tests 1-7,text,false,,204,237,2,2,http://localhost:8000/api/auth/token,3,0,0
+1751018289903,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-7,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,1,0,0
+1751018289904,2,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-7,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,2,0,0
+1751018289907,2,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-7,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,2,0,0
+1751018289909,2,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-7,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,2,0,0
+1751018289911,3,Login Request,401,Unauthorized,Prediction System Tests 1-7,text,false,,204,237,2,2,http://localhost:8000/api/auth/token,2,0,0
+1751018289914,2,Train Model Request,401,Unauthorized,Prediction System Tests 1-7,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,2,0,0
+1751018289916,2,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-7,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,2,0,0
+1751018289918,2,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-7,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,2,0,0
+1751018289921,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-7,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018289923,3,Login Request,401,Unauthorized,Prediction System Tests 1-7,text,false,,204,234,2,2,http://localhost:8000/api/auth/token,3,0,0
+1751018289926,2,Train Model Request,401,Unauthorized,Prediction System Tests 1-7,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,2,0,0
+1751018289928,2,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-7,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,2,0,0
+1751018289930,2,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-7,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,2,0,0
+1751018289933,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-7,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018290187,173,Login Request,200,OK,Prediction System Tests 1-9,text,true,,493,232,2,2,http://localhost:8000/api/auth/token,173,0,0
+1751018289873,488,Train Model Request,200,OK,Prediction System Tests 1-8,text,true,,780,334,2,2,http://localhost:8000/api/prediksi/train,488,0,0
+1751018290361,11,Single Prediction Request,200,OK,Prediction System Tests 1-8,text,true,,469,409,2,2,http://localhost:8000/api/prediksi/,11,0,0
+1751018290373,7,Batch Prediction Request,200,OK,Prediction System Tests 1-8,text,true,,607,395,2,2,http://localhost:8000/api/prediksi/batch,7,0,0
+1751018290381,3,Get Model Metrics,200,OK,Prediction System Tests 1-8,text,true,,325,290,2,2,http://localhost:8000/api/prediksi/model-metrics,3,0,0
+1751018290384,3,Login Request,401,Unauthorized,Prediction System Tests 1-8,text,false,,204,237,2,2,http://localhost:8000/api/auth/token,3,0,0
+1751018290387,2,Train Model Request,401,Unauthorized,Prediction System Tests 1-8,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,2,0,0
+1751018290389,2,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-8,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,2,0,0
+1751018290391,2,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-8,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,2,0,0
+1751018290393,2,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-8,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,2,0,0
+1751018290395,3,Login Request,401,Unauthorized,Prediction System Tests 1-8,text,false,,204,237,2,2,http://localhost:8000/api/auth/token,2,0,0
+1751018290398,2,Train Model Request,401,Unauthorized,Prediction System Tests 1-8,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,2,0,0
+1751018290400,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-8,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,1,0,0
+1751018290402,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-8,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018290403,2,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-8,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,2,0,0
+1751018290405,3,Login Request,401,Unauthorized,Prediction System Tests 1-8,text,false,,204,234,2,2,http://localhost:8000/api/auth/token,3,0,0
+1751018290409,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-8,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,1,0,0
+1751018290410,2,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-8,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,2,0,0
+1751018290412,2,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-8,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,2,0,0
+1751018290414,2,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-8,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018290416,219,Login Request,200,OK,Prediction System Tests 1-8,text,true,,493,232,2,2,http://localhost:8000/api/auth/token,219,0,0
+1751018290683,4,Login Request,401,Unauthorized,Prediction System Tests 1-10,text,false,,204,237,3,3,http://localhost:8000/api/auth/token,4,0,1
+1751018290688,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-10,text,false,,204,219,3,3,http://localhost:8000/api/prediksi/train,1,0,0
+1751018290690,2,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-10,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,3,3,http://localhost:8000/api/prediksi/,1,0,0
+1751018290692,2,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-10,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,3,3,http://localhost:8000/api/prediksi/batch,2,0,0
+1751018290694,3,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-10,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,3,3,http://localhost:8000/api/prediksi/model-metrics,3,0,0
+1751018290698,4,Login Request,401,Unauthorized,Prediction System Tests 1-10,text,false,,204,237,3,3,http://localhost:8000/api/auth/token,4,0,0
+1751018290702,2,Train Model Request,401,Unauthorized,Prediction System Tests 1-10,text,false,,204,219,3,3,http://localhost:8000/api/prediksi/train,2,0,0
+1751018290704,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-10,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,3,3,http://localhost:8000/api/prediksi/,1,0,0
+1751018290706,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-10,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,3,3,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018290707,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-10,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,3,3,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018290709,2,Login Request,401,Unauthorized,Prediction System Tests 1-10,text,false,,204,234,3,3,http://localhost:8000/api/auth/token,2,0,0
+1751018290711,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-10,text,false,,204,219,3,3,http://localhost:8000/api/prediksi/train,1,0,0
+1751018290713,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-10,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,3,3,http://localhost:8000/api/prediksi/,1,0,0
+1751018290714,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-10,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,3,3,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018290715,2,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-10,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,3,3,http://localhost:8000/api/prediksi/model-metrics,2,0,0
+1751018290718,180,Login Request,200,OK,Prediction System Tests 1-10,text,true,,493,232,3,3,http://localhost:8000/api/auth/token,180,0,0
+1751018290361,538,Train Model Request,200,OK,Prediction System Tests 1-9,text,true,,780,334,3,3,http://localhost:8000/api/prediksi/train,538,0,0
+1751018290899,17,Single Prediction Request,200,OK,Prediction System Tests 1-9,text,true,,469,409,3,3,http://localhost:8000/api/prediksi/,17,0,0
+1751018290917,8,Batch Prediction Request,200,OK,Prediction System Tests 1-9,text,true,,607,395,3,3,http://localhost:8000/api/prediksi/batch,8,0,0
+1751018290926,2,Get Model Metrics,200,OK,Prediction System Tests 1-9,text,true,,323,290,3,3,http://localhost:8000/api/prediksi/model-metrics,2,0,0
+1751018290929,1,Login Request,401,Unauthorized,Prediction System Tests 1-9,text,false,,204,237,3,3,http://localhost:8000/api/auth/token,1,0,0
+1751018290931,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-9,text,false,,204,219,3,3,http://localhost:8000/api/prediksi/train,1,0,0
+1751018290933,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-9,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,3,3,http://localhost:8000/api/prediksi/,1,0,0
+1751018290934,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-9,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,3,3,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018290936,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-9,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,3,3,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018290938,2,Login Request,401,Unauthorized,Prediction System Tests 1-9,text,false,,204,237,3,3,http://localhost:8000/api/auth/token,2,0,0
+1751018290941,2,Train Model Request,401,Unauthorized,Prediction System Tests 1-9,text,false,,204,219,3,3,http://localhost:8000/api/prediksi/train,2,0,0
+1751018290943,2,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-9,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,3,3,http://localhost:8000/api/prediksi/,2,0,0
+1751018290945,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-9,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,3,3,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018290947,0,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-9,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,3,3,http://localhost:8000/api/prediksi/model-metrics,0,0,0
+1751018290948,2,Login Request,401,Unauthorized,Prediction System Tests 1-9,text,false,,204,234,3,3,http://localhost:8000/api/auth/token,2,0,0
+1751018290637,314,Train Model Request,200,OK,Prediction System Tests 1-8,text,true,,777,334,3,3,http://localhost:8000/api/prediksi/train,314,0,0
+1751018290950,2,Train Model Request,401,Unauthorized,Prediction System Tests 1-9,text,false,,204,219,3,3,http://localhost:8000/api/prediksi/train,2,0,0
+1751018290952,3,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-9,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,3,3,http://localhost:8000/api/prediksi/,3,0,0
+1751018290956,3,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-9,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,3,3,http://localhost:8000/api/prediksi/batch,3,0,0
+1751018290960,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-9,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,3,3,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018290952,11,Single Prediction Request,200,OK,Prediction System Tests 1-8,text,true,,469,409,3,3,http://localhost:8000/api/prediksi/,11,0,0
+1751018290962,197,Login Request,200,OK,Prediction System Tests 1-9,text,true,,493,232,3,3,http://localhost:8000/api/auth/token,197,0,0
+1751018290963,214,Batch Prediction Request,200,OK,Prediction System Tests 1-8,text,true,,607,395,3,3,http://localhost:8000/api/prediksi/batch,214,0,0
+1751018291178,3,Get Model Metrics,200,OK,Prediction System Tests 1-8,text,true,,323,290,3,3,http://localhost:8000/api/prediksi/model-metrics,3,0,0
+1751018291184,3,Login Request,401,Unauthorized,Prediction System Tests 1-11,text,false,,204,237,3,3,http://localhost:8000/api/auth/token,3,0,0
+1751018291187,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-11,text,false,,204,219,3,3,http://localhost:8000/api/prediksi/train,1,0,0
+1751018291189,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-11,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,3,3,http://localhost:8000/api/prediksi/,1,0,0
+1751018291191,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-11,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,3,3,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018291193,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-11,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,3,3,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018291194,2,Login Request,401,Unauthorized,Prediction System Tests 1-11,text,false,,204,237,3,3,http://localhost:8000/api/auth/token,2,0,0
+1751018291197,2,Train Model Request,401,Unauthorized,Prediction System Tests 1-11,text,false,,204,219,3,3,http://localhost:8000/api/prediksi/train,2,0,0
+1751018291199,2,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-11,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,3,3,http://localhost:8000/api/prediksi/,2,0,0
+1751018291202,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-11,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,3,3,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018291204,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-11,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,3,3,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018291205,2,Login Request,401,Unauthorized,Prediction System Tests 1-11,text,false,,204,234,3,3,http://localhost:8000/api/auth/token,2,0,0
+1751018291208,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-11,text,false,,204,219,3,3,http://localhost:8000/api/prediksi/train,1,0,0
+1751018291209,2,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-11,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,3,3,http://localhost:8000/api/prediksi/,2,0,0
+1751018291211,2,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-11,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,3,3,http://localhost:8000/api/prediksi/batch,2,0,0
+1751018291213,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-11,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,3,3,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018291215,201,Login Request,200,OK,Prediction System Tests 1-11,text,true,,493,232,3,3,http://localhost:8000/api/auth/token,201,0,0
+1751018290899,532,Train Model Request,200,OK,Prediction System Tests 1-10,text,true,,777,334,3,3,http://localhost:8000/api/prediksi/train,532,0,0
+1751018291433,20,Single Prediction Request,200,OK,Prediction System Tests 1-10,text,true,,469,409,3,3,http://localhost:8000/api/prediksi/,20,0,0
+1751018291454,8,Batch Prediction Request,200,OK,Prediction System Tests 1-10,text,true,,607,395,3,3,http://localhost:8000/api/prediksi/batch,8,0,0
+1751018291463,3,Get Model Metrics,200,OK,Prediction System Tests 1-10,text,true,,325,290,3,3,http://localhost:8000/api/prediksi/model-metrics,3,0,0
+1751018291466,2,Login Request,401,Unauthorized,Prediction System Tests 1-10,text,false,,204,237,3,3,http://localhost:8000/api/auth/token,2,0,0
+1751018291469,0,Train Model Request,401,Unauthorized,Prediction System Tests 1-10,text,false,,204,219,3,3,http://localhost:8000/api/prediksi/train,0,0,0
+1751018291470,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-10,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,3,3,http://localhost:8000/api/prediksi/,1,0,0
+1751018291471,2,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-10,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,3,3,http://localhost:8000/api/prediksi/batch,2,0,0
+1751018291473,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-10,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,3,3,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018291160,382,Train Model Request,200,OK,Prediction System Tests 1-9,text,true,,780,334,2,2,http://localhost:8000/api/prediksi/train,382,0,0
+1751018291544,10,Single Prediction Request,200,OK,Prediction System Tests 1-9,text,true,,469,409,2,2,http://localhost:8000/api/prediksi/,10,0,0
+1751018291554,8,Batch Prediction Request,200,OK,Prediction System Tests 1-9,text,true,,607,395,2,2,http://localhost:8000/api/prediksi/batch,8,0,0
+1751018291562,5,Get Model Metrics,200,OK,Prediction System Tests 1-9,text,true,,325,290,2,2,http://localhost:8000/api/prediksi/model-metrics,5,0,0
+1751018291685,30,Login Request,401,Unauthorized,Prediction System Tests 1-12,text,false,,204,237,2,2,http://localhost:8000/api/auth/token,30,0,1
+1751018291715,2,Train Model Request,401,Unauthorized,Prediction System Tests 1-12,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,2,0,0
+1751018291717,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-12,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,1,0,0
+1751018291719,2,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-12,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,2,0,0
+1751018291722,2,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-12,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018291724,2,Login Request,401,Unauthorized,Prediction System Tests 1-12,text,false,,204,234,2,2,http://localhost:8000/api/auth/token,2,0,0
+1751018291727,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-12,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,1,0,0
+1751018291728,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-12,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,1,0,0
+1751018291730,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-12,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018291731,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-12,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018291732,174,Login Request,200,OK,Prediction System Tests 1-12,text,true,,493,232,2,2,http://localhost:8000/api/auth/token,174,0,0
+1751018291418,489,Train Model Request,200,OK,Prediction System Tests 1-11,text,true,,780,334,2,2,http://localhost:8000/api/prediksi/train,488,0,0
+1751018291907,11,Single Prediction Request,200,OK,Prediction System Tests 1-11,text,true,,469,409,2,2,http://localhost:8000/api/prediksi/,11,0,0
+1751018291919,7,Batch Prediction Request,200,OK,Prediction System Tests 1-11,text,true,,607,395,2,2,http://localhost:8000/api/prediksi/batch,7,0,0
+1751018291926,2,Get Model Metrics,200,OK,Prediction System Tests 1-11,text,true,,325,290,2,2,http://localhost:8000/api/prediksi/model-metrics,2,0,0
+1751018291928,2,Login Request,401,Unauthorized,Prediction System Tests 1-11,text,false,,204,237,2,2,http://localhost:8000/api/auth/token,2,0,0
+1751018291931,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-11,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,1,0,0
+1751018291932,2,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-11,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,2,0,0
+1751018291934,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-11,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018291935,2,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-11,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,2,0,0
+1751018292185,5,Login Request,401,Unauthorized,Prediction System Tests 1-13,text,false,,204,237,2,2,http://localhost:8000/api/auth/token,5,0,1
+1751018292191,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-13,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,1,0,0
+1751018292192,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-13,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,1,0,0
+1751018292194,0,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-13,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,0,0,0
+1751018292195,0,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-13,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,0,0,0
+1751018292196,2,Login Request,401,Unauthorized,Prediction System Tests 1-13,text,false,,204,234,2,2,http://localhost:8000/api/auth/token,2,0,0
+1751018292198,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-13,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,1,0,0
+1751018292200,2,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-13,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,2,0,0
+1751018292202,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-13,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018292203,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-13,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018292204,168,Login Request,200,OK,Prediction System Tests 1-13,text,true,,493,232,2,2,http://localhost:8000/api/auth/token,168,0,0
+1751018291907,466,Train Model Request,200,OK,Prediction System Tests 1-12,text,true,,777,334,2,2,http://localhost:8000/api/prediksi/train,466,0,0
+1751018292373,12,Single Prediction Request,200,OK,Prediction System Tests 1-12,text,true,,469,409,2,2,http://localhost:8000/api/prediksi/,12,0,0
+1751018292385,7,Batch Prediction Request,200,OK,Prediction System Tests 1-12,text,true,,607,395,2,2,http://localhost:8000/api/prediksi/batch,7,0,0
+1751018292392,2,Get Model Metrics,200,OK,Prediction System Tests 1-12,text,true,,323,290,2,2,http://localhost:8000/api/prediksi/model-metrics,2,0,0
+1751018292395,1,Login Request,401,Unauthorized,Prediction System Tests 1-12,text,false,,204,237,2,2,http://localhost:8000/api/auth/token,1,0,0
+1751018292397,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-12,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,1,0,0
+1751018292398,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-12,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,1,0,0
+1751018292400,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-12,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018292401,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-12,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018292403,2,Login Request,401,Unauthorized,Prediction System Tests 1-12,text,false,,204,237,2,2,http://localhost:8000/api/auth/token,1,0,0
+1751018292405,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-12,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,1,0,0
+1751018292406,2,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-12,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,2,0,0
+1751018292409,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-12,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018292410,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-12,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018292683,5,Login Request,401,Unauthorized,Prediction System Tests 1-14,text,false,,204,234,2,2,http://localhost:8000/api/auth/token,5,0,1
+1751018292688,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-14,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,1,0,0
+1751018292690,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-14,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,1,0,0
+1751018292691,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-14,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018292692,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-14,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018292694,168,Login Request,200,OK,Prediction System Tests 1-14,text,true,,493,232,2,2,http://localhost:8000/api/auth/token,168,0,0
+1751018292373,489,Train Model Request,200,OK,Prediction System Tests 1-13,text,true,,780,334,2,2,http://localhost:8000/api/prediksi/train,489,0,0
+1751018292863,11,Single Prediction Request,200,OK,Prediction System Tests 1-13,text,true,,469,409,2,2,http://localhost:8000/api/prediksi/,11,0,0
+1751018292875,9,Batch Prediction Request,200,OK,Prediction System Tests 1-13,text,true,,607,395,2,2,http://localhost:8000/api/prediksi/batch,9,0,0
+1751018292885,2,Get Model Metrics,200,OK,Prediction System Tests 1-13,text,true,,325,290,2,2,http://localhost:8000/api/prediksi/model-metrics,2,0,0
+1751018292888,3,Login Request,401,Unauthorized,Prediction System Tests 1-13,text,false,,204,237,2,2,http://localhost:8000/api/auth/token,3,0,0
+1751018292892,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-13,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,1,0,0
+1751018292893,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-13,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,1,0,0
+1751018292894,2,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-13,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,2,0,0
+1751018292896,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-13,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018292898,2,Login Request,401,Unauthorized,Prediction System Tests 1-13,text,false,,204,237,2,2,http://localhost:8000/api/auth/token,2,0,0
+1751018292900,2,Train Model Request,401,Unauthorized,Prediction System Tests 1-13,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,2,0,0
+1751018292902,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-13,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,1,0,0
+1751018292904,2,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-13,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018292906,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-13,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018293186,5,Login Request,401,Unauthorized,Prediction System Tests 1-15,text,false,,204,234,2,2,http://localhost:8000/api/auth/token,5,0,1
+1751018293192,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-15,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,1,0,0
+1751018293193,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-15,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,1,0,0
+1751018293194,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-15,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018293195,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-15,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018292863,502,Train Model Request,200,OK,Prediction System Tests 1-14,text,true,,777,334,2,2,http://localhost:8000/api/prediksi/train,502,0,0
+1751018293197,168,Login Request,200,OK,Prediction System Tests 1-15,text,true,,493,232,2,2,http://localhost:8000/api/auth/token,168,0,0
+1751018293365,12,Single Prediction Request,200,OK,Prediction System Tests 1-14,text,true,,469,409,2,2,http://localhost:8000/api/prediksi/,12,0,0
+1751018293378,6,Batch Prediction Request,200,OK,Prediction System Tests 1-14,text,true,,607,395,2,2,http://localhost:8000/api/prediksi/batch,6,0,0
+1751018293385,2,Get Model Metrics,200,OK,Prediction System Tests 1-14,text,true,,323,290,2,2,http://localhost:8000/api/prediksi/model-metrics,2,0,0
+1751018293387,3,Login Request,401,Unauthorized,Prediction System Tests 1-14,text,false,,204,237,2,2,http://localhost:8000/api/auth/token,2,0,0
+1751018293390,2,Train Model Request,401,Unauthorized,Prediction System Tests 1-14,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,2,0,0
+1751018293392,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-14,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,1,0,0
+1751018293394,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-14,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018293395,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-14,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018293396,2,Login Request,401,Unauthorized,Prediction System Tests 1-14,text,false,,204,237,2,2,http://localhost:8000/api/auth/token,2,0,0
+1751018293398,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-14,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,1,0,0
+1751018293400,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-14,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,1,0,0
+1751018293401,2,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-14,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,2,0,0
+1751018293403,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-14,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018293404,3,Login Request,401,Unauthorized,Prediction System Tests 1-14,text,false,,204,234,2,2,http://localhost:8000/api/auth/token,3,0,0
+1751018293407,2,Train Model Request,401,Unauthorized,Prediction System Tests 1-14,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,2,0,0
+1751018293409,2,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-14,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,1,0,0
+1751018293411,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-14,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018293413,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-14,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018293365,493,Train Model Request,200,OK,Prediction System Tests 1-15,text,true,,777,334,2,2,http://localhost:8000/api/prediksi/train,493,0,0
+1751018293686,171,Login Request,200,OK,Prediction System Tests 1-16,text,true,,493,232,2,2,http://localhost:8000/api/auth/token,171,0,2
+1751018293858,10,Single Prediction Request,200,OK,Prediction System Tests 1-15,text,true,,469,409,2,2,http://localhost:8000/api/prediksi/,10,0,0
+1751018293868,8,Batch Prediction Request,200,OK,Prediction System Tests 1-15,text,true,,607,395,2,2,http://localhost:8000/api/prediksi/batch,8,0,0
+1751018293877,2,Get Model Metrics,200,OK,Prediction System Tests 1-15,text,true,,323,290,2,2,http://localhost:8000/api/prediksi/model-metrics,2,0,0
+1751018293879,3,Login Request,401,Unauthorized,Prediction System Tests 1-15,text,false,,204,237,2,2,http://localhost:8000/api/auth/token,3,0,0
+1751018293883,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-15,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,1,0,0
+1751018293885,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-15,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,1,0,0
+1751018293886,3,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-15,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,3,0,0
+1751018293889,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-15,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018293890,2,Login Request,401,Unauthorized,Prediction System Tests 1-15,text,false,,204,237,2,2,http://localhost:8000/api/auth/token,2,0,0
+1751018293892,2,Train Model Request,401,Unauthorized,Prediction System Tests 1-15,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,2,0,0
+1751018293894,3,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-15,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,2,0,0
+1751018293897,2,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-15,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,2,0,0
+1751018293899,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-15,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018293901,1,Login Request,401,Unauthorized,Prediction System Tests 1-15,text,false,,204,234,2,2,http://localhost:8000/api/auth/token,1,0,0
+1751018293903,2,Train Model Request,401,Unauthorized,Prediction System Tests 1-15,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,2,0,0
+1751018293905,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-15,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,1,0,0
+1751018293906,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-15,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018293907,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-15,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018293858,318,Train Model Request,200,OK,Prediction System Tests 1-16,text,true,,780,334,1,1,http://localhost:8000/api/prediksi/train,318,0,0
+1751018294176,8,Single Prediction Request,200,OK,Prediction System Tests 1-16,text,true,,469,409,2,2,http://localhost:8000/api/prediksi/,8,0,0
+1751018294183,167,Login Request,200,OK,Prediction System Tests 1-17,text,true,,493,232,2,2,http://localhost:8000/api/auth/token,167,0,1
+1751018294185,173,Batch Prediction Request,200,OK,Prediction System Tests 1-16,text,true,,607,395,2,2,http://localhost:8000/api/prediksi/batch,173,0,0
+1751018294358,2,Get Model Metrics,200,OK,Prediction System Tests 1-16,text,true,,325,290,2,2,http://localhost:8000/api/prediksi/model-metrics,2,0,0
+1751018294361,2,Login Request,401,Unauthorized,Prediction System Tests 1-16,text,false,,204,237,2,2,http://localhost:8000/api/auth/token,2,0,0
+1751018294363,2,Train Model Request,401,Unauthorized,Prediction System Tests 1-16,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,2,0,0
+1751018294365,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-16,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,1,0,0
+1751018294367,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-16,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018294369,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-16,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018294370,4,Login Request,401,Unauthorized,Prediction System Tests 1-16,text,false,,204,237,2,2,http://localhost:8000/api/auth/token,4,0,0
+1751018294375,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-16,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,1,0,0
+1751018294377,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-16,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,1,0,0
+1751018294379,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-16,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018294380,2,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-16,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,2,0,0
+1751018294382,2,Login Request,401,Unauthorized,Prediction System Tests 1-16,text,false,,204,234,2,2,http://localhost:8000/api/auth/token,2,0,0
+1751018294384,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-16,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,1,0,0
+1751018294386,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-16,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,1,0,0
+1751018294387,2,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-16,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,2,0,0
+1751018294389,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-16,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018294390,198,Login Request,200,OK,Prediction System Tests 1-16,text,true,,493,232,2,2,http://localhost:8000/api/auth/token,198,0,0
+1751018294684,5,Login Request,401,Unauthorized,Prediction System Tests 1-18,text,false,,204,237,3,3,http://localhost:8000/api/auth/token,5,0,1
+1751018294689,2,Train Model Request,401,Unauthorized,Prediction System Tests 1-18,text,false,,204,219,3,3,http://localhost:8000/api/prediksi/train,2,0,0
+1751018294691,2,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-18,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,3,3,http://localhost:8000/api/prediksi/,2,0,0
+1751018294693,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-18,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,3,3,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018294695,3,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-18,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,3,3,http://localhost:8000/api/prediksi/model-metrics,3,0,0
+1751018294698,3,Login Request,401,Unauthorized,Prediction System Tests 1-18,text,false,,204,237,3,3,http://localhost:8000/api/auth/token,3,0,0
+1751018294701,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-18,text,false,,204,219,3,3,http://localhost:8000/api/prediksi/train,1,0,0
+1751018294702,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-18,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,3,3,http://localhost:8000/api/prediksi/,1,0,0
+1751018294703,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-18,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,3,3,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018294705,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-18,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,3,3,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018294706,2,Login Request,401,Unauthorized,Prediction System Tests 1-18,text,false,,204,234,3,3,http://localhost:8000/api/auth/token,2,0,0
+1751018294709,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-18,text,false,,204,219,3,3,http://localhost:8000/api/prediksi/train,1,0,0
+1751018294710,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-18,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,3,3,http://localhost:8000/api/prediksi/,1,0,0
+1751018294711,2,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-18,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,3,3,http://localhost:8000/api/prediksi/batch,2,0,0
+1751018294713,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-18,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,3,3,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018294715,180,Login Request,200,OK,Prediction System Tests 1-18,text,true,,493,232,3,3,http://localhost:8000/api/auth/token,180,0,0
+1751018294351,544,Train Model Request,200,OK,Prediction System Tests 1-17,text,true,,780,334,3,3,http://localhost:8000/api/prediksi/train,544,0,0
+1751018294896,13,Single Prediction Request,200,OK,Prediction System Tests 1-17,text,true,,469,409,3,3,http://localhost:8000/api/prediksi/,13,0,0
+1751018294910,8,Batch Prediction Request,200,OK,Prediction System Tests 1-17,text,true,,607,395,3,3,http://localhost:8000/api/prediksi/batch,8,0,0
+1751018294918,2,Get Model Metrics,200,OK,Prediction System Tests 1-17,text,true,,323,290,3,3,http://localhost:8000/api/prediksi/model-metrics,2,0,0
+1751018294921,2,Login Request,401,Unauthorized,Prediction System Tests 1-17,text,false,,204,237,3,3,http://localhost:8000/api/auth/token,2,0,0
+1751018294923,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-17,text,false,,204,219,3,3,http://localhost:8000/api/prediksi/train,1,0,0
+1751018294924,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-17,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,3,3,http://localhost:8000/api/prediksi/,1,0,0
+1751018294925,2,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-17,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,3,3,http://localhost:8000/api/prediksi/batch,2,0,0
+1751018294927,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-17,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,3,3,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018294929,2,Login Request,401,Unauthorized,Prediction System Tests 1-17,text,false,,204,237,3,3,http://localhost:8000/api/auth/token,2,0,0
+1751018294932,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-17,text,false,,204,219,3,3,http://localhost:8000/api/prediksi/train,1,0,0
+1751018294933,2,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-17,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,3,3,http://localhost:8000/api/prediksi/,2,0,0
+1751018294935,2,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-17,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,3,3,http://localhost:8000/api/prediksi/batch,2,0,0
+1751018294937,2,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-17,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,3,3,http://localhost:8000/api/prediksi/model-metrics,2,0,0
+1751018294939,3,Login Request,401,Unauthorized,Prediction System Tests 1-17,text,false,,204,234,3,3,http://localhost:8000/api/auth/token,3,0,0
+1751018294942,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-17,text,false,,204,219,3,3,http://localhost:8000/api/prediksi/train,1,0,0
+1751018294944,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-17,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,3,3,http://localhost:8000/api/prediksi/,0,0,0
+1751018294945,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-17,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,3,3,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018294946,2,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-17,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,3,3,http://localhost:8000/api/prediksi/model-metrics,2,0,0
+1751018294948,179,Login Request,200,OK,Prediction System Tests 1-17,text,true,,493,232,3,3,http://localhost:8000/api/auth/token,179,0,0
+1751018294589,539,Train Model Request,200,OK,Prediction System Tests 1-16,text,true,,777,334,3,3,http://localhost:8000/api/prediksi/train,539,0,0
+1751018295129,13,Single Prediction Request,200,OK,Prediction System Tests 1-16,text,true,,469,409,3,3,http://localhost:8000/api/prediksi/,13,0,0
+1751018295144,8,Batch Prediction Request,200,OK,Prediction System Tests 1-16,text,true,,607,395,3,3,http://localhost:8000/api/prediksi/batch,8,0,0
+1751018295152,2,Get Model Metrics,200,OK,Prediction System Tests 1-16,text,true,,323,290,3,3,http://localhost:8000/api/prediksi/model-metrics,2,0,0
+1751018295181,3,Login Request,401,Unauthorized,Prediction System Tests 1-19,text,false,,204,237,3,3,http://localhost:8000/api/auth/token,3,0,0
+1751018295184,2,Train Model Request,401,Unauthorized,Prediction System Tests 1-19,text,false,,204,219,3,3,http://localhost:8000/api/prediksi/train,2,0,0
+1751018295186,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-19,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,3,3,http://localhost:8000/api/prediksi/,1,0,0
+1751018295188,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-19,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,3,3,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018295189,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-19,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,3,3,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018295191,2,Login Request,401,Unauthorized,Prediction System Tests 1-19,text,false,,204,237,3,3,http://localhost:8000/api/auth/token,2,0,0
+1751018295194,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-19,text,false,,204,219,3,3,http://localhost:8000/api/prediksi/train,1,0,0
+1751018295196,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-19,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,3,3,http://localhost:8000/api/prediksi/,1,0,0
+1751018295198,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-19,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,3,3,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018295199,2,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-19,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,3,3,http://localhost:8000/api/prediksi/model-metrics,2,0,0
+1751018295201,3,Login Request,401,Unauthorized,Prediction System Tests 1-19,text,false,,204,234,3,3,http://localhost:8000/api/auth/token,2,0,0
+1751018295204,2,Train Model Request,401,Unauthorized,Prediction System Tests 1-19,text,false,,204,219,3,3,http://localhost:8000/api/prediksi/train,2,0,0
+1751018295206,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-19,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,3,3,http://localhost:8000/api/prediksi/,1,0,0
+1751018295208,2,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-19,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,3,3,http://localhost:8000/api/prediksi/batch,2,0,0
+1751018295210,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-19,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,3,3,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018294895,501,Train Model Request,200,OK,Prediction System Tests 1-18,text,true,,777,334,3,3,http://localhost:8000/api/prediksi/train,501,0,0
+1751018295212,184,Login Request,200,OK,Prediction System Tests 1-19,text,true,,493,232,3,3,http://localhost:8000/api/auth/token,184,0,0
+1751018295397,18,Single Prediction Request,200,OK,Prediction System Tests 1-18,text,true,,469,409,3,3,http://localhost:8000/api/prediksi/,18,0,0
+1751018295416,7,Batch Prediction Request,200,OK,Prediction System Tests 1-18,text,true,,607,395,3,3,http://localhost:8000/api/prediksi/batch,7,0,0
+1751018295424,2,Get Model Metrics,200,OK,Prediction System Tests 1-18,text,true,,325,290,3,3,http://localhost:8000/api/prediksi/model-metrics,2,0,0
+1751018295426,3,Login Request,401,Unauthorized,Prediction System Tests 1-18,text,false,,204,237,3,3,http://localhost:8000/api/auth/token,3,0,0
+1751018295429,2,Train Model Request,401,Unauthorized,Prediction System Tests 1-18,text,false,,204,219,3,3,http://localhost:8000/api/prediksi/train,2,0,0
+1751018295431,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-18,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,3,3,http://localhost:8000/api/prediksi/,1,0,0
+1751018295432,2,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-18,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,3,3,http://localhost:8000/api/prediksi/batch,2,0,0
+1751018295434,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-18,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,3,3,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018295128,377,Train Model Request,200,OK,Prediction System Tests 1-17,text,true,,780,334,2,2,http://localhost:8000/api/prediksi/train,377,0,0
+1751018295505,10,Single Prediction Request,200,OK,Prediction System Tests 1-17,text,true,,469,409,2,2,http://localhost:8000/api/prediksi/,10,0,0
+1751018295515,7,Batch Prediction Request,200,OK,Prediction System Tests 1-17,text,true,,607,395,2,2,http://localhost:8000/api/prediksi/batch,7,0,0
+1751018295522,2,Get Model Metrics,200,OK,Prediction System Tests 1-17,text,true,,325,290,2,2,http://localhost:8000/api/prediksi/model-metrics,2,0,0
+1751018295684,4,Login Request,401,Unauthorized,Prediction System Tests 1-20,text,false,,204,237,2,2,http://localhost:8000/api/auth/token,4,0,1
+1751018295689,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-20,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,1,0,0
+1751018295690,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-20,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,1,0,0
+1751018295692,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-20,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018295693,2,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-20,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,2,0,0
+1751018295695,3,Login Request,401,Unauthorized,Prediction System Tests 1-20,text,false,,204,234,2,2,http://localhost:8000/api/auth/token,3,0,0
+1751018295698,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-20,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,1,0,0
+1751018295699,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-20,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,1,0,0
+1751018295700,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-20,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018295701,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-20,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018295702,171,Login Request,200,OK,Prediction System Tests 1-20,text,true,,493,232,2,2,http://localhost:8000/api/auth/token,171,0,0
+1751018295397,476,Train Model Request,200,OK,Prediction System Tests 1-19,text,true,,780,334,2,2,http://localhost:8000/api/prediksi/train,476,0,0
+1751018295873,12,Single Prediction Request,200,OK,Prediction System Tests 1-19,text,true,,469,409,2,2,http://localhost:8000/api/prediksi/,12,0,0
+1751018295886,8,Batch Prediction Request,200,OK,Prediction System Tests 1-19,text,true,,607,395,2,2,http://localhost:8000/api/prediksi/batch,8,0,0
+1751018295894,2,Get Model Metrics,200,OK,Prediction System Tests 1-19,text,true,,325,290,2,2,http://localhost:8000/api/prediksi/model-metrics,2,0,0
+1751018295896,2,Login Request,401,Unauthorized,Prediction System Tests 1-19,text,false,,204,237,2,2,http://localhost:8000/api/auth/token,2,0,0
+1751018295899,2,Train Model Request,401,Unauthorized,Prediction System Tests 1-19,text,false,,204,219,2,2,http://localhost:8000/api/prediksi/train,2,0,0
+1751018295901,2,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-19,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,2,2,http://localhost:8000/api/prediksi/,2,0,0
+1751018295903,2,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-19,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,2,2,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018295905,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-19,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,2,2,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018295873,354,Train Model Request,200,OK,Prediction System Tests 1-20,text,true,,777,334,1,1,http://localhost:8000/api/prediksi/train,354,0,0
+1751018296227,8,Single Prediction Request,200,OK,Prediction System Tests 1-20,text,true,,469,409,1,1,http://localhost:8000/api/prediksi/,8,0,0
+1751018296236,4,Batch Prediction Request,200,OK,Prediction System Tests 1-20,text,true,,607,395,1,1,http://localhost:8000/api/prediksi/batch,4,0,0
+1751018296241,1,Get Model Metrics,200,OK,Prediction System Tests 1-20,text,true,,323,290,1,1,http://localhost:8000/api/prediksi/model-metrics,1,0,0
+1751018296242,1,Login Request,401,Unauthorized,Prediction System Tests 1-20,text,false,,204,237,1,1,http://localhost:8000/api/auth/token,1,0,0
+1751018296244,1,Train Model Request,401,Unauthorized,Prediction System Tests 1-20,text,false,,204,219,1,1,http://localhost:8000/api/prediksi/train,1,0,0
+1751018296245,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-20,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,1,1,http://localhost:8000/api/prediksi/,1,0,0
+1751018296247,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-20,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,1,1,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018296248,0,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-20,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,1,1,http://localhost:8000/api/prediksi/model-metrics,0,0,0
+1751018296249,1,Login Request,401,Unauthorized,Prediction System Tests 1-20,text,false,,204,234,1,1,http://localhost:8000/api/auth/token,1,0,0
+1751018296251,2,Train Model Request,401,Unauthorized,Prediction System Tests 1-20,text,false,,204,219,1,1,http://localhost:8000/api/prediksi/train,2,0,0
+1751018296253,1,Single Prediction Request,401,Unauthorized,Prediction System Tests 1-20,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,294,1,1,http://localhost:8000/api/prediksi/,1,0,0
+1751018296254,1,Batch Prediction Request,401,Unauthorized,Prediction System Tests 1-20,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,280,1,1,http://localhost:8000/api/prediksi/batch,1,0,0
+1751018296256,1,Get Model Metrics,401,Unauthorized,Prediction System Tests 1-20,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[401]]]
+
+****** comparison: [[[200]]]
+
+/",204,175,1,1,http://localhost:8000/api/prediksi/model-metrics,1,0,0

@@ -1,0 +1,204 @@
+{
+    "ddos_simulation": {
+        "phases": [
+            {
+                "name": "baseline",
+                "duration": 300,
+                "requests_per_second": 100
+            },
+            {
+                "name": "ramp_up",
+                "duration": 600,
+                "requests_per_second": 1000,
+                "increment": 100
+            },
+            {
+                "name": "peak",
+                "duration": 900,
+                "requests_per_second": 10000
+            },
+            {
+                "name": "cool_down",
+                "duration": 300,
+                "requests_per_second": 100,
+                "decrement": 100
+            }
+        ],
+        "endpoints": [
+            "/api/auth/login",
+            "/api/prediksi/individual",
+            "/api/siswa/search",
+            "/api/nilai/view"
+        ],
+        "attack_patterns": [
+            "flood",
+            "slow_loris",
+            "connection_depletion"
+        ]
+    },
+    "session_management": {
+        "scenarios": [
+            {
+                "name": "multiple_devices",
+                "devices": [
+                    "web_browser",
+                    "mobile_app",
+                    "tablet"
+                ],
+                "actions": [
+                    "concurrent_login",
+                    "data_sync",
+                    "logout"
+                ]
+            },
+            {
+                "name": "session_timeout",
+                "idle_times": [
+                    300,
+                    600,
+                    1800
+                ],
+                "actions": [
+                    "auto_logout",
+                    "data_persistence",
+                    "relogin"
+                ]
+            },
+            {
+                "name": "forced_logout",
+                "triggers": [
+                    "admin_action",
+                    "security_violation",
+                    "password_change"
+                ],
+                "verification": [
+                    "all_sessions_terminated",
+                    "audit_log_created",
+                    "notification_sent"
+                ]
+            }
+        ],
+        "validation": {
+            "token_checks": [
+                "expiration",
+                "signature",
+                "claims"
+            ],
+            "security_headers": [
+                "X-Frame-Options",
+                "X-XSS-Protection",
+                "Content-Security-Policy"
+            ]
+        }
+    },
+    "access_control": {
+        "roles": [
+            {
+                "name": "admin",
+                "permissions": [
+                    "full_access",
+                    "user_management",
+                    "system_configuration"
+                ]
+            },
+            {
+                "name": "guru",
+                "permissions": [
+                    "view_students",
+                    "manage_grades",
+                    "create_predictions"
+                ]
+            },
+            {
+                "name": "staff",
+                "permissions": [
+                    "view_reports",
+                    "export_data",
+                    "basic_predictions"
+                ]
+            },
+            {
+                "name": "siswa",
+                "permissions": [
+                    "view_own_data",
+                    "view_predictions",
+                    "download_reports"
+                ]
+            }
+        ],
+        "test_scenarios": [
+            {
+                "name": "unauthorized_access",
+                "attempts": [
+                    "access_admin_panel",
+                    "modify_grades",
+                    "delete_records"
+                ]
+            },
+            {
+                "name": "permission_escalation",
+                "attempts": [
+                    "role_modification",
+                    "system_configuration",
+                    "user_impersonation"
+                ]
+            }
+        ]
+    },
+    "input_validation": {
+        "test_cases": [
+            {
+                "type": "sql_injection",
+                "inputs": [
+                    "' OR '1'='1",
+                    "'; DROP TABLE users;--",
+                    "' UNION SELECT * FROM sensitive_data;--"
+                ]
+            },
+            {
+                "type": "xss",
+                "inputs": [
+                    "<script>alert('XSS')</script>",
+                    "<img src='x' onerror='alert(1)'>",
+                    "javascript:alert('XSS')"
+                ]
+            },
+            {
+                "type": "path_traversal",
+                "inputs": [
+                    "../../../etc/passwd",
+                    "..\\..\\..\\windows\\system32",
+                    "%2e%2e%2f%2e%2e%2f"
+                ]
+            }
+        ]
+    },
+    "api_security": {
+        "rate_limiting": {
+            "thresholds": [
+                {
+                    "endpoint": "/api/auth/*",
+                    "limit": 5,
+                    "window": 60
+                },
+                {
+                    "endpoint": "/api/prediksi/*",
+                    "limit": 100,
+                    "window": 3600
+                }
+            ]
+        },
+        "authentication": {
+            "methods": [
+                "JWT",
+                "API Key",
+                "OAuth2"
+            ],
+            "test_scenarios": [
+                "invalid_token",
+                "expired_token",
+                "missing_token"
+            ]
+        }
+    }
+} 

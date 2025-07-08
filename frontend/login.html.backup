@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPPAS - Sistem Prediksi Prestasi Akademik Siswa)</title>
+    
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="styles/kendo.bootstrap-v4.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- JavaScript Dependencies -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/kendo.all.min.js"></script>
+    
+    <!-- Environment and API Configuration -->
+    <script src="/env-config.js"></script>
+    <script src="js/api-config.js"></script>
+    
+    <style>
+        body {
+            background-color: #f8f9fa;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        .login-container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 450px;
+            margin: 0 auto;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        /* Enhanced width and spacing for registration mode */
+        .login-container.registration-mode {
+            max-width: 900px; /* Significantly wider for 2-column layout */
+            padding: 50px 60px; /* More generous padding */
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+        
+        /* Captcha Styling */
+        #captchaCanvas {
+            border-radius: 5px;
+            cursor: default;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        #refreshCaptcha {
+            height: 50px;
+            width: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+        }
+        
+        #refreshCaptcha:hover {
+            background-color: #e9ecef;
+        }
+        
+        .captcha-container {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+        
+        /* Registration Form Styles */
+        #registerForm {
+            animation: fadeIn 0.3s ease-in;
+            padding-top: 30px; /* Increased padding */
+            margin-top: 20px;
+        }
+        
+        /* Better spacing for form title when in registration mode */
+        #formTitle {
+            color: #495057;
+            margin-bottom: 30px; /* Increased margin */
+            font-weight: 500;
+            padding-top: 15px;
+        }
+        
+        /* Better spacing for registration form fields */
+        #registerForm .mb-3 {
+            margin-bottom: 1.8rem; /* Increased spacing */
+        }
+        
+        #registerForm .form-label {
+            margin-bottom: 0.75rem;
+            font-weight: 500;
+        }
+        
+        /* Ensure first field has proper spacing from title */
+        #registerForm .mb-3:first-child {
+            margin-top: 15px;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .form-text {
+            font-size: 0.875rem;
+            color: #6c757d;
+        }
+        
+        .login-container .row {
+            margin-left: -10px; /* Increased spacing between columns */
+            margin-right: -10px;
+        }
+        
+        .login-container .row .col-md-6 {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 576px) {
+            .login-container {
+                padding: 20px;
+                margin: 10px;
+                max-width: 95%; /* Better mobile width */
+            }
+            
+            .login-container.registration-mode {
+                max-width: 95%;
+                padding: 30px 20px;
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }
+            
+            .login-container .row .col-md-6 {
+                margin-bottom: 15px; /* Increased mobile spacing */
+            }
+            
+            #registerForm {
+                padding-top: 20px;
+            }
+        }
+        
+        /* Medium screens (tablets) */
+        @media (min-width: 577px) and (max-width: 991px) {
+            .login-container.registration-mode {
+                max-width: 750px; /* Tablet width */
+                padding: 40px 45px;
+            }
+        }
+        
+        /* Large screens */
+        @media (min-width: 992px) {
+            .login-container.registration-mode {
+                max-width: 900px; /* Full desktop width */
+                padding: 50px 60px;
+            }
+        }
+        
+        /* Ensure container has enough space and better centering */
+        .container {
+            padding-top: 30px; /* Increased top padding */
+            padding-bottom: 30px; /* Added bottom padding */
+            min-height: 100vh;
+            display: flex;
+            align-items: flex-start; /* Changed from center to flex-start */
+            justify-content: center;
+        }
+        
+        /* Better container behavior for registration mode */
+        .container:has(.login-container.registration-mode) {
+            align-items: flex-start;
+            padding-top: 20px;
+        }
+        
+        /* Fallback for browsers that don't support :has() */
+        .container.registration-active {
+            align-items: flex-start;
+            padding-top: 20px;
+        }
+        
+        /* Registration Form Section Styling */
+        .registration-header {
+            text-align: center;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 20px; /* Increased padding */
+            margin-bottom: 30px; /* Increased margin */
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border-radius: 10px;
+            padding: 25px 20px 20px 20px;
+        }
+        
+        .registration-header h5 {
+            font-weight: 600;
+            color: #007bff;
+            margin-bottom: 8px;
+            font-size: 1.4rem; /* Larger header */
+        }
+        
+        .registration-header p {
+            color: #6c757d;
+            font-size: 1rem; /* Slightly larger description */
+            margin-bottom: 0;
+        }
+        
+        .registration-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            padding: 25px 30px; /* Increased padding for wider form */
+            margin-bottom: 25px; /* Increased margin */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            animation: slideInUp 0.6s ease-out;
+        }
+        
+        .registration-section:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        
+        .section-header {
+            margin-bottom: 25px; /* Increased margin */
+            padding-bottom: 12px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .section-title {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 0;
+            font-size: 1.1rem; /* Slightly larger font */
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Increased gap */
+        }
+        
+        .section-title i {
+            font-size: 1.2rem; /* Larger icons */
+        }
+        
+        /* Enhanced form controls for registration */
+        #registerForm .form-control {
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 14px 18px; /* Increased padding for better UX */
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            background-color: #ffffff;
+            min-height: 48px; /* Minimum height for better touch targets */
+        }
+        
+        #registerForm .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.15);
+            background-color: #ffffff;
+        }
+        
+        #registerForm .form-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 10px; /* Increased margin */
+            font-size: 0.95rem; /* Slightly larger labels */
+        }
+        
+        #registerForm .form-text {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-top: 6px; /* Increased margin */
+        }
+        
+        /* Enhanced captcha container for registration */
+        #registerForm .captcha-container {
+            background: linear-gradient(135deg, #f1f3f4 0%, #ffffff 100%);
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px; /* Increased padding */
+            text-align: center;
+        }
+        
+        #registerForm #regCaptchaCanvas {
+            border: 2px solid #dee2e6;
+            border-radius: 6px;
+            background-color: #ffffff;
+        }
+        
+        /* Enhanced submit button */
+        #registerForm .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            border: none;
+            border-radius: 25px;
+            padding: 15px 40px; /* Increased padding */
+            font-weight: 600;
+            font-size: 1.1rem; /* Larger font */
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+            transition: all 0.3s ease;
+            min-width: 200px; /* Minimum width */
+        }
+        
+        #registerForm .btn-success:hover {
+            background: linear-gradient(135deg, #218838 0%, #1ea085 100%);
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        /* Responsive adjustments for registration sections */
+        @media (max-width: 768px) {
+            .registration-section {
+                padding: 20px 15px; /* Adjusted for mobile */
+                margin-bottom: 20px;
+            }
+            
+            .section-title {
+                font-size: 1rem;
+            }
+            
+            #registerForm .form-control {
+                padding: 12px 15px;
+                font-size: 0.9rem;
+                min-height: 44px;
+            }
+            
+            .registration-header h5 {
+                font-size: 1.2rem;
+            }
+            
+            #registerForm .btn-success {
+                padding: 12px 30px;
+                font-size: 1rem;
+                min-width: 180px;
+            }
+        }
+        
+        /* Enhanced row spacing for registration form */
+        #registerForm .row {
+            margin-left: -12px; /* Increased spacing */
+            margin-right: -12px;
+        }
+        
+        #registerForm .row .col-md-6 {
+            padding-left: 12px;
+            padding-right: 12px;
+        }
+        
+        /* Better spacing for full-width fields */
+        #registerForm .row .col-12 {
+            padding-left: 12px;
+            padding-right: 12px;
+        }
+        
+        /* Animation for section appearance */
+        .registration-section:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+        
+        .registration-section:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+        
+        .registration-section:nth-child(4) {
+            animation-delay: 0.3s;
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Special styling for required fields */
+        #registerForm .form-label[for="regUsername"]:after,
+        #registerForm .form-label[for="regEmail"]:after,
+        #registerForm .form-label[for="regPassword"]:after,
+        #registerForm .form-label[for="regConfirmPassword"]:after,
+        #registerForm .form-label[for="regRole"]:after,
+        #registerForm .form-label[for="regNamaLengkap"]:after,
+        #registerForm .form-label[for="regJabatan"]:after {
+            content: " *";
+            color: #dc3545;
+            font-weight: bold;
+        }
+    </style>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+    <script src="/env-config.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="login-container">
+            <div class="logo">
+                <h3>SPPAS Sistem Prediksi Prestasi Siswa</h3>
+                <h4 id="formTitle">Login</h4>
+            </div>
+            
+            <form id="loginForm">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" required>
+                </div>
+                
+                <!-- Captcha Section -->
+                <div class="mb-3">
+                    <label for="captcha" class="form-label">Verifikasi Keamanan</label>
+                    <div class="captcha-container">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <canvas id="captchaCanvas" width="150" height="50" class="border"></canvas>
+                            <button type="button" class="btn btn-outline-secondary" id="refreshCaptcha" title="Refresh Captcha">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+                        <input type="text" class="form-control" id="captcha" placeholder="Masukkan kode yang terlihat di atas" required>
+                        <small class="form-text text-muted mt-1">
+                            <i class="fas fa-info-circle"></i> Masukkan kode verifikasi untuk melanjutkan login
+                        </small>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary w-100">Login</button>
+            </form>
+            
+            <!-- Registration Form (Hidden by default) -->
+             <div class="row">
+                <form id="registerForm" style="display: none;">
+                
+                    <!-- Registration Header -->
+                    <div class="registration-header mb-4">
+                        <h5 class="text-center text-primary mb-1">
+                            <i class="fas fa-user-plus"></i> Buat Akun Baru
+                        </h5>
+                        <p class="text-center text-muted small mb-0">Lengkapi informasi di bawah untuk mendaftar</p>
+                    </div>
+                    
+                    <!-- Account Information Section -->
+                    <div class="registration-section mb-4">
+                        <div class="section-header">
+                            <h6 class="section-title">
+                                <i class="fas fa-key text-primary"></i> Informasi Akun
+                            </h6>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="regUsername" class="form-label">Username</label>
+                                    <input type="text" class="form-control" id="regUsername" required minlength="3" maxlength="20">
+                                    <small class="form-text text-muted">3-20 karakter, hanya huruf dan angka</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="regEmail" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="regEmail" required>
+                                    <small class="form-text text-muted">Email untuk notifikasi</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="regPassword" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="regPassword" required minlength="6">
+                                    <small class="form-text text-muted">Minimal 6 karakter</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="regConfirmPassword" class="form-label">Konfirmasi Password</label>
+                                    <input type="password" class="form-control" id="regConfirmPassword" required>
+                                    <small class="form-text text-muted">Masukkan ulang password</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="regRole" class="form-label">Role</label>
+                                    <select class="form-control" id="regRole" required>
+                                        <option value="">Pilih Role</option>
+                                        <option value="guru">Guru</option>
+                                        <option value="staf">Staf</option>
+                                    </select>
+                                    <small class="form-text text-muted">Pilih role sesuai jabatan</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Profile Information Section -->
+                    <div class="registration-section mb-4">
+                        <div class="section-header">
+                            <h6 class="section-title">
+                                <i class="fas fa-user text-success"></i> Informasi Profile
+                            </h6>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="regNamaLengkap" class="form-label">Nama Lengkap</label>
+                                    <input type="text" class="form-control" id="regNamaLengkap" required>
+                                    <small class="form-text text-muted">Nama lengkap sesuai identitas</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="regNip" class="form-label">NIP</label>
+                                    <input type="text" class="form-control" id="regNip" placeholder="Nomor Induk Pegawai (opsional)">
+                                    <small class="form-text text-muted">Opsional</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="regJabatan" class="form-label">Jabatan</label>
+                                    <input type="text" class="form-control" id="regJabatan" required>
+                                    <small class="form-text text-muted">Jabatan di sekolah</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="regNoHp" class="form-label">No. HP</label>
+                                    <input type="text" class="form-control" id="regNoHp" placeholder="Nomor handphone (opsional)">
+                                    <small class="form-text text-muted">Opsional</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="mb-3">
+                                    <label for="regAlamat" class="form-label">Alamat</label>
+                                    <textarea class="form-control" id="regAlamat" placeholder="Alamat lengkap (opsional)" rows="2"></textarea>
+                                    <small class="form-text text-muted">Opsional</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Security Verification Section -->
+                    <div class="registration-section mb-4">
+                        <div class="section-header">
+                            <h6 class="section-title">
+                                <i class="fas fa-shield-alt text-warning"></i> Verifikasi Keamanan
+                            </h6>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="captcha-container">
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                        <canvas id="regCaptchaCanvas" width="150" height="50" class="border rounded"></canvas>
+                                        <button type="button" class="btn btn-outline-secondary btn-sm" id="regRefreshCaptcha" title="Refresh Captcha">
+                                            <i class="fas fa-sync-alt"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="regCaptcha" class="form-label">Kode Verifikasi</label>
+                                    <input type="text" class="form-control" id="regCaptcha" placeholder="Masukkan kode di samping" required>
+                                    <small class="form-text text-muted">
+                                        <i class="fas fa-info-circle"></i> Masukkan kode untuk verifikasi
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Submit Button -->
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-success btn-lg px-5">
+                            <i class="fas fa-user-plus"></i> Daftar Sekarang
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            
+            <div class="text-center mt-3">
+                <a href="#" id="registerLink">Belum punya akun? Daftar disini</a>
+                <a href="#" id="loginLink" style="display: none;">Sudah punya akun? Login disini</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Captcha variables
+        let captchaText = '';
+        let captchaAttempts = 0;
+        const maxCaptchaAttempts = 3;
+        
+        // Registration captcha variables
+        let regCaptchaText = '';
+        let regCaptchaAttempts = 0;
+        
+        // Generate random captcha text
+        function generateCaptchaText() {
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789';
+            let result = '';
+            for (let i = 0; i < 6; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+        
+        // Draw captcha on canvas
+        function drawCaptcha() {
+            const canvas = document.getElementById('captchaCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Generate new captcha text
+            captchaText = generateCaptchaText();
+            
+            // Set background with gradient
+            const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            gradient.addColorStop(0, '#f8f9fa');
+            gradient.addColorStop(1, '#e9ecef');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Add noise lines
+            for (let i = 0; i < 8; i++) {
+                ctx.strokeStyle = `hsla(${Math.random() * 360}, 50%, 70%, 0.3)`;
+                ctx.lineWidth = Math.random() * 2 + 1;
+                ctx.beginPath();
+                ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
+                ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
+                ctx.stroke();
+            }
+            
+            // Add noise dots
+            for (let i = 0; i < 30; i++) {
+                ctx.fillStyle = `hsla(${Math.random() * 360}, 50%, 70%, 0.4)`;
+                ctx.beginPath();
+                ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, Math.random() * 2, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+            
+            // Draw captcha text with better styling
+            ctx.font = 'bold 18px Arial, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            
+            for (let i = 0; i < captchaText.length; i++) {
+                const char = captchaText[i];
+                const x = 25 + (i * 20);
+                const y = 25 + (Math.random() - 0.5) * 8; // Random vertical offset
+                const angle = (Math.random() - 0.5) * 0.4; // Random rotation
+                
+                ctx.save();
+                ctx.translate(x, y);
+                ctx.rotate(angle);
+                
+                // Add text shadow
+                ctx.fillStyle = 'rgba(0,0,0,0.3)';
+                ctx.fillText(char, 1, 1);
+                
+                // Main text
+                ctx.fillStyle = `hsl(${Math.random() * 360}, 70%, 25%)`;
+                ctx.fillText(char, 0, 0);
+                ctx.restore();
+            }
+            
+            // Reset attempts counter when new captcha is generated
+            captchaAttempts = 0;
+        }
+        
+        // Draw registration captcha on canvas
+        function drawRegCaptcha() {
+            const canvas = document.getElementById('regCaptchaCanvas');
+            if (!canvas) return; // Canvas might not exist yet
+            
+            const ctx = canvas.getContext('2d');
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Generate new captcha text
+            regCaptchaText = generateCaptchaText();
+            
+            // Set background with gradient
+            const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            gradient.addColorStop(0, '#f8f9fa');
+            gradient.addColorStop(1, '#e9ecef');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Add noise lines
+            for (let i = 0; i < 8; i++) {
+                ctx.strokeStyle = `hsla(${Math.random() * 360}, 50%, 70%, 0.3)`;
+                ctx.lineWidth = Math.random() * 2 + 1;
+                ctx.beginPath();
+                ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
+                ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
+                ctx.stroke();
+            }
+            
+            // Add noise dots
+            for (let i = 0; i < 30; i++) {
+                ctx.fillStyle = `hsla(${Math.random() * 360}, 50%, 70%, 0.4)`;
+                ctx.beginPath();
+                ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, Math.random() * 2, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+            
+            // Draw captcha text with better styling
+            ctx.font = 'bold 18px Arial, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            
+            for (let i = 0; i < regCaptchaText.length; i++) {
+                const char = regCaptchaText[i];
+                const x = 25 + (i * 20);
+                const y = 25 + (Math.random() - 0.5) * 8; // Random vertical offset
+                const angle = (Math.random() - 0.5) * 0.4; // Random rotation
+                
+                ctx.save();
+                ctx.translate(x, y);
+                ctx.rotate(angle);
+                
+                // Add text shadow
+                ctx.fillStyle = 'rgba(0,0,0,0.3)';
+                ctx.fillText(char, 1, 1);
+                
+                // Main text
+                ctx.fillStyle = `hsl(${Math.random() * 360}, 70%, 25%)`;
+                ctx.fillText(char, 0, 0);
+                ctx.restore();
+            }
+            
+            // Reset attempts counter when new captcha is generated
+            regCaptchaAttempts = 0;
+        }
+        
+        // Validate captcha
+        function validateCaptcha(userInput) {
+            return userInput.trim().toLowerCase() === captchaText.toLowerCase();
+        }
+        
+        // Validate registration captcha
+        function validateRegCaptcha(userInput) {
+            return userInput.trim().toLowerCase() === regCaptchaText.toLowerCase();
+        }
+        
+        // Validate registration form
+        function validateRegistrationForm() {
+            const username = $('#regUsername').val().trim();
+            const email = $('#regEmail').val().trim();
+            const password = $('#regPassword').val();
+            const confirmPassword = $('#regConfirmPassword').val();
+            const role = $('#regRole').val();
+            const namaLengkap = $('#regNamaLengkap').val().trim();
+            const jabatan = $('#regJabatan').val().trim();
+            
+            // Username validation
+            if (username.length < 3 || username.length > 20) {
+                kendo.alert('Username harus 3-20 karakter');
+                return false;
+            }
+            
+            if (!/^[a-zA-Z0-9]+$/.test(username)) {
+                kendo.alert('Username hanya boleh berisi huruf dan angka');
+                return false;
+            }
+            
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                kendo.alert('Format email tidak valid');
+                return false;
+            }
+            
+            // Password validation
+            if (password.length < 6) {
+                kendo.alert('Password minimal 6 karakter');
+                return false;
+            }
+            
+            if (password !== confirmPassword) {
+                kendo.alert('Password dan konfirmasi password tidak sama');
+                return false;
+            }
+            
+            // Role validation
+            if (!role) {
+                kendo.alert('Silakan pilih role');
+                return false;
+            }
+            
+            // Required fields validation
+            if (!namaLengkap) {
+                kendo.alert('Nama lengkap harus diisi');
+                return false;
+            }
+            
+            if (!jabatan) {
+                kendo.alert('Jabatan harus diisi');
+                return false;
+            }
+            
+            return true;
+        }
+        
+        // Show captcha error with attempts counter
+        function showCaptchaError() {
+            captchaAttempts++;
+            const remainingAttempts = maxCaptchaAttempts - captchaAttempts;
+            
+            if (remainingAttempts > 0) {
+                kendo.alert(`Kode verifikasi salah. Sisa percobaan: ${remainingAttempts}`);
+            } else {
+                kendo.alert('Terlalu banyak percobaan gagal. Captcha akan di-refresh.');
+                drawCaptcha(); // Auto refresh after max attempts
+            }
+            
+            $('#captcha').val('').focus(); // Clear and focus input
+        }
+        
+        $(document).ready(function() {
+            // Initialize captcha
+            drawCaptcha();
+            
+            // Refresh captcha button
+            $('#refreshCaptcha').click(function() {
+                drawCaptcha();
+                $('#captcha').val('').focus(); // Clear input and focus
+            });
+            
+            // Keyboard accessibility for captcha refresh
+            $('#refreshCaptcha').keydown(function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    $(this).click();
+                }
+            });
+            
+            // Auto-focus captcha input when canvas is clicked
+            $('#captchaCanvas').click(function() {
+                $('#captcha').focus();
+            });
+            
+            // Enter key support for captcha input
+            $('#captcha').keydown(function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    $('#loginForm').submit();
+                }
+            });
+            
+            // Handle login form submission
+            $('#loginForm').submit(function(e) {
+                e.preventDefault();
+                
+                const username = $('#username').val();
+                const password = $('#password').val();
+                const captchaInput = $('#captcha').val();
+                
+                // Validate captcha first
+                if (!validateCaptcha(captchaInput)) {
+                    showCaptchaError();
+                    return;
+                }
+                
+                // Show loading state
+                const submitBtn = $(this).find('button[type="submit"]');
+                const originalText = submitBtn.text();
+                submitBtn.prop('disabled', true).text('Loading...');
+                
+                API_CONFIG.login(username, password)
+                    .then(function(response) {
+                        // Store token and user data in localStorage
+                        localStorage.setItem('access_token', response.access_token);
+                        localStorage.setItem('user_data', JSON.stringify(response.user));
+                        
+                        // Redirect to dashboard
+                        window.location.href = 'index.html';
+                    })
+                    .catch(function(xhr) {
+                        let errorMessage = 'Login gagal';
+                        if (xhr.responseJSON && xhr.responseJSON.detail) {
+                            errorMessage = xhr.responseJSON.detail;
+                        }
+                        kendo.alert(errorMessage);
+                        // Generate new captcha on login failure
+                        drawCaptcha();
+                        $('#captcha').val('');
+                    })
+                    .finally(function() {
+                        // Restore button state
+                        submitBtn.prop('disabled', false).text(originalText);
+                    });
+            });
+            
+            // Handle register link
+            $('#registerLink').click(function(e) {
+                e.preventDefault();
+                
+                // Hide login form and show registration form
+                $('#loginForm').hide();
+                $('#registerForm').show();
+                $('#registerLink').hide();
+                $('#loginLink').show();
+                $('#formTitle').text('Registrasi');
+                
+                // Add registration mode class for better spacing
+                $('.login-container').addClass('registration-mode');
+                $('.container').addClass('registration-active'); // Add fallback class
+                
+                // Initialize registration captcha
+                drawRegCaptcha();
+                
+                // Debug: Check if form is visible and accessible
+                console.log('Registration form shown, visible:', $('#registerForm').is(':visible'));
+                console.log('Registration form exists:', $('#registerForm').length);
+            });
+            
+            // Handle login link (back to login from registration)
+            $('#loginLink').click(function(e) {
+                e.preventDefault();
+                
+                // Hide registration form and show login form
+                $('#registerForm').hide();
+                $('#loginForm').show();
+                $('#loginLink').hide();
+                $('#registerLink').show();
+                $('#formTitle').text('Login');
+                
+                // Remove registration mode class
+                $('.login-container').removeClass('registration-mode');
+                $('.container').removeClass('registration-active'); // Remove fallback class
+                
+                // Clear registration form
+                $('#registerForm')[0].reset();
+            });
+            
+            // Registration captcha refresh button
+            $('#regRefreshCaptcha').click(function() {
+                drawRegCaptcha();
+                $('#regCaptcha').val('').focus();
+            });
+            
+            // Auto-focus registration captcha input when canvas is clicked
+            $('#regCaptchaCanvas').click(function() {
+                $('#regCaptcha').focus();
+            });
+            
+            // Handle registration form submission using event delegation
+            $(document).on('submit', '#registerForm', function(e) {
+                e.preventDefault();
+                console.log('Registration form submitted via delegation'); // Debug log
+                
+                const username = $('#regUsername').val();
+                const email = $('#regEmail').val();
+                const password = $('#regPassword').val();
+                const confirmPassword = $('#regConfirmPassword').val();
+                const role = $('#regRole').val();
+                const nip = $('#regNip').val();
+                const namaLengkap = $('#regNamaLengkap').val();
+                const jabatan = $('#regJabatan').val();
+                const noHp = $('#regNoHp').val();
+                const alamat = $('#regAlamat').val();
+                const regCaptcha = $('#regCaptcha').val();
+                
+                console.log('Form data:', { username, email, role, namaLengkap, jabatan }); // Debug log
+                
+                // Validate captcha for registration
+                if (!validateRegCaptcha(regCaptcha)) {
+                    kendo.alert('Kode verifikasi registrasi salah');
+                    return;
+                }
+                
+                // Validate registration form
+                if (!validateRegistrationForm()) {
+                    return;
+                }
+                
+                // Show loading state
+                const submitBtn = $('#registerForm button[type="submit"]');
+                const originalText = submitBtn.html();
+                submitBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Mendaftar...');
+                
+                $.ajax({
+                    url: API_CONFIG.getUrl(API_CONFIG.ENDPOINTS.AUTH.REGISTER),
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        username: username,
+                        email: email,
+                        password: password,
+                        role: role,
+                        profile: {
+                            nip: nip,
+                            nama_lengkap: namaLengkap,
+                            jabatan: jabatan,
+                            no_hp: noHp,
+                            alamat: alamat
+                        }
+                    }),
+                    success: function(response) {
+                        console.log('Registration successful:', response); // Debug log
+                        kendo.alert('Registrasi berhasil. Silakan login.');
+                        
+                        // Switch back to login form
+                        $('#registerForm').hide();
+                        $('#loginForm').show();
+                        $('#loginLink').hide();
+                        $('#registerLink').show();
+                        $('#formTitle').text('Login');
+                        
+                        // Remove registration mode class
+                        $('.login-container').removeClass('registration-mode');
+                        $('.container').removeClass('registration-active'); // Remove fallback class
+                        
+                        // Clear registration form
+                        $('#registerForm')[0].reset();
+                    },
+                    error: function(xhr) {
+                        console.error('Registration error:', xhr); // Debug log
+                        let errorMsg = 'Registrasi gagal';
+                        
+                        if (xhr.responseJSON) {
+                            if (xhr.responseJSON.detail) {
+                                if (Array.isArray(xhr.responseJSON.detail)) {
+                                    // Handle validation errors
+                                    const errors = xhr.responseJSON.detail.map(err => {
+                                        const field = err.loc[err.loc.length - 1];
+                                        return `${field}: ${err.msg}`;
+                                    });
+                                    errorMsg = errors.join('\n');
+                                } else {
+                                    errorMsg = xhr.responseJSON.detail;
+                                }
+                            }
+                        }
+                        
+                        kendo.alert(errorMsg);
+                        
+                        // Refresh registration captcha on error
+                        drawRegCaptcha();
+                        $('#regCaptcha').val('');
+                    },
+                    complete: function() {
+                        // Restore button state
+                        submitBtn.prop('disabled', false).html(originalText);
+                    }
+                });
+            });
+            
+            // Backup event handler for registration button click
+            $(document).on('click', '#registerForm button[type="submit"]', function(e) {
+                e.preventDefault();
+                console.log('Registration button clicked'); // Debug log
+                $('#registerForm').trigger('submit');
+            });
+            
+            // Simple test event handler
+            $(document).on('click', '#registerForm .btn-success', function(e) {
+                e.preventDefault();
+                console.log('Registration button clicked (simple handler)');
+                alert('Form registrasi diklik!');
+                
+                // Trigger form submission manually
+                const form = document.getElementById('registerForm');
+                if (form) {
+                    const event = new Event('submit', { bubbles: true, cancelable: true });
+                    form.dispatchEvent(event);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

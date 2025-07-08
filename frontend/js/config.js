@@ -42,20 +42,10 @@ function getEnvVar(name, defaultValue = '') {
 
 // Deteksi environment berdasarkan URL dan context
 function detectEnvironment() {
-    if (typeof window === 'undefined') return 'server';
-    
-    const hostname = window.location.hostname;
-    const protocol = window.location.protocol;
-    
-    if (hostname === 'localhost' || hostname === '127.0.0.1' || hostname.startsWith('192.168.')) {
+    if (window.ENV && window.ENV.EDUPRO_DEBUG === 'true') {
         return 'development';
     }
-    
-    if (protocol === 'https:') {
-        return 'production';
-    }
-    
-    return 'development';
+    return 'production';
 }
 
 // Konfigurasi aplikasi dengan environment-specific defaults
@@ -63,11 +53,9 @@ const environment = detectEnvironment();
 const config = {
     // API Configuration - Dynamic based on environment
     API_URL: getEnvVar('EDUPRO_API_URL', 
-        environment === 'production' 
-            ? 'https://api.edupro.com/api'  // Production default
-            : (typeof window !== 'undefined' && window.location.hostname !== 'localhost')
-                ? `http://${window.location.hostname}:8000/api`  // Docker/network default
-                : 'http://localhost:8000/api'  // Local development default
+        detectEnvironment() === 'development' 
+            ? '/api'  // Development default
+            : '/api'  // Production default
     ),
     
     // App Information
@@ -75,7 +63,7 @@ const config = {
     APP_VERSION: getEnvVar('EDUPRO_APP_VERSION', '1.0.0'),
     
     // Debug Settings - Auto-detect based on environment
-    DEBUG: getEnvVar('EDUPRO_DEBUG', environment === 'development' ? 'true' : 'false') === 'true',
+    DEBUG: getEnvVar('EDUPRO_DEBUG', 'false') === 'true',
     
     // Environment info
     ENVIRONMENT: environment,
@@ -100,6 +88,18 @@ const config = {
         TINGGI: '#28a745',
         SEDANG: '#ffc107', 
         RENDAH: '#dc3545'
+    },
+
+    // API Endpoints
+    ENDPOINTS: {
+        HISTORY: '/prediksi/history',
+        TRAIN: '/prediksi/train',
+        PREDICT: '/prediksi',
+        BATCH_PREDICT: '/prediksi/batch',
+        MODEL_METRICS: '/prediksi/model-metrics',
+        CONFUSION_MATRIX: '/prediksi/confusion-matrix',
+        FEATURE_STATISTICS: '/prediksi/feature-statistics',
+        RULES: '/prediksi/rules'
     }
 };
 

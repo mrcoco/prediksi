@@ -1,0 +1,38 @@
+http:
+  routers:
+    backend:
+      rule: "PathPrefix(`/api`)"
+      service: backend
+      entryPoints:
+        - web
+
+    frontend:
+      rule: "PathPrefix(`/`)"
+      service: frontend
+      entryPoints:
+        - web
+
+  services:
+    backend:
+      loadBalancer:
+        servers:
+          - url: "http://backend:8000"
+    
+    frontend:
+      loadBalancer:
+        servers:
+          - url: "http://frontend:80"
+
+entryPoints:
+  web:
+    address: ":80"
+    
+api:
+  dashboard: true
+  insecure: true
+
+providers:
+  docker:
+    exposedByDefault: false
+  file:
+    filename: /etc/traefik/traefik.yml 

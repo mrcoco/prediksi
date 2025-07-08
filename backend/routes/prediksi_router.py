@@ -5,6 +5,7 @@ from typing import List, Optional
 from database import get_db, Siswa, NilaiRaport, PenghasilanOrtu, Presensi, Prestasi
 from schemas import PrestasiCreate, PrestasiResponse, PrediksiRequest, PrediksiResponse
 from models.c45_model import c45_model
+from model_accuracy_manager import model_accuracy_manager, RetrainingTrigger
 from datetime import datetime
 import os
 import random
@@ -13,8 +14,18 @@ from routes.auth_router import get_current_user
 from models.user import User
 import numpy as np
 from io import BytesIO
+import time
+import logging
+
+# Cache imports
+from cache_config import (
+    create_cache_key, set_cache, get_cache, 
+    invalidate_student_cache, cache_health_check,
+    CACHE_EXPIRE_PREDICTIONS, CACHE_EXPIRE_STUDENT_DATA
+)
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 @router.post("/train", status_code=status.HTTP_200_OK)
 def train_model(
@@ -52,9 +63,32 @@ def predict_prestasi(
     request: PrediksiRequest,
     db: Session = Depends(get_db),
     force_train: bool = False,
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
+    use_cache: bool = True
 ):
-    """Memprediksi prestasi siswa berdasarkan data yang ada"""
+    """Memprediksi prestasi siswa berdasarkan data yang ada dengan caching untuk performance optimization"""
+    start_time = time.time()
+    
+    # Create cache key for this prediction
+    cache_key = create_cache_key(
+        "predict",
+        siswa_id=request.siswa_id,
+        semester=request.semester,
+        tahun_ajaran=request.tahun_ajaran,
+        model_version=getattr(c45_model, 'model_version', 'v1')
+    )
+    
+    # Try to get from cache first if caching is enabled
+    if use_cache and cache_health_check():
+        cached_result = get_cache(cache_key)
+        if cached_result:
+            # Return cached result with same structure
+            logging.info(f"🎯 Cache HIT for prediction siswa_id={request.siswa_id}, response_time={time.time() - start_time:.3f}s")
+            return cached_result
+    
+    # Cache miss - proceed with normal prediction logic
+    logging.info(f"🔍 Cache MISS for prediction siswa_id={request.siswa_id}")
+    
     # Cek apakah siswa ada
     siswa = db.query(Siswa).filter(Siswa.id == request.siswa_id).first()
     if not siswa:
@@ -154,12 +188,36 @@ def predict_prestasi(
             db.add(new_prestasi)
             db.commit()
         
+        # Tentukan semester depan untuk prediksi
+        def get_next_semester(current_semester, current_tahun_ajaran):
+            if current_semester.lower() == "ganjil":
+                return "Genap", current_tahun_ajaran
+            elif current_semester.lower() == "genap":
+                # Jika semester genap, tahun ajaran berubah
+                tahun_parts = current_tahun_ajaran.split('/')
+                if len(tahun_parts) == 2:
+                    next_tahun = f"{int(tahun_parts[1])}/{int(tahun_parts[1]) + 1}"
+                    return "Ganjil", next_tahun
+                else:
+                    return "Ganjil", current_tahun_ajaran
+            else:
+                return "Ganjil", current_tahun_ajaran
+        
+        next_semester, next_tahun_ajaran = get_next_semester(request.semester, request.tahun_ajaran)
+        
         # Siapkan response
         response = {
             'siswa_id': request.siswa_id,
             'nama_siswa': siswa.nama,
             'prediksi_prestasi': result['prediksi'],
             'confidence': result['confidence'],
+            'semester_prediksi': {
+                'data_dari_semester': request.semester,
+                'data_dari_tahun_ajaran': request.tahun_ajaran,
+                'prediksi_untuk_semester': next_semester,
+                'prediksi_untuk_tahun_ajaran': next_tahun_ajaran,
+                'keterangan': f"Prediksi untuk semester {next_semester} tahun ajaran {next_tahun_ajaran} berdasarkan data semester {request.semester} tahun ajaran {request.tahun_ajaran}"
+            },
             'detail_faktor': {
                 'nilai_rata_rata': nilai.rata_rata,
                 'kategori_penghasilan': penghasilan.kategori_penghasilan,
@@ -167,6 +225,18 @@ def predict_prestasi(
                 'feature_importances': result['feature_importances']
             }
         }
+        
+        # Store result in cache for future requests
+        if use_cache and cache_health_check():
+            cache_success = set_cache(cache_key, response, CACHE_EXPIRE_PREDICTIONS)
+            if cache_success:
+                logging.info(f"📦 Cache SET for prediction siswa_id={request.siswa_id}, expires in {CACHE_EXPIRE_PREDICTIONS}s")
+            else:
+                logging.warning(f"⚠️ Failed to cache prediction for siswa_id={request.siswa_id}")
+        
+        # Log performance metrics
+        total_time = time.time() - start_time
+        logging.info(f"✅ Prediction completed for siswa_id={request.siswa_id}, total_time={total_time:.3f}s")
         
         return response
     
@@ -180,11 +250,15 @@ def predict_prestasi(
 def predict_all_students(
     request: dict = Body(...),
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
+    use_cache: bool = True
 ):
-    """Memprediksi prestasi untuk semua siswa berdasarkan semester dan tahun ajaran"""
+    """Memprediksi prestasi untuk semua siswa berdasarkan semester dan tahun ajaran dengan caching optimization"""
+    start_time = time.time()
     semester = request.get('semester')
     tahun_ajaran = request.get('tahun_ajaran')
+    
+    logging.info(f"Starting batch prediction for semester={semester}, tahun_ajaran={tahun_ajaran}")
     
     if not semester or not tahun_ajaran:
         raise HTTPException(
@@ -192,11 +266,31 @@ def predict_all_students(
             detail="Semester dan tahun ajaran harus diisi"
         )
     
+    # Create cache key for batch prediction
+    batch_cache_key = create_cache_key(
+        "batch_predict",
+        semester=semester,
+        tahun_ajaran=tahun_ajaran,
+        model_version=getattr(c45_model, 'model_version', 'v1')
+    )
+    
+    # Try to get from cache first if caching is enabled
+    if use_cache and cache_health_check():
+        cached_result = get_cache(batch_cache_key)
+        if cached_result:
+            logging.info(f"🎯 Cache HIT for batch prediction {semester}-{tahun_ajaran}, response_time={time.time() - start_time:.3f}s")
+            return cached_result
+    
+    logging.info(f"🔍 Cache MISS for batch prediction {semester}-{tahun_ajaran}")
+    
     # Cek apakah model sudah dilatih
     if not c45_model.trained:
         try:
+            logging.info("Model not trained, training now...")
             c45_model.train(db)
+            logging.info("Model training completed")
         except ValueError as e:
+            logging.error(f"Error training model: {str(e)}")
             if "Data berlabel tidak cukup" in str(e):
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
@@ -209,12 +303,23 @@ def predict_all_students(
     
     try:
         # Ambil semua siswa yang memiliki data lengkap untuk semester dan tahun ajaran tersebut
-        siswa_query = db.query(Siswa).join(NilaiRaport).join(Presensi).join(PenghasilanOrtu).filter(
-            NilaiRaport.semester == semester,
-            NilaiRaport.tahun_ajaran == tahun_ajaran,
-            Presensi.semester == semester,
-            Presensi.tahun_ajaran == tahun_ajaran
+        logging.info("Querying students with complete data...")
+        siswa_query = db.query(Siswa).join(
+            NilaiRaport,
+            (NilaiRaport.siswa_id == Siswa.id) &
+            (NilaiRaport.semester == semester) &
+            (NilaiRaport.tahun_ajaran == tahun_ajaran)
+        ).join(
+            Presensi,
+            (Presensi.siswa_id == Siswa.id) &
+            (Presensi.semester == semester) &
+            (Presensi.tahun_ajaran == tahun_ajaran)
+        ).join(
+            PenghasilanOrtu,
+            PenghasilanOrtu.siswa_id == Siswa.id
         ).all()
+        
+        logging.info(f"Found {len(siswa_query)} students with complete data")
         
         if not siswa_query:
             raise HTTPException(
@@ -226,11 +331,14 @@ def predict_all_students(
         success_count = 0
         error_count = 0
         errors = []
+        prestasi_updates = []
         
         for siswa in siswa_query:
             try:
+                logging.info(f"Processing student {siswa.id} - {siswa.nama}")
+                
                 # Ambil data nilai raport
-                nilai = db.query(NilaiRaport).filter(
+                nilai_raport = db.query(NilaiRaport).filter(
                     NilaiRaport.siswa_id == siswa.id,
                     NilaiRaport.semester == semester,
                     NilaiRaport.tahun_ajaran == tahun_ajaran
@@ -248,20 +356,25 @@ def predict_all_students(
                     PenghasilanOrtu.siswa_id == siswa.id
                 ).first()
                 
-                if not nilai or not presensi or not penghasilan:
+                if not nilai_raport or not presensi or not penghasilan:
                     error_count += 1
-                    errors.append(f"Data tidak lengkap untuk siswa {siswa.nama}")
+                    error_msg = f"Data tidak lengkap untuk siswa {siswa.nama}"
+                    logging.warning(error_msg)
+                    errors.append(error_msg)
                     continue
                 
                 # Siapkan data untuk prediksi
                 prediction_data = {
-                    'rata_rata': nilai.rata_rata,
+                    'rata_rata': nilai_raport.rata_rata,
                     'kategori_penghasilan': penghasilan.kategori_penghasilan,
                     'kategori_kehadiran': presensi.kategori_kehadiran
                 }
                 
+                logging.info(f"Prediction data for student {siswa.id}: {prediction_data}")
+                
                 # Lakukan prediksi
                 result = c45_model.predict(prediction_data)
+                logging.info(f"Prediction result for student {siswa.id}: {result}")
                 
                 # Simpan hasil prediksi ke database
                 prestasi_data = {
@@ -284,10 +397,28 @@ def predict_all_students(
                     for key, value in prestasi_data.items():
                         setattr(existing_prestasi, key, value)
                     existing_prestasi.updated_at = datetime.now()
+                    prestasi_updates.append(existing_prestasi)
                 else:
                     # Buat prediksi baru
                     new_prestasi = Prestasi(**prestasi_data)
-                    db.add(new_prestasi)
+                    prestasi_updates.append(new_prestasi)
+                
+                # Tentukan semester depan untuk prediksi
+                def get_next_semester_batch(current_semester, current_tahun_ajaran):
+                    if current_semester.lower() == "ganjil":
+                        return "Genap", current_tahun_ajaran
+                    elif current_semester.lower() == "genap":
+                        # Jika semester genap, tahun ajaran berubah
+                        tahun_parts = current_tahun_ajaran.split('/')
+                        if len(tahun_parts) == 2:
+                            next_tahun = f"{int(tahun_parts[1])}/{int(tahun_parts[1]) + 1}"
+                            return "Ganjil", next_tahun
+                        else:
+                            return "Ganjil", current_tahun_ajaran
+                    else:
+                        return "Ganjil", current_tahun_ajaran
+                
+                next_semester, next_tahun_ajaran = get_next_semester_batch(semester, tahun_ajaran)
                 
                 # Siapkan data untuk response
                 result_data = {
@@ -296,8 +427,15 @@ def predict_all_students(
                     'kelas': siswa.kelas,
                     'prediksi_prestasi': result['prediksi'],
                     'confidence': result['confidence'],
+                    'semester_prediksi': {
+                        'data_dari_semester': semester,
+                        'data_dari_tahun_ajaran': tahun_ajaran,
+                        'prediksi_untuk_semester': next_semester,
+                        'prediksi_untuk_tahun_ajaran': next_tahun_ajaran,
+                        'keterangan': f"Prediksi untuk semester {next_semester} tahun ajaran {next_tahun_ajaran} berdasarkan data semester {semester} tahun ajaran {tahun_ajaran}"
+                    },
                     'detail_faktor': {
-                        'nilai_rata_rata': nilai.rata_rata,
+                        'nilai_rata_rata': nilai_raport.rata_rata,
                         'kategori_penghasilan': penghasilan.kategori_penghasilan,
                         'kategori_kehadiran': presensi.kategori_kehadiran
                     }
@@ -305,14 +443,27 @@ def predict_all_students(
                 
                 results.append(result_data)
                 success_count += 1
+                logging.info(f"Successfully processed student {siswa.id}")
                 
             except Exception as e:
                 error_count += 1
-                errors.append(f"Error untuk siswa {siswa.nama}: {str(e)}")
+                error_msg = f"Error untuk siswa {siswa.nama}: {str(e)}"
+                logging.error(error_msg)
+                errors.append(error_msg)
                 continue
         
-        # Commit semua perubahan
-        db.commit()
+        # Commit semua perubahan sekaligus
+        try:
+            logging.info("Committing changes to database...")
+            for prestasi in prestasi_updates:
+                if not prestasi.id:  # Jika prestasi baru
+                    db.add(prestasi)
+            db.commit()
+            logging.info("Database commit successful")
+        except Exception as e:
+            logging.error(f"Error committing to database: {str(e)}")
+            db.rollback()
+            raise
         
         # Siapkan summary
         summary = {
@@ -322,23 +473,60 @@ def predict_all_students(
             'success_rate': (success_count / len(siswa_query)) * 100 if len(siswa_query) > 0 else 0
         }
         
+        # Tentukan semester depan untuk prediksi batch
+        def get_next_semester_summary(current_semester, current_tahun_ajaran):
+            if current_semester.lower() == "ganjil":
+                return "Genap", current_tahun_ajaran
+            elif current_semester.lower() == "genap":
+                # Jika semester genap, tahun ajaran berubah
+                tahun_parts = current_tahun_ajaran.split('/')
+                if len(tahun_parts) == 2:
+                    next_tahun = f"{int(tahun_parts[1])}/{int(tahun_parts[1]) + 1}"
+                    return "Ganjil", next_tahun
+                else:
+                    return "Ganjil", current_tahun_ajaran
+            else:
+                return "Ganjil", current_tahun_ajaran
+        
+        next_semester_summary, next_tahun_ajaran_summary = get_next_semester_summary(semester, tahun_ajaran)
+        
         response = {
             'status': 'success',
             'message': f'Prediksi batch selesai. {success_count} siswa berhasil diprediksi, {error_count} siswa gagal.',
             'semester': semester,
             'tahun_ajaran': tahun_ajaran,
+            'semester_prediksi': {
+                'data_dari_semester': semester,
+                'data_dari_tahun_ajaran': tahun_ajaran,
+                'prediksi_untuk_semester': next_semester_summary,
+                'prediksi_untuk_tahun_ajaran': next_tahun_ajaran_summary,
+                'keterangan': f"Prediksi untuk semester {next_semester_summary} tahun ajaran {next_tahun_ajaran_summary} berdasarkan data semester {semester} tahun ajaran {tahun_ajaran}"
+            },
             'summary': summary,
             'results': results,
-            'errors': errors if error_count > 0 else None
+            'errors': errors if error_count > 0 else None,
+            'processing_time': time.time() - start_time
         }
+        
+        logging.info(f"Batch prediction completed: {summary}")
+        
+        # Cache the result if successful and caching is enabled
+        if use_cache and cache_health_check() and success_count > 0:
+            try:
+                set_cache(batch_cache_key, response, CACHE_EXPIRE_PREDICTIONS)
+                logging.info(f"📦 Batch prediction cached: {semester}-{tahun_ajaran}")
+            except Exception as e:
+                logging.warning(f"⚠️ Failed to cache batch prediction: {str(e)}")
         
         return response
         
     except Exception as e:
+        error_msg = f"Terjadi kesalahan saat melakukan prediksi batch: {str(e)}"
+        logging.error(error_msg)
         db.rollback()
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Terjadi kesalahan saat melakukan prediksi batch: {str(e)}"
+            detail=error_msg
         )
 
 @router.get("/rules")
@@ -471,8 +659,11 @@ def generate_dummy_data(jumlah_data: int = Body(..., embed=True), db: Session = 
         )
 
 @router.get("/visualization")
-def get_visualization(db: Session = Depends(get_db)):
-    """Mendapatkan URL visualisasi pohon keputusan"""
+def get_visualization(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Mendapatkan visualisasi pohon keputusan dalam format base64"""
     if not c45_model.trained:
         try:
             c45_model.train(db)
@@ -486,9 +677,15 @@ def get_visualization(db: Session = Depends(get_db)):
         base64_image = c45_model.visualize()
         return {
             "status": "success",
-            "image": base64_image
+            "data": {
+                "image": base64_image,
+                "format": "base64",
+                "type": "png"
+            },
+            "message": "Berhasil mendapatkan visualisasi pohon keputusan"
         }
     except Exception as e:
+        logger.error(f"Error saat membuat visualisasi: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Terjadi kesalahan saat membuat visualisasi: {str(e)}"
@@ -613,8 +810,8 @@ def delete_prediction_history(
     # Cari data prestasi yang akan dihapus
     prestasi = db.query(Prestasi).filter(Prestasi.id == prestasi_id).first()
     if not prestasi:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Riwayat prediksi dengan ID {prestasi_id} tidak ditemukan"
         )
     
@@ -717,21 +914,21 @@ def generate_dummy_data(count: int = 10, db: Session = Depends(get_db)):
         
         # Cek apakah sudah ada data untuk siswa, semester, dan tahun ajaran ini
         existing_nilai = db.query(NilaiRaport).filter(
-            NilaiRaport.siswa_id == siswa.id,
-            NilaiRaport.semester == semester,
-            NilaiRaport.tahun_ajaran == tahun_ajaran
-        ).first()
-        
+                    NilaiRaport.siswa_id == siswa.id,
+                    NilaiRaport.semester == semester,
+                    NilaiRaport.tahun_ajaran == tahun_ajaran
+                ).first()
+                
         existing_presensi = db.query(Presensi).filter(
-            Presensi.siswa_id == siswa.id,
-            Presensi.semester == semester,
-            Presensi.tahun_ajaran == tahun_ajaran
-        ).first()
-        
+                    Presensi.siswa_id == siswa.id,
+                    Presensi.semester == semester,
+                    Presensi.tahun_ajaran == tahun_ajaran
+                ).first()
+                
         existing_penghasilan = db.query(PenghasilanOrtu).filter(
-            PenghasilanOrtu.siswa_id == siswa.id
-        ).first()
-        
+                    PenghasilanOrtu.siswa_id == siswa.id
+                ).first()
+                
         # Buat data nilai jika belum ada
         if not existing_nilai:
             # Generate nilai acak
@@ -1090,17 +1287,20 @@ def get_confusion_matrix(
     try:
         # Cek apakah model sudah dilatih
         if not c45_model.trained:
-            return {
-                "status": "error",
-                "message": "Model belum dilatih. Silakan latih model terlebih dahulu."
-            }
+            try:
+                c45_model.train(db)
+            except ValueError as e:
+                return {
+                    "status": "error",
+                    "message": str(e)
+                }
         
         # Ambil confusion matrix
         result = c45_model.get_confusion_matrix()
         
         return {
             "status": "success",
-            "confusion_matrix": result['confusion_matrix'],
+            "confusion_matrix": result['matrix'],
             "labels": result['labels']
         }
     
@@ -1110,6 +1310,7 @@ def get_confusion_matrix(
             "message": str(e)
         }
     except Exception as e:
+        logger.error(f"Error getting confusion matrix: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Terjadi kesalahan saat mengambil confusion matrix: {str(e)}"
@@ -1155,16 +1356,37 @@ def get_tree_data(
     current_user: User = Depends(get_current_user)
 ):
     """Mendapatkan data pohon keputusan dalam format JSON untuk D3.js"""
-    if not c45_model.trained:
-        try:
-            c45_model.train(db)
-        except ValueError as e:
+    try:
+        # Cek apakah model sudah dilatih
+        if not c45_model.trained:
+            try:
+                c45_model.train(db)
+            except ValueError as e:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=str(e)
+                )
+        
+        # Validasi model dan data yang diperlukan
+        if not hasattr(c45_model, 'model') or not c45_model.model:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=str(e)
+                detail="Model belum diinisialisasi dengan benar"
             )
-    
-    try:
+        
+        if not c45_model.features or len(c45_model.features) == 0:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Feature names tidak tersedia"
+            )
+            
+        # Cek apakah tree sudah dibuat
+        if not hasattr(c45_model.model, 'tree_'):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Tree belum dibuat, model mungkin belum dilatih dengan benar"
+            )
+            
         # Ekstrak struktur tree dari model sklearn
         tree = c45_model.model.tree_
         feature_names = c45_model.features
@@ -1173,7 +1395,11 @@ def get_tree_data(
         def build_tree_dict(node_id):
             """Recursively build tree dictionary"""
             if tree.feature[node_id] != -2:  # Not a leaf node
-                feature_name = feature_names[int(tree.feature[node_id])]
+                feature_idx = int(tree.feature[node_id])
+                # Validasi indeks feature sebelum mengakses
+                if feature_idx < 0 or feature_idx >= len(feature_names):
+                    raise ValueError(f"Invalid feature index {feature_idx} for feature_names with length {len(feature_names)}")
+                feature_name = feature_names[feature_idx]
                 threshold = float(tree.threshold[node_id])
                 
                 # Get children
@@ -1233,6 +1459,81 @@ def get_tree_data(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Terjadi kesalahan saat mengambil data tree: {str(e)}"
+        )
+
+@router.post("/cache/invalidate", status_code=status.HTTP_200_OK)
+def invalidate_prediction_cache(
+    request: dict = Body(...),
+    current_user: User = Depends(get_current_user)
+):
+    """Invalidate cache untuk siswa atau semua prediksi"""
+    siswa_id = request.get('siswa_id')
+    semester = request.get('semester')
+    tahun_ajaran = request.get('tahun_ajaran')
+    
+    if not cache_health_check():
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Cache service tidak tersedia"
+        )
+    
+    try:
+        deleted_count = invalidate_student_cache(siswa_id, semester, tahun_ajaran)
+        
+        return {
+            "status": "success",
+            "message": f"Cache invalidated successfully. {deleted_count} entries deleted.",
+            "data": {
+                "siswa_id": siswa_id,
+                "semester": semester,
+                "tahun_ajaran": tahun_ajaran,
+                "deleted_count": deleted_count
+            }
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Gagal invalidate cache: {str(e)}"
+        )
+
+@router.post("/cache/clear", status_code=status.HTTP_200_OK)
+def clear_all_prediction_cache(
+    current_user: User = Depends(get_current_user)
+):
+    """Clear semua cache prediksi"""
+    if not cache_health_check():
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Cache service tidak tersedia"
+        )
+    
+    try:
+        from cache_config import delete_cache_pattern
+        
+        patterns = [
+            "predict:*",
+            "student_data:*",
+            "model_data:*"
+        ]
+        
+        total_deleted = 0
+        for pattern in patterns:
+            deleted = delete_cache_pattern(pattern)
+            total_deleted += deleted
+        
+        return {
+            "status": "success",
+            "message": f"All prediction cache cleared successfully. {total_deleted} entries deleted.",
+            "data": {
+                "total_deleted": total_deleted,
+                "patterns_cleared": patterns
+            }
+        }
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Gagal clear cache: {str(e)}"
         )
 
 @router.get("/feature-statistics")
@@ -1526,4 +1827,208 @@ def get_feature_statistics(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Terjadi kesalahan saat mengambil statistik fitur: {str(e)}"
+        )
+
+
+# =============================================
+# MODEL ACCURACY MANAGEMENT ENDPOINTS
+# =============================================
+
+@router.post("/model/retrain", status_code=status.HTTP_200_OK)
+def manual_model_retrain(
+    trigger: str = "manual",
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Manual model retraining dengan validation dan backup"""
+    try:
+        # Parse trigger
+        retraining_trigger = RetrainingTrigger.MANUAL
+        if trigger == "data_change":
+            retraining_trigger = RetrainingTrigger.DATA_CHANGE
+        elif trigger == "accuracy_degradation":
+            retraining_trigger = RetrainingTrigger.ACCURACY_DEGRADATION
+        elif trigger == "scheduled":
+            retraining_trigger = RetrainingTrigger.SCHEDULED
+        
+        result = model_accuracy_manager.retrain_model_if_needed(db, retraining_trigger)
+        
+        return {
+            "status": "success" if result["success"] else "failed",
+            "message": result["message"],
+            "data": result
+        }
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error during manual retraining: {str(e)}"
+        )
+
+
+@router.get("/model/performance", status_code=status.HTTP_200_OK)
+def get_model_performance_monitoring(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Get model performance monitoring dan accuracy degradation detection"""
+    try:
+        monitoring_result = model_accuracy_manager.monitor_model_performance(db)
+        
+        return {
+            "status": "success",
+            "message": "Model performance monitoring completed",
+            "data": monitoring_result
+        }
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error monitoring model performance: {str(e)}"
+        )
+
+
+@router.post("/model/validate-change", status_code=status.HTTP_200_OK)
+def validate_data_change_impact(
+    request: dict = Body(...),
+    current_user: User = Depends(get_current_user)
+):
+    """Validate impact of data changes pada model accuracy"""
+    try:
+        siswa_id = request.get("siswa_id")
+        change_type = request.get("change_type")  # 'nilai', 'presensi', 'penghasilan'
+        old_value = request.get("old_value")
+        new_value = request.get("new_value")
+        
+        if not all([siswa_id, change_type, old_value is not None, new_value is not None]):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Missing required fields: siswa_id, change_type, old_value, new_value"
+            )
+        
+        validation_result = model_accuracy_manager.validate_data_change(
+            siswa_id=siswa_id,
+            change_type=change_type,
+            old_value=old_value,
+            new_value=new_value
+        )
+        
+        return {
+            "status": "success",
+            "message": "Data change validation completed",
+            "data": validation_result
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error validating data change: {str(e)}"
+        )
+
+
+@router.get("/model/data-changes", status_code=status.HTTP_200_OK)
+def get_recent_data_changes(
+    days: int = 7,
+    current_user: User = Depends(get_current_user)
+):
+    """Get recent data changes yang mempengaruhi model accuracy"""
+    try:
+        recent_changes = model_accuracy_manager._get_recent_data_changes(days)
+        
+        return {
+            "status": "success",
+            "message": f"Retrieved data changes for last {days} days",
+            "data": {
+                "changes": recent_changes,
+                "total_changes": len(recent_changes),
+                "days_analyzed": days,
+                "timestamp": datetime.now().isoformat()
+            }
+        }
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error getting recent data changes: {str(e)}"
+        )
+
+
+@router.get("/model/health", status_code=status.HTTP_200_OK)
+def get_model_health_status(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Get comprehensive model health status dan recommendations"""
+    try:
+        # Get current model metrics
+        current_metrics = model_accuracy_manager._get_current_model_metrics()
+        
+        # Get training requirements
+        training_req = model_accuracy_manager._validate_training_requirements(db)
+        
+        # Get data quality check
+        data_quality = model_accuracy_manager._check_data_quality(db)
+        
+        # Get recent changes
+        recent_changes = model_accuracy_manager._get_recent_data_changes(days=7)
+        
+        # Determine overall health status
+        health_status = "healthy"
+        warnings = []
+        recommendations = []
+        
+        if not current_metrics:
+            health_status = "no_model"
+            warnings.append("No model metrics available")
+            recommendations.append("Train initial model")
+        
+        if not training_req["can_train"]:
+            health_status = "insufficient_data"
+            warnings.append(training_req["message"])
+            recommendations.append("Add more labeled training data")
+        
+        if not data_quality["is_good"]:
+            health_status = "data_quality_issues"
+            warnings.extend(data_quality["issues"])
+            recommendations.append("Improve data quality")
+        
+        # Check model age
+        if current_metrics:
+            days_since_training = (datetime.now() - current_metrics.timestamp).days
+            if days_since_training > model_accuracy_manager.max_days_without_training:
+                health_status = "stale_model"
+                warnings.append(f"Model is {days_since_training} days old")
+                recommendations.append("Consider model retraining")
+        
+        health_data = {
+            "overall_status": health_status,
+            "current_metrics": {
+                "accuracy": current_metrics.accuracy if current_metrics else None,
+                "model_version": current_metrics.model_version if current_metrics else None,
+                "training_samples": current_metrics.training_samples if current_metrics else None,
+                "days_since_training": (datetime.now() - current_metrics.timestamp).days if current_metrics else None
+            } if current_metrics else None,
+            "training_requirements": training_req,
+            "data_quality": data_quality,
+            "recent_activity": {
+                "changes_last_7_days": len(recent_changes),
+                "significant_changes": len([c for c in recent_changes if c.get("is_significant", False)])
+            },
+            "warnings": warnings,
+            "recommendations": recommendations,
+            "timestamp": datetime.now().isoformat()
+        }
+        
+        return {
+            "status": "success",
+            "message": "Model health status retrieved",
+            "data": health_data
+        }
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error getting model health status: {str(e)}"
         )

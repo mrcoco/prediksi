@@ -1,7 +1,7 @@
 $(document).ready(function() {
     // initGenerateDummyForm();
     // Konfigurasi global dari environment variables
-    const API_URL = window.AppConfig ? window.AppConfig.config.API_URL : 'http://localhost:8000/api';
+    const API_URL = window.AppConfig ? window.AppConfig.config.API_URL : '/api';
     const TOKEN_KEY = window.AppConfig ? window.AppConfig.config.TOKEN_KEY : 'access_token';
     
     // Validasi konfigurasi
@@ -533,12 +533,11 @@ $(document).ready(function() {
         // Ambil data prediksi untuk statistik
         $.ajax({
             url: `${API_URL}/prediksi/history`,
-            method: "POST",
-            contentType: "application/json",
-            data: JSON.stringify({
+            method: "GET",
+            data: {
                 skip: 0,
                 limit: 1000 // Ambil lebih banyak data untuk statistik akurat
-            }),
+            },
             beforeSend: function(xhr) {
                 const token = getToken();
                 if (token) {
@@ -618,16 +617,17 @@ $(document).ready(function() {
                 }
             },
             success: function(data) {
-                if (data.status === "success" && data.image) {
+                
+                if (data.status === "success" && data.data.image) {
                     staticContainer.innerHTML = `
                         <div class="static-tree-wrapper">
                             <div class="static-tree-overlay">
                                 <i class="fas fa-image mr-1"></i>
                                 Static PNG
                             </div>
-                            <img src="${data.image}" 
+                            <img src="data:image/png;base64,${data.data.image}" 
                                  alt="Pohon Keputusan C4.5" 
-                                 onclick="openImageModal('${data.image}')"
+                                 onclick="openImageModal('data:image/png;base64,${data.data.image}')"
                                  style="max-width: 100%; height: auto; cursor: pointer;" />
                             <div class="mt-2">
                                 <small class="text-muted">Klik gambar untuk memperbesar</small>
@@ -3062,9 +3062,8 @@ $(document).ready(function() {
                 transport: {
                     read: {
                         url: `${API_URL}/prediksi/history`,
-                        type: "POST",
+                        type: "GET",
                         dataType: "json",
-                        contentType: "application/json",
                         beforeSend: function(xhr) {
                             const token = getToken();
                             if (token) {
@@ -3074,10 +3073,10 @@ $(document).ready(function() {
                     },
                     parameterMap: function(data, operation) {
                         if (operation === "read") {
-                            return JSON.stringify({
+                            return {
                                 skip: data.skip || 0,
                                 limit: data.take || 10
-                            });
+                            };
                         }
                         return data;
                     }
@@ -3185,16 +3184,137 @@ $(document).ready(function() {
                     // Tampilkan hasil prediksi
                     const hasilHTML = `
                         <div class="alert ${getAlertClass(data.prediksi_prestasi)}">
-                            <h4 class="alert-heading">Hasil Prediksi untuk ${data.nama_siswa}</h4>
-                            <p><strong>Prediksi Prestasi:</strong> ${data.prediksi_prestasi}</p>
-                            <p><strong>Confidence:</strong> ${(data.confidence * 100).toFixed(2)}%</p>
+                            <h4 class="alert-heading">
+                                <i class="fas fa-chart-line mr-2"></i>
+                                Hasil Prediksi untuk ${data.nama_siswa}
+                            </h4>
+                            
+                            <!-- Prediksi Utama -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <div class="prediction-main">
+                                        <h5 class="text-primary mb-2">
+                                            <i class="fas fa-bullseye mr-1"></i>
+                                            Prediksi Prestasi
+                                        </h5>
+                                        <div class="prediction-result">
+                                            <span class="badge badge-${data.prediksi_prestasi === 'Tinggi' ? 'success' : data.prediksi_prestasi === 'Sedang' ? 'warning' : 'danger'} badge-lg">
+                                                ${data.prediksi_prestasi}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="confidence-info">
+                                        <h5 class="text-info mb-2">
+                                            <i class="fas fa-percentage mr-1"></i>
+                                            Tingkat Kepercayaan
+                                        </h5>
+                                        <div class="confidence-value">
+                                            <span class="badge badge-info badge-lg">
+                                                ${(data.confidence * 100).toFixed(1)}%
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
                             <hr>
-                            <p class="mb-0"><strong>Detail Faktor:</strong></p>
-                            <ul>
-                                <li>Nilai Rata-rata: ${data.detail_faktor.nilai_rata_rata.toFixed(2)}</li>
-                                <li>Kategori Penghasilan: ${data.detail_faktor.kategori_penghasilan}</li>
-                                <li>Kategori Kehadiran: ${data.detail_faktor.kategori_kehadiran}</li>
-                            </ul>
+                            
+                            <!-- Informasi Semester -->
+                            <div class="semester-info mb-3">
+                                <h5 class="text-success mb-3">
+                                    <i class="fas fa-calendar-alt mr-2"></i>
+                                    Informasi Semester Prediksi
+                                </h5>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="info-card bg-light p-3 rounded">
+                                            <h6 class="text-primary mb-2">
+                                                <i class="fas fa-database mr-1"></i>
+                                                Data Sumber
+                                            </h6>
+                                            <p class="mb-1">
+                                                <strong>Semester:</strong> ${data.semester_prediksi.data_dari_semester}
+                                            </p>
+                                            <p class="mb-0">
+                                                <strong>Tahun Ajaran:</strong> ${data.semester_prediksi.data_dari_tahun_ajaran}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="info-card bg-light p-3 rounded">
+                                            <h6 class="text-success mb-2">
+                                                <i class="fas fa-chart-line mr-1"></i>
+                                                Prediksi Untuk
+                                            </h6>
+                                            <p class="mb-1">
+                                                <strong>Semester:</strong> ${data.semester_prediksi.prediksi_untuk_semester}
+                                            </p>
+                                            <p class="mb-0">
+                                                <strong>Tahun Ajaran:</strong> ${data.semester_prediksi.prediksi_untuk_tahun_ajaran}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <hr>
+                            
+                            <!-- Detail Faktor -->
+                            <div class="detail-factors">
+                                <h5 class="text-warning mb-3">
+                                    <i class="fas fa-cogs mr-2"></i>
+                                    Detail Faktor Penentu
+                                </h5>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="factor-card text-center p-3 bg-light rounded">
+                                            <i class="fas fa-book fa-2x text-primary mb-2"></i>
+                                            <h6 class="text-primary">Nilai Rata-rata</h6>
+                                            <span class="badge badge-primary badge-lg">
+                                                ${data.detail_faktor.nilai_rata_rata.toFixed(2)}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="factor-card text-center p-3 bg-light rounded">
+                                            <i class="fas fa-money-bill-wave fa-2x text-success mb-2"></i>
+                                            <h6 class="text-success">Kategori Penghasilan</h6>
+                                            <span class="badge badge-success badge-lg">
+                                                ${data.detail_faktor.kategori_penghasilan}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="factor-card text-center p-3 bg-light rounded">
+                                            <i class="fas fa-calendar-check fa-2x text-info mb-2"></i>
+                                            <h6 class="text-info">Kategori Kehadiran</h6>
+                                            <span class="badge badge-info badge-lg">
+                                                ${data.detail_faktor.kategori_kehadiran}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Rekomendasi -->
+                            <div class="mt-3">
+                                <div class="alert alert-info">
+                                    <h6 class="alert-heading">
+                                        <i class="fas fa-lightbulb mr-1"></i>
+                                        Rekomendasi Tindak Lanjut
+                                    </h6>
+                                    <p class="mb-0">
+                                        ${data.prediksi_prestasi === 'Tinggi' ? 
+                                            'Siswa menunjukkan potensi tinggi. Pertimbangkan program akselerasi atau pengayaan untuk mengoptimalkan prestasi.' :
+                                            data.prediksi_prestasi === 'Sedang' ? 
+                                            'Siswa memiliki potensi sedang. Berikan program pengayaan dan monitoring berkala untuk meningkatkan prestasi.' :
+                                            'Siswa memerlukan perhatian khusus. Implementasikan program remedial intensif dan monitoring ketat untuk meningkatkan prestasi.'
+                                        }
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     `;
                     
@@ -3383,14 +3503,41 @@ $(document).ready(function() {
     
     // Function to display batch prediction summary
     function displayBatchSummary(summary, semester, tahunAjaran) {
+        // Tentukan semester depan untuk prediksi batch
+        let prediksiSemester, prediksiTahunAjaran;
+        if (semester.toLowerCase() === "ganjil") {
+            prediksiSemester = "Genap";
+            prediksiTahunAjaran = tahunAjaran;
+        } else if (semester.toLowerCase() === "genap") {
+            prediksiSemester = "Ganjil";
+            // Jika semester genap, tahun ajaran berubah
+            const tahunParts = tahunAjaran.split('/');
+            if (tahunParts.length === 2) {
+                const tahun1 = parseInt(tahunParts[0]);
+                const tahun2 = parseInt(tahunParts[1]);
+                prediksiTahunAjaran = `${tahun1 + 1}/${tahun2 + 1}`;
+            } else {
+                prediksiTahunAjaran = tahunAjaran;
+            }
+        } else {
+            prediksiSemester = semester;
+            prediksiTahunAjaran = tahunAjaran;
+        }
+
         const summaryHTML = `
             <div class="alert alert-info">
-                <h6><i class="fas fa-info-circle mr-2"></i>Semester ${semester} - ${tahunAjaran}</h6>
-                <div class="row">
+                <h6><i class="fas fa-info-circle mr-2"></i>Informasi Prediksi Batch</h6>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <p class="mb-1"><strong>Data dari:</strong> Semester ${semester} Tahun Ajaran ${tahunAjaran}</p>
+                        <p class="mb-1"><strong>Prediksi untuk:</strong> Semester ${prediksiSemester} Tahun Ajaran ${prediksiTahunAjaran}</p>
+                    </div>
                     <div class="col-md-6">
                         <p class="mb-1"><strong>Total Siswa:</strong> ${summary.total_siswa}</p>
                         <p class="mb-1"><strong>Berhasil:</strong> ${summary.success_count}</p>
                     </div>
+                </div>
+                <div class="row">
                     <div class="col-md-6">
                         <p class="mb-1"><strong>Gagal:</strong> ${summary.error_count}</p>
                         <p class="mb-1"><strong>Success Rate:</strong> ${summary.success_rate.toFixed(1)}%</p>
@@ -3458,7 +3605,21 @@ $(document).ready(function() {
                     }
                 },
                 { field: "detail_faktor.kategori_penghasilan", title: "Kategori Penghasilan", width: 150 },
-                { field: "detail_faktor.kategori_kehadiran", title: "Kategori Kehadiran", width: 150 }
+                { field: "detail_faktor.kategori_kehadiran", title: "Kategori Kehadiran", width: 150 },
+                { 
+                    field: "semester_prediksi", 
+                    title: "Semester Prediksi", 
+                    width: 200,
+                    template: function(dataItem) {
+                        if (dataItem.semester_prediksi) {
+                            return `<small>
+                                <strong>Dari:</strong> ${dataItem.semester_prediksi.data_dari_semester} ${dataItem.semester_prediksi.data_dari_tahun_ajaran}<br>
+                                <strong>Untuk:</strong> ${dataItem.semester_prediksi.prediksi_untuk_semester} ${dataItem.semester_prediksi.prediksi_untuk_tahun_ajaran}
+                            </small>`;
+                        }
+                        return "-";
+                    }
+                }
             ]
         });
         
@@ -3485,10 +3646,11 @@ $(document).ready(function() {
         }
         
         // Create CSV content
-        const headers = ['Nama Siswa', 'Kelas', 'Prediksi Prestasi', 'Confidence (%)', 'Nilai Rata-rata', 'Kategori Penghasilan', 'Kategori Kehadiran'];
+        const headers = ['Nama Siswa', 'Kelas', 'Prediksi Prestasi', 'Confidence (%)', 'Nilai Rata-rata', 'Kategori Penghasilan', 'Kategori Kehadiran', 'Data dari Semester', 'Data dari Tahun Ajaran', 'Prediksi untuk Semester', 'Prediksi untuk Tahun Ajaran'];
         let csvContent = headers.join(',') + '\n';
         
         data.forEach(item => {
+            const semesterInfo = item.semester_prediksi || {};
             const row = [
                 `"${item.nama_siswa}"`,
                 `"${item.kelas}"`,
@@ -3496,7 +3658,11 @@ $(document).ready(function() {
                 `"${(item.confidence * 100).toFixed(1)}"`,
                 `"${item.detail_faktor.nilai_rata_rata.toFixed(2)}"`,
                 `"${item.detail_faktor.kategori_penghasilan}"`,
-                `"${item.detail_faktor.kategori_kehadiran}"`
+                `"${item.detail_faktor.kategori_kehadiran}"`,
+                `"${semesterInfo.data_dari_semester || '-'}"`,
+                `"${semesterInfo.data_dari_tahun_ajaran || '-'}"`,
+                `"${semesterInfo.prediksi_untuk_semester || '-'}"`,
+                `"${semesterInfo.prediksi_untuk_tahun_ajaran || '-'}"`
             ];
             csvContent += row.join(',') + '\n';
         });

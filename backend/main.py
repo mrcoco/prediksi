@@ -1,14 +1,21 @@
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import FastAPI, Depends, HTTPException, status, Header, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.openapi.utils import get_openapi
 from sqlalchemy.orm import Session
 import uvicorn
 import os
+from jose import jwt, JWTError
+from fastapi_cache import FastAPICache
+from fastapi_cache.backends.redis import RedisBackend
+from redis import asyncio as aioredis
+from datetime import datetime
 
 # Import modul lokal
 from database import get_db, init_db
 from routes import siswa_router, nilai_router, presensi_router, penghasilan_router, prediksi_router, auth_router
+from config import SECRET_KEY, ALGORITHM, REDIS_HOST, REDIS_PORT
+from models.user import User
 
 # Metadata untuk dokumentasi API
 description = """
@@ -35,6 +42,7 @@ Sistem ini memungkinkan manajemen data siswa, analisis prestasi, dan prediksi pe
 * **Machine Learning**: scikit-learn dengan algoritma C4.5
 * **Authentication**: JWT Bearer Token
 * **Documentation**: OpenAPI 3.0 dengan Swagger UI
+* **Caching**: Redis untuk optimasi performa
 
 ### 📚 **Cara Penggunaan**
 
@@ -60,43 +68,31 @@ Untuk menggunakan API ini, Anda perlu:
 * **ReDoc**: [http://localhost:8000/redoc](http://localhost:8000/redoc)
 """
 
-# Tags metadata untuk organisasi endpoint yang lebih baik
+# Metadata untuk dokumentasi API
 tags_metadata = [
     {
-        "name": "Root",
-        "description": "🏠 **Root endpoints** - Basic application information dan health checks"
-    },
-    {
-        "name": "Authentication", 
-        "description": "🔐 **Authentication & Authorization** - Login, logout, user management, dan token operations"
-    },
-    {
         "name": "Siswa",
-        "description": "👥 **Manajemen Data Siswa** - CRUD operations untuk data siswa, upload Excel, dan export data"
+        "description": "Operasi CRUD untuk data siswa"
     },
     {
         "name": "Nilai Raport",
-        "description": "📊 **Nilai Akademik** - Manajemen nilai raport siswa semua mata pelajaran dengan auto-calculation rata-rata"
+        "description": "Manajemen nilai akademik siswa"
     },
     {
-        "name": "Presensi", 
-        "description": "📅 **Kehadiran Siswa** - Tracking presensi, absensi, dan perhitungan persentase kehadiran otomatis"
+        "name": "Presensi",
+        "description": "Tracking kehadiran dan absensi siswa"
     },
     {
         "name": "Penghasilan Ortu",
-        "description": "💰 **Data Ekonomi Keluarga** - Informasi penghasilan dan pekerjaan orang tua dengan kategorisasi otomatis"
+        "description": "Data kondisi ekonomi keluarga"
     },
     {
         "name": "Prediksi Prestasi",
-        "description": "🔮 **Machine Learning** - Prediksi prestasi siswa menggunakan C4.5, batch processing, dan analytics"
+        "description": "Machine learning untuk prediksi performa"
     },
     {
-        "name": "Visualisasi",
-        "description": "📈 **Data Visualization** - Decision tree visualization dan static assets"
-    },
-    {
-        "name": "Health",
-        "description": "🏥 **System Health** - API status monitoring dan health checks"
+        "name": "Authentication",
+        "description": "Manajemen user dan autentikasi"
     }
 ]
 
@@ -147,52 +143,72 @@ app.include_router(penghasilan_router.router, prefix="/api/penghasilan", tags=["
 app.include_router(prediksi_router.router, prefix="/api/prediksi", tags=["Prediksi Prestasi"])
 app.include_router(auth_router.router, prefix="/api/auth", tags=["Authentication"])
 
-# Endpoint root dengan informasi API
-@app.get(
-    "/", 
-    tags=["Root"],
-    summary="🏠 API Information",
-    description="Menampilkan informasi dasar tentang API Sistem Prediksi Prestasi Siswa",
-    response_description="Informasi API dan links dokumentasi"
-)
-async def root():
-    return {
-        "message": "🎓 Selamat datang di EduPro - Sistem Prediksi Prestasi Siswa API",
-        "version": "2.0.0",
-        "docs": "/docs",
-        "redoc": "/redoc",
-        "openapi": "/openapi.json",
-        "features": [
-            "👥 Manajemen Data Siswa",
-            "📊 Nilai Raport & Analytics", 
-            "📅 Presensi & Kehadiran",
-            "💰 Data Ekonomi Keluarga",
-            "🔮 Prediksi Prestasi ML",
-            "🔐 Authentication & Security",
-            "📤 Export Excel",
-            "📈 Data Visualization"
-        ]
-    }
+# Custom OpenAPI schema untuk dokumentasi yang lebih baik
+def custom_openapi():
+    if app.openapi_schema:
+        return app.openapi_schema
+    openapi_schema = get_openapi(
+        title=app.title,
+        version=app.version,
+        description=app.description,
+        routes=app.routes,
+    )
+    app.openapi_schema = openapi_schema
+    return app.openapi_schema
 
-# Endpoint untuk memeriksa status API
-@app.get(
-    "/health", 
-    tags=["Health"],
-    summary="🏥 Health Check",
-    description="Memeriksa status kesehatan API dan koneksi database",
-    response_description="Status API dan informasi sistem"
-)
+app.openapi = custom_openapi
+
+# Inisialisasi database dan Redis cache saat aplikasi dimulai
+@app.on_event("startup")
+async def startup_event():
+    # Initialize database
+    init_db()
+    
+    # Initialize Redis cache
+    from cache_config import init_cache
+    cache_initialized = init_cache()
+    
+    if cache_initialized:
+        print("🚀 Database dan Redis cache telah diinisialisasi")
+    else:
+        print("🚀 Database diinisialisasi, Redis cache tidak tersedia")
+        print("⚠️ Application akan berjalan tanpa caching")
+    
+    print("📚 Swagger UI tersedia di: http://localhost:8000/docs")
+    print("📖 ReDoc tersedia di: http://localhost:8000/redoc")
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    # Close Redis connection
+    if hasattr(FastAPICache, '_backend'):
+        try:
+            await FastAPICache._backend.client.close()
+            print("✅ Redis connection closed")
+        except Exception as e:
+            print(f"❌ Error closing Redis connection: {str(e)}")
+
+# Endpoint untuk health check
+@app.get("/health")
 async def health_check():
+    return {"status": "healthy", "timestamp": datetime.now().isoformat()}
+
+# Endpoint untuk cache statistics
+@app.get("/api/cache/stats", tags=["System"], summary="📊 Cache Statistics")
+async def get_cache_stats():
+    """
+    Menampilkan statistik penggunaan Redis cache
+    
+    **Response**: Informasi statistik cache meliputi hit rate, memory usage, dll.
+    """
+    from cache_config import get_cache_stats, cache_health_check
+    
+    stats = get_cache_stats()
+    stats['healthy'] = cache_health_check()
+    
     return {
-        "status": "✅ healthy", 
-        "message": "API berjalan dengan baik",
-        "version": "2.0.0",
-        "timestamp": "2025-06-18",
-        "services": {
-            "api": "✅ running",
-            "database": "✅ connected", 
-            "ml_model": "✅ ready"
-        }
+        "status": "success",
+        "message": "Cache statistics retrieved successfully",
+        "data": stats
     }
 
 # Endpoint untuk menampilkan decision tree
@@ -211,50 +227,89 @@ async def get_decision_tree():
     """
     return FileResponse("static/decision_tree.png")
 
-# Custom OpenAPI schema dengan security definitions
-def custom_openapi():
-    if app.openapi_schema:
-        return app.openapi_schema
+# Endpoint verify untuk Traefik ForwardAuth
+@app.get(
+    "/api/auth/verify",
+    tags=["Authentication"],
+    summary="🔒 Verify Token",
+    description="Endpoint untuk verifikasi token JWT oleh Traefik ForwardAuth",
+    response_description="Status verifikasi token dan informasi user"
+)
+async def verify_token(authorization: str = Header(None), response: Response = None, db: Session = Depends(get_db)):
+    print(f"Received Authorization header: {authorization}")  # Debug log
     
-    openapi_schema = get_openapi(
-        title=app.title,
-        version=app.version,
-        description=app.description,
-        routes=app.routes,
-        tags=app.openapi_tags,
-        servers=app.servers
-    )
+    if not authorization:
+        print("No Authorization header found")  # Debug log
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Missing authorization header",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
     
-    # Tambahkan security schemes
-    openapi_schema["components"]["securitySchemes"] = {
-        "BearerAuth": {
-            "type": "http",
-            "scheme": "bearer",
-            "bearerFormat": "JWT",
-            "description": "Masukkan JWT token yang didapat dari endpoint login. Format: Bearer <token>"
-        }
-    }
-    
-    # Tambahkan security requirement untuk semua endpoint kecuali auth dan root
-    for path_key, path_value in openapi_schema["paths"].items():
-        # Skip auth endpoints dan root endpoints
-        if not path_key.startswith("/api/auth") and path_key not in ["/", "/health", "/api/decision_tree"]:
-            for method_key, method_value in path_value.items():
-                if method_key.lower() in ["get", "post", "put", "delete", "patch"]:
-                    method_value["security"] = [{"BearerAuth": []}]
-    
-    app.openapi_schema = openapi_schema
-    return app.openapi_schema
-
-app.openapi = custom_openapi
-
-# Inisialisasi database saat aplikasi dimulai
-@app.on_event("startup")
-async def startup_event():
-    init_db()
-    print("🚀 Database telah diinisialisasi")
-    print("📚 Swagger UI tersedia di: http://localhost:8000/docs")
-    print("📖 ReDoc tersedia di: http://localhost:8000/redoc")
+    try:
+        # Extract token from Authorization header
+        if not authorization.lower().startswith("bearer "):
+            print(f"Invalid auth scheme: {authorization[:20]}...")  # Debug log
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid authentication scheme",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        
+        token = authorization.split(" ")[1]
+        print(f"Extracted token: {token[:20]}...")  # Debug log
+        
+        # Decode and verify token
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+            print(f"Decoded payload: {payload}")  # Debug log
+        except JWTError as e:
+            print(f"JWT Decode Error: {str(e)}")  # Debug log
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid token",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        
+        # Extract user info from payload
+        username = payload.get("sub")
+        if not username:
+            print("No username found in payload")  # Debug log
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Token missing username",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        
+        # Verify user exists in database
+        user = db.query(User).filter(User.username == username).first()
+        if not user:
+            print(f"User not found in database: {username}")  # Debug log
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="User not found",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        
+        print(f"User found: {user.username}, role: {user.role}")  # Debug log
+        
+        # Set response headers for Traefik ForwardAuth
+        response.headers["X-User-ID"] = str(user.id)
+        response.headers["X-User-Role"] = str(user.role)
+        response.headers["X-Username"] = str(user.username)
+        
+        print(f"Response headers set: {dict(response.headers)}")  # Debug log
+        
+        # Return 200 OK with empty response
+        return Response(status_code=200)
+        
+    except Exception as e:
+        print(f"Verification Error: {str(e)}")  # Debug log
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token verification failed",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
 
 # Menjalankan aplikasi jika file ini dijalankan langsung
 if __name__ == "__main__":

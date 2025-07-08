@@ -1,0 +1,23 @@
+{
+    "nis": "12345",
+    "nama": "Test Student",
+    "jenis_kelamin": "L",
+    "nilai_semester_1": {
+        "matematika": 85,
+        "bahasa_indonesia": 88,
+        "bahasa_inggris": 90,
+        "ipa": 87,
+        "ips": 89
+    },
+    "nilai_semester_2": {
+        "matematika": 87,
+        "bahasa_indonesia": 85,
+        "bahasa_inggris": 92,
+        "ipa": 88,
+        "ips": 86
+    },
+    "kehadiran": 95,
+    "ekstrakurikuler": ["Pramuka", "PMR"],
+    "prestasi": ["Juara 2 Olimpiade Matematika Tingkat Kota"],
+    "perilaku": "A"
+} 

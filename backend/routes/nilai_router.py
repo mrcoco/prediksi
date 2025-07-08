@@ -9,6 +9,13 @@ from routes.auth_router import get_current_user
 from models.user import User
 import pandas as pd
 from io import BytesIO
+import logging
+
+# Cache imports
+from cache_config import invalidate_student_cache, cache_health_check
+
+# Model accuracy management
+from model_accuracy_manager import model_accuracy_manager
 
 router = APIRouter()
 
@@ -195,12 +202,51 @@ def update_nilai(
     for key, value in update_data.items():
         setattr(db_nilai, key, value)
     
+    # Store old rata_rata for model accuracy validation
+    old_rata_rata = db_nilai.rata_rata
+    
     # Update timestamp
     db_nilai.updated_at = datetime.now()
     
     # Simpan perubahan
     db.commit()
     db.refresh(db_nilai)
+    
+    # Model accuracy validation untuk perubahan nilai
+    try:
+        validation_result = model_accuracy_manager.validate_data_change(
+            siswa_id=db_nilai.siswa_id,
+            change_type="nilai",
+            old_value=old_rata_rata,
+            new_value=db_nilai.rata_rata
+        )
+        
+        # Log validation result
+        logging.info(f"📊 Nilai change validation - siswa_id={db_nilai.siswa_id}, significant={validation_result.get('is_significant')}, needs_retraining={validation_result.get('needs_retraining')}")
+        
+        # Trigger model retraining jika diperlukan
+        if validation_result.get('needs_retraining'):
+            logging.info(f"🔄 Triggering model retraining due to significant nilai changes")
+            try:
+                retraining_result = model_accuracy_manager.retrain_model_if_needed(db)
+                logging.info(f"🎯 Model retraining result: {retraining_result.get('message')}")
+            except Exception as e:
+                logging.warning(f"⚠️ Model retraining failed: {str(e)}")
+        
+    except Exception as e:
+        logging.warning(f"⚠️ Failed to validate data change for nilai: {str(e)}")
+    
+    # Invalidate cache for this student since nilai affects prediction
+    if cache_health_check():
+        try:
+            invalidate_student_cache(
+                db_nilai.siswa_id, 
+                db_nilai.semester, 
+                db_nilai.tahun_ajaran
+            )
+            logging.info(f"🔄 Cache invalidated for updated nilai siswa_id={db_nilai.siswa_id}")
+        except Exception as e:
+            logging.warning(f"⚠️ Failed to invalidate cache for nilai siswa_id={db_nilai.siswa_id}: {str(e)}")
     
     return db_nilai
 
@@ -217,6 +263,19 @@ def delete_nilai(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Nilai dengan ID {nilai_id} tidak ditemukan"
         )
+    
+    # Store data for cache invalidation before deletion
+    siswa_id = db_nilai.siswa_id
+    semester = db_nilai.semester
+    tahun_ajaran = db_nilai.tahun_ajaran
+    
+    # Invalidate cache before deletion since nilai affects prediction
+    if cache_health_check():
+        try:
+            invalidate_student_cache(siswa_id, semester, tahun_ajaran)
+            logging.info(f"🔄 Cache invalidated for deleted nilai siswa_id={siswa_id}")
+        except Exception as e:
+            logging.warning(f"⚠️ Failed to invalidate cache for nilai siswa_id={siswa_id}: {str(e)}")
     
     # Hapus nilai
     db.delete(db_nilai)

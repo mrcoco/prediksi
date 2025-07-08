@@ -1,0 +1,31 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1751020487130,221,Login Request,200,OK,Basic Flow Test 1-1,text,true,,493,227,2,2,http://localhost/api/auth/token,219,0,8
+1751020487305,194,Login Request,200,OK,Basic Flow Test 1-2,text,true,,493,227,2,2,http://localhost/api/auth/token,194,0,1
+1751020487508,195,Login Request,200,OK,Basic Flow Test 1-3,text,true,,493,227,4,4,http://localhost/api/auth/token,195,0,1
+1751020487700,168,Login Request,200,OK,Basic Flow Test 1-4,text,true,,493,227,4,4,http://localhost/api/auth/token,168,0,0
+1751020487905,173,Login Request,200,OK,Basic Flow Test 1-5,text,true,,493,227,5,5,http://localhost/api/auth/token,173,0,1
+1751020489369,7,Single Prediction Request,422,Unprocessable Entity,Basic Flow Test 1-1,text,false,,372,370,5,5,http://localhost/api/prediksi/,6,0,0
+1751020489393,1,Debug Token,200,OK,Basic Flow Test 1-1,text,true,,465,0,5,5,null,0,0,0
+1751020489504,2,Single Prediction Request,422,Unprocessable Entity,Basic Flow Test 1-2,text,false,,372,370,5,5,http://localhost/api/prediksi/,2,0,0
+1751020489506,0,Debug Token,200,OK,Basic Flow Test 1-2,text,true,,465,0,5,5,null,0,0,0
+1751020489394,216,Login Request,200,OK,Basic Flow Test 1-1,text,true,,493,227,5,5,http://localhost/api/auth/token,216,0,0
+1751020489506,170,Login Request,200,OK,Basic Flow Test 1-2,text,true,,493,227,5,5,http://localhost/api/auth/token,170,0,0
+1751020489708,2,Single Prediction Request,422,Unprocessable Entity,Basic Flow Test 1-3,text,false,,372,370,5,5,http://localhost/api/prediksi/,2,0,0
+1751020489710,1,Debug Token,200,OK,Basic Flow Test 1-3,text,true,,465,0,5,5,null,0,0,0
+1751020489875,2,Single Prediction Request,422,Unprocessable Entity,Basic Flow Test 1-4,text,false,,372,370,5,5,http://localhost/api/prediksi/,2,0,0
+1751020489877,1,Debug Token,200,OK,Basic Flow Test 1-4,text,true,,465,0,5,5,null,0,0,0
+1751020489711,172,Login Request,200,OK,Basic Flow Test 1-3,text,true,,493,227,5,5,http://localhost/api/auth/token,172,0,0
+1751020489878,167,Login Request,200,OK,Basic Flow Test 1-4,text,true,,493,227,5,5,http://localhost/api/auth/token,167,0,0
+1751020490081,2,Single Prediction Request,422,Unprocessable Entity,Basic Flow Test 1-5,text,false,,372,370,5,5,http://localhost/api/prediksi/,2,0,0
+1751020490083,1,Debug Token,200,OK,Basic Flow Test 1-5,text,true,,464,0,5,5,null,0,0,0
+1751020490084,167,Login Request,200,OK,Basic Flow Test 1-5,text,true,,493,227,5,5,http://localhost/api/auth/token,167,0,0
+1751020491612,4,Single Prediction Request,422,Unprocessable Entity,Basic Flow Test 1-1,text,false,,372,370,5,5,http://localhost/api/prediksi/,4,0,0
+1751020491616,0,Debug Token,200,OK,Basic Flow Test 1-1,text,true,,465,0,5,5,null,0,0,0
+1751020491680,1,Single Prediction Request,422,Unprocessable Entity,Basic Flow Test 1-2,text,false,,372,370,4,4,http://localhost/api/prediksi/,1,0,0
+1751020491682,0,Debug Token,200,OK,Basic Flow Test 1-2,text,true,,465,0,4,4,null,0,0,0
+1751020491890,8,Single Prediction Request,422,Unprocessable Entity,Basic Flow Test 1-3,text,false,,372,370,3,3,http://localhost/api/prediksi/,7,0,0
+1751020491898,1,Debug Token,200,OK,Basic Flow Test 1-3,text,true,,465,0,3,3,null,0,0,0
+1751020492049,1,Single Prediction Request,422,Unprocessable Entity,Basic Flow Test 1-4,text,false,,372,370,2,2,http://localhost/api/prediksi/,1,0,0
+1751020492050,1,Debug Token,200,OK,Basic Flow Test 1-4,text,true,,465,0,2,2,null,0,0,0
+1751020492257,3,Single Prediction Request,422,Unprocessable Entity,Basic Flow Test 1-5,text,false,,372,370,1,1,http://localhost/api/prediksi/,3,0,0
+1751020492261,0,Debug Token,200,OK,Basic Flow Test 1-5,text,true,,464,0,1,1,null,0,0,0

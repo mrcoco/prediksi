@@ -1,0 +1,2467 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1751029624573,34,Initial Token Request,422,Unprocessable Entity,Token Setup Thread Group 1-1,text,false,,335,227,1,1,http://localhost/api/auth/token,34,0,2
+1751029625646,1,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-1,text,false,,1125,0,4,4,http:/api/auth/refresh,0,0,0
+1751029625953,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-2,text,false,,1125,0,5,5,http:/api/auth/refresh,0,0,0
+1751029626248,1,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-3,text,false,,1125,0,6,6,http:/api/auth/refresh,0,0,0
+1751029626552,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-4,text,false,,1125,0,7,7,http:/api/auth/refresh,0,0,0
+1751029626654,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-1,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,7,7,http:/api/prediksi/,0,0,0
+1751029626848,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-5,text,false,,1125,0,8,8,http:/api/auth/refresh,0,0,0
+1751029626957,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-2,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,8,8,http:/api/prediksi/,0,0,0
+1751029627145,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-6,text,false,,1125,0,9,9,http:/api/auth/refresh,0,0,0
+1751029627255,1,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-3,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,9,9,http:/api/prediksi/,0,0,0
+1751029627446,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-7,text,false,,1125,0,10,10,http:/api/auth/refresh,0,0,0
+1751029627564,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-4,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,10,10,http:/api/prediksi/,0,0,0
+1751029627656,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-1,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,11,11,http:/api/prediksi/batch,0,0,0
+1751029627751,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-8,text,false,,1125,0,11,11,http:/api/auth/refresh,0,0,0
+1751029627854,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-5,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,11,11,http:/api/prediksi/,0,0,0
+1751029627963,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-2,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,12,12,http:/api/prediksi/batch,0,0,0
+1751029628047,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-9,text,false,,1125,0,12,12,http:/api/auth/refresh,0,0,0
+1751029628151,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-6,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,12,12,http:/api/prediksi/,0,0,0
+1751029628261,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-3,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,13,13,http:/api/prediksi/batch,0,0,0
+1751029628353,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-10,text,false,,1125,0,13,13,http:/api/auth/refresh,0,0,0
+1751029628452,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-7,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,13,13,http:/api/prediksi/,0,0,0
+1751029628578,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-4,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,14,14,http:/api/prediksi/batch,0,0,0
+1751029628643,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-11,text,false,,1125,0,14,14,http:/api/auth/refresh,0,0,0
+1751029628657,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-1,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,14,14,http:/api/prediksi/model-metrics,0,0,0
+1751029628756,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-8,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,14,14,http:/api/prediksi/,0,0,0
+1751029628858,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-5,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,15,15,http:/api/prediksi/batch,0,0,0
+1751029628950,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-12,text,false,,1125,0,15,15,http:/api/auth/refresh,0,0,0
+1751029628967,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-2,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,15,15,http:/api/prediksi/model-metrics,0,0,0
+1751029629054,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-9,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,15,15,http:/api/prediksi/,0,0,0
+1751029629152,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-6,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,16,16,http:/api/prediksi/batch,0,0,0
+1751029629250,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-13,text,false,,1125,0,16,16,http:/api/auth/refresh,0,0,0
+1751029629265,1,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-3,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,16,16,http:/api/prediksi/model-metrics,0,0,0
+1751029629360,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-10,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,16,16,http:/api/prediksi/,0,0,0
+1751029629458,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-7,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,17,17,http:/api/prediksi/batch,0,0,0
+1751029629553,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-14,text,false,,1125,0,17,17,http:/api/auth/refresh,0,0,0
+1751029629580,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-4,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,17,17,http:/api/prediksi/model-metrics,0,0,0
+1751029629651,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-11,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,17,17,http:/api/prediksi/,0,0,0
+1751029629663,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-1,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,17,17,http:/api/prediksi/,0,0,0
+1751029629758,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-8,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,18,18,http:/api/prediksi/batch,0,0,0
+1751029629849,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-15,text,false,,1125,0,18,18,http:/api/auth/refresh,0,0,0
+1751029629862,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-5,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,18,18,http:/api/prediksi/model-metrics,0,0,0
+1751029629959,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-12,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,18,18,http:/api/prediksi/,0,0,0
+1751029629981,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-2,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,18,18,http:/api/prediksi/,0,0,0
+1751029630057,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-9,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,19,19,http:/api/prediksi/batch,0,0,0
+1751029630148,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-16,text,false,,1125,0,19,19,http:/api/auth/refresh,0,0,0
+1751029630158,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-6,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,19,19,http:/api/prediksi/model-metrics,0,0,0
+1751029630253,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-13,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,19,19,http:/api/prediksi/,0,0,0
+1751029630271,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-3,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,19,19,http:/api/prediksi/,0,0,0
+1751029630362,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-10,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,20,20,http:/api/prediksi/batch,0,0,0
+1751029630452,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-17,text,false,,1125,0,20,20,http:/api/auth/refresh,0,0,0
+1751029630463,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-7,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,20,20,http:/api/prediksi/model-metrics,0,0,0
+1751029630558,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-14,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,20,20,http:/api/prediksi/,0,0,0
+1751029630600,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-4,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,20,20,http:/api/prediksi/,0,0,0
+1751029630652,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-11,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,21,21,http:/api/prediksi/batch,0,0,0
+1751029630668,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-1,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,21,21,http:/api/prediksi/batch,0,0,0
+1751029630750,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-18,text,false,,1125,0,21,21,http:/api/auth/refresh,0,0,0
+1751029630758,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-8,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,21,21,http:/api/prediksi/model-metrics,0,0,0
+1751029630854,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-15,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,21,21,http:/api/prediksi/,0,0,0
+1751029630862,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-5,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,21,21,http:/api/prediksi/,0,0,0
+1751029630961,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-12,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,22,22,http:/api/prediksi/batch,0,0,0
+1751029630985,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-2,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,22,22,http:/api/prediksi/batch,0,0,0
+1751029631052,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-19,text,false,,1125,0,22,22,http:/api/auth/refresh,0,0,0
+1751029631061,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-9,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,22,22,http:/api/prediksi/model-metrics,0,0,0
+1751029631153,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-16,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,22,22,http:/api/prediksi/,0,0,0
+1751029631160,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-6,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,22,22,http:/api/prediksi/,0,0,0
+1751029631254,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-13,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,23,23,http:/api/prediksi/batch,0,0,0
+1751029631276,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-3,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,23,23,http:/api/prediksi/batch,0,0,0
+1751029631348,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-20,text,false,,1125,0,23,23,http:/api/auth/refresh,0,0,0
+1751029631364,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-10,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,23,23,http:/api/prediksi/model-metrics,0,0,0
+1751029631452,1,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-17,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,23,23,http:/api/prediksi/,0,0,0
+1751029631465,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-7,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,23,23,http:/api/prediksi/,0,0,0
+1751029631564,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-14,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,24,24,http:/api/prediksi/batch,0,0,0
+1751029631611,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-4,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,24,24,http:/api/prediksi/batch,0,0,0
+1751029631651,1,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-21,text,false,,1125,0,24,24,http:/api/auth/refresh,0,0,0
+1751029631656,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-11,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,24,24,http:/api/prediksi/model-metrics,0,0,0
+1751029631673,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-1,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,24,24,http:/api/prediksi/model-metrics,0,0,0
+1751029631756,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-18,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,24,24,http:/api/prediksi/,0,0,0
+1751029631759,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-8,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,24,24,http:/api/prediksi/,0,0,0
+1751029631859,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-15,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,25,25,http:/api/prediksi/batch,0,0,0
+1751029631863,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-5,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,25,25,http:/api/prediksi/batch,0,0,0
+1751029631948,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-22,text,false,,1125,0,25,25,http:/api/auth/refresh,0,0,0
+1751029631964,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-12,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,25,25,http:/api/prediksi/model-metrics,0,0,0
+1751029631990,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-2,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,25,25,http:/api/prediksi/model-metrics,0,0,0
+1751029632055,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-19,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,25,25,http:/api/prediksi/,0,0,0
+1751029632063,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-9,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,25,25,http:/api/prediksi/,0,0,0
+1751029632154,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-16,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,26,26,http:/api/prediksi/batch,0,0,0
+1751029632162,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-6,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,26,26,http:/api/prediksi/batch,0,0,0
+1751029632251,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-23,text,false,,1125,0,26,26,http:/api/auth/refresh,0,0,0
+1751029632258,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-13,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,26,26,http:/api/prediksi/model-metrics,0,0,0
+1751029632281,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-3,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,26,26,http:/api/prediksi/model-metrics,0,0,0
+1751029632354,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-20,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,26,26,http:/api/prediksi/,0,0,0
+1751029632370,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-10,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,26,26,http:/api/prediksi/,0,0,0
+1751029632454,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-17,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,27,27,http:/api/prediksi/batch,0,0,0
+1751029632469,1,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-7,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,27,27,http:/api/prediksi/batch,0,0,0
+1751029632547,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-24,text,false,,1125,0,27,27,http:/api/auth/refresh,0,0,0
+1751029632566,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-14,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,27,27,http:/api/prediksi/model-metrics,0,0,0
+1751029632619,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-4,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,27,27,http:/api/prediksi/model-metrics,0,0,0
+1751029632658,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-21,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,27,27,http:/api/prediksi/,0,0,0
+1751029632659,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-11,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,27,27,http:/api/prediksi/,0,0,0
+1751029632677,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-1,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,27,27,http:/api/prediksi/,0,0,0
+1751029632761,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-18,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,28,28,http:/api/prediksi/batch,0,0,0
+1751029632761,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-8,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,28,28,http:/api/prediksi/batch,0,0,0
+1751029632848,1,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-25,text,false,,1125,0,28,28,http:/api/auth/refresh,0,0,0
+1751029632864,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-5,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,28,28,http:/api/prediksi/model-metrics,0,0,0
+1751029632864,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-15,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,28,28,http:/api/prediksi/model-metrics,0,0,0
+1751029632957,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-22,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,28,28,http:/api/prediksi/,0,0,0
+1751029632969,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-12,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,28,28,http:/api/prediksi/,0,0,0
+1751029632992,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-2,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,28,28,http:/api/prediksi/,0,0,0
+1751029633059,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-19,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,29,29,http:/api/prediksi/batch,0,0,0
+1751029633065,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-9,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,29,29,http:/api/prediksi/batch,0,0,0
+1751029633150,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-26,text,false,,1125,0,29,29,http:/api/auth/refresh,0,0,0
+1751029633160,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-16,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,29,29,http:/api/prediksi/model-metrics,0,0,0
+1751029633165,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-6,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,29,29,http:/api/prediksi/model-metrics,0,0,0
+1751029633256,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-23,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,29,29,http:/api/prediksi/,0,0,0
+1751029633261,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-13,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,29,29,http:/api/prediksi/,0,0,0
+1751029633287,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-3,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,29,29,http:/api/prediksi/,0,0,0
+1751029633356,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-20,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,30,30,http:/api/prediksi/batch,0,0,0
+1751029633373,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-10,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,30,30,http:/api/prediksi/batch,0,0,0
+1751029633448,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-27,text,false,,1125,0,30,30,http:/api/auth/refresh,0,0,0
+1751029633460,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-17,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,30,30,http:/api/prediksi/model-metrics,0,0,0
+1751029633473,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-7,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,30,30,http:/api/prediksi/model-metrics,0,0,0
+1751029633553,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-24,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,30,30,http:/api/prediksi/,0,0,0
+1751029633569,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-14,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,30,30,http:/api/prediksi/,0,0,0
+1751029633627,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-4,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,30,30,http:/api/prediksi/,0,0,0
+1751029633659,1,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-21,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,31,31,http:/api/prediksi/batch,0,0,0
+1751029633664,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-11,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,31,31,http:/api/prediksi/batch,0,0,0
+1751029633681,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-1,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,31,31,http:/api/prediksi/batch,0,0,0
+1751029633748,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-28,text,false,,1125,0,31,31,http:/api/auth/refresh,0,0,0
+1751029633765,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-8,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,31,31,http:/api/prediksi/model-metrics,0,0,0
+1751029633767,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-18,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,31,31,http:/api/prediksi/model-metrics,0,0,0
+1751029633852,1,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-25,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,31,31,http:/api/prediksi/,0,0,0
+1751029633867,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-5,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,31,31,http:/api/prediksi/,0,0,0
+1751029633870,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-15,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,31,31,http:/api/prediksi/,0,0,0
+1751029633958,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-22,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,32,32,http:/api/prediksi/batch,0,0,0
+1751029633975,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-12,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,32,32,http:/api/prediksi/batch,0,0,0
+1751029633995,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-2,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,32,32,http:/api/prediksi/batch,0,0,0
+1751029634050,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-29,text,false,,1125,0,32,32,http:/api/auth/refresh,0,0,0
+1751029634064,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-19,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,32,32,http:/api/prediksi/model-metrics,0,0,0
+1751029634066,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-9,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,32,32,http:/api/prediksi/model-metrics,0,0,0
+1751029634153,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-26,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,32,32,http:/api/prediksi/,0,0,0
+1751029634165,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-16,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,32,32,http:/api/prediksi/,0,0,0
+1751029634170,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-6,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,32,32,http:/api/prediksi/,0,0,0
+1751029634261,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-23,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,33,33,http:/api/prediksi/batch,0,0,0
+1751029634267,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-13,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,33,33,http:/api/prediksi/batch,0,0,0
+1751029634292,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-3,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,33,33,http:/api/prediksi/batch,0,0,0
+1751029634344,1,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-30,text,false,,1125,0,33,33,http:/api/auth/refresh,0,0,0
+1751029634360,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-20,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,33,33,http:/api/prediksi/model-metrics,0,0,0
+1751029634377,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-10,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,33,33,http:/api/prediksi/model-metrics,0,0,0
+1751029634452,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-27,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,33,33,http:/api/prediksi/,0,0,0
+1751029634464,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-17,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,33,33,http:/api/prediksi/,0,0,0
+1751029634473,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-7,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,33,33,http:/api/prediksi/,0,0,0
+1751029634558,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-24,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,34,34,http:/api/prediksi/batch,0,0,0
+1751029634573,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-14,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,34,34,http:/api/prediksi/batch,0,0,0
+1751029634629,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-4,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,34,34,http:/api/prediksi/batch,0,0,0
+1751029634647,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-31,text,false,,1125,0,34,34,http:/api/auth/refresh,0,0,0
+1751029634660,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-21,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,34,34,http:/api/prediksi/model-metrics,0,0,0
+1751029634669,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-11,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,34,34,http:/api/prediksi/model-metrics,0,0,0
+1751029634684,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-1,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,34,34,http:/api/prediksi/model-metrics,0,0,0
+1751029634753,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-28,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,34,34,http:/api/prediksi/,0,0,0
+1751029634766,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-8,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,34,34,http:/api/prediksi/,0,0,0
+1751029634772,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-18,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,34,34,http:/api/prediksi/,0,0,0
+1751029634857,1,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-25,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,35,35,http:/api/prediksi/batch,0,0,0
+1751029634873,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-5,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,35,35,http:/api/prediksi/batch,0,0,0
+1751029634873,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-15,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,35,35,http:/api/prediksi/batch,0,0,0
+1751029634944,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-32,text,false,,1125,0,35,35,http:/api/auth/refresh,0,0,0
+1751029634964,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-22,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,35,35,http:/api/prediksi/model-metrics,0,0,0
+1751029634978,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-12,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,35,35,http:/api/prediksi/model-metrics,0,0,0
+1751029634998,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-2,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,35,35,http:/api/prediksi/model-metrics,0,0,0
+1751029635056,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-29,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,35,35,http:/api/prediksi/,0,0,0
+1751029635067,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-19,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,35,35,http:/api/prediksi/,0,0,0
+1751029635069,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-9,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,35,35,http:/api/prediksi/,0,0,0
+1751029635158,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-26,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,36,36,http:/api/prediksi/batch,0,0,0
+1751029635167,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-16,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,36,36,http:/api/prediksi/batch,0,0,0
+1751029635175,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-6,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,36,36,http:/api/prediksi/batch,0,0,0
+1751029635248,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-33,text,false,,1125,0,36,36,http:/api/auth/refresh,0,0,0
+1751029635264,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-23,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,36,36,http:/api/prediksi/model-metrics,0,0,0
+1751029635268,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-13,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,36,36,http:/api/prediksi/model-metrics,0,0,0
+1751029635297,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-3,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,36,36,http:/api/prediksi/model-metrics,0,0,0
+1751029635351,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-30,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,36,36,http:/api/prediksi/,0,0,0
+1751029635362,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-20,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,36,36,http:/api/prediksi/,0,0,0
+1751029635382,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-10,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,36,36,http:/api/prediksi/,0,0,0
+1751029635456,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-27,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,37,37,http:/api/prediksi/batch,0,0,0
+1751029635468,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-17,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,37,37,http:/api/prediksi/batch,0,0,0
+1751029635478,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-7,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,37,37,http:/api/prediksi/batch,0,0,0
+1751029635547,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-34,text,false,,1125,0,37,37,http:/api/auth/refresh,0,0,0
+1751029635562,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-24,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,37,37,http:/api/prediksi/model-metrics,0,0,0
+1751029635574,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-14,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,37,37,http:/api/prediksi/model-metrics,0,0,0
+1751029635634,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-4,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,37,37,http:/api/prediksi/model-metrics,0,0,0
+1751029635648,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-31,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,37,37,http:/api/prediksi/,0,0,0
+1751029635665,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-21,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,37,37,http:/api/prediksi/,0,0,0
+1751029635674,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-11,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,37,37,http:/api/prediksi/,0,0,0
+1751029635685,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-1,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,37,37,http:/api/prediksi/,0,0,0
+1751029635754,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-28,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,38,38,http:/api/prediksi/batch,0,0,0
+1751029635767,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-8,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,38,38,http:/api/prediksi/batch,0,0,0
+1751029635774,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-18,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,38,38,http:/api/prediksi/batch,0,0,0
+1751029635849,1,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-35,text,false,,1125,0,38,38,http:/api/auth/refresh,0,0,0
+1751029635858,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-25,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,38,38,http:/api/prediksi/model-metrics,0,0,0
+1751029635877,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-5,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,38,38,http:/api/prediksi/model-metrics,0,0,0
+1751029635877,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-15,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,38,38,http:/api/prediksi/model-metrics,0,0,0
+1751029635946,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-32,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,38,38,http:/api/prediksi/,0,0,0
+1751029635968,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-22,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,38,38,http:/api/prediksi/,0,0,0
+1751029635983,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-12,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,38,38,http:/api/prediksi/,0,0,0
+1751029636003,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-2,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,38,38,http:/api/prediksi/,0,0,0
+1751029636061,1,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-29,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,39,39,http:/api/prediksi/batch,0,0,0
+1751029636071,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-19,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,39,39,http:/api/prediksi/batch,0,0,0
+1751029636075,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-9,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,39,39,http:/api/prediksi/batch,0,0,0
+1751029636151,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-36,text,false,,1125,0,39,39,http:/api/auth/refresh,0,0,0
+1751029636161,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-26,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,39,39,http:/api/prediksi/model-metrics,0,0,0
+1751029636168,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-16,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,39,39,http:/api/prediksi/model-metrics,0,0,0
+1751029636178,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-6,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,39,39,http:/api/prediksi/model-metrics,0,0,0
+1751029636252,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-33,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,39,39,http:/api/prediksi/,0,0,0
+1751029636268,1,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-23,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,39,39,http:/api/prediksi/,0,0,0
+1751029636274,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-13,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,39,39,http:/api/prediksi/,0,0,0
+1751029636299,1,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-3,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,39,39,http:/api/prediksi/,0,0,0
+1751029636355,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-30,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,40,40,http:/api/prediksi/batch,0,0,0
+1751029636365,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-20,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,40,40,http:/api/prediksi/batch,0,0,0
+1751029636388,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-10,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,40,40,http:/api/prediksi/batch,0,0,0
+1751029636447,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-37,text,false,,1125,0,40,40,http:/api/auth/refresh,0,0,0
+1751029636461,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-27,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,40,40,http:/api/prediksi/model-metrics,0,0,0
+1751029636473,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-17,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,40,40,http:/api/prediksi/model-metrics,0,0,0
+1751029636483,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-7,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,40,40,http:/api/prediksi/model-metrics,0,0,0
+1751029636554,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-34,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,40,40,http:/api/prediksi/,0,0,0
+1751029636564,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-24,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,40,40,http:/api/prediksi/,0,0,0
+1751029636577,1,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-14,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,40,40,http:/api/prediksi/,0,0,0
+1751029636639,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-4,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,40,40,http:/api/prediksi/,0,0,0
+1751029636651,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-31,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,41,41,http:/api/prediksi/batch,0,0,0
+1751029636669,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-21,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,41,41,http:/api/prediksi/batch,0,0,0
+1751029636677,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-11,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,41,41,http:/api/prediksi/batch,0,0,0
+1751029636690,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-1,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,41,41,http:/api/prediksi/batch,0,0,0
+1751029636750,1,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-38,text,false,,1125,0,41,41,http:/api/auth/refresh,0,0,0
+1751029636759,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-28,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,41,41,http:/api/prediksi/model-metrics,0,0,0
+1751029636769,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-8,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,41,41,http:/api/prediksi/model-metrics,0,0,0
+1751029636777,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-18,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,41,41,http:/api/prediksi/model-metrics,0,0,0
+1751029636856,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-35,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,41,41,http:/api/prediksi/,0,0,0
+1751029636861,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-25,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,41,41,http:/api/prediksi/,0,0,0
+1751029636878,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-15,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,41,41,http:/api/prediksi/,0,0,0
+1751029636882,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-5,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,41,41,http:/api/prediksi/,0,0,0
+1751029636948,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-32,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,42,42,http:/api/prediksi/batch,0,0,0
+1751029636972,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-22,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,42,42,http:/api/prediksi/batch,0,0,0
+1751029636985,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-12,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,42,42,http:/api/prediksi/batch,0,0,0
+1751029637009,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-2,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,42,42,http:/api/prediksi/batch,0,0,0
+1751029637053,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-39,text,false,,1125,0,42,42,http:/api/auth/refresh,0,0,0
+1751029637063,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-29,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,42,42,http:/api/prediksi/model-metrics,0,0,0
+1751029637073,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-19,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,42,42,http:/api/prediksi/model-metrics,0,0,0
+1751029637077,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-9,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,42,42,http:/api/prediksi/model-metrics,0,0,0
+1751029637154,1,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-36,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,42,42,http:/api/prediksi/,0,0,0
+1751029637162,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-26,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,42,42,http:/api/prediksi/,0,0,0
+1751029637170,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-16,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,42,42,http:/api/prediksi/,0,0,0
+1751029637182,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-6,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,42,42,http:/api/prediksi/,0,0,0
+1751029637256,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-33,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,43,43,http:/api/prediksi/batch,0,0,0
+1751029637273,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-23,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,43,43,http:/api/prediksi/batch,0,0,0
+1751029637278,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-13,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,43,43,http:/api/prediksi/batch,0,0,0
+1751029637301,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-3,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,43,43,http:/api/prediksi/batch,0,0,0
+1751029637348,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-40,text,false,,1125,0,43,43,http:/api/auth/refresh,0,0,0
+1751029637360,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-30,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,43,43,http:/api/prediksi/model-metrics,0,0,0
+1751029637368,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-20,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,43,43,http:/api/prediksi/model-metrics,0,0,0
+1751029637393,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-10,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,43,43,http:/api/prediksi/model-metrics,0,0,0
+1751029637449,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-37,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,43,43,http:/api/prediksi/,0,0,0
+1751029637467,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-27,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,43,43,http:/api/prediksi/,0,0,0
+1751029637477,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-17,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,43,43,http:/api/prediksi/,0,0,0
+1751029637488,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-7,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,43,43,http:/api/prediksi/,0,0,0
+1751029637559,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-34,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,44,44,http:/api/prediksi/batch,0,0,0
+1751029637568,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-24,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,44,44,http:/api/prediksi/batch,0,0,0
+1751029637579,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-14,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,44,44,http:/api/prediksi/batch,0,0,0
+1751029637643,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-4,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,44,44,http:/api/prediksi/batch,0,0,0
+1751029637648,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-41,text,false,,1125,0,44,44,http:/api/auth/refresh,0,0,0
+1751029637656,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-31,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,44,44,http:/api/prediksi/model-metrics,0,0,0
+1751029637674,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-21,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,44,44,http:/api/prediksi/model-metrics,0,0,0
+1751029637681,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-11,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,44,44,http:/api/prediksi/model-metrics,0,0,0
+1751029637693,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-1,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,44,44,http:/api/prediksi/model-metrics,0,0,0
+1751029637758,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-38,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,44,44,http:/api/prediksi/,0,0,0
+1751029637762,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-28,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,44,44,http:/api/prediksi/,0,0,0
+1751029637769,1,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-8,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,44,44,http:/api/prediksi/,0,0,0
+1751029637780,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-18,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,44,44,http:/api/prediksi/,0,0,0
+1751029637861,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-35,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,45,45,http:/api/prediksi/batch,0,0,0
+1751029637865,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-25,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,45,45,http:/api/prediksi/batch,0,0,0
+1751029637881,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-15,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,45,45,http:/api/prediksi/batch,0,0,0
+1751029637886,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-5,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,45,45,http:/api/prediksi/batch,0,0,0
+1751029637949,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-32,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,45,45,http:/api/prediksi/model-metrics,0,0,0
+1751029637949,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-42,text,false,,1125,0,45,45,http:/api/auth/refresh,0,0,0
+1751029637977,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-22,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,45,45,http:/api/prediksi/model-metrics,0,0,0
+1751029637990,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-12,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,45,45,http:/api/prediksi/model-metrics,0,0,0
+1751029638012,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-2,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,45,45,http:/api/prediksi/model-metrics,0,0,0
+1751029638059,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-39,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,45,45,http:/api/prediksi/,0,0,0
+1751029638067,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-29,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,45,45,http:/api/prediksi/,0,0,0
+1751029638078,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-19,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,45,45,http:/api/prediksi/,0,0,0
+1751029638081,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-9,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,45,45,http:/api/prediksi/,0,0,0
+1751029638156,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-36,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,46,46,http:/api/prediksi/batch,0,0,0
+1751029638166,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-26,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,46,46,http:/api/prediksi/batch,0,0,0
+1751029638173,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-16,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,46,46,http:/api/prediksi/batch,0,0,0
+1751029638185,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-6,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,46,46,http:/api/prediksi/batch,0,0,0
+1751029638248,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-43,text,false,,1125,0,46,46,http:/api/auth/refresh,0,0,0
+1751029638260,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-33,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,46,46,http:/api/prediksi/model-metrics,0,0,0
+1751029638277,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-23,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,46,46,http:/api/prediksi/model-metrics,0,0,0
+1751029638283,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-13,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,46,46,http:/api/prediksi/model-metrics,0,0,0
+1751029638303,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-3,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,46,46,http:/api/prediksi/model-metrics,0,0,0
+1751029638349,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-40,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,46,46,http:/api/prediksi/,0,0,0
+1751029638364,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-30,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,46,46,http:/api/prediksi/,0,0,0
+1751029638373,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-20,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,46,46,http:/api/prediksi/,0,0,0
+1751029638398,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-10,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,46,46,http:/api/prediksi/,0,0,0
+1751029638454,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-37,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,47,47,http:/api/prediksi/batch,0,0,0
+1751029638469,1,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-27,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,47,47,http:/api/prediksi/batch,0,0,0
+1751029638478,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-17,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,47,47,http:/api/prediksi/batch,0,0,0
+1751029638494,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-7,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,47,47,http:/api/prediksi/batch,0,0,0
+1751029638550,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-44,text,false,,1125,0,47,47,http:/api/auth/refresh,0,0,0
+1751029638565,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-34,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,47,47,http:/api/prediksi/model-metrics,0,0,0
+1751029638573,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-24,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,47,47,http:/api/prediksi/model-metrics,0,0,0
+1751029638585,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-14,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,47,47,http:/api/prediksi/model-metrics,0,0,0
+1751029638647,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-4,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,47,47,http:/api/prediksi/model-metrics,0,0,0
+1751029638652,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-41,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,47,47,http:/api/prediksi/,0,0,0
+1751029638656,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-31,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,47,47,http:/api/prediksi/,0,0,0
+1751029638677,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-21,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,47,47,http:/api/prediksi/,0,0,0
+1751029638684,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-11,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,47,47,http:/api/prediksi/,0,0,0
+1751029638698,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-1,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,47,47,http:/api/prediksi/,0,0,0
+1751029638762,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-38,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,48,48,http:/api/prediksi/batch,0,0,0
+1751029638768,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-28,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,48,48,http:/api/prediksi/batch,0,0,0
+1751029638775,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-8,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,48,48,http:/api/prediksi/batch,0,0,0
+1751029638785,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-18,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,48,48,http:/api/prediksi/batch,0,0,0
+1751029638852,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-45,text,false,,1125,0,48,48,http:/api/auth/refresh,0,0,0
+1751029638865,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-35,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,48,48,http:/api/prediksi/model-metrics,0,0,0
+1751029638868,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-25,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,48,48,http:/api/prediksi/model-metrics,0,0,0
+1751029638886,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-15,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,48,48,http:/api/prediksi/model-metrics,0,0,0
+1751029638890,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-5,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,48,48,http:/api/prediksi/model-metrics,0,0,0
+1751029638952,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-32,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,48,48,http:/api/prediksi/,0,0,0
+1751029638952,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-42,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,48,48,http:/api/prediksi/,0,0,0
+1751029638982,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-22,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,48,48,http:/api/prediksi/,0,0,0
+1751029638994,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-12,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,48,48,http:/api/prediksi/,0,0,0
+1751029639016,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-2,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,48,48,http:/api/prediksi/,0,0,0
+1751029639064,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-39,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,49,49,http:/api/prediksi/batch,0,0,0
+1751029639070,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-29,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,49,49,http:/api/prediksi/batch,0,0,0
+1751029639082,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-19,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,49,49,http:/api/prediksi/batch,0,0,0
+1751029639085,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-9,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,49,49,http:/api/prediksi/batch,0,0,0
+1751029639148,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-46,text,false,,1125,0,49,49,http:/api/auth/refresh,0,0,0
+1751029639160,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-36,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,49,49,http:/api/prediksi/model-metrics,0,0,0
+1751029639168,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-26,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,49,49,http:/api/prediksi/model-metrics,0,0,0
+1751029639178,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-16,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,49,49,http:/api/prediksi/model-metrics,0,0,0
+1751029639187,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-6,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,49,49,http:/api/prediksi/model-metrics,0,0,0
+1751029639255,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-43,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,49,49,http:/api/prediksi/,0,0,0
+1751029639265,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-33,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,49,49,http:/api/prediksi/,0,0,0
+1751029639282,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-23,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,49,49,http:/api/prediksi/,0,0,0
+1751029639285,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-13,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,49,49,http:/api/prediksi/,0,0,0
+1751029639308,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-3,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,49,49,http:/api/prediksi/,0,0,0
+1751029639355,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-40,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,50,50,http:/api/prediksi/batch,0,0,0
+1751029639365,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-30,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,50,50,http:/api/prediksi/batch,0,0,0
+1751029639378,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-20,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,50,50,http:/api/prediksi/batch,0,0,0
+1751029639399,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-10,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,50,50,http:/api/prediksi/batch,0,0,0
+1751029639448,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-47,text,false,,1125,0,50,50,http:/api/auth/refresh,0,0,0
+1751029639456,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-37,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,50,50,http:/api/prediksi/model-metrics,0,0,0
+1751029639472,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-27,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,50,50,http:/api/prediksi/model-metrics,0,0,0
+1751029639484,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-17,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,50,50,http:/api/prediksi/model-metrics,0,0,0
+1751029639499,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-7,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,50,50,http:/api/prediksi/model-metrics,0,0,0
+1751029639553,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-44,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,50,50,http:/api/prediksi/,0,0,0
+1751029639567,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-34,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,50,50,http:/api/prediksi/,0,0,0
+1751029639577,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-24,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,50,50,http:/api/prediksi/,0,0,0
+1751029639590,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-14,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,50,50,http:/api/prediksi/,0,0,0
+1751029639648,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-4,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,51,51,http:/api/prediksi/,0,0,0
+1751029639652,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-41,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,51,51,http:/api/prediksi/batch,0,0,0
+1751029639658,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-31,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,51,51,http:/api/prediksi/batch,0,0,0
+1751029639678,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-21,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,51,51,http:/api/prediksi/batch,0,0,0
+1751029639690,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-11,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,51,51,http:/api/prediksi/batch,0,0,0
+1751029639702,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-1,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,51,51,http:/api/prediksi/batch,0,0,0
+1751029639748,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-48,text,false,,1125,0,51,51,http:/api/auth/refresh,0,0,0
+1751029639767,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-38,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,51,51,http:/api/prediksi/model-metrics,0,0,0
+1751029639773,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-28,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,51,51,http:/api/prediksi/model-metrics,0,0,0
+1751029639780,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-8,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,51,51,http:/api/prediksi/model-metrics,0,0,0
+1751029639790,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-18,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,51,51,http:/api/prediksi/model-metrics,0,0,0
+1751029639858,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-45,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,51,51,http:/api/prediksi/,0,0,0
+1751029639868,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-35,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,51,51,http:/api/prediksi/,0,0,0
+1751029639873,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-25,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,51,51,http:/api/prediksi/,0,0,0
+1751029639889,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-15,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,51,51,http:/api/prediksi/,0,0,0
+1751029639892,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-5,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,51,51,http:/api/prediksi/,0,0,0
+1751029639953,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-42,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,52,52,http:/api/prediksi/batch,0,0,0
+1751029639953,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-32,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,52,52,http:/api/prediksi/batch,0,0,0
+1751029639987,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-22,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,52,52,http:/api/prediksi/batch,0,0,0
+1751029640000,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-12,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,52,52,http:/api/prediksi/batch,0,0,0
+1751029640019,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-2,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,52,52,http:/api/prediksi/batch,0,0,0
+1751029640050,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-49,text,false,,1125,0,52,52,http:/api/auth/refresh,0,0,0
+1751029640069,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-39,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,52,52,http:/api/prediksi/model-metrics,0,0,0
+1751029640073,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-29,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,52,52,http:/api/prediksi/model-metrics,0,0,0
+1751029640084,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-19,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,52,52,http:/api/prediksi/model-metrics,0,0,0
+1751029640086,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-9,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,52,52,http:/api/prediksi/model-metrics,0,0,0
+1751029640152,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-46,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,52,52,http:/api/prediksi/,0,0,0
+1751029640164,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-36,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,52,52,http:/api/prediksi/,0,0,0
+1751029640173,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-26,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,52,52,http:/api/prediksi/,0,0,0
+1751029640182,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-16,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,52,52,http:/api/prediksi/,0,0,0
+1751029640189,0,Single Student Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/,Performance Test Group 1-6,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1122,0,52,52,http:/api/prediksi/,0,0,0
+1751029640260,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-43,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,53,53,http:/api/prediksi/batch,0,0,0
+1751029640270,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-33,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,53,53,http:/api/prediksi/batch,0,0,0
+1751029640287,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-23,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,53,53,http:/api/prediksi/batch,0,0,0
+1751029640287,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-13,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,53,53,http:/api/prediksi/batch,0,0,0
+1751029640313,0,Batch Class Prediction,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/batch,Performance Test Group 1-3,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1127,0,53,53,http:/api/prediksi/batch,0,0,0
+1751029640349,0,Refresh Token,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/auth/refresh,Performance Test Group 1-50,text,false,,1125,0,53,53,http:/api/auth/refresh,0,0,0
+1751029640360,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-40,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,53,53,http:/api/prediksi/model-metrics,0,0,0
+1751029640370,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-30,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,53,53,http:/api/prediksi/model-metrics,0,0,0
+1751029640383,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-20,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,53,53,http:/api/prediksi/model-metrics,0,0,0
+1751029640404,0,Get Model Metrics,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/api/prediksi/model-metrics,Performance Test Group 1-10,text,false,"Test failed: code expected to equal /
+
+****** received  : [[[Non HTTP response code: org.apache.http.client.ClientProtocolException]]]
+
+****** comparison: [[[200                                                                   ]]]
+
+/",1135,0,53,53,http:/api/prediksi/model-metrics,0,0,0

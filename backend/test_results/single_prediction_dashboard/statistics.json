@@ -1,0 +1,50 @@
+{
+  "Total" : {
+    "transaction" : "Total",
+    "sampleCount" : 2,
+    "errorCount" : 2,
+    "errorPct" : 100.0,
+    "meanResTime" : 5.0,
+    "medianResTime" : 5.0,
+    "minResTime" : 1.0,
+    "maxResTime" : 9.0,
+    "pct1ResTime" : 9.0,
+    "pct2ResTime" : 9.0,
+    "pct3ResTime" : 9.0,
+    "throughput" : 0.39816842524387813,
+    "receivedKBytesPerSec" : 1.00319779016524,
+    "sentKBytesPerSec" : 0.0
+  },
+  "Single Prediction Request" : {
+    "transaction" : "Single Prediction Request",
+    "sampleCount" : 1,
+    "errorCount" : 1,
+    "errorPct" : 100.0,
+    "meanResTime" : 1.0,
+    "medianResTime" : 1.0,
+    "minResTime" : 1.0,
+    "maxResTime" : 1.0,
+    "pct1ResTime" : 1.0,
+    "pct2ResTime" : 1.0,
+    "pct3ResTime" : 1.0,
+    "throughput" : 1000.0,
+    "receivedKBytesPerSec" : 2519.53125,
+    "sentKBytesPerSec" : 0.0
+  },
+  "Login Request" : {
+    "transaction" : "Login Request",
+    "sampleCount" : 1,
+    "errorCount" : 1,
+    "errorPct" : 100.0,
+    "meanResTime" : 9.0,
+    "medianResTime" : 9.0,
+    "minResTime" : 9.0,
+    "maxResTime" : 9.0,
+    "pct1ResTime" : 9.0,
+    "pct2ResTime" : 9.0,
+    "pct3ResTime" : 9.0,
+    "throughput" : 111.1111111111111,
+    "receivedKBytesPerSec" : 279.9479166666667,
+    "sentKBytesPerSec" : 0.0
+  }
+}

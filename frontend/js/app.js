@@ -2904,7 +2904,7 @@ $(document).ready(function() {
                         
                         if (totalPenghasilan > 5000000) {
                             kategori = "Tinggi";
-                        } else if (totalPenghasilan >= 2000000) {
+                        } else if (totalPenghasilan >= 2300000) {
                             kategori = "Sedang";
                         } else {
                             kategori = "Rendah";

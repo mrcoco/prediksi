@@ -94,6 +94,9 @@ class C45Model:
     
     def train(self, db: Session):
         """Melatih model C4.5 dengan data dari database"""
+        print("Training model...")
+        print("Preparing data...")
+        print(self.prepare_data(db))
         try:
             logger.info("Starting model training...")
             _, df_labeled = self.prepare_data(db)

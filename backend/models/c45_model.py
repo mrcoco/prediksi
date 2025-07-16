@@ -70,6 +70,8 @@ class C45Model:
             ).filter(
                 Prestasi.prediksi_prestasi.isnot(None)
             ).all()
+
+            
             
             # Convert ke DataFrame untuk data berlabel
             df_labeled = pd.DataFrame([{
@@ -95,7 +97,7 @@ class C45Model:
         try:
             logger.info("Starting model training...")
             _, df_labeled = self.prepare_data(db)
-            
+            print(df_labeled)
             # Jika data berlabel kurang dari 10, tidak bisa melatih model
             if len(df_labeled) < 10:
                 raise ValueError("Data berlabel tidak cukup untuk melatih model (minimal 10 data)")
